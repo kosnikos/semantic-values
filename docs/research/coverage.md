@@ -9,8 +9,8 @@ Cells show the number of usable (free or free-registration) sources per period.
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
 | FR | 1 | 0 | 0 | 6 |
-| NL | 0 | 0 | 2 | 4 |
-| BE | 1 | 1 | 1 | 3 |
+| NL | 0 | 0 | 2 | 12 |
+| BE | 1 | 1 | 1 | 7 |
 | LU | 1 | 1 | 1 | 5 |
 | DE | 4 | 4 | 6 | 5 |
 | AT | 2 | 2 | 1 | 3 |
@@ -28,8 +28,8 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
 | FR | 1 | 0 | 0 | 6 |
-| NL | 0 | 0 | 2 | 4 |
-| BE | 1 | 1 | 1 | 3 |
+| NL | 0 | 0 | 2 | 12 |
+| BE | 1 | 1 | 1 | 7 |
 | LU | 1 | 1 | 1 | 4 |
 | DE | 2 | 2 | 3 | 2 |
 | AT | 2 | 2 | 1 | 3 |
@@ -93,6 +93,11 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - be-politics-be-forum: llm_api_allowed, per_text_publish_allowed
 - be-reddit-belgium: llm_api_allowed, per_text_publish_allowed
 - be-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-lavenir-website: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-rtbf-info: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-rtl-info: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-mo-magazine: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-dewereldmorgen: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - lu-eluxemburgensia: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - lu-rtl-lu: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - lu-tageblatt-website: per_text_publish_allowed
@@ -108,6 +113,15 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - nl-reddit-thenetherlands: llm_api_allowed, per_text_publish_allowed
 - nl-kb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - nl-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-nh-nieuws: llm_api_allowed, per_text_publish_allowed
+- nl-omroep-brabant: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-metro: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-de-correspondent: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-tpo: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-wynias-week: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-dagelijkse-standaard: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-viva: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-opzij: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-zeitungsportal: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-zefys-ddr-presse: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-spiegel-print-archive: per_text_publish_allowed

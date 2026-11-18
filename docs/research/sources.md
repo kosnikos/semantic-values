@@ -452,10 +452,120 @@ Belgian coverage will be francophone-heavy unless Mediahuis or DPG grant a licen
   returned 403. No entry.
 - **Le Soir, HLN, De Morgen, Het Nieuwsblad, 7sur7**: 403 on the landing pages (and for
   lesoir.be and hln.be, on robots.txt too). Access model and terms were not verified.
+  (Task 5e: nieuwsblad.be's robots.txt is now readable and carries the Mediahuis Art. 4
+  reservation, so `tdm_all`; the DPG titles still return 403. See Wider sweep.)
 - **Belgian web archive** (KBR PROMISE/BelgicaWeb): IIPC lists "Access methods:
   currently in development" (https://netpreserve.org/about-us/members/kbr/). No entry.
-- **RTBF / VRT NWS**: public broadcasters, reachable but mostly straight news. Not
-  surveyed further.
+- **RTBF / VRT NWS**: public broadcasters, reachable but mostly straight news. (Task 5e
+  surveyed both: RTBF is registered as `be-rtbf-info`; VRT's terms reserve TDM, so
+  `tdm_all`. See Wider sweep.)
+
+### Wider sweep (Task 5e)
+
+**Title list.** Newspapers come from Wikipedia's
+[List of newspapers in Belgium](https://en.wikipedia.org/wiki/List_of_newspapers_in_Belgium),
+whose daily-newspaper table names every daily below with its average distribution in 2011
+(CIM). Circulation below is that 2011 figure; the page gives none for the Brussels Times
+(NA) or the broadcasters (n/a). Public-broadcaster and other news sites (VRT NWS, RTBF, RTL
+info, 7sur7, BRUZZ) were added from the owner's brief. Magazines come from the owner's lists,
+cross-checked against Wikipedia's
+[List of magazines in Belgium](https://en.wikipedia.org/wiki/List_of_magazines_in_Belgium),
+which names Knack, Le Vif/L'Express, HUMO, Dag Allemaal, Story, Libelle, Flair, Femmes
+d'Aujourd'hui, Moustique, Ciné-Télé-Revue, Paris Match Belgique, Plus Magazine, Joepie,
+Mondiaal Nieuws (MO*), Médor and Kerk en Leven. Apache, DeWereldMorgen, Doorbraak and
+Télépro are not on that page; they were added as Belgian opinion and TV-guide titles. We
+found no cited magazine circulation figures (n/a). De Standaard, La Libre, Le Soir,
+BelgicaPress and forum.politics.be are covered above. We checked 38 titles, all listed in
+the two tables below: 18 newspapers and 20 magazines. 5 are registered (rows marked
+**Registry**) and 33 are not. For each we read robots.txt, the terms page, and one to
+three sample pages (paywall flag and whether the body is in the HTML).
+
+Belgium splits into three groups. (1) Blocked: DPG Media (HLN, De Morgen, 7sur7, Humo, Dag
+Allemaal, Story, Joepie) returned its "Web Application Firewall" 403 to every request;
+Rossel (Sudinfo, Grenz-Echo, Metro, Ciné-Télé-Revue) returned an Akamai 403; Mediafin (De
+Tijd, L'Echo) served the homepage but returned a "Bot detection" 403 for robots.txt and the
+terms; Roularta (Knack, Le Vif, Libelle, Flair, Femmes d'Aujourd'hui, Télépro) and Plus
+Magazine served an AWS "Human Verification" page (HTTP 405). We did not try to get past any of these, so
+their scope is `unknown`. Such titles are open under the rule but unusable until the terms
+and access are checked in a browser. (2) Closed: Mediahuis (Het Nieuwsblad, GVA, HBVL) and
+VRT reserve TDM (`tdm_all`); IPM (DH, Paris Match Belgique) uses the La Libre "sous toute
+forme" clause, and Moustique, BRUZZ, Apache and Kerknet restrict use (`all_reuse`). (3)
+Open and usable: RTBF, L'Avenir, RTL info, MO* and DeWereldMorgen.
+
+#### Newspapers
+
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| RTBF (Actus, Opinions / Carte blanche) | copyright_boilerplate | n/a | **Registry** `be-rtbf-info`. Public broadcaster. The CGU ban copying except "utilisation à des fins strictement privées", with no AI clause. 2/2 opinion pages free. | `evidence_urls` of registry entry `be-rtbf-info` |
+| L'Avenir | copyright_boilerplate | 94,118 | **Registry** `be-lavenir-website`. EDA Presse terms grant rights "à titre personnel", with no use ban and no AI clause. 1 of 3 opinion pieces free. | `evidence_urls` of registry entry `be-lavenir-website` |
+| RTL info | unknown | n/a | **Registry** `be-rtl-info`. Terms page is a script shell; robots.txt blocks AI bots. 2/2 news pages free; no opinion section. | `evidence_urls` of registry entry `be-rtl-info` |
+| Het Laatste Nieuws | unknown | 288,898 | Blocked: DPG WAF 403 on homepage and robots.txt; WebFetch could not fetch robots.txt. | https://www.hln.be/ and https://www.hln.be/robots.txt (403, "blocked by DPG Media's Web Application Firewall") |
+| Het Nieuwsblad | tdm_all | 264,961 (incl. De Gentenaar) | robots.txt: "In accordance with Article 4 of the Directive on Copyright in the Digital Single Market (CDSM) ... all content of this website ... is not to be used for the purposes of text and data mining, extraction, scraping ... whether for machine learning or artificial intelligence purposes or otherwise". Homepage 403. | https://www.nieuwsblad.be/robots.txt ("is not to be used for the purposes of text and data mining"); https://www.nieuwsblad.be/ (403) |
+| Gazet van Antwerpen | tdm_all | 101,559 | Same Mediahuis Art. 4 reservation in robots.txt. Homepage 403. | https://www.gva.be/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Het Belang van Limburg | tdm_all | 100,113 | Same Mediahuis Art. 4 reservation in robots.txt. Homepage 403. | https://www.hbvl.be/robots.txt ("is not to be used for the purposes of text and data mining") |
+| De Morgen | unknown | 55,870 | Blocked: DPG WAF 403 on homepage and robots.txt. | https://www.demorgen.be/ and /robots.txt (403) |
+| De Tijd | unknown | 37,720 | Homepage served (200), but robots.txt and the terms page returned 403 "Bot detection"; WebFetch could not fetch the terms. | https://www.tijd.be/robots.txt and https://www.tijd.be/service/algemene-voorwaarden.html (403) |
+| L'Echo | unknown | 17,170 | Same Mediafin bot detection: 403 on robots.txt and the terms page. | https://www.lecho.be/robots.txt and https://www.lecho.be/service/conditions-generales.html (403) |
+| La Dernière Heure / Les Sports+ | all_reuse | 62,427 | IPM conditions générales (same as La Libre): "Toute reproduction totale ou partielle et sous toute forme des contenus ... est strictement interdite". The sampled editorial had `isAccessibleForFree` false. | https://www.dhnet.be/page/conditions-generales/ ("Toute reproduction totale ou partielle et sous toute forme"); https://www.dhnet.be/robots.txt; sample https://www.dhnet.be/actu/edito/2026/11/18/appel-au-boycott-du-nouveau-james-bond-ou-quand-le-cinema-se-footballise-5KLUYFUMJ5CERADQPOPASDSNQI/ |
+| Sudinfo (SudPresse: La Meuse, La Capitale, La Nouvelle Gazette, La Province, Nord Éclair) | unknown | 115,853 | Blocked: Akamai 403 on homepage and robots.txt. | https://www.sudinfo.be/ and /robots.txt (403) |
+| Grenz-Echo | unknown | 12,079 | Blocked: Akamai 403 on homepage and robots.txt. | https://www.grenzecho.net/ and /robots.txt (403) |
+| Metro (BE) | unknown | 130,968 (nl) / 116,022 (fr) | metrotime.be redirects to lesoir.be, which returned 403. | https://www.metrotime.be/ (redirect to https://www.lesoir.be/, 403) |
+| The Brussels Times | unknown | NA | The site is a script-rendered app: the homepage and /terms-and-conditions served the same shell with no terms text. robots.txt has no AI block. English-language and expat-oriented; access not verified, so not registered. | https://www.brusselstimes.com/terms-and-conditions (script shell); https://www.brusselstimes.com/robots.txt |
+| VRT NWS | tdm_all | n/a | VRT terms: "VRT maakt een uitdrukkelijk voorbehoud dat de reproductie, opvraging en elk ander gebruik van rechtmatig toegankelijke VRT-content met het oog op tekst- en datamining enkel kan met de voorafgaande, specifieke schriftelijke toestemming van VRT"; automated use "(vb. voor het trainen van artificiële intelligentie (AI))" is also banned. | https://www.vrt.be/nl/info/gebruiksvoorwaarden ("uitdrukkelijk voorbehoud ... met het oog op tekst- en datamining"); https://www.vrt.be/robots.txt |
+| 7sur7 | unknown | n/a | Blocked: DPG WAF 403 on homepage and robots.txt. | https://www.7sur7.be/ and /robots.txt (403) |
+| BRUZZ | all_reuse | n/a | Disclaimer: articles "mogen op geen enkele wijze worden verspreid, gebruikt of overgenomen". | https://www.bruzz.be/disclaimer-copyright-op-bruzzbe ("op geen enkele wijze worden verspreid, gebruikt of overgenomen") |
+
+#### Magazines
+
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| MO* (Mondiaal Nieuws) | copyright_boilerplate | n/a | **Registry** `be-mo-magazine`. Personal download and copying allowed, reproduction needs permission; no AI clause. 3/3 column/opinion pages free. | `evidence_urls` of registry entry `be-mo-magazine` |
+| DeWereldMorgen | unknown | n/a | **Registry** `be-dewereldmorgen`. No terms found. 2/2 opinion pages free; sitemap from 2008; has reader "Community" posts. | `evidence_urls` of registry entry `be-dewereldmorgen` |
+| Knack | unknown | n/a | Blocked: AWS "Human Verification" page (HTTP 405) on homepage and /algemene-voorwaarden/; WebFetch got 403. robots.txt (readable) has no AI block. roularta.com's own disclaimer covers only the corporate site. | https://www.knack.be/ and https://www.knack.be/algemene-voorwaarden/ (405 challenge); https://www.knack.be/robots.txt |
+| Le Vif | unknown | n/a | Same Roularta AWS challenge (405). robots.txt has no AI block. | https://www.levif.be/ (405); https://www.levif.be/robots.txt |
+| Libelle (BE) | unknown | n/a | Same Roularta AWS challenge (405); robots.txt is the same Roularta template (`rmg_dologin`). | https://www.libelle.be/ (405); https://www.libelle.be/robots.txt |
+| Flair | unknown | n/a | Same Roularta AWS challenge (405). | https://www.flair.be/ (405); https://www.flair.be/robots.txt |
+| Femmes d'Aujourd'hui | unknown | n/a | Same Roularta AWS challenge (405). | https://www.femmesdaujourdhui.be/ (405); https://www.femmesdaujourdhui.be/robots.txt |
+| Plus Magazine | unknown | n/a | Same AWS challenge (405). | https://www.plusmagazine.be/ (405); https://www.plusmagazine.be/robots.txt |
+| Télépro | unknown | n/a | Same Roularta AWS challenge (405). | https://www.telepro.be/ (405); https://www.telepro.be/robots.txt |
+| HUMO | unknown | n/a | Blocked: DPG WAF 403 on homepage and robots.txt. | https://www.humo.be/ and /robots.txt (403) |
+| Dag Allemaal | unknown | n/a | Blocked: DPG WAF 403. | https://www.dagallemaal.be/ and /robots.txt (403) |
+| Story (BE) | unknown | n/a | Blocked: DPG WAF 403. | https://www.story.be/ and /robots.txt (403) |
+| Joepie | unknown | n/a | joepie.be redirects to hln.be/joepie (DPG WAF 403). | https://www.joepie.be/ (redirect to https://www.hln.be/joepie, 403) |
+| Moustique | all_reuse | n/a | L'Avenir Hebdo CGUV: the user agrees to "n'utiliser ces pages que pour ses besoins strictement personnels" and to download only "pour un usage personnel et limité dans le temps". robots.txt blocks CCBot, GPTBot and others. | https://www.moustique.be/page/conditions-generales/ ("n'utiliser ces pages que pour ses besoins strictement personnels"); https://www.moustique.be/robots.txt |
+| Paris Match Belgique | all_reuse | n/a | IPM conditions générales: "Toute reproduction totale ou partielle et sous toute forme ... est strictement interdite". | https://www.parismatch.be/page/conditions-generales/ ("sous toute forme"); https://www.parismatch.be/robots.txt |
+| Ciné-Télé-Revue | unknown | n/a | cinetelerevue.be redirects to sudinfo.be/cine-tele-revue (Akamai 403). | https://www.cinetelerevue.be/ (redirect, 403) |
+| Apache | all_reuse | n/a | Terms: "Je mag de inhoud van Apache ook niet automatisch opnemen in een database". robots.txt blocks GPTBot, CCBot, anthropic-ai and Claude-Web. | https://apache.be/algemene-voorwaarden ("niet automatisch opnemen in een database"); https://apache.be/robots.txt |
+| Doorbraak | copyright_boilerplate | n/a | Terms: "Het verder verspreiden van deze inhoud ... zonder de uitdrukkelijke schriftelijke toestemming van Perruptio BV, is verboden". Open, but all four sampled pieces (one interview, one column, two Forum pieces) carried the "Plus" paywall block ("Dit artikel is er eentje voor onze abo[nnees]"), and three served only ~3,000 characters of page text. No free full text verified, so not registered. Flemish-nationalist opinion. | https://doorbraak.be/algemene-voorwaarden ("Het verder verspreiden van deze inhoud ... is verboden"); samples https://doorbraak.be/barbara-pas-vlaams-belang-wat-de-nva-doet-is-niet-compromissen-maken-maar-kruipen, https://doorbraak.be/de-discriminatiemythe-ontkracht, https://doorbraak.be/de-vragen-die-kasparov-niet-kreeg, https://doorbraak.be/een-parlementaire-gebedslunch-is-de-scheiding-van-kerk-en-staat-nu-bedreigd |
+| Médor | none | n/a | Conditions générales: Médor encourages authors to publish "sous des licences Creative Commons, qui sont renseignées dans les articles"; sampled pieces are "Texte (CC BY-NC-ND)". Quarterly, mostly for subscribers. Two "libre accès" pieces served ~400 words with a trial overlay ("Je lis d'abord la suite"), so we could not verify full free text. Not registered. | https://medor.coop/medor-cest-quoi-cest-qui/conditions-generales/ ("sous des licences Creative Commons"); samples https://medor.coop/magazines/medor-n44-automne-2026/edito-a-quoi-bon-impact-journalisme-changement-democratie-environnement-sante-social/, https://medor.coop/magazines/medor-n44-automne-2026/chomage-le-debut-de-la-fin-reforme-aide-sociale-allocations-politique-mobilisation-archive-photo-guyaux-histoire-onem-cpas/ |
+| Kerknet (Kerk & Leven) | all_reuse | n/a | Terms: "Zonder toestemming mag je informatie op deze website op geen enkele manier gebruiken, kopiëren, opslaan, publiceren ...". | https://www.kerknet.be/gebruiksvoorwaarden ("op geen enkele manier gebruiken, kopiëren, opslaan") |
+
+#### Open titles shortlist (BE), ranked by fit
+
+Newspapers:
+
+1. `be-rtbf-info`: free francophone public broadcaster with an Opinions / Carte blanche
+   section (outside op-eds by associations and citizens). Boilerplate terms only. Archive
+   depth of opinions not verified.
+2. `be-lavenir-website`: regional francophone daily with Opinions and Espace débat; partly
+   free, boilerplate terms. Pair with `be-rtbf-info`.
+3. `be-rtl-info`: free commercial TV news; terms unread and no opinion section, so low
+   fit.
+
+No usable Flemish daily was found. Mediahuis and VRT reserve TDM; DPG and Mediafin block
+our client.
+
+Magazines:
+
+1. `be-dewereldmorgen`: free Flemish opinion and reader "Community" posts, with sitemap
+   URLs from 2008. Left-leaning; terms unknown, so ask the publisher.
+2. `be-mo-magazine`: free Flemish columns and opinion on global affairs; boilerplate
+   terms. NGO slant.
+
+No open popular magazine with free text was reachable. Roularta's (Knack, Le Vif,
+Libelle, Flair, Femmes d'Aujourd'hui, Télépro), Plus Magazine and DPG's (HUMO, Dag Allemaal,
+Story) are all behind bot walls, so a browser check of the Roularta terms is the next
+step. Knack and Le Vif would be the best-fit opinion weeklies if their terms are open.
 
 ## LU
 
@@ -562,9 +672,121 @@ GeenStijl comments.
 - **de Volkskrant, Trouw, NU.nl (NUjij comments), De Telegraaf**: 403 on the landing
   pages (and for volkskrant.nl and nu.nl, on robots.txt too). Access model and terms were
   not verified. NUjij is a strong lead for reader comments.
-- **NOS**: public broadcaster, reachable, but straight news. Not surveyed.
+- **NOS**: public broadcaster, reachable, but straight news. (Task 5e: NOS terms ban
+  "Bots of AI-systemen gebruiken om automatisch data te verzamelen", so `all_reuse`. De
+  Telegraaf's robots.txt is now readable and carries the Mediahuis Art. 4 reservation.
+  See Wider sweep.)
 - **r/Netherlands**: English and expat-heavy. Recorded in the notes of
   `nl-reddit-thenetherlands`.
+
+### Wider sweep (Task 5e)
+
+**Title list.** Newspapers come from Wikipedia's
+[List of newspapers in the Netherlands](https://en.wikipedia.org/wiki/List_of_newspapers_in_the_Netherlands),
+which lists the national and regional dailies with 2017 circulation (Mediamonitor, "the
+last year precise numbers were published"). Circulation below is that 2017 figure.
+Broadcaster news sites (NOS, RTL Nieuws, NH Nieuws, Omroep Brabant) and Metro were added
+from the owner's brief. Magazines come from the owner's lists, cross-checked against
+Wikipedia's [List of magazines in the Netherlands](https://en.wikipedia.org/wiki/List_of_magazines_in_the_Netherlands),
+which names Elsevier, De Groene Amsterdammer, HP/De Tijd, Vrij Nederland, Nieuwe Revu,
+Panorama, Libelle, Margriet, Opzij, Privé, Story, Viva and Televizier. De Correspondent,
+Follow the Money, LINDA., TPO, Wynia's Week, De Dagelijkse Standaard and Joop are not on
+that page; they were added as major online opinion or popular titles. We found no cited
+magazine circulation figures (n/a). NRC, Delpher, the KB, GeenStijl, FOK! and Reddit are
+covered above. De Telegraaf, de Volkskrant, Trouw and NU.nl were dead ends in the first
+survey; the first three are re-checked below, and NU.nl still returned 403. We checked 48
+titles in 40 table rows: 20 newspaper rows (two of them group seven DPG and three
+Mediahuis regionals, so 28 newspapers) and 20 magazines. 9 are
+registered (rows marked **Registry**) and 39 are not. For each we read robots.txt, the
+terms page, and one to three sample pages.
+
+The Dutch national and regional press is closed or blocked. Every Mediahuis NL daily we
+could read (De Telegraaf and eight regionals) carries the Art. 4 CDSM reservation in
+robots.txt. FD and RD print their own TDM/AI ban in robots.txt, and ND reserves TDM in its
+terms (`tdm_all`). All DPG Media titles (AD, de Volkskrant, Trouw, Het Parool, the DPG
+regionals, Libelle, Margriet, LINDA., Story) returned DPG's "Web Application Firewall" 403,
+so they are `unknown` and unusable for now. NOS bans bots and AI collection
+(`all_reuse`). The open, usable titles are regional public broadcasters (NH Nieuws, Omroep
+Brabant), Metro, and a set of online opinion and popular magazines.
+
+#### Newspapers
+
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| NH Nieuws | ai_training_only | n/a | **Registry** `nl-nh-nieuws`. robots.txt content signals: `ai-train=no, search=yes, ai-input=yes`. Free regional public broadcaster. | `evidence_urls` of registry entry `nl-nh-nieuws` |
+| Omroep Brabant | unknown | n/a | **Registry** `nl-omroep-brabant`. No terms page found; llms.txt invites AI use. Free. | `evidence_urls` of registry entry `nl-omroep-brabant` |
+| Metro | unknown | n/a | **Registry** `nl-metro`. The linked Mediahuis NL terms returned 403; robots.txt has no reservation or AI block. Free; sitemaps from 2020. | `evidence_urls` of registry entry `nl-metro` |
+| De Telegraaf | tdm_all | 385,501 | robots.txt (now readable): "In accordance with Article 4 of the Directive on Copyright in the Digital Single Market (CDSM) ... all content of this website ... is not to be used for the purposes of text and data mining ...". Homepage 403. | https://www.telegraaf.nl/robots.txt ("is not to be used for the purposes of text and data mining"); https://www.telegraaf.nl/ (403) |
+| Algemeen Dagblad | unknown | 340,758 | Blocked: DPG WAF 403 on homepage and robots.txt. | https://www.ad.nl/ and /robots.txt (403, "blocked by DPG Media's Web Application Firewall") |
+| de Volkskrant | unknown | 239,219 | Re-check: still DPG WAF 403 on homepage and robots.txt. | https://www.volkskrant.nl/ and /robots.txt (403) |
+| Trouw | unknown | 98,882 | Re-check: still DPG WAF 403. | https://www.trouw.nl/ and /robots.txt (403) |
+| Het Financieele Dagblad | tdm_all | 47,363 | robots.txt "AI & TDM OPT-OUT": "Scraping, harvesting, or any other form of data or text mining, machine learning, or artificial intelligence purposes ... using FD content — is expressly prohibited." | https://fd.nl/robots.txt ("any other form of data or text mining ... is expressly prohibited") |
+| Reformatorisch Dagblad | tdm_all | 42,967 | robots.txt: the same wording ("... using RD content — is expressly prohibited"), plus `User-agent: *` `Disallow: /`. | https://www.rd.nl/robots.txt ("any other form of data or text mining ... is expressly prohibited") |
+| Nederlands Dagblad | tdm_all | 19,593 | Terms 7.3, an express Art. 15o reservation: "ND behoudt zich met betrekking tot ... tekst- en datamining van content van ND, als bedoeld in artikel 15 c.q. 15o van de Auteurswet, daaronder begrepen, maar niet uitsluitend het gebruik van content van ND voor het trainen van generatieve ...". robots.txt: "Nederlands Dagblad allows search indexing, but no real-time retrieval, no AI training." | https://www.nd.nl/service/algemene-voorwaarden ("met betrekking tot tekst- en datamining van content van ND, als bedoeld in artikel 15 c.q. 15o van de Auteurswet"); https://www.nd.nl/robots.txt |
+| Het Parool | unknown | 49,483 | Blocked: DPG WAF 403. | https://www.parool.nl/ and /robots.txt (403) |
+| De Gelderlander and the other DPG regionals (Brabants Dagblad, De Stentor, Tubantia, Eindhovens Dagblad, BN DeStem, PZC) | unknown | 111,311 (Gelderlander); 41,111-96,008 (others) | Blocked: all seven returned DPG WAF 403 on homepage and robots.txt. | https://www.gelderlander.nl/, https://www.bd.nl/, https://www.destentor.nl/, https://www.tubantia.nl/, https://www.ed.nl/, https://www.bndestem.nl/, https://www.pzc.nl/ (each plus /robots.txt, 403) |
+| Dagblad van het Noorden | tdm_all | 95,202 | Mediahuis Art. 4 reservation in robots.txt. Homepage 403. | https://www.dvhn.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Leeuwarder Courant | tdm_all | 64,639 | Same Mediahuis reservation. Homepage 403. | https://www.lc.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| De Limburger | tdm_all | 122,269 | Same Mediahuis reservation; the homepage redirected to a Mediahuis login. | https://www.limburger.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Noordhollands Dagblad | tdm_all | 95,767 | Same Mediahuis reservation. Homepage 403. | https://www.noordhollandsdagblad.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Friesch Dagblad | tdm_all | 12,112 | Same Mediahuis reservation. Homepage 403. | https://www.frieschdagblad.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Haarlems Dagblad, Leidsch Dagblad, De Gooi- en Eemlander | tdm_all | 25,464 / 21,318 / 17,020 | Same Mediahuis reservation in all three robots.txt files. Homepages 403. | https://www.haarlemsdagblad.nl/robots.txt, https://www.leidschdagblad.nl/robots.txt, https://www.gooieneemlander.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| NOS | all_reuse | n/a | Terms: you may not "Bots of AI-systemen gebruiken om automatisch data te verzamelen, tenzij NOS dit expliciet toestaat"; content may be viewed and shared "voor persoonlijk en niet-commercieel gebruik". robots.txt blocks CCBot, GPTBot and others. | https://over.nos.nl/organisatie/algemene-voorwaarden-nos/ ("Bots of AI-systemen gebruiken om automatisch data te verzamelen"); https://nos.nl/robots.txt |
+| RTL Nieuws | unknown | n/a | rtl.nl redirected to the DPG privacy gate (403); terms not read. robots.txt: "Blocked are AI training, AI search and AI agents, SEO scrapers, archives". | https://www.rtl.nl/ (redirect to myprivacy.dpgmedia.nl, 403); https://www.rtl.nl/robots.txt |
+
+#### Magazines
+
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| De Correspondent | copyright_boilerplate | n/a | **Registry** `nl-de-correspondent`. No publishing, copying, scanning "of anderszins te exploiteren" without permission; no AI clause. 2/2 pages free. | `evidence_urls` of registry entry `nl-de-correspondent` |
+| Wynia's Week | unknown | n/a | **Registry** `nl-wynias-week`. Only shop terms found. Free opinion columns; sitemaps from 2019. | `evidence_urls` of registry entry `nl-wynias-week` |
+| TPO (ThePostOnline) | copyright_boilerplate | n/a | **Registry** `nl-tpo`. Same terms template as De Correspondent. Has a Premium tier; 3 sampled pages served their body. | `evidence_urls` of registry entry `nl-tpo` |
+| De Dagelijkse Standaard | crawler_block_only | n/a | **Registry** `nl-dagelijkse-standaard`. No terms found; robots.txt blocks AI bots on /nieuws/ only. 2/2 Opinie pages free. | `evidence_urls` of registry entry `nl-dagelijkse-standaard` |
+| VIVA | unknown | n/a | **Registry** `nl-viva`. Terms put no reuse restriction on visitors. 2/2 pages free. | `evidence_urls` of registry entry `nl-viva` |
+| Opzij | unknown | n/a | **Registry** `nl-opzij`. No terms found. 2/2 pages free; sitemaps from 2017. | `evidence_urls` of registry entry `nl-opzij` |
+| EW (Elsevier Weekblad) | unknown | n/a | Blocked: AWS "Human Verification" page (HTTP 405), as on the Roularta BE sites; robots.txt uses the Roularta template (`rmg_dologin`). Terms unread. | https://www.ewmagazine.nl/ (405 challenge); https://www.ewmagazine.nl/robots.txt |
+| De Groene Amsterdammer | all_reuse | n/a | Terms: "Voor het overnemen, opslaan en verspreiden van (delen van) de inhoud en gebruik van de vormgeving, op welke wijze dan ook, dient u vooraf schriftelijke toestemming te hebben verkregen". robots.txt blocks AI training, search and RAG agents. | https://www.groene.nl/over/pagina/gebruiksvoorwaarden ("overnemen, opslaan en verspreiden ... op welke wijze dan ook"); https://www.groene.nl/robots.txt |
+| Vrij Nederland | unknown | n/a | The disclaimer has no reuse clause; the algemene voorwaarden PDF was not read. Two sampled articles served only ~110-120 words (paywalled), so no free part was found. Not registered. | https://www.vn.nl/service/disclaimer/; samples https://www.vn.nl/dag-verzorgingsstaat-hallo-vermogensstaat/, https://www.vn.nl/econoom-eelco-heinen-moet-op-bijles/ |
+| HP/De Tijd | all_reuse | n/a | Terms: "Gebruik van (de aangeboden informatie op) de Website is alleen toegestaan voor persoonlijke, niet commerciële doeleinden", and copying by any means "(bijv. geautomatiseerde software)" is banned. The sampled page had `isAccessibleForFree` False. | https://www.hpdetijd.nl/gebruikersvoorwaarden ("alleen toegestaan voor persoonlijke, niet commerciële doeleinden"); sample https://www.hpdetijd.nl/boezemvrienden/boezemvrienden/48508/rinus-gerritsen-en-nico-dijkshoorn-in-het-begin-was-ik-starstruck |
+| Follow the Money | copyright_boilerplate | n/a | Same terms template as De Correspondent ("openbaar te maken, te verveelvoudigen, scannen of anderszins te exploiteren"). robots.txt: "Training en dataverzameling: geblokkeerd". Member-funded; the sampled articles served ~500 and ~1,400 words with no free flag, so the free share is not established. Investigative, low opinion fit. Not registered. | https://www.ftm.nl/over-ftm/voorwaarden; https://www.ftm.nl/robots.txt; samples https://www.ftm.nl/artikelen/ai-bedrijf-wil-geld-verdienen-met-dubieuze-duurzaamheids-claim, https://www.ftm.nl/artikelen/gevangen-in-de-franse-morvan-1-weggestopt-en-uitgebuit |
+| Joop (BNNVARA) | all_reuse | n/a | BNNVARA terms: "Het is niet toegestaan de Diensten op geautomatiseerde wijze te (laten) raadplegen en/of te analyseren, zoals onder meer via scripts, spiders en of bots." joop.nl redirects to bnnvara.nl/joop. | https://www.bnnvara.nl/algemene-voorwaarden ("op geautomatiseerde wijze te (laten) raadplegen en/of te analyseren") |
+| Panorama | all_reuse | n/a | Pijper Media robots.txt: the content is "uitsluitend voor persoonlijk, niet-commercieel gebruik en het is niet toegestaan om gegevens ... door middel van screen scraping (of een andere geautomatiseerde werkwijze) te vergaren". | https://panorama.nl/robots.txt ("uitsluitend voor persoonlijk, niet-commercieel gebruik") |
+| Nieuwe Revu | all_reuse | n/a | Same Pijper Media robots.txt clause. | https://revu.nl/robots.txt ("uitsluitend voor persoonlijk, niet-commercieel gebruik") |
+| Privé | tdm_all | n/a | prive.nl redirects to telegraaf.nl/entertainment, so it falls under De Telegraaf's Art. 4 reservation (prive.nl/robots.txt served a Cloudflare challenge). | https://www.prive.nl/ (redirect to https://www.telegraaf.nl/entertainment, 403); https://www.telegraaf.nl/robots.txt ("is not to be used for the purposes of text and data mining") |
+| Libelle (NL) | unknown | n/a | Blocked: DPG WAF 403 on homepage and robots.txt. | https://www.libelle.nl/ and /robots.txt (403) |
+| Margriet | unknown | n/a | Blocked: DPG WAF 403. | https://www.margriet.nl/ and /robots.txt (403) |
+| LINDA. | unknown | n/a | Blocked: DPG WAF 403. | https://www.linda.nl/ and /robots.txt (403) |
+| Story (NL) | unknown | n/a | Blocked: DPG WAF 403. | https://www.story.nl/ and /robots.txt (403) |
+| Televizier | all_reuse | n/a | Terms: the services "zijn alleen bedoeld voor eigen persoonlijke raadpleging en/of via normaal browserbezoek". | https://www.televizier.nl/algemene-voorwaarden/ ("alleen bedoeld voor eigen persoonlijke raadpleging en/of via normaal browserbezoek") |
+
+#### Open titles shortlist (NL), ranked by fit
+
+Newspapers:
+
+1. `nl-nh-nieuws`: free regional public broadcaster that explicitly allows `ai-input`
+   (only AI training is refused). The clearest terms in this batch, but mostly news.
+2. `nl-omroep-brabant`: free regional public broadcaster with no terms found and an
+   AI-friendly llms.txt. News only.
+3. `nl-metro`: free daily with a daily reader poll ("Stelling van de dag"). Its Mediahuis
+   terms are unread, so check them before use.
+
+No national daily is usable: Mediahuis, FD, RD and ND reserve TDM, and DPG blocks our
+client.
+
+Magazines:
+
+1. `nl-de-correspondent`: free long-form opinion and explanatory pieces, with boilerplate
+   terms (our reading of "anderszins te exploiteren"). Progressive.
+2. `nl-wynias-week`: free right-of-centre opinion columns from 2019; terms unknown. Pairs
+   with De Correspondent for balance.
+3. `nl-tpo`: right-leaning opinion and news, partly Premium; boilerplate terms.
+4. `nl-dagelijkse-standaard`: right-wing opinion blog with comments; one-sided.
+5. Popular-magazine stream: `nl-viva` (women's, free, terms silent on reuse) and
+   `nl-opzij` (feminist monthly, free, from 2017).
+
+The big popular titles (Libelle, Margriet, LINDA., Story) are DPG and blocked; Privé is
+under the Telegraaf reservation; Panorama, Nieuwe Revu and Televizier restrict use.
+Letters pages were not checked title by title.
 
 ## DE
 

@@ -1910,6 +1910,196 @@
     lesoir.be and hln.be returned 403 even for robots.txt, so their status is unknown.
     Belgian coverage must be measured from the index.
 
+# --- BE wider sweep (Task 5e batch ii)
+
+- id: be-lavenir-website
+  name: L'Avenir website (lavenir.net, Opinions and Espace débat)
+  country: BE
+  source_type: newspaper_archive
+  url: https://www.lavenir.net/opinions/
+  access: partial_paywall
+  year_start: 2026
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: EDA Presse conditions générales d'utilisation et de vente (rights granted "à titre personnel"; no TDM/AI clause)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lavenir.net/opinions/
+    - https://www.lavenir.net/opinions/2026/10/16/budget-il-est-minuit-moins-une-5Q2ADJCXHRADHLZUXQOIW4UMDI/
+    - https://www.lavenir.net/opinions/2026/10/16/opinion-linquietude-pour-le-climat-ce-nest-pas-du-rechauffe-YA4ICU4K7JFJFDREAAYMN5F52M/
+    - https://www.lavenir.net/opinions/2026/11/18/lia-et-les-travailleurs-V2LOGFRRMBARDNVNWKVCHENNQA/
+    - https://www.lavenir.net/abonnement/cdv/
+    - https://www.lavenir.net/robots.txt
+  notes: >-
+    Terms (linked as "Conditions générales" in the footer): "Les droits de consultation,
+    d'utilisation et d'accès visés ci-dessus sont accordés à titre personnel, et non
+    transmissible aux Utilisateurs par les EDA PRESSE", and 9.3 "L'Utilisateur s'engage à
+    ne pas utiliser les Informations de manière à porter atteinte aux droits des EDA PRESSE
+    et à ce que cette utilisation ne constitue pas de la contrefaçon". No TDM, automated or
+    AI clause and no "any other use" ban, so copyright_boilerplate. The IPM conditions page
+    used by La Libre/DH (/page/conditions-generales/) returned 404 here. robots.txt blocks
+    CCBot, GPTBot, Claudebot, anthropic-ai and press-monitoring bots. Of three sampled
+    opinion pieces, one had isAccessibleForFree "True" and two "False", hence
+    partial_paywall. year_start 2026 = oldest page seen; archive depth not verified.
+    Regional francophone daily (Wallonia); also has an "Espace débat" section.
+
+- id: be-rtbf-info
+  name: RTBF Actus (rtbf.be, incl. Opinions / Carte blanche)
+  country: BE
+  source_type: newspaper_archive
+  url: https://www.rtbf.be/dossier/opinions
+  access: free
+  year_start: 2010
+  year_end: null
+  languages: [fr]
+  genres: [opinion, news]
+  access_method: scrape
+  licence: RTBF conditions générales d'utilisation (reproduction etc. banned except strictly private use)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.rtbf.be/cgu
+    - https://www.rtbf.be/robots.txt
+    - https://www.rtbf.be/sitemap.xml
+    - https://www.rtbf.be/dossier/opinions
+    - https://www.rtbf.be/article/carte-blanche-aide-alimentaire-l-approvisionnement-en-chute-libre-1-3-de-budget-en-moins-pour-2026-11570515
+    - https://www.rtbf.be/article/a-toutes-celles-qui-paient-le-lourd-tribut-de-l-invisibilite-11614049
+    - https://www.rtbf.be/article/le-flux-rss-mode-d-emploi-3266
+  notes: >-
+    Francophone public broadcaster. CGU: "En vertu des règles relatives à la propriété
+    intellectuelle et sauf l'hypothèse de l'utilisation à des fins strictement privées,
+    toute reproduction (y compris par téléchargement, impression,…), toute communication,
+    représentation, adaptation, traduction, transformation, incorporation, commercialisation
+    et/ou transfert partiel ou intégral vers un autre site ..." is banned. It lists
+    copyright acts only, with private use allowed, and has no TDM, automated or AI clause,
+    so copyright_boilerplate. robots.txt blocks AI2Bot, anthropic-ai, CCBot, ClaudeBot,
+    GPTBot and others. access "free" is observed: two sampled "Carte blanche"/opinion pages
+    (2025) served ~1,100-1,250 words in paragraph tags with no paywall marker or
+    isAccessibleForFree field. year_start 2010 = oldest page seen (a 2010-07-07 RSS help
+    page); archive depth of opinion pieces not verified.
+
+- id: be-rtl-info
+  name: RTL info (rtl.be)
+  country: BE
+  source_type: newspaper_archive
+  url: https://www.rtl.be/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [fr]
+  genres: [news]
+  access_method: scrape
+  licence: unknown (legal.rtl.be terms page is a script-only shell)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.rtl.be/robots.txt
+    - https://legal.rtl.be/conditions-generales-d-utilisation
+    - https://www.rtl.be/actu/belgique/economie/arreter-de-travailler-et-vivre-de-ses-rentes-combien-faut-il-avoir-de-cote-en/2026-11-17/article/806839
+    - https://www.rtl.be/actu/belgique/meteo/nen-pas-fini-avec-les-fortes-precipitations-le-code-jaune-prolonge-sur-la-quasi/2026-11-18/article/806943
+  notes: >-
+    Commercial francophone TV news site. The footer's terms link
+    (legal.rtl.be/conditions-generales-d-utilisation) served an empty script-rendered
+    shell ("Espace de confidentialité"), so the terms are unread: scope unknown (open in
+    the EU rule). robots.txt: "Robots IA : bloques PARTOUT, sauf sur les repertoires a
+    visibilite maximale (/actu/conso/, /partenaire/)", with GPTBot, ClaudeBot, CCBot,
+    anthropic-ai and others disallowed. Both sampled news pages had isAccessibleForFree
+    "True". Mostly straight news; no opinion section found, so low fit. year_start 2026 =
+    oldest page seen.
+
+- id: be-mo-magazine
+  name: MO* (Mondiaal Nieuws, mo.be)
+  country: BE
+  source_type: magazine
+  url: https://www.mo.be/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [nl]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: Wereldmediahuis disclaimer (personal download/copying allowed; reproduction needs permission)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.mo.be/mo/disclaimer
+    - https://www.mo.be/robots.txt
+    - https://www.mo.be/sitemap.xml
+    - https://www.mo.be/column/de-herfst-van-het-grote-zwijgen
+    - https://www.mo.be/column/namaakei
+    - https://www.mo.be/opinie/afrika-heeft-een-ander-soort-klimaatfinanciering-nodig
+  notes: >-
+    Flemish global-affairs magazine with Column and Opinie sections. Disclaimer: articles
+    "kunnen door andere organisaties overgenomen, gereproduceerd, openbaar gemaakt en/of
+    verspreid worden, mits goedkeuring van onze organisatie en duidelijke bronvermelding",
+    and "Downloaden en kopiëren van gegevens voor persoonlijk gebruik, bekendmaking louter
+    binnen de familie- en vriendenkring en korte aanhalingen uit artikels, zijn zonder
+    toestemming en mits bronvermelding toch toegelaten, tenzij voor commerciële
+    doeleinden." No TDM, automated or AI clause, so copyright_boilerplate. robots.txt is
+    "User-agent: * Allow: /" (no AI block; its Sitemap line points to localhost).
+    access "free" is observed: three sampled column/opinion pages served ~1,000-2,250 words
+    in paragraph tags with no paywall prompt; no isAccessibleForFree field. The sitemap at
+    /sitemap.xml lists only 100 recent URLs, so archive depth is not verified (year_start
+    2026 = oldest page seen). Global-South/NGO slant.
+
+- id: be-dewereldmorgen
+  name: DeWereldMorgen.be (news, opinion and reader "community" blogs)
+  country: BE
+  source_type: magazine
+  url: https://www.dewereldmorgen.be/
+  access: free
+  year_start: 2008
+  year_end: null
+  languages: [nl]
+  genres: [opinion, news, other]
+  access_method: scrape
+  licence: unknown (no terms or licence page found)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "sitemap index of 11 pages, up to 2,000 URLs each (~20k URLs)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dewereldmorgen.be/over-ons
+    - https://www.dewereldmorgen.be/robots.txt
+    - https://www.dewereldmorgen.be/sitemap.xml
+    - https://www.dewereldmorgen.be/sitemap.xml?page=1
+    - https://www.dewereldmorgen.be/artikel/2026/11/10/met-zakenadvocaten-als-minister-van-justitie-krijg-je-zakenjustitie
+    - https://www.dewereldmorgen.be/artikel/2026/11/11/dit-is-geen-begrotingscrisis-dit-is-consequent-neoliberaal-beleid
+  notes: >-
+    Left-leaning Flemish citizen-journalism site with a "Community" section of reader
+    contributions. No terms, disclaimer or licence link on the homepage; the over-ons page
+    has no reuse clause. Scope unknown (open in the EU rule). robots.txt is the Drupal
+    default with no AI-crawler block. access "free" is observed: two sampled 2026 opinion
+    pieces served ~1,900-2,000 words in paragraph tags with no paywall marker. Sitemap page
+    1 has URLs dated /artikel/2008 (3), 2009 (3) and 2010 (1,126), so year_start 2008.
+    One-sided readership; pair it with Doorbraak-type sources if any become usable.
+
 # ---------------------------------------------------------------- LU
 
 - id: lu-eluxemburgensia
@@ -2445,6 +2635,315 @@
     Same dataset as gb-common-crawl-news. nrc.nl disallows CCBot; forum.fok.nl does not.
     volkskrant.nl and nu.nl returned 403 even for robots.txt, so their status is unknown.
     Dutch coverage must be measured from the index.
+
+# --- NL wider sweep (Task 5e batch ii)
+
+- id: nl-nh-nieuws
+  name: NH Nieuws (nhnieuws.nl, regional public broadcaster North Holland)
+  country: NL
+  source_type: newspaper_archive
+  url: https://www.nhnieuws.nl/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [nl]
+  genres: [news]
+  access_method: scrape
+  licence: robots.txt content signals (ai-train=no, search=yes, ai-input=yes); disclaimer page unread
+  tdm_opt_out: "yes"
+  restriction_scope: ai_training_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~365,400 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nhnieuws.nl/robots.txt
+    - https://www.nhnieuws.nl/llms.txt
+    - https://www.nhnieuws.nl/disclaimer
+    - https://www.nhnieuws.nl/nieuws/365407/dit-vinden-ze-in-zandvoort-en-bloemendaal-van-de-miljonairsbelasting-die-kunnen-het-missen
+  notes: >-
+    robots.txt: "As a condition of accessing this website, you agree to abide by the
+    following content signals" and "Content-Signal: ai-train=no, search=yes, ai-input=yes".
+    llms.txt says robots.txt "vormt een expliciete reservering van rechten onder artikel 4
+    van EU-richtlijn 2019/790" and "Bij gebruik van onze journalistieke content is
+    bronvermelding naar nhnieuws.nl verplicht. Commerciële exploitatie vereist voorafgaande
+    schriftelijke toestemming". Only AI training is refused; ai-input (feeding content to
+    an AI model, i.e. our LLM tagging) is allowed, so ai_training_only. robots.txt also
+    disallows GPTBot, CCBot, ClaudeBot and anthropic-ai. The disclaimer page served a
+    script shell (~800 characters of text). The sampled news page had no paywall marker
+    (public broadcaster, free). Mostly regional news; reader voice appears only in vox-pop
+    pieces. year_start 2026 = oldest page seen.
+
+- id: nl-omroep-brabant
+  name: Omroep Brabant (omroepbrabant.nl, regional public broadcaster North Brabant)
+  country: NL
+  source_type: newspaper_archive
+  url: https://www.omroepbrabant.nl/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [nl]
+  genres: [news]
+  access_method: scrape
+  licence: unknown (no terms page linked; llms.txt gives AI usage guidelines)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~6,035,000 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.omroepbrabant.nl/robots.txt
+    - https://www.omroepbrabant.nl/llms.txt
+    - https://www.omroepbrabant.nl/nieuws/6030126/het-is-hier-gewoon-wildwest-omwonenden-vliegveld-zijn-moe-van-het-klagen
+  notes: >-
+    The homepage links only a privacy page; no terms or copyright page was found, so scope
+    unknown (open in the EU rule). robots.txt has no AI-crawler block and points to
+    llms.txt, whose "AI Gebruiksrichtlijnen" invite AI models to "Gebruik de homepage en
+    recente artikelen voor actueel Brabants nieuws". The sampled news page served ~790
+    words in paragraph tags with no paywall marker. Regional news, low opinion fit.
+    year_start 2026 = oldest page seen.
+
+- id: nl-metro
+  name: Metro (metronieuws.nl)
+  country: NL
+  source_type: newspaper_archive
+  url: https://www.metronieuws.nl/
+  access: free
+  year_start: 2020
+  year_end: null
+  languages: [nl]
+  genres: [news, other]
+  access_method: scrape
+  licence: unknown (linked Mediahuis NL terms of use returned 403)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "sitemap index of 107 sub-sitemaps"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.metronieuws.nl/robots.txt
+    - https://www.metronieuws.nl/sitemap_index.xml
+    - https://www.metronieuws.nl/post-sitemap.xml
+    - https://www.mediahuis.nl/algemene-voorwaarden/gebruikersvoorwaarden-uitgaven/
+    - https://www.metronieuws.nl/geld-carriere/2026/11/stelling-van-de-dag-belachelijk-basisverzekering-meer-dan-2000-euro/
+  notes: >-
+    Free daily. The footer links the Mediahuis NL "Gebruikersvoorwaarden uitgaven", which
+    returned 403, so the terms are unread: scope unknown (open in the EU rule). Other
+    Mediahuis NL titles carry an Art. 4 CDSM reservation in robots.txt, but metronieuws.nl's
+    robots.txt has none and no AI-crawler block, so the reservation is not shown to apply
+    here; re-check the terms in a browser before use. The sampled "Stelling van de dag"
+    page (a daily reader poll) served ~320 words with no paywall marker. year_start 2020 =
+    oldest lastmod in the first post sitemap.
+
+- id: nl-de-correspondent
+  name: De Correspondent (decorrespondent.nl)
+  country: NL
+  source_type: magazine
+  url: https://decorrespondent.nl/
+  access: free
+  year_start: 2023
+  year_end: null
+  languages: [nl]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: De Correspondent voorwaarden (no publication, reproduction, scanning or other exploitation without permission)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~14,900"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://decorrespondent.nl/voorwaarden
+    - https://decorrespondent.nl/robots.txt
+    - https://decorrespondent.nl/14588/op-de-kleinkinderen-passen-komt-oma-duur-te-staan/d097ec8b-e63c-0a26-3615-5819f5e56052
+    - https://decorrespondent.nl/14901/beste-kamerleden-zo-geeft-u-de-tweede-kamer-een-vliegende-start/90f4a955-74dc-0734-0438-4f744526719c
+  notes: >-
+    Member-funded explanatory journalism. Voorwaarden: "Het is zonder voorafgaande
+    schriftelijke toestemming van De Correspondent niet toegestaan (delen van) de Dienst
+    openbaar te maken, te verveelvoudigen, scannen of anderszins te exploiteren." This bans
+    copyright acts and exploitation, not use, and has no TDM, automated or AI clause, so we
+    class it copyright_boilerplate (judgement call: "anderszins te exploiteren" read as
+    exploitation, not analysis). robots.txt disallows GPTBot, CCBot, ClaudeBot and
+    anthropic-ai. Both sampled pages had isAccessibleForFree "true". year_start 2023 =
+    oldest page seen; the site itself is older (not verified).
+
+- id: nl-tpo
+  name: TPO (ThePostOnline, tpo.nl)
+  country: NL
+  source_type: magazine
+  url: https://tpo.nl/
+  access: partial_paywall
+  year_start: 2023
+  year_end: null
+  languages: [nl]
+  genres: [opinion, news]
+  access_method: scrape
+  licence: TPO algemene voorwaarden (same template as De Correspondent)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://tpo.nl/algemene-voorwaarden/
+    - https://www.thepostonline.nl/robots.txt
+    - https://tpo.nl/2025/07/12/zionisme-gaat-vooraf-aan-antisemitisme-het-is-geworteld-in-joodse-geschiedenis-en-identiteit/
+    - https://tpo.nl/2026/11/18/peltola-alaska-democraten-senaat-meerderheid/
+    - https://tpo.nl/2026/11/18/thuisbatterijen-verdubbelen-einde-salderingsregeling/
+  notes: >-
+    Right-leaning opinion and news site with a "Premium" tier ("Lid worden voor €4,95 per
+    maand"). Terms: "Het is zonder voorafgaande schriftelijke toestemming van TPO niet
+    toegestaan (delen van) de Dienst openbaar te maken, te verveelvoudigen, scannen of
+    anderszins te exploiteren"; no TDM, automated or AI clause, so copyright_boilerplate
+    (same reading as nl-de-correspondent). robots.txt has no AI-crawler block. Three sampled
+    pages (one 2025 opinion piece, two news items) served ~400-1,250 words in paragraph
+    tags; none had an isAccessibleForFree field. Because of the Premium tier we record
+    partial_paywall. year_start 2023 = oldest page linked from the homepage.
+
+- id: nl-wynias-week
+  name: Wynia's Week (wyniasweek.nl)
+  country: NL
+  source_type: magazine
+  url: https://www.wyniasweek.nl/
+  access: free
+  year_start: 2019
+  year_end: null
+  languages: [nl]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: unknown (only shop/sales terms found)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "17 sub-sitemaps; first post sitemap has 1,000 URLs"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.wyniasweek.nl/robots.txt
+    - https://www.wyniasweek.nl/sitemap_index.xml
+    - https://www.wyniasweek.nl/post-sitemap.xml
+    - https://www.wyniasweek.nl/algemene-voorwaarden-vandorp-uitgevers/
+    - https://www.wyniasweek.nl/burgers-extra-belasten-zit-in-het-dna-van-jesse-klaver-en-consorten-wacht-maar-tot-u-aan-de-beurt-bent/
+    - https://www.wyniasweek.nl/de-nieuwe-naam-van-uw-dagblad-zou-weleens-staatscourant-kunnen-worden/
+  notes: >-
+    Reader-funded opinion weekly (Syp Wynia and guest columnists), right-of-centre. The only
+    terms found (algemene voorwaarden Vandorp Uitgevers / Uitgeverij Blauwburgwal) cover
+    shop orders and have no content-reuse clause, so scope unknown (open in the EU rule).
+    robots.txt is the WordPress default, with no AI-crawler block. access "free" is
+    observed: of two sampled 2026 columns, one had isAccessibleForFree "true" and the other
+    no field; both served ~860-1,000 words in paragraph tags. year_start 2019 = oldest
+    lastmod in the first post sitemap.
+
+- id: nl-dagelijkse-standaard
+  name: De Dagelijkse Standaard (dagelijksestandaard.nl, Opinie)
+  country: NL
+  source_type: magazine
+  url: https://www.dagelijksestandaard.nl/
+  access: free
+  year_start: 2024
+  year_end: null
+  languages: [nl]
+  genres: [opinion, news]
+  access_method: scrape
+  licence: unknown (no terms page found)
+  tdm_opt_out: "unknown"
+  restriction_scope: crawler_block_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dagelijksestandaard.nl/robots.txt
+    - https://www.dagelijksestandaard.nl/sitemap.xml
+    - https://www.dagelijksestandaard.nl/algemene-voorwaarden
+    - https://www.dagelijksestandaard.nl/opinie/gert-jan-mulder-wantrouwt-zelensky
+    - https://www.dagelijksestandaard.nl/opinie/brazilie-lula-economische-grootmacht-op-krediet-gert-jan-mulder
+  notes: >-
+    Right-wing opinion blog with reader comments. robots.txt disallows /nieuws/ (only) for
+    GPTBot, Google-Extended, ClaudeBot and CCBot. The homepage has no terms link and
+    /algemene-voorwaarden returned 404, so we found no terms clause: crawler_block_only.
+    Both sampled Opinie pages had isAccessibleForFree "true". year_start 2024 = oldest year
+    in the sitemap index. One-sided readership; use only alongside other sources.
+
+- id: nl-viva
+  name: VIVA (viva.nl)
+  country: NL
+  source_type: magazine
+  url: https://www.viva.nl/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [nl]
+  genres: [columns, other]
+  access_method: scrape
+  licence: VIVA gebruikersvoorwaarden (no reuse restriction on visitors)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.viva.nl/gebruikersvoorwaarden/
+    - https://www.viva.nl/robots.txt
+    - https://www.viva.nl/sitemap_index.xml
+    - https://www.viva.nl/11-gruwelijke-vrouwenmoorden-in-2-maanden-tijd-in-zuid-afrika-geweld-tegen-vrouwen-is-hier-een-jarenlange-crisis/
+    - https://www.viva.nl/alles-over-bone-broth-hype/
+  notes: >-
+    Women's magazine ("viva sinds 1972"). The gebruikersvoorwaarden (updated 9 September
+    2026) cover liability, the site's own copyright practice and user uploads; they put no
+    restriction on visitors copying or analysing content (section 3 only says "Wij streven
+    ernaar om geen inbreuk te maken op auteursrechten"). Oddly, they define the website as
+    "Alle pagina's onder het domein man-man.nl". Not an explicit permission, so scope
+    unknown (open). robots.txt has no AI-crawler block. access "free" is observed: two
+    sampled 2026 articles served ~830-1,600 words in paragraph tags with no paywall marker.
+    Popular-magazine stream; also hosts the VIVA forum (forums out of scope here).
+    year_start 2026 = oldest lastmod in the post sitemap.
+
+- id: nl-opzij
+  name: Opzij (opzij.nl)
+  country: NL
+  source_type: magazine
+  url: https://www.opzij.nl/
+  access: free
+  year_start: 2017
+  year_end: null
+  languages: [nl]
+  genres: [opinion, columns, other]
+  access_method: scrape
+  licence: unknown (no terms page found)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "20 sub-sitemaps; first post sitemap has 1,001 URLs"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.opzij.nl/robots.txt
+    - https://www.opzij.nl/sitemap_index.xml
+    - https://www.opzij.nl/post-sitemap.xml
+    - https://www.opzij.nl/over-opzij/
+    - https://www.opzij.nl/2026/10/22/we-cringen-te-veel-en-voelen-te-weinig/
+    - https://www.opzij.nl/2026/10/24/van-lust-naar-rust-in-deze-men-only-sportschool-hoeven-mannen-eindelijk-niet-meer-te-kijken-naar-vrouwenbillen/
+  notes: >-
+    Feminist monthly (since 1972 per Wikipedia's list). No terms link on the homepage; the
+    over-opzij page has no reuse clause. Scope unknown (open in the EU rule). robots.txt is
+    the WordPress default, with no AI-crawler block. access "free" is observed: two sampled
+    2026 pieces served ~430-650 words in paragraph tags with no paywall marker or
+    isAccessibleForFree field. year_start 2017 = oldest lastmod in the first post sitemap.
 
 # ---------------------------------------------------------------- DE
 
