@@ -148,3 +148,7 @@ def test_copyright_boilerplate_is_open():
             year_end=None)  # fmt: skip
     assert is_open(s)
     assert coverage_matrix([s], V0_COUNTRIES, 2026, open_only=True)["FR"]["2005-now"] == ["fr-b"]
+
+
+def test_magazine_source_type_accepted():
+    assert Source(**make_source(source_type="magazine")).source_type == "magazine"

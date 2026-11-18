@@ -24,7 +24,7 @@ V0_COUNTRIES = ["FR", "NL", "BE", "LU", "DE", "AT", "CH", "IT", "GR", "ES", "PT"
 # ISO 3166-1 alpha-2 codes for Europe, plus US.
 ISO_COUNTRIES = frozenset(
     ["AD", "AL", "AM", "AT", "AZ", "BA", "BE", "BG", "BY", "CH", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FO", "FR", "GB", "GE", "GI", "GR", "HR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MC", "MD", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "RS", "RU", "SE", "SI", "SK", "SM", "TR", "UA", "VA", "XK", "US"]
-)
+)  # fmt: skip
 
 Tri = Literal["yes", "no", "unknown"]
 
@@ -51,7 +51,7 @@ class Source(BaseModel):
     country: str
     source_type: Literal[
         "newspaper_archive", "national_library", "web_archive", "news_api",
-        "forum", "book_archive", "other",
+        "forum", "book_archive", "magazine", "other",
     ]  # fmt: skip
     url: HttpUrl
     access: Literal["free", "free_registration", "partial_paywall", "paywall"]
