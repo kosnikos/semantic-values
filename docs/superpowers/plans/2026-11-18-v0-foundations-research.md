@@ -156,6 +156,29 @@ Same method and checks as Task 4, for FR, NL, BE, LU, DE, AT, CH, IT, ES, PT. Ca
 - [ ] **Step 3:** `python -m semval coverage` and `pytest -q` → PASS.
 - [ ] **Step 4: Commit** `research: archive survey for remaining v0 countries`.
 
+### Task 5d: Restriction scope field
+
+**Files:**
+- Modify: `src/semval/sources.py`, `tests/test_sources.py`, `src/semval/cli.py`, `tests/test_cli.py`, `data/sources/sources.yaml`
+- Regenerate: `docs/research/coverage.md`
+
+**Interfaces:**
+- Produces: `Source.restriction_scope: Literal["none","ai_training_only","crawler_block_only","tdm_all","all_reuse","unknown"]` (required). Meaning: `tdm_all` = terms or a valid Art. 4(3) reservation forbid any automated analysis (covers dictionary methods too); `all_reuse` = any copying/reproduction forbidden without licence; `ai_training_only` = only AI training/development is forbidden; `crawler_block_only` = no clause in terms, only robots.txt blocks of AI crawlers; `none` = terms explicitly allow or impose nothing relevant.
+- Produces: `OPEN_SCOPES = {"none","ai_training_only","crawler_block_only","unknown"}`; `JURISDICTION_OPEN_SCOPES: dict[str, set[str]] = {"GB": {"tdm_all"}}` (UK CDPA s.29A: contract bans on non-commercial research TDM are unenforceable; `all_reuse` stays closed). `is_open(source) -> bool` = scope in `OPEN_SCOPES | JURISDICTION_OPEN_SCOPES.get(country, set())`. `coverage_matrix(..., open_only: bool = False)` — when True, also excludes sources where `is_open` is False. CLI renders two tables: "Usable (free access)" and "Usable and not opted out".
+
+- [ ] **Step 1: Failing tests:** `test_restriction_scope_required`, `test_open_only_excludes_tdm_all` (free FR source with `tdm_all` absent from `open_only=True` matrix, present in default), `test_gb_tdm_all_open_under_s29a` (free GB `tdm_all` source present with `open_only=True`; GB `all_reuse` absent), `test_render_has_two_tables`.
+- [ ] **Step 2:** Run → FAIL. **Step 3:** Implement. **Step 4:** Back-fill `restriction_scope` for every existing entry from its `notes` (no new web research; if the notes don't establish it → `unknown`). A licence requirement for any use beyond strictly personal/individual use (e.g. Le Figaro) is `all_reuse`. `pytest -q`, `ruff check .`, `python -m semval coverage` → PASS.
+- [ ] **Step 5: Commit** `feat: restriction scope and open-only coverage`.
+
+### Task 5e: Wider newspaper/magazine sweep for restriction-heavy countries
+
+Research task, same method and evidence rules as Task 4. Countries: GB, FR, BE, NL, plus any of DE/AT/CH where batch 5b found most major titles opted out.
+
+- [ ] **Step 1:** Per country, list general-interest national and major regional newspapers and news/opinion/culture magazines (weekly and monthly; exclude sport, fashion, lifestyle, trade). Cite the list's source (e.g. press-council, circulation-audit or Wikipedia list page).
+- [ ] **Step 2:** For each title, check: online archive depth, access, ToS/robots.txt text on TDM/AI, `restriction_scope`, and whether a research/academic licence route exists. Add registry entries only for titles with `access` usable or a research-licence route; list the rest in a per-country table in `sources.md` (title, scope, one-line reason).
+- [ ] **Step 3:** In `sources.md`, per country: "open titles" shortlist ranked by fit (opinion/letters/editorials, archive depth).
+- [ ] **Step 4:** `python -m semval coverage`, `pytest -q` → PASS. **Commit** `research: wider newspaper sweep for restriction-heavy countries`.
+
 ### Task 6: Literature review
 
 Research task; can run in parallel with Tasks 4–5.
@@ -195,5 +218,5 @@ Depends on Task 6.
 
 ### Task 8: Owner decision checkpoint
 
-- [ ] **Step 1:** Write a summary for the owner: (a) the recommended framework and why; (b) GR/GB thin-slice sources and their coverage; (c) how many usable sources have `llm_api_allowed` = `no`/`unknown` (spec §3 open item); (d) proposed next plan (step 4 of the design: tagging-method comparison under the $300 cap).
+- [ ] **Step 1:** Write a summary for the owner: (a) the recommended framework and why; (a2) legal routes worth checking: EU DSM Art. 3 (research organisations) and UK CDPA s.29A (non-commercial research; contract override void) — flagged as leads, not legal advice; (b) GR/GB thin-slice sources and their coverage; (c) how many usable sources have `llm_api_allowed` = `no`/`unknown` (spec §3 open item); (d) proposed next plan (step 4 of the design: tagging-method comparison under the $300 cap).
 - [ ] **Step 2:** The owner approves or amends the framework and the API decision. Record the outcome in `framework-decision.md` (`## Decision`) and the spec's §3 table. Commit `docs: record owner decisions`.
