@@ -1,1 +1,727 @@
-[]
+# Source registry. One entry per distinct access route.
+# Schema: src/semval/sources.py (Source). Fields not established from a visited
+# page are "unknown"; evidence_urls lists the pages actually read.
+# Note: "usable" in coverage.md means access is free/free_registration only; it
+# does NOT mean the terms permit our use. See docs/research/sources.md.
+
+# ---------------------------------------------------------------- GB
+
+- id: gb-guardian-open-platform
+  name: Guardian Open Platform Content API (Developer key)
+  country: GB
+  source_type: news_api
+  url: https://open-platform.theguardian.com/
+  access: free_registration
+  year_start: 1999
+  year_end: null
+  languages: [en]
+  genres: [opinion, letters, columns, news]
+  access_method: api
+  licence: >-
+    Guardian Open Platform Terms (updated 4 Feb 2015 per variations log; clause 6(g)
+    AI/TDM ban present on page). Developer key is for non-commercial use only.
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: "over 1,900,000 pieces of content (Developer tier, per access page); 500 calls/day, 1 call/s"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://open-platform.theguardian.com/access/
+    - https://www.theguardian.com/open-platform/terms-and-conditions
+    - https://cran.r-project.org/web/packages/guardianapi/index.html
+  notes: >-
+    Full article text is available via the Developer key. But the OP terms clause 6(g)
+    forbids using the Content API/OP Content "for any machine learning, machine
+    learning language models and/or artificial intelligence-related purposes", "for any
+    text and data aggregation, analysis or mining purposes (including to generate any
+    patterns, trends or correlations)", or "with any machine learning and/or artificial
+    intelligence technologies to generate any data"; 6(g)(iv) is an express reservation
+    under Art. 4(3) DSM Directive. Clause 5: OP Content must not be kept longer than 24
+    hours. Clause 6(c)(i): no translating. The access page lists "training models for
+    generative artificial intelligence services, text and data mining solutions, sentiment
+    analysis" as Commercial-key use cases (price on request). per_text_publish "no" because
+    generating tags from OP Content is itself prohibited by 6(g); publishing links alone
+    is allowed. Year range 1999-present comes from the CRAN guardianapi package page,
+    not a Guardian page. Opinion genres exist (site nav lists Opinion > Columnists,
+    Letters). Usable only under a licence from licensing@theguardian.com.
+
+- id: gb-guardian-website
+  name: The Guardian website (theguardian.com)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.theguardian.com/
+  access: free
+  year_start: 1999
+  year_end: null
+  languages: [en]
+  genres: [opinion, letters, columns, news]
+  access_method: scrape
+  licence: theguardian.com Terms of Service (personal, non-commercial use only)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.theguardian.com/help/terms-of-service
+    - https://www.theguardian.com/robots.txt
+  notes: >-
+    ToS: use is "for your own personal and non-commercial use only"; you shall not use
+    Guardian Content "(a) for any machine learning, machine learning language models
+    and/or artificial intelligence-related purposes ... (b) for any text and data
+    aggregation, analysis or mining purposes ... (c) with any machine learning and/or
+    artificial intelligence technologies to generate any data". Bots/scrapers prohibited;
+    all rights reserved under Art. 4(3) DSM Directive (change log 22 Feb 2023).
+    robots.txt header repeats the LLM/ML ban. Same prohibitions as the API route. Year
+    start mirrors the API's 1999 (not separately verified for the website).
+
+- id: gb-bbc-news
+  name: BBC News website
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.bbc.co.uk/news
+  access: free
+  year_start: 1997
+  year_end: null
+  languages: [en]
+  genres: [news]
+  access_method: scrape
+  licence: BBC Terms of Use (personal use; permission needed for computer analysis/AI)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.bbc.co.uk/robots.txt
+    - https://www.bbc.co.uk/usingthebbc/terms/can-i-use-bbc-content
+    - https://www.journalism.co.uk/20-years-of-digital-milestones-at-bbc-online/
+  notes: >-
+    robots.txt: "No scraping, crawling, or systematic extraction of content"; "No
+    retrieval-augmented generation (RAG), AI-powered search, agentic AI or grounding using
+    BBC content"; "No creating datasets from BBC content"; "No text and data mining (TDM)
+    under Article 4"; "No using BBC content to create summaries for your own use". The
+    "Can I use BBC content" page says permission is needed for anything taken "to develop
+    or train artificial intelligence or to do computer analysis". Public broadcaster, mostly
+    straight news; low value for opinion genres. Launch December 1997 per journalism.co.uk.
+
+- id: gb-independent
+  name: The Independent website (independent.co.uk)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.independent.co.uk/archive
+  access: partial_paywall
+  year_start: 1995
+  year_end: null
+  languages: [en]
+  genres: [opinion, letters, columns, news]
+  access_method: scrape
+  licence: Independent user policies (personal, non-commercial use only; all rights reserved)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.independent.co.uk/archive
+    - https://www.independent.co.uk/voices/letters
+    - https://www.independent.co.uk/voices/editorials/alan-milburn-neets-report-million-young-people-jobs-b3085948.html
+    - https://www.independent.co.uk/voices/comment/prepping-stockpiling-tin-food-fussy-eater-child-b3084129.html
+    - https://www.independent.co.uk/service/user-policies-a6184151.html
+    - https://www.independent.co.uk/robots.txt
+  notes: >-
+    Date-browsable archive /archive/YYYY-MM-DD with years 1995-2026 listed. Letters
+    (/voices/letters) items are marked "Member exclusive" (paywalled); of sampled /voices
+    pages, editorials had isAccessibleForFree true and one comment piece false. User policies:
+    "may only be used for your personal, non-commercial use"; may store files "in
+    electronic form on disc, but not on any server"; "you agree not to download, copy,
+    reproduce, modify, store, archive ... without the prior written permission". No
+    explicit AI/LLM or Art. 4 TDM clause seen on that page; robots.txt only blocks Nutch.
+    Hence tdm/llm unknown, but the blanket copying restriction is a strong caution.
+
+- id: gb-reddit-unitedkingdom
+  name: Reddit r/unitedkingdom (via Reddit Data API)
+  country: GB
+  source_type: forum
+  url: https://www.reddit.com/r/unitedkingdom/
+  access: free_registration
+  year_start: 2008
+  year_end: null
+  languages: [en]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~711k posts, ~25.0M comments, ~4.9M subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/data-api-terms
+    - https://redditinc.com/policies/developer-terms
+    - https://www.reddit.com/robots.txt
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=unitedkingdom
+  notes: >-
+    Created 2008-04-02, earliest post 2008-04-02 (Arctic Shift subreddit metadata, a
+    third-party archive; reddit.com itself returned 403). robots.txt: "User-agent: * /
+    Disallow: /" and points to the Public Content Policy (that page returned 403 to us).
+    Developer Terms 4.2: no use "to train large language, artificial intelligence, or
+    other algorithmic models ... without our permission"; "You will not share Reddit
+    Services and Data with any third party" except as required by law; research "in
+    excess of rate limits" or commercial use needs a separate agreement; data must be
+    deleted when no longer needed or when the user deletes it. Terms do not explicitly
+    address sending text to an LLM inference API, but the third-party-sharing clause
+    likely bars it without permission. Historical bulk dumps exist from Arctic Shift
+    (github.com/ArthurHeitmann/arctic_shift), whose standing under Reddit terms is unclear.
+
+- id: gb-reddit-askuk
+  name: Reddit r/AskUK (via Reddit Data API)
+  country: GB
+  source_type: forum
+  url: https://www.reddit.com/r/AskUK/
+  access: free_registration
+  year_start: 2011
+  year_end: null
+  languages: [en]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~543k posts, ~22.6M comments, ~1.9M subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=AskUK
+  notes: >-
+    Created 2011-11-22; earliest archived post 2012-12-08 (Arctic Shift metadata).
+    Same Reddit terms as gb-reddit-unitedkingdom. Everyday-life questions; good for
+    values in daily life rather than politics.
+
+- id: gb-mumsnet
+  name: Mumsnet Talk forums
+  country: GB
+  source_type: forum
+  url: https://www.mumsnet.com/talk
+  access: free
+  year_start: 2000
+  year_end: null
+  languages: [en]
+  genres: [forum]
+  access_method: scrape
+  licence: Mumsnet Terms of Use (all rights reserved; copying needs licence)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.mumsnet.com/i/terms-of-use
+    - https://www.mumsnet.com/robots.txt
+    - https://www.mumsnet.com/i/about-us
+  notes: >-
+    Terms 1(c): "No part of the Website may be distributed, scraped or copied for any
+    purpose without express approval and a licence". 1(e): no TDM/scraping for
+    "developing, training, fine-tuning or validating artificial intelligence or machine
+    learning systems" or "creating datasets"; 1(f) express Art. 4(3) reservation. Linking
+    and short snippets are permitted. robots.txt blocks GPTBot and others. llm "no" because
+    copying for any purpose without licence is prohibited. Site "conceived in early 2000"
+    (about page); start year of the Talk archive itself not verified. Licence enquiries
+    possible (contact on terms page). Strong source for family/gender/work values if licensed.
+
+- id: gb-uk-web-archive
+  name: UK Web Archive (British Library and Legal Deposit Libraries)
+  country: GB
+  source_type: web_archive
+  url: https://www.webarchive.org.uk/
+  access: partial_paywall
+  year_start: 2004
+  year_end: 2022
+  languages: [en]
+  genres: [news, opinion, forum, other]
+  access_method: manual
+  licence: Legal Deposit Libraries (Non-Print Works) Regulations 2013; most content reading-room only
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.bl.uk/ukwebarchive
+    - https://www.bl.uk/stories/blogs/posts/the-uk-web-archive-continuing-our-work-behind-the-scenes
+  notes: >-
+    access is set to partial_paywall only because the schema has no "restricted" value:
+    there is no fee, but "most of the archived websites can only be viewed within a Legal
+    Deposit Library reading room"; a subset is viewable from anywhere. After the 2023
+    cyber-attack the platform is restored but "Only websites archived before December 2022
+    are available to search" (hence year_end 2022; collection continues). Established 2004.
+    webarchive.org.uk itself returned 403 to our client. Datasets of curated metadata exist
+    ("Datasheets for Datasets"). Not a practical full-text source for us.
+
+- id: gb-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .uk domains
+  country: GB
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [en]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (daily WARC files, all countries; .uk share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/blog/news-dataset-available
+    - https://commoncrawl.org/terms-of-use
+    - https://raw.githubusercontent.com/commoncrawl/news-crawl/main/README.md
+  notes: >-
+    Daily WARC files since 2016, seeded from RSS/Atom feeds and news sitemaps; crawler
+    uses StormCrawler robots.txt handling. CC ToU: Crawled Content "may be subject to
+    separate terms of use or terms of service from the owners", so the per-publisher terms
+    above (Guardian, BBC: prohibited) still apply to their pages inside CC-NEWS. Which .uk
+    sites are included is not documented; must be measured from the WARC index. Useful as
+    a discovery layer, not as a licence.
+
+- id: gb-gdelt-url-index
+  name: GDELT GKG 2.1 as URL index (.uk sources)
+  country: GB
+  source_type: other
+  url: https://www.gdeltproject.org/data.html
+  access: free
+  year_start: 2015
+  year_end: null
+  languages: [en]
+  genres: [news]
+  access_method: bulk
+  licence: GDELT terms - "unlimited and unrestricted use for any academic, commercial, or governmental use", citation required
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.gdeltproject.org/about.html
+    - https://www.gdeltproject.org/data.html
+    - http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
+  notes: >-
+    GDELT holds no article text: GKG 2.1 (from February 2015) gives a DocumentIdentifier
+    that is "a fully-qualified URL" plus metadata (themes, tone), filterable by domain.
+    GDELT data itself may be redistributed "in any form" with citation, so tdm_opt_out "no"
+    refers to GDELT's own data. The article texts behind the URLs are governed by each
+    publisher, so llm/per-text fields depend on the target site. GKG 1.0 begins 1 April
+    2013. DOC 2.0 full-text search API covers only a rolling 3 months.
+
+- id: gb-british-newspaper-archive
+  name: British Newspaper Archive (Findmypast / British Library)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.britishnewspaperarchive.co.uk/
+  access: paywall
+  year_start: 1720
+  year_end: null
+  languages: [en]
+  genres: [news, letters, opinion]
+  access_method: manual
+  licence: unknown (terms page returned 403)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.bl.uk/stories/blogs/posts/free-to-view-online-newspapers
+  notes: >-
+    Subscription service; the site returned 403 to our client so prices, title list and
+    end year were not verified (year_end null = not verified, not "ongoing"). BL blog: a
+    free-to-view set of 158 titles "ranging from 1720 to 1880" (registration needed);
+    nothing post-1940 is free. Main paid route to 1940-2005 regional and national UK press
+    including letters pages. Recorded as paywall.
+
+# ---------------------------------------------------------------- GR
+
+- id: gr-nlg-efimeris
+  name: National Library of Greece - Digital Library of Newspapers and Periodical Press (efimeris)
+  country: GR
+  source_type: national_library
+  url: http://efimeris.nlg.gr/ns/main.html
+  access: free
+  year_start: 1883
+  year_end: 1983
+  languages: [el]
+  genres: [news]
+  access_method: manual
+  licence: unknown (no terms on efimeris pages; NLG digitalcollections platform terms may apply)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "7 titles: Akropolis 1883-1884, Eleftheria 1944-1967, Embros 1896-1969, Makedonia 1911-1981, Rizospastis 1917-1983, Skrip 1893-1963, Tachydromos 1958-1977"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nlg.gr/collection/ilektronikes-amp-psifiakes-sylloges/
+    - http://efimeris.nlg.gr/ns/dateselect.asp
+    - http://efimeris.nlg.gr/ns/ftr.asp
+    - https://digitalcollections.nlg.gr/nlg-repo/dl/el/terms.html
+  notes: >-
+    Linked from nlg.gr as "Ψηφιακή Συλλογή Εφημερίδων". Old ASP frameset; search form offers
+    page text, article title, article text, signature (υπογραφή), categories and article
+    length, which implies article-level segmentation and OCR, but OCR quality and whether
+    opinion/letters categories exist were not checked. No API. Covers the 1940-1983 gap
+    for 5 titles. The digitalcollections.nlg.gr terms (not confirmed to cover efimeris):
+    metadata CC0; default item licence allows reproduction only with attribution,
+    non-commercial use, no derivatives and no distribution. Rizospastis is the KKE party
+    organ (party voice; flag when used). efimeries.nlg.gr does not resolve; the live host
+    is efimeris.nlg.gr.
+
+- id: gr-kathimerini-historical-archive
+  name: Kathimerini Historical Archive (archive.kathimerini.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://archive.kathimerini.gr/
+  access: paywall
+  year_start: 1919
+  year_end: 2010
+  languages: [el]
+  genres: [news, opinion, letters]
+  access_method: manual
+  licence: kathimerini.gr Terms of Use (all rights reserved)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://archive.kathimerini.gr/
+    - https://www.kathimerini.gr/syndromes/
+    - https://www.kathimerini.gr/termsofuse/
+    - https://www.kathimerini.gr/robots.txt
+  notes: >-
+    Page title "Ιστορικό Αρχείο 1919 - 2010"; "διαθέσιμο αποκλειστικά με την ετήσια
+    συνδρομή" (available exclusively with the annual kathimerini.gr subscription; 59 EUR
+    shown on /syndromes/). Genres assumed from a full-newspaper archive, not inspected.
+    tdm_opt_out "yes" from robots.txt "#AI Bots" section blocking CCBot, GPTBot,
+    ClaudeBot, Google-Extended, etc. Strongest GR 1940-2005 run, but paywalled.
+
+- id: gr-kathimerini-website
+  name: Kathimerini website (kathimerini.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://www.kathimerini.gr/opinion/
+  access: partial_paywall
+  year_start: 2001
+  year_end: null
+  languages: [el]
+  genres: [opinion, letters, columns, news]
+  access_method: scrape
+  licence: kathimerini.gr Terms of Use (all rights reserved; single personal copy allowed)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~1,270 post sitemaps (sitemap.xml)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.kathimerini.gr/termsofuse/
+    - https://www.kathimerini.gr/robots.txt
+    - https://www.kathimerini.gr/syndromes/
+    - https://www.kathimerini.gr/opinion/readers/
+    - https://www.kathimerini.gr/post-sitemap1.xml
+    - https://www.kathimerini.gr/sitemap.xml
+  notes: >-
+    Metered paywall: opinion and letters pages checked carry isAccessibleForFree "false";
+    subscription page offers "Περισσότερα δωρεάν άρθρα" (more free articles). Letters
+    section at /opinion/readers/. Terms: no content may be copied, reproduced,
+    republished or transmitted, except storing "ενός και μόνου αντιγράφου" (a single copy)
+    on a personal computer for personal, non-public, non-commercial use. No explicit AI
+    clause; robots.txt blocks AI crawlers (CCBot, GPTBot, ClaudeBot, Google-Extended...).
+    year_start from the earliest sitemap lastmod seen (2001-06-01), not a verified
+    publication date.
+
+- id: gr-tovima-website
+  name: To Vima website (tovima.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://www.tovima.gr/category/opinions/
+  access: free
+  year_start: 2008
+  year_end: null
+  languages: [el]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: tovima.gr Όροι Χρήσης (Alter Ego Media; all rights reserved)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.tovima.gr/oroi-xrisis/
+    - https://www.tovima.gr/robots.txt
+    - https://www.tovima.gr/post-sitemap1.xml
+    - https://www.tovima.gr/2026/11/18/opinions/gyrologoi/
+    - https://www.tovima.gr/print/opinions/esto-loipon-lepen/
+    - https://www.tovima.gr/2024/09/20/media/to-vima-kalosorizei-tous-neous-syndromites-tou-me-mia-monadiki-prosfora/
+  notes: >-
+    Opinion articles checked (web and /print/) carry isAccessibleForFree true;
+    subscriptions advertised are for the print edition. Earliest sitemap URL dated
+    2008-11-24. Terms: content may not be sold, copied, modified, reproduced, republished,
+    uploaded, transmitted or distributed in any way, except a single copy for personal use.
+    No AI/TDM clause found; robots.txt has no AI-bot blocks. Same owner as Ta Nea.
+
+- id: gr-tanea-website
+  name: Ta Nea website (tanea.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://www.tanea.gr/category/opinions/
+  access: free
+  year_start: 1997
+  year_end: null
+  languages: [el]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: tanea.gr Όροι Χρήσης (Alter Ego Media; all rights reserved)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~1,370 post sitemaps (sitemap.xml)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.tanea.gr/oroi-xrisis/
+    - https://www.tanea.gr/robots.txt
+    - https://www.tanea.gr/post-sitemap1.xml
+    - https://www.tanea.gr/sitemap.xml
+    - https://www.tanea.gr/
+    - https://www.tanea.gr/2026/11/17/opinions/na-meinei-o-giovanovits-i-na-fygei/
+  notes: >-
+    Earliest sitemap article URL dated 1997-04-19, so the online archive reaches back
+    into the 1990-2004 period. Opinion section incl. "Πολιτικές απόψεις". Article checked
+    carries isAccessibleForFree true. Same boilerplate terms as To Vima (no copying
+    except a single personal copy; no AI/TDM clause found); robots.txt has no AI-bot blocks.
+
+- id: gr-efsyn-website
+  name: Efimerida ton Syntakton website (efsyn.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://www.efsyn.gr/stiles/
+  access: free
+  year_start: 2015
+  year_end: null
+  languages: [el]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: efsyn.gr Όροι Χρήσης (all rights reserved)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~500 post sitemaps (sitemap_index.xml)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.efsyn.gr/terms/
+    - https://www.efsyn.gr/robots.txt
+    - https://www.efsyn.gr/sitemap_index.xml
+    - https://www.efsyn.gr/
+    - https://www.efsyn.gr/stiles/1512727/to-vima-sto-keno/
+  notes: >-
+    Opinion columns under /stiles/. No paywall markers seen on the homepage or the article
+    checked. Oldest sitemap lastmod seen is 2015-01 (the /arheio/ section may hold older
+    items; founding year not verified). Same Greek boilerplate terms (no reproduction or
+    distribution; no AI/TDM clause found); robots.txt has no AI-bot blocks.
+
+- id: gr-rizospastis-website
+  name: Rizospastis website archive (rizospastis.gr)
+  country: GR
+  source_type: newspaper_archive
+  url: https://www.rizospastis.gr/
+  access: free
+  year_start: 1997
+  year_end: null
+  languages: [el]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: unknown (only "Copyright © 1997-2026 ΡΙΖΟΣΠΑΣΤΗΣ" seen; no terms page found)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (daily issues, page-by-page)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.rizospastis.gr/
+    - https://www.rizospastis.gr/robots.txt
+    - https://www.rizospastis.gr/page.do?publDate=15/6/1997&pageNo=1
+  notes: >-
+    Every daily issue browsable by date (page.do?publDate=D/M/YYYY); the 15 June 1997 issue
+    loads, 15 Jan 1996 does not. robots.txt disallows search.do, textOnly.do,
+    storyPlain.do etc., but no AI-bot blocks. KKE (Communist Party) organ: it is a party
+    voice, so use only as one clearly labelled strand. Pre-1983 run is in gr-nlg-efimeris.
+
+- id: gr-insomnia-forum
+  name: insomnia.gr forums
+  country: GR
+  source_type: forum
+  url: https://www.insomnia.gr/forums/
+  access: free
+  year_start: 2000
+  year_end: null
+  languages: [el]
+  genres: [forum]
+  access_method: scrape
+  licence: insomnia.gr terms (forum rules; no content licence stated)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "Μπλα Μπλα (general chat) forum: 62,176 topics"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.insomnia.gr/robots.txt
+    - https://www.insomnia.gr/terms/
+    - https://www.insomnia.gr/forums/
+    - https://www.insomnia.gr/forums/forum/9-mpla-mpla/?sortby=start_date&sortdirection=asc
+  notes: >-
+    Mostly a tech forum; the "Μπλα Μπλα" sub-forum is general discussion ("Χαλαρή
+    κουβέντα ... για (σχεδόν) όλα τα θέματα") with topics dated from 2000-07-27. robots.txt
+    sets "Content-Signal: search=yes,ai-train=no,use=reference" and disallows CCBot,
+    ClaudeBot, GPTBot, Google-Extended and others. The ai-input signal is defined but not
+    set, so LLM inference use is not explicitly addressed. Terms page covers posting rules
+    only.
+
+- id: gr-reddit-greece
+  name: Reddit r/greece (via Reddit Data API)
+  country: GR
+  source_type: forum
+  url: https://www.reddit.com/r/greece/
+  access: free_registration
+  year_start: 2008
+  year_end: null
+  languages: [el, en]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~352k posts, ~6.0M comments, ~254k subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://redditinc.com/policies/data-api-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=greece
+  notes: >-
+    Created 2008-01-26, subreddit language "el"; earliest archived comment 2010-02 (Arctic
+    Shift metadata). Mixed Greek/English and includes diaspora and visitors, so country
+    attribution is weaker than for Greek-language sites. Same Reddit terms caveats as
+    gb-reddit-unitedkingdom (no third-party sharing; no model training).
+
+- id: gr-greek-web-archive-portal
+  name: Greek Web Archive Portal (NLG with Internet Archive)
+  country: GR
+  source_type: web_archive
+  url: https://webarchive.nlg.gr/
+  access: free
+  year_start: 1996
+  year_end: null
+  languages: [el]
+  genres: [news, opinion, forum, other]
+  access_method: manual
+  licence: unknown for the portal; Internet Archive terms for underlying Wayback data
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nlg.gr/static-page/pyli-archeioy-ellinikoy-istoy/?lang=en
+    - https://webarchive.nlg.gr/
+    - https://help.archive.org/help/rights/
+    - https://help.archive.org/help/internet-archive-access-policy/
+  notes: >-
+    NLG: "snapshots of all .gr domain sites from 1996 up to the present day", "developed in
+    collaboration with the Internet Archive", search by keyword or URL. The portal page
+    title reads ".gr Web Archive Search (archive.org)". Equivalent direct route is the
+    Wayback Machine. IA rights page: IA "does not make guarantees as to the copyright status"
+    and users use collections "at their own risk"; archived pages keep their original
+    publishers' rights. Useful to recover dead Greek forums/blogs of 1996-2010.
+
+- id: gr-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .gr domains
+  country: GR
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [el]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.gr share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/blog/news-dataset-available
+    - https://commoncrawl.org/terms-of-use
+    - https://www.kathimerini.gr/robots.txt
+    - https://www.insomnia.gr/robots.txt
+    - https://www.tovima.gr/robots.txt
+    - https://www.tanea.gr/robots.txt
+    - https://www.efsyn.gr/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. kathimerini.gr and insomnia.gr block CCBot in
+    robots.txt, so they are likely absent from recent crawls; tovima.gr, tanea.gr and
+    efsyn.gr do not block it. Greek coverage must be measured from the index.
+
+- id: gr-gdelt-url-index
+  name: GDELT GKG 2.1 as URL index (.gr sources)
+  country: GR
+  source_type: other
+  url: https://www.gdeltproject.org/data.html
+  access: free
+  year_start: 2015
+  year_end: null
+  languages: [el]
+  genres: [news]
+  access_method: bulk
+  licence: GDELT terms - "unlimited and unrestricted use for any academic, commercial, or governmental use", citation required
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.gdeltproject.org/about.html
+    - http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
+    - https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
+  notes: >-
+    URLs + metadata only (see gb-gdelt-url-index). GDELT machine-translates 65 languages;
+    whether Greek is among them was not verified. Text behind URLs is under each
+    publisher's terms.
