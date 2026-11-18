@@ -879,8 +879,8 @@ Freizeit Revue, Das Goldene Blatt and Eltern. Der Freitag is on the newspaper pa
 the owner's list. Stern, Focus and Cicero circulations come from the newspaper page's
 "News magazines" section. Spiegel, Zeit, taz, DWDS, DeReKo and the Zeitungsportal are
 covered above. We checked 37 titles: 22 newspapers (21 from the brief plus Junge
-Freiheit, added as the right-wing weekly) and 15 magazines. 8 are registered (rows marked
-**Registry**) and 29 are not. For each we read robots.txt, the terms page, and one to
+Freiheit, added as the right-wing weekly) and 15 magazines. 6 are registered (rows marked
+**Registry**) and 31 are not. For each we read robots.txt, the terms page, and one to
 four sample pages.
 
 **Reading rules used here.** Two patterns recur in German terms. (1) Most big dailies
@@ -889,20 +889,20 @@ for commercial text and data mining (§ 44b UrhG). The use of robots or other au
 means to access [site] or collect or mine data without the express permission of [site]
 is strictly prohibited." The first sentence alone would be a commercial-only reservation,
 but the second bans automated collection outright, so we class it `tdm_all`, as for
-`lu-tageblatt` and `de-taz-website`. (2) Clauses that limit *use* to private or personal
-purposes ("nur für persönliche Zwecke", "zum privaten, eigenen Gebrauch", "für Ihren
-persönlichen Bedarf") are `all_reuse`, as for HP/De Tijd in NL. Clauses that allow use for
-"own non-commercial purposes" (Berliner Zeitung, Handelsblatt) forbid only commercial use,
-so we class them `copyright_boilerplate` with the commercial-only marker. That second
-line is a judgement call; the owner may flip it.
+`lu-tageblatt` and `de-taz-website`. (2) Use-vs-copy test: a clause that limits *using, accessing or viewing* content to a
+private or own purpose (nutzen, verwenden, abrufen, "jede darüber hinausgehende Nutzung")
+is `all_reuse`; one that limits only *copies* (kopieren, speichern, ausdrucken,
+herunterladen) is `copyright_boilerplate`; a clause naming both is `all_reuse`. Under this
+test Berliner Zeitung and Handelsblatt, which limit "Nutzung" to own non-commercial
+purposes, are `all_reuse`.
 
 German papers are mostly closed. Thirteen of 22 newspapers are `tdm_all`: nine through the
 robots.txt notice above (FAZ, SZ, FR, Tagesspiegel, Rheinische Post, Stuttgarter
 Zeitung, Sächsische Zeitung, Freie Presse, LVZ), Welt and Bild through Axel Springer's
 AGB, and the ARD sites (MDR, tagesschau.de) through a § 44b(3) robots.txt reservation.
-Funke (WAZ, Abendblatt), DuMont (Kölner Stadt-Anzeiger) and Deutschlandfunk limit use to
-private purposes (`all_reuse`). The open titles are smaller national dailies and
-weeklies: Berliner Zeitung, nd, junge Welt, Junge Freiheit and Handelsblatt. Among
+Funke (WAZ, Abendblatt), DuMont (Kölner Stadt-Anzeiger), Deutschlandfunk, Berliner
+Zeitung and Handelsblatt limit use to private or own purposes (`all_reuse`). The open
+titles are smaller national dailies and weeklies: nd, junge Welt and Junge Freiheit. Among
 magazines, Stern, Focus, Bunte, Cicero and Der Freitag restrict use, Hörzu and Apotheken Umschau ban
 automated collection, and the open ones are FUNKE women's and family titles.
 
@@ -910,11 +910,11 @@ automated collection, and the open ones are FUNKE women's and family titles.
 
 | Title | Scope | Circ. | Reason | Evidence |
 |---|---|---|---|---|
-| Berliner Zeitung | copyright_boilerplate | n/a | **Registry** `de-berliner-zeitung`. Use allowed "zu eigenen, nichtkommerziellen Zwecken"; commercial use banned; no AI clause, no AI-crawler block. 3/4 pages free; sitemaps from 2010. | `evidence_urls` of registry entry `de-berliner-zeitung` |
+| Berliner Zeitung | all_reuse | n/a | Nutzungsbedingungen 4.2 limits use: "Die Nutzung unserer Publikationen bzw. Inhalten ist ausschließlich zu eigenen, nichtkommerziellen Zwecken zulässig. Jede Nutzung von Inhalten ... außerhalb der engen gesetzlichen Grenzen des Urheberrechts ist unzulässig". No AI clause and no AI-crawler block; 3/4 sampled pages free; sitemaps from 2010. Registry entry removed (fix round 1, use-vs-copy test). | https://www.berliner-zeitung.de/allgemeine-nutzungsbedingungen ("Die Nutzung ... ist ausschließlich zu eigenen, nichtkommerziellen Zwecken zulässig"); https://www.berliner-zeitung.de/robots.txt |
 | nd (Neues Deutschland) | crawler_block_only | 25,158 | **Registry** `de-nd-aktuell`. AGB bans only commercial use; robots.txt blocks AI crawlers. 5/5 pages free; articles from 2002. | `evidence_urls` of registry entry `de-nd-aktuell` |
 | junge Welt | copyright_boilerplate | c. 19,000 | **Registry** `de-junge-welt`. Bans reuse "in anderen elektronischen oder gedruckten Publikationen" only. Daily Leserbriefe; per-article paywall (3 current pages free, older ones login-gated). | `evidence_urls` of registry entry `de-junge-welt` |
-| Junge Freiheit | copyright_boilerplate | 25,868 (weekly) | **Registry** `de-junge-freiheit`. Copies "nur für den privaten, nicht kommerziellen Gebrauch"; robots.txt `ai-train=no`. 2/3 pages free; sitemaps from 1997. | `evidence_urls` of registry entry `de-junge-freiheit` |
-| Handelsblatt | copyright_boilerplate | 130,864 | **Registry** `de-handelsblatt`. Commercial TDM reserved; AGB allows use for "privaten oder sonstigen eigenen, nicht-kommerziellen" purposes (scope: commercial-only reservation). 3/3 Meinung pieces free; sitemaps from 2011. | `evidence_urls` of registry entry `de-handelsblatt` |
+| Junge Freiheit | copyright_boilerplate | 25,868 (weekly) | **Registry** `de-junge-freiheit`. Impressum limits only copies ("Downloads und Kopien ... nur für den privaten, nicht kommerziellen Gebrauch"); the use licence binds subscribers only. robots.txt `ai-train=no`. 2/3 pages free; sitemaps from 1997. | `evidence_urls` of registry entry `de-junge-freiheit` |
+| Handelsblatt | all_reuse | 130,864 | Commercial TDM reserved (Impressum), and the AGB limits use: "Sie dürfen diese daher ohne unsere gesonderte Zustimmung nur zu privaten oder sonstigen eigenen, nicht-kommerziellen und/oder -gewerblichen Zwecken nutzen ... Jede darüber hinausgehende Nutzung unserer Inhalte außerhalb der gesetzlichen Schrankenbestimmungen ...". 3/3 Meinung pieces free. Registry entry removed (fix round 1, use-vs-copy test). | https://handelsblattgroup.com/agb/ ("nur zu privaten oder sonstigen eigenen, nicht-kommerziellen ... Zwecken nutzen"); https://www.handelsblatt.com/impressum/ |
 | Frankfurter Allgemeine (FAZ) | tdm_all | 254,263 | robots.txt notice: "faz.net expressly reserves the right to use its content for commercial text and data mining (§44 b UrhG). The use of robots or other automated means to access faz.net or collect or mine data without the express permission of faz.net is strictly prohibited." | https://www.faz.net/robots.txt ("The use of robots or other automated means to access faz.net or collect or mine data ... is strictly prohibited") |
 | Süddeutsche Zeitung | tdm_all | 361,507 | Same robots.txt notice for SZ.de. | https://www.sueddeutsche.de/robots.txt ("The use of robots or other automated means to access SZ.de or collect or mine data without ... is strictly prohibited") |
 | Die Welt | tdm_all | 165,686 | Nutzungsbedingungen 19.1: "Dem Nutzer ist es nicht gestattet, die digitalen Inhalte mithilfe von Bots, Spidern, Screenscraping oder anderen automatisierten Verfahren abzurufen oder zu kopieren. ... Nutzungen zum Text und Data Mining (§ 44b UrhG) bleiben ausdrücklich vorbehalten." | https://www.welt.de/services/article122129231/Nutzungsbedingungen-WELT-Digital.html ("Nutzungen zum Text und Data Mining (§ 44b UrhG) bleiben ausdrücklich vorbehalten") |
@@ -957,19 +957,17 @@ automated collection, and the open ones are FUNKE women's and family titles.
 
 Newspapers:
 
-1. `de-berliner-zeitung`: a general-interest daily with Meinung and reader-contribution
-   ("Open Source") sections and sitemaps from 2010; most pages free. Its "own
-   non-commercial purposes" clause is our reading, so confirm with the publisher.
-2. `de-nd-aktuell`: free left-wing daily with an archive from 2002; terms ban only
+1. `de-nd-aktuell`: free left-wing daily with an archive from 2002; terms ban only
    commercial use.
-3. `de-junge-welt`: far-left daily with a daily letters page; current pieces free, older
+2. `de-junge-welt`: far-left daily with a daily letters page; current pieces free, older
    ones login-gated.
-4. `de-junge-freiheit`: right-wing weekly with sitemaps from 1997; partly free. Pairs with
+3. `de-junge-freiheit`: right-wing weekly with sitemaps from 1997; partly free. Pairs with
    nd and jW for balance.
-5. `de-handelsblatt`: business daily; Meinung pieces free; commercial-only reservation.
 
 No large national or regional daily is open: FAZ, SZ, Welt, Bild, FR, Tagesspiegel and
-the big regionals reserve TDM, and Funke and DuMont limit use to private purposes.
+the big regionals reserve TDM, and Funke, DuMont, Berliner Zeitung and Handelsblatt limit
+use to private or own purposes. Berliner Zeitung (mostly free, sitemaps from 2010) would
+be the best general daily if the publisher agreed to research use.
 
 Magazines:
 
@@ -1228,14 +1226,16 @@ the page. Magazines come from the owner's list, cross-checked against Wikipedia'
 [List of magazines in Spain](https://en.wikipedia.org/wiki/List_of_magazines_in_Spain),
 which names Cambio 16, Diez Minutos and others; it gives no circulation figures (n/a).
 El País, ABC, La Vanguardia, elDiario.es, BNE and BVPH are covered above. We checked 33
-titles: 17 newspapers and 16 magazines. 10 are registered (rows marked **Registry**) and
-23 are not. For each we read robots.txt, the aviso legal or terms page, and one to three
+titles: 17 newspapers and 16 magazines. 6 are registered (rows marked **Registry**) and
+27 are not. For each we read robots.txt, the aviso legal or terms page, and one to three
 sample pages.
 
-**Reading rules used here.** As in FR, clauses that restrict *use* ("cualquier uso no
-autorizado", "fines estrictamente particulares", "cualquier uso ... que no sea la mera
-consulta") are `all_reuse`; clauses that ban only reproduction, distribution or
-communication and allow a personal copy are `copyright_boilerplate`. An express art. 67.3
+**Reading rules used here.** Use-vs-copy test: a clause that limits *using, accessing or
+viewing* content to a private purpose (utilizar, visualizar, consultar, "cualquier uso no
+autorizado", "fines estrictamente particulares") is `all_reuse`; one that limits only
+*copies* (copiar, reproducir, descargar, imprimir) is `copyright_boilerplate`; a clause
+naming both (for example "Podrá visualizar ... e incluso imprimirlos, copiarlos ... para su
+uso personal y privado") is `all_reuse`. An express art. 67.3
 RDL 24/2021 reservation is `tdm_all`.
 
 Spanish dailies are closed or paywalled. El Mundo, 20 minutos, La Voz de Galicia, the
@@ -1244,8 +1244,9 @@ Diario de Navarra all state art. 67.3 reservations (`tdm_all`). El Confidencial,
 and Heraldo restrict use (`all_reuse`). El Español, Ara, El Periódico and La Nueva España
 put their sampled opinion pages behind a paywall. The open, usable newspapers are La
 Razón and RTVE. The magazine side is better: CTXT (CC BY-NC) and El Salto (CC BY-SA) are
-openly licensed, La Marea is CC BY-SA with an AI-training exclusion, and Jot Down and the
-popular weeklies (¡HOLA!, Diez Minutos, Mía) and Muy Interesante carry only boilerplate.
+openly licensed, La Marea is CC BY-SA with an AI-training exclusion, and ¡HOLA! carries
+only boilerplate. Jot Down, Diez Minutos, Mía and Muy Interesante limit viewing to
+personal use (`all_reuse`).
 
 #### Newspapers
 
@@ -1262,7 +1263,7 @@ popular weeklies (¡HOLA!, Diez Minutos, Mía) and Muy Interesante carry only bo
 | El Correo | tdm_all | 100,291 | Vocento condiciones de uso: "No está permitido el uso, reproducción o extracción del contenido de este Sitio Web para fines de minería de datos o textos ni para cualquier otro fin, como, por ejemplo, la inteligencia artificial", plus an Art. 4(3) / art. 67.3 reservation. | https://www.elcorreo.com/condiciones-uso.html ("para fines de minería de datos o textos ni para cualquier otro fin") |
 | Heraldo de Aragón | all_reuse | 46,757 | Aviso legal: "Cualquier uso no autorizado previamente por HERALDO será considerado una infracción de los derechos de propiedad intelectual"; a private copy is allowed under art. 31 LPI. robots.txt blocks AI training crawlers. | https://www.heraldo.es/estaticos/aviso-legal.html ("Cualquier uso no autorizado previamente por HERALDO") |
 | Diario de Sevilla | tdm_all | 23,192 | Aviso legal reserves reproductions and extractions "a medios de lectura mecánica u otros medios que resulten adecuados a tal fin de conformidad con el artículo 67.3 del Real Decreto - ley 24/2021". | https://www.diariodesevilla.es/avisolegal/ ("de conformidad con el artículo 67.3") |
-| Ara | copyright_boilerplate | 29,930 | Avís legal: "L'usuari podrà visualitzar els continguts d'aquest portal, copiar-los, imprimir-los ... només per al seu ús personal i privat." Free registration gives 10 articles a month; both sampled opinion pieces had `isAccessibleForFree` false. Metered, so not registered. | https://www.ara.cat/avis_legal.html ("només per al seu ús personal i privat"); https://www.ara.cat/condicions_contractacio.html ("accés a 10 articles"); samples https://llegim.ara.cat/opinio/alfons-jove-rei-conquerir-menorca_129_5912002.html, https://empreses.ara.cat/opinio/campanya-electoral-2050_129_5911297.html |
+| Ara | all_reuse | 29,930 | Avís legal names viewing and copying: "L'usuari podrà visualitzar els continguts d'aquest portal, copiar-los, imprimir-los ... només per al seu ús personal i privat." Free registration gives 10 articles a month; both sampled opinion pieces had `isAccessibleForFree` false. | https://www.ara.cat/avis_legal.html ("només per al seu ús personal i privat"); https://www.ara.cat/condicions_contractacio.html ("accés a 10 articles"); samples https://llegim.ara.cat/opinio/alfons-jove-rei-conquerir-menorca_129_5912002.html, https://empreses.ara.cat/opinio/campanya-electoral-2050_129_5911297.html |
 | El Diario Vasco | tdm_all | 68,509 | Same Vocento clause ("ni para cualquier otro fin, como, por ejemplo, la inteligencia artificial"). | https://www.diariovasco.com/condiciones-uso.html ("para fines de minería de datos o textos ni para cualquier otro fin") |
 | Las Provincias | tdm_all | 26,202 | Same Vocento clause. | https://www.lasprovincias.es/condiciones-uso.html ("para fines de minería de datos o textos ni para cualquier otro fin") |
 | El Español | copyright_boilerplate | n/a | Aviso legal bans reproduction, distribution and communication "con fines comerciales" only. All 3 sampled pages (two opinion, one news) had `isAccessibleForFree` false, so no free part found. Not registered. | https://www.elespanol.com/aviso_legal/ ("con fines comerciales"); samples https://www.elespanol.com/el-cultural/opinion/minima_molestia_ignacio_echevarria/20261118/restitucion-poetica/1003744461839_13.html, https://www.elespanol.com/invertia/opinion/20261118/ola-azul-no-frenara-marea-creciente-ia/1003744461114_12.html, https://www.elespanol.com/espana/20261118/cayetana-frases-sanchez-mix-narciso-neron-acabar-tezanos-intxaurrondos-pumpidos/1003744462366_0.html |
@@ -1273,14 +1274,14 @@ popular weeklies (¡HOLA!, Diez Minutos, Mía) and Muy Interesante carry only bo
 
 | Title | Scope | Circ. | Reason | Evidence |
 |---|---|---|---|---|
-| CTXT | none | n/a | **Registry** `es-ctxt`. Site-wide CC BY-NC 4.0 (the older aviso legal still says personal and private copies only). 2/2 pieces free; from 2015. | `evidence_urls` of registry entry `es-ctxt` |
+| CTXT | none | n/a | **Registry** `es-ctxt`. Site-wide CC BY-NC 4.0 governs. The older aviso legal's "Podrá visualizar ... para su uso personal y privado" would be `all_reuse` on its own; conflict flagged. 2/2 pieces free; from 2015. | `evidence_urls` of registry entry `es-ctxt` |
 | El Salto | none | n/a | **Registry** `es-elsalto`. Texts CC BY-SA 3.0 ES. Has a members-only section; 2/2 articles served text. | `evidence_urls` of registry entry `es-elsalto` |
 | La Marea | ai_training_only | n/a | **Registry** `es-lamarea`. Footer: CC BY-SA 3.0, "No se permite el uso del contenido para entrenamiento de IA". 2/2 free; archive from 2013. | `evidence_urls` of registry entry `es-lamarea` |
-| Jot Down | copyright_boilerplate | n/a | **Registry** `es-jotdown`. Reproduction banned; personal and private copies allowed. 2/2 free. | `evidence_urls` of registry entry `es-jotdown` |
+| Jot Down | all_reuse | n/a | Aviso legal: "Podrá visualizar los elementos del Site e incluso imprimirlos, copiarlos y almacenarlos ... siempre y cuando sea, única y exclusivamente, para su uso personal y privado" (names viewing). 2/2 pieces free. Registry entry removed (fix round 1, use-vs-copy test). | https://www.jotdown.es/aviso-legal/ ("Podrá visualizar los elementos del Site ... para su uso personal y privado") |
 | ¡HOLA! | copyright_boilerplate | n/a | **Registry** `es-hola`. "Reproducir, distribuir, modificar o copiar" banned unless authorised or legally allowed. 2/2 pages `isAccessibleForFree` true. | `evidence_urls` of registry entry `es-hola` |
-| Diez Minutos | copyright_boilerplate | n/a | **Registry** `es-diezminutos`. Hearst: private copy for personal use; distribution and other unauthorised acts banned. 2/2 pages served text. | `evidence_urls` of registry entry `es-diezminutos` |
-| Muy Interesante | copyright_boilerplate | n/a | **Registry** `es-muy-interesante`. Zinet Media: copies for personal and private use. 2/2 free. Now on an okdiario.com subdomain. | `evidence_urls` of registry entry `es-muy-interesante` |
-| Mía | copyright_boilerplate | n/a | **Registry** `es-mia`. Same Zinet Media template. 2/2 free. | `evidence_urls` of registry entry `es-mia` |
+| Diez Minutos | all_reuse | n/a | Hearst aviso legal: "únicamente podrá visualizar y obtener copia privada de los contenidos siempre y cuando dicha copia sea, única y exclusivamente, para su uso personal y privado" (names viewing). 2/2 pages served text. Registry entry removed (fix round 1, use-vs-copy test). | https://www.hearst.es/aviso-legal ("únicamente podrá visualizar y obtener copia privada") |
+| Muy Interesante | all_reuse | n/a | Zinet Media aviso legal: "Podrá visualizar los elementos del Site e incluso imprimirlos, copiarlos y almacenarlos ... única y exclusivamente, para su uso personal y privado" (names viewing). 2/2 free; now on an okdiario.com subdomain. Registry entry removed (fix round 1, use-vs-copy test). | https://muyinteresante.okdiario.com/aviso-legal.html ("Podrá visualizar los elementos del Site ... para su uso personal y privado") |
+| Mía | all_reuse | n/a | Same Zinet Media clause ("Podrá visualizar los elementos del Site ... para su uso personal y privado"). 2/2 free. Registry entry removed (fix round 1, use-vs-copy test). | https://miarevista.okdiario.com/aviso-legal.html ("Podrá visualizar los elementos del Site ... para su uso personal y privado") |
 | Tiempo | unknown | n/a | The magazine site is gone: tiempodehoy.com now serves a weather site ("El tiempo en España, México, Argentina y Colombia hoy"). | https://www.tiempodehoy.com/ |
 | Interviú (archive) | unknown | n/a | interviu.es did not respond (connection failed on https and http). No online archive found. | https://www.interviu.es/ and http://www.interviu.es/ (no response) |
 | Cambio 16 | all_reuse | n/a | Términos de uso: "Se prohíbe cualquier uso del contenido que no sea la mera consulta y visualización desde nuestro sitio web." | https://www.cambio16.com/terminos-de-uso/ ("Se prohíbe cualquier uso del contenido que no sea la mera consulta") |
@@ -1309,10 +1310,9 @@ Magazines:
 2. `es-elsalto`: left-wing news and opinion, CC BY-SA; partly members-only.
 3. `es-lamarea`: left-wing monthly, CC BY-SA with only AI training excluded; archive from
    2013.
-4. `es-jotdown`: long-form culture and interviews; boilerplate terms.
-5. Popular-magazine stream: `es-hola` and `es-diezminutos` (celebrity weeklies),
-   `es-mia` (women's weekly) and `es-muy-interesante` (popular science), all free with
-   boilerplate terms.
+4. Popular-magazine stream: `es-hola` (celebrity weekly), free with boilerplate terms.
+   Diez Minutos, Mía and Muy Interesante limit viewing to personal use, so they are
+   closed.
 
 The magazine stream leans left (CTXT, El Salto, La Marea); La Razón is the only
 right-of-centre open title. Letters pages were not checked title by title.
