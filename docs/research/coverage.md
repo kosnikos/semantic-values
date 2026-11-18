@@ -6,10 +6,10 @@ Cells show the number of usable (free or free-registration) sources per period.
 
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
-| FR | 0 | 0 | 0 | 0 |
-| NL | 0 | 0 | 0 | 0 |
-| BE | 0 | 0 | 0 | 0 |
-| LU | 0 | 0 | 0 | 0 |
+| FR | 1 | 0 | 0 | 3 |
+| NL | 2 | 2 | 4 | 4 |
+| BE | 1 | 1 | 1 | 3 |
+| LU | 1 | 1 | 1 | 5 |
 | DE | 0 | 0 | 0 | 0 |
 | AT | 0 | 0 | 0 | 0 |
 | CH | 0 | 0 | 0 | 0 |
@@ -42,3 +42,30 @@ Cells show the number of usable (free or free-registration) sources per period.
 - gr-greek-web-archive-portal: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gr-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gr-gdelt-url-index: llm_api_allowed, per_text_publish_allowed
+- fr-gallica-presse: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-retronews: per_text_publish_allowed
+- fr-lemonde-website: llm_api_allowed, per_text_publish_allowed
+- fr-agoravox: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-reddit-france: llm_api_allowed, per_text_publish_allowed
+- fr-bnf-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-kbr-belgicapress: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- be-lalibre-website: per_text_publish_allowed
+- be-politics-be-forum: llm_api_allowed, per_text_publish_allowed
+- be-reddit-belgium: llm_api_allowed, per_text_publish_allowed
+- be-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- lu-eluxemburgensia: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- lu-rtl-lu: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- lu-tageblatt-website: per_text_publish_allowed
+- lu-lessentiel: llm_api_allowed, per_text_publish_allowed
+- lu-reddit-luxembourg: llm_api_allowed, per_text_publish_allowed
+- lu-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- lu-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-delpher-kranten: llm_api_allowed, per_text_publish_allowed
+- nl-kb-delpher-data: llm_api_allowed, per_text_publish_allowed
+- nl-nrc-website: per_text_publish_allowed
+- nl-geenstijl: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-fok-forum: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-reddit-thenetherlands: llm_api_allowed, per_text_publish_allowed
+- nl-kb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- nl-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out

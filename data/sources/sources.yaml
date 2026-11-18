@@ -754,3 +754,962 @@
     URLs + metadata only (see gb-gdelt-url-index). GDELT machine-translates 65 languages;
     whether Greek is among them was not verified. Text behind URLs is under each
     publisher's terms.
+
+# ---------------------------------------------------------------- FR
+
+- id: fr-gallica-presse
+  name: Gallica (BnF) - digitised press and periodicals
+  country: FR
+  source_type: national_library
+  url: https://gallica.bnf.fr/
+  access: free
+  year_start: 1940
+  year_end: 1953
+  languages: [fr]
+  genres: [news, opinion, other]
+  access_method: api
+  licence: >-
+    Conditions d'utilisation des contenus de Gallica (page not reachable by us); the
+    api.bnf.fr CGU (24 Feb 2025) defer to them for digitised documents; BnF metadata are
+    under the Etalab Licence Ouverte.
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "over 13,000 press and periodical titles published before 1954 (BnF Presse et medias page)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.bnf.fr/fr/presse-et-medias
+    - https://www.bnf.fr/fr/gallica-la-bibliotheque-numerique-de-la-bnf-et-de-ses-partenaires
+    - https://www.bnf.fr/fr/sentir-le-pouls-dune-epoque-la-numerisation-de-la-presse
+    - https://api.bnf.fr/fr/api-gallica-de-recherche
+    - https://api.bnf.fr/fr/conditions-generales-dutilisation-du-site-bnf-api-et-jeux-de-donnees
+  notes: >-
+    Entry is scoped to the v0 window: year_start 1940 is our cut, not Gallica's first year
+    (the press collection covers "près de trois siècles"). BnF: Gallica holds "plus de 13
+    000 titres de presse et revues publiés avant 1954"; "Certains titres et numéros publiés
+    après 1954 ... étant encore sous droits, ils sont consultables uniquement sur place ...
+    grâce à Gallica Intra Muros" (hence year_end 1953 for the online part). Gallica is
+    "accessible gratuitement" (BnF Gallica page). The SRU search API has a full-text "text"
+    index, an "ocrquality" index (0-100) and an "access" index (fayes = libre de droits,
+    fano = sous conditions de réutilisation). gallica.bnf.fr itself, including the terms page
+    /edit/und/conditions-dutilisation-des-contenus-de-gallica, returned a Cloudflare 403 to
+    curl and WebFetch, and the Wayback copy returned 429, so the content terms were not read.
+    api.bnf.fr CGU 4.1: users "s'engagent à ne faire aucune réutilisation des documents
+    numérisés, hormis celles prévues par les présentes CGU, sans avoir contacté au préalable
+    la BnF". No AI/TDM clause in the api.bnf.fr CGU. Mostly news; opinion columns exist in
+    the dailies but were not inspected. OCR quality not checked.
+
+- id: fr-retronews
+  name: RetroNews (BnF-Partenariats press archive)
+  country: FR
+  source_type: newspaper_archive
+  url: https://www.retronews.fr/
+  access: paywall
+  year_start: 1631
+  year_end: 1954
+  languages: [fr]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: RetroNews CGU (BnF-Partenariats); explicit ban on use in AI systems
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "more than 2,000 press titles, 1631-1954 (homepage)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.retronews.fr/
+    - https://www.retronews.fr/pages/cgu
+    - https://www.retronews.fr/abonnement
+    - https://www.retronews.fr/robots.txt
+  notes: >-
+    Homepage: "De 1631 à 1954, plus de 2000 titres de presse sont publiés sur RetroNews";
+    subscription offers for individuals and institutions. CGU (read from the raw HTML; the
+    text sits in a script payload), verbatim: "Toute utilisation non expressément autorisée
+    est interdite. Sont notamment interdits : téléchargement, reproduction, extraction ;
+    modification, adaptation ; réutilisation à des fins commerciales ; utilisation dans des
+    systèmes d'intelligence artificielle (entraînement, extraction, scraping)". Pages carry
+    meta robots "noai, noimageai"; robots.txt blocks GPTBot, ClaudeBot, CCBot,
+    Google-Extended and others. It covers the same period as free Gallica, so it adds little
+    for us beyond better search tools.
+
+- id: fr-lemonde-website
+  name: Le Monde website (lemonde.fr)
+  country: FR
+  source_type: newspaper_archive
+  url: https://www.lemonde.fr/idees/
+  access: partial_paywall
+  year_start: 2005
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: all rights reserved; RSS and robots.txt restrict use to strictly personal use without a licence
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lemonde.fr/robots.txt
+    - https://www.lemonde.fr/idees/rss_full.xml
+    - https://next.ink/brief-article/le-monde-devoile-ses-nouvelles-offres-dabonnement-en-partenariat-avec-google/
+  notes: >-
+    lemonde.fr HTML pages (including /cgv/ and /mentions-legales/) served a bot challenge
+    to curl and WebFetch, so the paywall flag and the terms could not be read directly.
+    access "partial_paywall" rests on next.ink (4 June 2020): the subscription gives access
+    to "l'ensemble des contenus et des archives" from 9.99 EUR/month. robots.txt header
+    (dated 16/08/2019): "Il est interdit d'utiliser des robots d'indexation Web ou d'autres
+    méthodes automatiques de feuilletage ou de navigation sur ce site Web" and "Seuls les
+    partenaires sont habilités à utiliser nos contenus pour un usage autre que strictement
+    individuel"; CCBot, ClaudeBot, anthropic-ai and others are disallowed. RSS copyright
+    field: "L'utilisation des flux RSS du Monde.fr est réservée à un usage strictement
+    personnel, non professionnel et non collectif. Toute autre exploitation doit faire
+    l'objet d'une autorisation et donner lieu au versement d'une rémunération". No explicit
+    LLM clause seen, hence "unknown", but any non-individual use needs a licence
+    (syndication@lemonde.fr). The opinion section "Débats" (/idees/) is confirmed by its RSS
+    feed, which includes chronicles. year_start 2005 is our window, not a verified archive
+    start. Libération's robots.txt uses the same wording; treat both as licence-only.
+
+- id: fr-lefigaro-website
+  name: Le Figaro website (lefigaro.fr, incl. FigaroVox)
+  country: FR
+  source_type: newspaper_archive
+  url: https://www.lefigaro.fr/vox
+  access: partial_paywall
+  year_start: 2005
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: Le Figaro CGU; any use beyond strictly individual use (explicitly incl. LLM/AI) needs a licence
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lefigaro.fr/robots.txt
+    - https://www.lefigaro.fr/vox
+    - https://mentions-legales.lefigaro.fr/page/cgu
+    - https://www.lefigaro.fr/vox/culture/aurelie-jean-prix-litteraires-et-sexisme-l-ia-demontre-que-nous-discriminons-encore-20261112
+  notes: >-
+    robots.txt header, verbatim: "Toute utilisation de nos contenus protégés autre qu'un
+    usage strictement individuel (incluant notamment l'entraînement des grands modèles de
+    langage (LLM), l'entraînement des outils d'intelligence artificielle, la veille web ou
+    le media monitoring) est conditionnée à la conclusion d'une licence d'utilisation avec
+    la SOCIETE DU FIGARO." CCBot and ClaudeBot are disallowed. The CGU forbid automatic
+    extraction "par l'utilisation de robots ... à des fins commerciales et ce notamment dans
+    le but de nourrir, entraîner et développer tout logiciel basé sur l'intelligence
+    artificielle", and any substantial extraction from its databases. Three sampled
+    FigaroVox opinion pieces (2025-2026) had isAccessibleForFree false. per_text "no"
+    because generating tags is a non-individual use that needs a licence. Licence contact:
+    syndication-service@lefigaro.fr. year_start 2005 is our window, not verified.
+
+- id: fr-agoravox
+  name: AgoraVox (citizen media, "Tribune libre")
+  country: FR
+  source_type: forum
+  url: https://www.agoravox.fr/
+  access: free
+  year_start: 2005
+  year_end: null
+  languages: [fr]
+  genres: [opinion, forum]
+  access_method: scrape
+  licence: authors keep copyright and grant AgoraVox free digital reproduction rights; reproduction needs AgoraVox's prior permission
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~273,800 (homepage links, Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.agoravox.fr/
+    - https://www.agoravox.fr/qui-sommes-nous/
+    - https://www.agoravox.fr/qui-sommes-nous/article/notice-legale-1923
+    - https://www.agoravox.fr/robots.txt
+  notes: >-
+    "AgoraVox, est un média 100% citoyen et 100% participatif ... géré par la Fondation
+    AgoraVox, reconnue d'utilité publique"; "fondé en mars 2005". Articles are written by
+    readers (section "Tribune libre"), plus reader comments, so close to the project's
+    "ordinary people" target. access "free" is observed: the homepage and its article links
+    load without login, with no paywall markers. Legal notice: content is "la propriété des
+    auteurs des articles, qui cèdent gratuitement à la Fondation AgoraVox leurs droits de
+    reproduction et de diffusion numériques"; "Toute représentation totale ou partielle du
+    contenu du site, par quelques procédés que ce soit, sans l'autorisation préalable
+    expresse de la Fondation AgoraVox est interdite". No AI/TDM clause; robots.txt blocks
+    only GPTBot (CCBot is not blocked). Ask the Fondation before tagging. Authors are
+    self-selected and often anti-establishment: a strong selection bias to note.
+
+- id: fr-reddit-france
+  name: Reddit r/france (via Reddit Data API)
+  country: FR
+  source_type: forum
+  url: https://www.reddit.com/r/france/
+  access: free_registration
+  year_start: 2008
+  year_end: null
+  languages: [fr]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~654k posts, ~17.9M comments, ~2.29M subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=france
+  notes: >-
+    Created 2008-03-19, subreddit language "fr"; earliest archived post and comment
+    2008-03-20 (Arctic Shift metadata). The largest French-language forum we could verify.
+    Same Reddit terms caveats as gb-reddit-unitedkingdom (no third-party sharing without
+    permission; no model training).
+
+- id: fr-bnf-web-archive
+  name: BnF Archives de l'internet (web legal deposit)
+  country: FR
+  source_type: web_archive
+  url: https://www.bnf.fr/fr/archives-de-linternet
+  access: partial_paywall
+  year_start: 2000
+  year_end: null
+  languages: [fr]
+  genres: [news, opinion, forum, other]
+  access_method: manual
+  licence: French legal deposit; consultation only in BnF research rooms and regional legal-deposit libraries
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.bnf.fr/fr/archives-de-linternet
+  notes: >-
+    access is set to partial_paywall only because the schema has no "restricted" value (as
+    in gb-uk-web-archive): consultation needs a "pass recherche" in the BnF "salles
+    Recherche" or in regional legal-deposit libraries; there is no remote access. The page
+    says French web content is, "depuis le début des années 2000, mieux couverts dans les
+    collections de la BnF que dans les collections d'Internet Archive"; year_start 2000 is
+    approximate, and the first crawl date was not verified. URL lists of targeted crawls are
+    published as datasets on api.bnf.fr and data.gouv.fr. Not a practical source for us.
+
+- id: fr-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .fr domains
+  country: FR
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [fr]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.fr share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.lemonde.fr/robots.txt
+    - https://www.lefigaro.fr/robots.txt
+    - https://www.liberation.fr/robots.txt
+    - https://www.20minutes.fr/robots.txt
+    - https://www.agoravox.fr/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. lemonde.fr, lefigaro.fr, liberation.fr and
+    20minutes.fr all disallow CCBot, so the main national titles are likely absent from
+    recent crawls; agoravox.fr does not block CCBot. French coverage must be measured from
+    the index.
+
+# ---------------------------------------------------------------- BE
+
+- id: be-kbr-belgicapress
+  name: KBR BelgicaPress (Royal Library of Belgium digitised newspapers)
+  country: BE
+  source_type: national_library
+  url: https://www.belgicapress.be/
+  access: free_registration
+  year_start: 1814
+  year_end: 1982
+  languages: [fr, nl, de]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: >-
+    Public domain up to 1918 (KBR's chosen cut-off); later issues only via a MyKBR login
+    with a declaration of use under the Belgian copyright exceptions for scientific
+    research or teaching illustration.
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "136 titles, 3,952,430 OCR pages (KBR news item); 1951-1989 digitisation underway (4M+ pages by 2027)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.kbr.be/en/collections/digitised-newspapers/
+    - https://www.kbr.be/en/digital-collections-what-about-copyrights
+    - https://www.kbr.be/en/remote-access-to-the-e-resources-and-the-digitised-collection/
+    - https://www.kbr.be/en/kbr-launches-new-and-major-project-to-digitise-belgian-daily-press/
+    - https://www.belgicapress.be/robots.txt
+  notes: >-
+    The portal "features 136 Belgian newspaper titles from 1814-1950 ... (two titles run a
+    little longer: the newspaper Le Soir runs until 1970 and Le Drapeau rouge runs to
+    1982)", all full-text OCR. Free for everyone up to 31 Dec 1918. "Since 15 June 2020, you
+    have full access to all the documents digitised in BelgicaPress ..., whether they are
+    free of copyright or not, provided that you have logged in via your MyKBR account and
+    that you declare that the documents will be used within the strict framework of the
+    exceptions provided for by Belgian copyright legislation, as illustration for teaching
+    or for scientific research." So 1940-1950 (and Le Soir to 1970) is free_registration
+    under a research declaration. Whether that covers sending text to a commercial LLM API
+    is not addressed. A new project will digitise the 1951-1989 dailies by 2027. The portal
+    itself reset our TLS connection (curl and WebFetch), so these facts come from kbr.be
+    pages. The language mix (French/Dutch/German) is assumed from the Belgian titles, not
+    inspected.
+
+- id: be-lalibre-website
+  name: La Libre Belgique website (lalibre.be, Débats section)
+  country: BE
+  source_type: newspaper_archive
+  url: https://www.lalibre.be/debats/
+  access: partial_paywall
+  year_start: 2017
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: IPM conditions générales - any reproduction "sous toute forme" is "strictement interdite"
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lalibre.be/debats/
+    - https://www.lalibre.be/debats/opinions/2026/11/10/face-a-limmobilisme-politique-la-majorite-silencieuse-des-jeunes-envisage-lemigration-HAGUDRZEG5GYDNIKJ7J5JKCHNQ/
+    - https://www.lalibre.be/debats/edito/2026/11/06/le-palais-nouvelle-cour-dappel-du-gouvernement-B5NEHGKVFVBQDEXBUGRFUIVGHQ/
+    - https://www.lalibre.be/page/conditions-generales/
+    - https://www.lalibre.be/robots.txt
+  notes: >-
+    The Débats section has /debats/opinions/ (outside op-eds), /debats/ripostes/,
+    /debats/edito/ and chronicles. Two sampled 2026 opinions had isAccessibleForFree "True";
+    a sampled editorial had "False". year_start 2017 is the oldest opinion URL seen on the
+    section page (the footer says "Copyright © La Libre.be 1996-2026"; archive depth not
+    verified). Conditions générales section V, verbatim: "Toute reproduction totale ou
+    partielle et sous toute forme des contenus des publications et des sites Internet
+    éditées par les sociétés «Société Anonyme d'Informations et de Productions Multimédia
+    (SA IPM)», «La Libre Match GEIE» et «Courrier International EBL GEIE» est strictement
+    interdite." No explicit AI clause, but the clause bans reproduction in any form for any purpose, so
+    llm is "no" (as for gb-mumsnet); robots.txt disallows CCBot, GPTBot, Claudebot,
+    anthropic-ai and others. The best free francophone-Belgian opinion source we could
+    verify; ask IPM first.
+
+- id: be-politics-be-forum
+  name: Politics.be forum (forum.politics.be)
+  country: BE
+  source_type: forum
+  url: https://forum.politics.be/
+  access: free
+  year_start: 2002
+  year_end: null
+  languages: [nl]
+  genres: [forum]
+  access_method: scrape
+  licence: unknown (forum rules page returned 403)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "11,192,567 posts, 164,449 members (forum index, 2026-11-18)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://forum.politics.be/
+    - https://forum.politics.be/robots.txt
+  notes: >-
+    Flemish political and social discussion forum (vBulletin), with subforums on domestic
+    politics, Europe and international affairs. Index page: "Om berichten te bekijken,
+    selecteer je het forum"; registration is needed only to post. access "free" is observed
+    from the index page only: thread pages (showthread.php) and the rules page
+    (misc.php?do=cfrules) returned 403 to curl. year_start 2002 comes from the footer
+    "©2002 - 2026", not from a dated post. robots.txt disallows ClaudeBot (CCBot is not
+    listed), hence tdm_opt_out "yes". Terms unknown; contact the operator.
+
+- id: be-reddit-belgium
+  name: Reddit r/belgium (via Reddit Data API)
+  country: BE
+  source_type: forum
+  url: https://www.reddit.com/r/belgium/
+  access: free_registration
+  year_start: 2008
+  year_end: null
+  languages: [en]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~169k posts, ~4.5M comments, ~329k subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=belgium
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=Belgium2
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=Vlaanderen
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=belgique
+  notes: >-
+    Created 2008-03-12, subreddit language "en"; earliest archived post 2008-09-20 (Arctic
+    Shift). Mainly English (any Dutch/French share not measured), which mixes in expats.
+    r/Belgium2 (created 2018-08-23, ~54k posts, ~1.76M comments, language "en") is a second
+    national sub. Language-specific subs are small: r/Vlaanderen ~3.5k posts, r/Belgique
+    ~1.3k posts. Same Reddit terms caveats as gb-reddit-unitedkingdom.
+
+- id: be-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .be domains
+  country: BE
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [nl, fr]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.be share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.standaard.be/robots.txt
+    - https://www.lalibre.be/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. standaard.be and lalibre.be disallow CCBot;
+    lesoir.be and hln.be returned 403 even for robots.txt, so their status is unknown.
+    Belgian coverage must be measured from the index.
+
+# ---------------------------------------------------------------- LU
+
+- id: lu-eluxemburgensia
+  name: eluxemburgensia.lu (BnL digitised periodicals)
+  country: LU
+  source_type: national_library
+  url: https://eluxemburgensia.lu/
+  access: free
+  year_start: 1848
+  year_end: 2014
+  languages: [de, fr, lb]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: >-
+    eluxemburgensia copyright page not readable (JavaScript-only); BnL: "all use of these
+    materials must comply with copyright law". In-copyright newspapers are online under
+    agreements with publishers.
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "68 periodicals (2023); Tageblatt 1951-2014 alone adds 19,248 issues, 699,786 pages, 9,045,139 articles"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://eluxemburgensia.lu/
+    - https://bnl.public.lu/en/a-la-une/actualites/communiques/2026/tageblatt.html
+    - https://gouvernement.lu/fr/actualites/toutes_actualites/communiques/2021/11-novembre/23-wort-bnl.html
+    - https://bnl.public.lu/en/a-la-une/actualites/communiques/2023/letzebuerger-journal.html
+    - https://bnl.public.lu/en/a-la-une/actualites/communiques/2025/periodiques.html
+    - https://bnl.public.lu/en/offres-numeriques/eluxemburgensia.html
+    - https://data.public.lu/en/posts/digitised-newspapers-apis-and-open-source-software-from-the-national-library-of-luxembourg-bnl/
+    - https://chat.eluxemburgensia.lu/terms
+  notes: >-
+    The strongest 1940-2005 run found in this batch. Luxemburger Wort is online for
+    1848-1950 plus 1951-1980: "désormais gratuitement accessibles sur les portails
+    eluxemburgensia.lu et a-z.lu" (government release, Nov 2021). The 1951-1980 pages "ne
+    peuvent être téléchargées au format PDF qu'au sein de la BnL" (agreement with the
+    publisher Saint Paul); post-1980 Wort is on microfilm only. Tageblatt 1951-2014 was put
+    online on 26.05.2026, described as "freely accessible to the public"; it "expanded the
+    content already available on the portal" (which earlier Tageblatt years are online was
+    not verified). BnL is digitising Lëtzebuerger Journal 1948-2020 for the portal (2023
+    release); the portal also holds the weekly d'Lëtzebuerger Land (years not verified).
+    BnL FAQ: "you do not need a library card"; "all use of these materials must comply with
+    copyright law". The site is a JavaScript app, so the copyright page text, title list
+    and genre sections could not be read; letters/opinion genres are assumed from
+    full-newspaper runs. Open-data bulk sets on data.bnl.lu (CC0) cover only 1841-1881, so
+    they fall outside the v0 window. BnL runs its own newspaper chatbot on OpenAI models
+    (chat.eluxemburgensia.lu terms). So BnL itself sends this text to a commercial LLM, but
+    that grants us no right. Ask BnL whether research tagging of post-1950 Wort/Tageblatt
+    text via an LLM API is allowed.
+
+- id: lu-rtl-lu
+  name: RTL.lu (incl. Meenung - Lieserbréiwer and Carte blanche)
+  country: LU
+  source_type: newspaper_archive
+  url: https://www.rtl.lu/news/meenung
+  access: free
+  year_start: 2024
+  year_end: null
+  languages: [lb]
+  genres: [letters, opinion, news, forum]
+  access_method: scrape
+  licence: RTL conditions d'utilisation (no reproduction or commercial exploitation of the Service; forum contributions licensed to RTL)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "28 letters linked on the Lieserbréiwer index page (Nov 2026); archive depth unknown"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.rtl.lu/news/meenung/lieserbreiwer
+    - https://www.rtl.lu/news/meenung/lieserbreiwer/dat-wat-schonn-do-ass-besser-notzen-934356013
+    - https://www.rtl.lu/news/meenung/carte-blanche/vun-der-nordstad-185142639
+    - https://www.rtl.lu/rtl-charte
+    - https://privacy-center.rtl.lu/fr
+    - https://www.rtl.lu/robots.txt
+  notes: >-
+    Readers' letters (Lieserbréiwer) and guest op-eds (Carte blanche) in Luxembourgish
+    (inLanguage "lb"). access "free" is observed: sampled pages have no paywall flag and we
+    saw no subscription offer on RTL.lu. year_start 2024 is the oldest letter date seen on
+    the index page (2024-10-10), not a verified archive start. Comments are short-lived:
+    the comment charter says threads stay open up to 72 hours and comments are "bis zu 2
+    Wochen um Site visibel", so they do not form an archive. Terms: "Vous vous interdisez de
+    reproduire, copier, vendre, revendre, ou exploiter dans un but commercial quel qu'il soit
+    toute partie du Service"; readers may reproduce forum content "à des fins de
+    consultation privée ou reproduire et diffuser de courts extraits d'un message, à des
+    fins d'information ou de recherche, en citant le nom de ce Forum et celui de l'auteur".
+    No AI/TDM clause; robots.txt does not block AI crawlers. The most promising
+    Luxembourgish-language letters source; ask RTL.
+
+- id: lu-tageblatt-website
+  name: Tageblatt website (tageblatt.lu, Meinung / Forum / Leserbriefe)
+  country: LU
+  source_type: newspaper_archive
+  url: https://www.tageblatt.lu/
+  access: partial_paywall
+  year_start: 2015
+  year_end: null
+  languages: [de, fr]
+  genres: [opinion, letters, columns, news]
+  access_method: scrape
+  licence: all rights reserved; robots.txt reserves commercial TDM and forbids automated collection without permission
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.tageblatt.lu/robots.txt
+    - https://www.tageblatt.lu/Meinung/Die-Grenzen-des-Machbaren-im-luxemburgischen-Fussball-114692.html
+    - https://www.tageblatt.lu/Meinung/Wenn-Outlook-streikt-und-Buerger-besser-still-sein-sollen-114625.html
+    - https://www.tageblatt.lu/Nachrichten/Forum
+  notes: >-
+    robots.txt, verbatim: "tageblatt.lu expressly reserves the right to use its content for
+    commercial text and data mining (§ 44b UrhG). The use of robots or other automated means
+    to access tageblatt.lu or collect or mine data without the express permission of
+    tageblatt.lu is strictly prohibited. If you would like to apply for permission to crawl
+    tageblatt.lu, collect or use data, please contact syndication@tageblatt.lu". GPTBot,
+    ChatGPT-User and CCBot are disallowed. Of two sampled Meinung pieces, one had
+    isAccessibleForFree false (with paywall markup) and one true. The Forum section includes
+    Leserbriefe. The languages are German and French (French share not measured).
+    year_start 2015 only marks where the BnL run (lu-eluxemburgensia, to 2014) ends; the
+    website's own archive depth was not verified.
+
+- id: lu-lessentiel
+  name: L'essentiel (lessentiel.lu)
+  country: LU
+  source_type: newspaper_archive
+  url: https://www.lessentiel.lu/fr
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [fr]
+  genres: [news, forum]
+  access_method: scrape
+  licence: L'essentiel conditions générales (personal, non-commercial use only)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lessentiel.lu/fr/conditions-generales
+    - https://www.lessentiel.lu/robots.txt
+    - https://www.lessentiel.lu/fr/story/a-differdange-une-femme-de-36-ans-grievement-blessee-par-balle-103669478
+  notes: >-
+    Free francophone daily; access "free" is observed (sampled story pages have no paywall
+    flag). Mostly news; reader comments exist (robots.txt paths /*comment/). year_start is
+    only the date of the pages sampled; archive depth not verified. Terms: "Tous les
+    produits sont exclusivement destinés à un usage personnel et non commercial" and "tout
+    téléchargement automatique des produits et toute diffusion de ceux-ci dans d'autres
+    systèmes ne sont autorisés qu'avec notre consentement exprès". No explicit AI clause,
+    but the "diffusion dans d'autres systèmes" clause is a strong caution. robots.txt
+    (updated Aug 2026) disallows story, video and comment paths for CCBot, GPTBot,
+    ClaudeBot, anthropic-ai and others. Low value for opinion genres.
+
+- id: lu-reddit-luxembourg
+  name: Reddit r/Luxembourg (via Reddit Data API)
+  country: LU
+  source_type: forum
+  url: https://www.reddit.com/r/Luxembourg/
+  access: free_registration
+  year_start: 2010
+  year_end: null
+  languages: [en]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~53k posts, ~706k comments, ~51k subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=luxembourg
+  notes: >-
+    Created 2010-07-25, subreddit language "en"; earliest post 2010-07-25 (Arctic Shift).
+    It is English-language and probably dominated by expats and cross-border workers (not
+    measured), so it is weak as a voice of Luxembourg society. Same Reddit terms caveats as
+    gb-reddit-unitedkingdom.
+
+- id: lu-web-archive
+  name: Luxembourg Web Archive (BnL)
+  country: LU
+  source_type: web_archive
+  url: https://www.webarchive.lu/
+  access: partial_paywall
+  year_start: 2016
+  year_end: null
+  languages: [lb, fr, de, en]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: Luxembourg legal deposit (Règlement grand-ducal of 6 Nov 2009, amended 2017); browsing only inside the BnL
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "news-media collection: over 70 sites harvested daily to quarterly since 1 June 2020"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.webarchive.lu/
+    - https://www.webarchive.lu/luxembourg-news-media/
+  notes: >-
+    access is set to partial_paywall only because the schema has no "restricted" value:
+    "Browsing the actual archive is only possible from within the National library of
+    Luxembourg." Scope: all .lu sites plus sites published or hosted in Luxembourg; 2 domain
+    crawls per year, with the Internet Archive as partner ("working with the Internet
+    Archive since 2016"; year_start 2016 is approximate). A dedicated news-media collection
+    has run since 1 June 2020. It would preserve RTL.lu letters and comments that vanish
+    from the live site, but only for on-site use.
+
+- id: lu-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .lu domains
+  country: LU
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [lb, fr, de]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.lu share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.wort.lu/robots.txt
+    - https://www.tageblatt.lu/robots.txt
+    - https://www.lessentiel.lu/robots.txt
+    - https://www.rtl.lu/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. wort.lu and tageblatt.lu disallow CCBot;
+    lessentiel.lu disallows CCBot on story paths; rtl.lu does not block it. Luxembourg
+    coverage must be measured from the index and is likely small.
+
+# ---------------------------------------------------------------- NL
+
+- id: nl-delpher-kranten
+  name: Delpher kranten (KB national library newspaper portal)
+  country: NL
+  source_type: national_library
+  url: https://www.delpher.nl/
+  access: free
+  year_start: 1618
+  year_end: 1995
+  languages: [nl]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: public domain after 140 years; later newspapers under copyright, online under publisher agreements
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "almost 2 million newspaper issues 1618-1995; 11M+ pages text-searchable (2017)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
+    - https://www.kb.nl/en/research-find/datasets/delpher-newspapers
+    - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
+    - https://www.computable.nl/2017/03/31/de-persgroep-verruimt-krantenaanbod-online-project-kb
+    - https://www.delpher.nl/robots.txt
+  notes: >-
+    The strongest free 1940-1995 newspaper run in this batch. KB: "edities van alle
+    jaargangen van de belangrijkste landelijke Nederlandse kranten, zoals De Telegraaf, De
+    Volkskrant en Het Parool", as scans with OCR and ALTO word coordinates. Computable (31 Mar
+    2017): the post-war Volkskrant, Trouw and Het Parool runs were digitised with publisher
+    consent and "online ontsloten"; the permission list includes De Volkskrant (1920-1995),
+    Trouw (1945-1995), Het Parool (1941-1995) and AD (1946-1960). access "free" rests on
+    these pages, not on observation: delpher.nl returned 403 to curl and WebFetch for every
+    page except robots.txt, so the online availability of each post-1945 title and year was
+    not checked (some may be reading-room only). robots.txt blocks all crawlers except a
+    search-engine whitelist and also blocks Google-Extended and /pageocr, hence tdm_opt_out
+    "yes". KB: newer newspapers "zijn vaak nog wel auteursrechtelijk en privacyrechtelijk
+    beschermd. Gebruik van deze kranten voor niet-commercieel wetenschappelijk onderzoek is
+    in sommige gevallen mogelijk." Readers' letters columns exist in these dailies but were
+    not inspected. For machine access see nl-kb-delpher-data.
+
+- id: nl-kb-delpher-data
+  name: KB Delpher newspapers dataset (SRU / OAI-PMH APIs and bulk)
+  country: NL
+  source_type: national_library
+  url: https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
+  access: free_registration
+  year_start: 1618
+  year_end: 1995
+  languages: [nl]
+  genres: [news, opinion, letters, other]
+  access_method: api
+  licence: 1618-1879 open archive reusable without restriction; later material only by agreement, sometimes for non-commercial research
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "open archive 1618-1879: 111 GB in 23 zip files; full set ~2M issues"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
+    - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
+  notes: >-
+    "Er zijn 2 API's beschikbaar: een metadata-harvest-API op basis van OAI-PMH en een
+    zoek-API op basis van SRU. Handleidingen voor deze API's worden ter beschikking gesteld
+    nadat rechtmatige toegang is verkregen via @email" (access on request, hence
+    free_registration). The open archive covers only 1618-1879 ("mogen onbeperkt worden
+    hergebruikt"), outside the v0 window. For protected material: "Voor niet-commercieel
+    wetenschappelijk onderzoek zijn er soms mogelijkheden. Wel kan het zijn dat je eerst een
+    contract moet ondertekenen of dat de toegang tot de data beperkt is tot het KB-gebouw"
+    (KB_Datalab and the SANE secure environment). The KB explicitly welcomes TDM, ML and AI
+    research on its collections (hence tdm_opt_out "no" for this route). Whether post-1940
+    text may be sent to a commercial LLM API is not addressed; the secure-environment
+    model suggests it would not be. Ask the KB (dataservices) with a concrete plan.
+
+- id: nl-nrc-website
+  name: NRC website (nrc.nl, Opinie and Lezersbrieven)
+  country: NL
+  source_type: newspaper_archive
+  url: https://www.nrc.nl/opinie/
+  access: paywall
+  year_start: 2005
+  year_end: null
+  languages: [nl]
+  genres: [opinion, letters, columns, news]
+  access_method: scrape
+  licence: all rights reserved; robots.txt Art. 4 CDSM reservation against TDM for ML/AI "or otherwise"
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nrc.nl/robots.txt
+    - https://www.nrc.nl/opinie/
+    - https://www.nrc.nl/index/opinie/lezersbrieven/
+    - https://www.nrc.nl/nieuws/2026/11/16/hoe-goed-je-bedoelingen-ook-waren-die-rekening-zul-je-betalen-a4941496
+    - https://www.nrc.nl/leveringsvoorwaarden/
+  notes: >-
+    robots.txt header, verbatim: "All copyrights, neighbouring rights and database rights in
+    the content and layout of this website/app are explicitly reserved and are for
+    personal, non-commercial use only. In accordance with Article 4 of the Directive on
+    Copyright in the Digital Single Market (CDSM) and its transposition into the law of the
+    applicable Member State, all content of this website on which it is made available is
+    not to be used for the purposes of text and data mining, extraction, scraping and/or the
+    use of programs or robots for automatic data collection and/or extraction of digital
+    data, whether for machine learning or artificial intelligence purposes or otherwise."
+    standaard.be and wort.lu (also Mediahuis) carry near-identical wording. All 6 sampled
+    opinion and letters pages (2026) had isAccessibleForFree false; access needs an NRC
+    account (leveringsvoorwaarden 6.3) and a subscription. Letters section at
+    /index/opinie/lezersbrieven/. year_start 2005 is our window, not verified. Licence only.
+
+- id: nl-geenstijl
+  name: GeenStijl (geenstijl.nl) incl. reader comments
+  country: NL
+  source_type: forum
+  url: https://www.geenstijl.nl/
+  access: free
+  year_start: 2003
+  year_end: null
+  languages: [nl]
+  genres: [opinion, columns, forum]
+  access_method: scrape
+  licence: unknown (only house rules and a privacy page found; no reuse terms)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "post ids reach ~5.19M (homepage links, Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.geenstijl.nl/
+    - https://www.geenstijl.nl/huisregels
+    - https://www.geenstijl.nl/5193052/sonny-spek-wij-worden-overbodig
+    - https://www.geenstijl.nl/robots.txt
+    - https://nl.wikipedia.org/wiki/GeenStijl
+  notes: >-
+    Provocative weblog with very active reader comments ("reaguurders"); the house rules
+    govern comments and expect "correct en foutloos Nederlands". Founded as a weblog in
+    April 2003 (nl.wikipedia). access "free" is observed: the homepage and a sampled post
+    (2026-11-17) load without login or a paywall flag. robots.txt returns an HTML 404
+    page, so there are no robots rules. No reuse or AI terms found, so all permission
+    fields are unknown. A strong but one-sided (right-leaning) voice; pair it with other
+    sources for balance.
+
+- id: nl-fok-forum
+  name: FOK!forum (forum.fok.nl)
+  country: NL
+  source_type: forum
+  url: https://forum.fok.nl/
+  access: free
+  year_start: 2002
+  year_end: null
+  languages: [nl]
+  genres: [forum]
+  access_method: scrape
+  licence: FOK! algemene voorwaarden (all rights reserved; users keep copyright and grant FOK! a use licence)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://forum.fok.nl/
+    - https://frontpage.fok.nl/page/voorwaarden
+    - https://forum.fok.nl/robots.txt
+    - https://forum.fok.nl/topic/100000
+  notes: >-
+    Large general Dutch forum. access "free" is observed: index and topic pages load
+    without login. year_start 2002 comes from topic 100000, dated "maandag 28 januari
+    2002"; earlier topics exist. Terms, verbatim: "Alle rechten zijn expliciet voorbehouden.
+    Behalve het downloaden en printen van geboden informatie voor persoonlijk gebruik, of
+    anders voor zover dit expliciet door FOK! wordt aangegeven danwel hiervoor uitdrukkelijk
+    schriftelijk toestemming voor wordt verleend, is het niet toegestaan de inhoud van deze
+    website en haar onderdelen geheel danwel gedeeltelijk over te nemen, vermenigvuldigen of
+    op welke wijze dan ook te distribueren of openbaar te maken." and "Het auteursrecht van
+    de reacties berust bij de individuele auteurs." No AI/TDM clause; robots.txt allows all
+    crawlers except SemrushBot. The blanket copying ban is a strong caution; ask FOK! first.
+
+- id: nl-reddit-thenetherlands
+  name: Reddit r/thenetherlands (via Reddit Data API)
+  country: NL
+  source_type: forum
+  url: https://www.reddit.com/r/thenetherlands/
+  access: free_registration
+  year_start: 2014
+  year_end: null
+  languages: [nl]
+  genres: [forum]
+  access_method: api
+  licence: Reddit Data API Terms (rev. 20 Jul 2026) + Developer Terms (rev. 24 Mar 2026)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "~231k posts, ~6.4M comments, ~1.44M subscribers (Arctic Shift metadata)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://redditinc.com/policies/developer-terms
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=thenetherlands
+    - https://arctic-shift.photon-reddit.com/api/subreddits/search?subreddit=Netherlands
+  notes: >-
+    Created 2014-02-20, subreddit language "nl"; earliest post 2014-02-20 (Arctic Shift).
+    The Dutch-language national sub. r/Netherlands (created 2009-06-20, language "en",
+    ~167k posts, ~3.5M comments, earliest archived comment 2015-09-22) is in English and
+    probably expat-heavy, so weaker as a voice of Dutch society. Same Reddit terms caveats
+    as gb-reddit-unitedkingdom.
+
+- id: nl-kb-web-archive
+  name: KB web collection (Dutch web archive)
+  country: NL
+  source_type: web_archive
+  url: https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
+  access: partial_paywall
+  year_start: 2007
+  year_end: null
+  languages: [nl]
+  genres: [news, opinion, forum, other]
+  access_method: manual
+  licence: selective collection, viewable only in the KB reading room by KB members
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "25,411 websites (KB page)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
+  notes: >-
+    access is set to partial_paywall only because the schema has no "restricted" value.
+    "Contents: selection of Dutch websites collected by the KB from 2007 onwards"; "Access:
+    can be inspected by KB members in the KB reading room"; sites are "collected and stored
+    once or twice per year". Selective, not a .nl domain crawl. Not a practical source for us.
+
+- id: nl-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .nl domains
+  country: NL
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [nl]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.nl share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.nrc.nl/robots.txt
+    - https://forum.fok.nl/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. nrc.nl disallows CCBot; forum.fok.nl does not.
+    volkskrant.nl and nu.nl returned 403 even for robots.txt, so their status is unknown.
+    Dutch coverage must be measured from the index.
