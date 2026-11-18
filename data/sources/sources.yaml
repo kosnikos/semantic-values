@@ -3322,6 +3322,47 @@
 
 # --- DE wider sweep (Task 5e batch iii)
 
+- id: de-berliner-zeitung
+  name: Berliner Zeitung (berliner-zeitung.de)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.berliner-zeitung.de/
+  access: partial_paywall
+  year_start: 2010
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns, letters]
+  access_method: scrape
+  licence: Allgemeine Nutzungsbedingungen (use for own non-commercial purposes; commercial use needs consent)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "monthly article sitemaps from 2010-01 to 2026-11 (245 sub-sitemaps)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.berliner-zeitung.de/allgemeine-nutzungsbedingungen
+    - https://www.berliner-zeitung.de/robots.txt
+    - https://www.berliner-zeitung.de/sitemap.xml
+    - https://www.berliner-zeitung.de/article/organisierte-unzustaendigkeit-was-nuetzt-der-rechtsstaat-wenn-er-im-alltag-versagt-10583901
+    - https://www.berliner-zeitung.de/article/geschichten-formen-das-gehirn-was-beim-lesen-und-hoeren-im-kopf-passiert-10601172
+    - https://www.berliner-zeitung.de/article/deutsche-bank-leak-warum-trump-und-die-bank-sich-gegenseitig-in-der-hand-haben-10611560
+    - https://www.berliner-zeitung.de/article/chemnitzer-fc-regionalliga-nordost-aufstieg-duda-kolumne-10605755
+  notes: >-
+    Berlin daily (Berliner Verlag). Nutzungsbedingungen § 4, verbatim: "4.2. Die Nutzung
+    unserer Publikationen bzw. Inhalten ist ausschließlich zu eigenen, nichtkommerziellen
+    Zwecken zulässig. Jede Nutzung von Inhalten ... außerhalb der engen gesetzlichen Grenzen
+    des Urheberrechts ist unzulässig ... 4.3. Jede Nutzung der Inhalte für gewerbliche Zwecke
+    ist untersagt". No TDM, automated or AI clause, and robots.txt blocks no AI crawler.
+    Judgement call: the only use class it forbids is commercial use, and the statutory
+    limits it defers to include § 44b/§ 60d, so we class it copyright_boilerplate
+    (scope: commercial-only reservation). It is closed if the owner reads "eigenen"
+    narrowly. Access is observed: 3 of 4 sampled Nov 2026 pages (Politik, Panorama,
+    Geopolitik) had isAccessibleForFree "True"; a sport column was "False" (B+). The site
+    has Meinung and "Open Source" (reader contributions) sections, which we did not sample.
+    year_start 2010 = oldest article sitemap.
+
 - id: de-nd-aktuell
   name: nd (nd-aktuell.de, formerly Neues Deutschland)
   country: DE
@@ -3405,6 +3446,51 @@
     (2026-03-28), 300000 (2016) and 100000 (2008-02-01) redirected to loginFailed.php. No
     isAccessibleForFree field. year_start 2008 = oldest article page seen (login-gated).
     One editorial line; pair with others.
+
+- id: de-handelsblatt
+  name: Handelsblatt (handelsblatt.com)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.handelsblatt.com/meinung/
+  access: partial_paywall
+  year_start: 2011
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: Handelsblatt Group AGB (use for private or own non-commercial purposes); commercial TDM reserved (§ 44b UrhG)
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "yearly sitemap indexes 2011-2026"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.handelsblatt.com/impressum/
+    - https://handelsblattgroup.com/agb/
+    - https://www.handelsblatt.com/robots.txt
+    - https://www.handelsblatt.com/sitemapExternal/sitemaps_index.xml
+    - https://www.handelsblatt.com/meinung/gastbeitraege/gastkommentar-abschluss-in-etappen-wie-ungelernte-zu-fachkraeften-werden/100269994.html
+    - https://www.handelsblatt.com/meinung/kommentare/kommentar-ein-schwarzer-tag-fuer-das-vertrauen-in-die-deutsche-bank/100270494.html
+    - https://www.handelsblatt.com/meinung/kommentare/kommentar-stromsteuersenkung-drei-currywuerste-im-monat-retten-koalition/100270730.html
+  notes: >-
+    Business daily, economically liberal. Impressum: "Die Handelsblatt GmbH behält sich eine
+    Nutzung ihrer Inhalte für kommerzielles Text- und Data-Mining im Sinne des § 44b UrhG
+    ausdrücklich vor." AGB, Urheberrecht: "Sie dürfen diese daher ohne unsere gesonderte
+    Zustimmung nur zu privaten oder sonstigen eigenen, nicht-kommerziellen und/oder
+    -gewerblichen Zwecken nutzen und dafür auch auf Ihrem Computer speichern ... Jede
+    darüber hinausgehende Nutzung unserer Inhalte außerhalb der gesetzlichen
+    Schrankenbestimmungen, insbesondere jede Vervielfältigung, Speicherung, Verbreitung,
+    öffentliche Zugänglichmachung, etc. zu kommerziellen und/oder gewerblichen ...". Only
+    commercial use is reserved, so copyright_boilerplate (scope: commercial-only
+    reservation). The AGB's MCP-server clause bans training and "systematische Extrahieren
+    oder Harvesting" but applies only to that interface. robots.txt blocks GPTBot, CCBot,
+    ClaudeBot and others. The AGB says unlocking all content needs a product (Digitalpass,
+    ePaper), and a premium-news sitemap exists, so partial_paywall; all 3 sampled Meinung
+    pieces (Nov 2026) had isAccessibleForFree "True" with ~580 words of body text.
+    year_start 2011 = oldest yearly sitemap. Business focus, so lower fit for societal
+    values.
 
 - id: de-junge-freiheit
   name: Junge Freiheit (jungefreiheit.de)

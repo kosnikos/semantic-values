@@ -131,8 +131,10 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - de-ids-dereko: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-dnb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-berliner-zeitung: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-nd-aktuell: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-junge-welt: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-handelsblatt: llm_api_allowed, per_text_publish_allowed
 - de-junge-freiheit: llm_api_allowed, per_text_publish_allowed
 - de-brigitte: llm_api_allowed, per_text_publish_allowed
 - de-gala: llm_api_allowed, per_text_publish_allowed

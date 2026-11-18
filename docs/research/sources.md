@@ -879,8 +879,8 @@ Freizeit Revue, Das Goldene Blatt and Eltern. Der Freitag is on the newspaper pa
 the owner's list. Stern, Focus and Cicero circulations come from the newspaper page's
 "News magazines" section. Spiegel, Zeit, taz, DWDS, DeReKo and the Zeitungsportal are
 covered above. We checked 37 titles: 22 newspapers (21 from the brief plus Junge
-Freiheit, added as the right-wing weekly) and 15 magazines. 6 are registered (rows marked
-**Registry**) and 31 are not. For each we read robots.txt, the terms page, and one to
+Freiheit, added as the right-wing weekly) and 15 magazines. 8 are registered (rows marked
+**Registry**) and 29 are not. For each we read robots.txt, the terms page, and one to
 four sample pages.
 
 **Reading rules used here.** Two patterns recur in German terms. (1) Most big dailies
@@ -892,17 +892,18 @@ but the second bans automated collection outright, so we class it `tdm_all`, as 
 `lu-tageblatt` and `de-taz-website`. (2) Use-vs-copy test: a clause that limits *using, accessing or viewing* content to a
 private or own purpose (nutzen, verwenden, abrufen, "jede darüber hinausgehende Nutzung")
 is `all_reuse`; one that limits only *copies* (kopieren, speichern, ausdrucken,
-herunterladen) is `copyright_boilerplate`; a clause naming both is `all_reuse`. Under this
-test Berliner Zeitung and Handelsblatt, which limit "Nutzung" to own non-commercial
-purposes, are `all_reuse`.
+herunterladen) is `copyright_boilerplate`; a clause naming both is `all_reuse`. A use
+limited to own non-commercial purposes is satisfied by this project and stays open, so
+Berliner Zeitung and Handelsblatt ("eigenen, nichtkommerziellen Zwecken") are
+`copyright_boilerplate` (scope: commercial-only reservation).
 
 German papers are mostly closed. Thirteen of 22 newspapers are `tdm_all`: nine through the
 robots.txt notice above (FAZ, SZ, FR, Tagesspiegel, Rheinische Post, Stuttgarter
 Zeitung, Sächsische Zeitung, Freie Presse, LVZ), Welt and Bild through Axel Springer's
 AGB, and the ARD sites (MDR, tagesschau.de) through a § 44b(3) robots.txt reservation.
-Funke (WAZ, Abendblatt), DuMont (Kölner Stadt-Anzeiger), Deutschlandfunk, Berliner
-Zeitung and Handelsblatt limit use to private or own purposes (`all_reuse`). The open
-titles are smaller national dailies and weeklies: nd, junge Welt and Junge Freiheit. Among
+Funke (WAZ, Abendblatt), DuMont (Kölner Stadt-Anzeiger) and Deutschlandfunk limit use to
+private purposes (`all_reuse`). The open titles are smaller national dailies and
+weeklies: Berliner Zeitung, nd, junge Welt, Junge Freiheit and Handelsblatt. Among
 magazines, Stern, Focus, Bunte, Cicero and Der Freitag restrict use, Hörzu and Apotheken Umschau ban
 automated collection, and the open ones are FUNKE women's and family titles.
 
@@ -910,11 +911,11 @@ automated collection, and the open ones are FUNKE women's and family titles.
 
 | Title | Scope | Circ. | Reason | Evidence |
 |---|---|---|---|---|
-| Berliner Zeitung | all_reuse | n/a | Nutzungsbedingungen 4.2 limits use: "Die Nutzung unserer Publikationen bzw. Inhalten ist ausschließlich zu eigenen, nichtkommerziellen Zwecken zulässig. Jede Nutzung von Inhalten ... außerhalb der engen gesetzlichen Grenzen des Urheberrechts ist unzulässig". No AI clause and no AI-crawler block; 3/4 sampled pages free; sitemaps from 2010. Registry entry removed (fix round 1, use-vs-copy test). | https://www.berliner-zeitung.de/allgemeine-nutzungsbedingungen ("Die Nutzung ... ist ausschließlich zu eigenen, nichtkommerziellen Zwecken zulässig"); https://www.berliner-zeitung.de/robots.txt |
+| Berliner Zeitung | copyright_boilerplate | n/a | **Registry** `de-berliner-zeitung`. Use allowed "zu eigenen, nichtkommerziellen Zwecken"; commercial use banned; no AI clause, no AI-crawler block. 3/4 pages free; sitemaps from 2010. | `evidence_urls` of registry entry `de-berliner-zeitung` |
 | nd (Neues Deutschland) | crawler_block_only | 25,158 | **Registry** `de-nd-aktuell`. AGB bans only commercial use; robots.txt blocks AI crawlers. 5/5 pages free; articles from 2002. | `evidence_urls` of registry entry `de-nd-aktuell` |
 | junge Welt | copyright_boilerplate | c. 19,000 | **Registry** `de-junge-welt`. Bans reuse "in anderen elektronischen oder gedruckten Publikationen" only. Daily Leserbriefe; per-article paywall (3 current pages free, older ones login-gated). | `evidence_urls` of registry entry `de-junge-welt` |
 | Junge Freiheit | copyright_boilerplate | 25,868 (weekly) | **Registry** `de-junge-freiheit`. Impressum limits only copies ("Downloads und Kopien ... nur für den privaten, nicht kommerziellen Gebrauch"); the use licence binds subscribers only. robots.txt `ai-train=no`. 2/3 pages free; sitemaps from 1997. | `evidence_urls` of registry entry `de-junge-freiheit` |
-| Handelsblatt | all_reuse | 130,864 | Commercial TDM reserved (Impressum), and the AGB limits use: "Sie dürfen diese daher ohne unsere gesonderte Zustimmung nur zu privaten oder sonstigen eigenen, nicht-kommerziellen und/oder -gewerblichen Zwecken nutzen ... Jede darüber hinausgehende Nutzung unserer Inhalte außerhalb der gesetzlichen Schrankenbestimmungen ...". 3/3 Meinung pieces free. Registry entry removed (fix round 1, use-vs-copy test). | https://handelsblattgroup.com/agb/ ("nur zu privaten oder sonstigen eigenen, nicht-kommerziellen ... Zwecken nutzen"); https://www.handelsblatt.com/impressum/ |
+| Handelsblatt | copyright_boilerplate | 130,864 | **Registry** `de-handelsblatt`. Commercial TDM reserved; AGB allows use for "privaten oder sonstigen eigenen, nicht-kommerziellen" purposes (scope: commercial-only reservation). 3/3 Meinung pieces free; sitemaps from 2011. | `evidence_urls` of registry entry `de-handelsblatt` |
 | Frankfurter Allgemeine (FAZ) | tdm_all | 254,263 | robots.txt notice: "faz.net expressly reserves the right to use its content for commercial text and data mining (§44 b UrhG). The use of robots or other automated means to access faz.net or collect or mine data without the express permission of faz.net is strictly prohibited." | https://www.faz.net/robots.txt ("The use of robots or other automated means to access faz.net or collect or mine data ... is strictly prohibited") |
 | Süddeutsche Zeitung | tdm_all | 361,507 | Same robots.txt notice for SZ.de. | https://www.sueddeutsche.de/robots.txt ("The use of robots or other automated means to access SZ.de or collect or mine data without ... is strictly prohibited") |
 | Die Welt | tdm_all | 165,686 | Nutzungsbedingungen 19.1: "Dem Nutzer ist es nicht gestattet, die digitalen Inhalte mithilfe von Bots, Spidern, Screenscraping oder anderen automatisierten Verfahren abzurufen oder zu kopieren. ... Nutzungen zum Text und Data Mining (§ 44b UrhG) bleiben ausdrücklich vorbehalten." | https://www.welt.de/services/article122129231/Nutzungsbedingungen-WELT-Digital.html ("Nutzungen zum Text und Data Mining (§ 44b UrhG) bleiben ausdrücklich vorbehalten") |
@@ -957,17 +958,19 @@ automated collection, and the open ones are FUNKE women's and family titles.
 
 Newspapers:
 
-1. `de-nd-aktuell`: free left-wing daily with an archive from 2002; terms ban only
+1. `de-berliner-zeitung`: a general-interest daily with Meinung and reader-contribution
+   ("Open Source") sections and sitemaps from 2010; most pages free. Use is limited to
+   own non-commercial purposes, which this project satisfies.
+2. `de-nd-aktuell`: free left-wing daily with an archive from 2002; terms ban only
    commercial use.
-2. `de-junge-welt`: far-left daily with a daily letters page; current pieces free, older
+3. `de-junge-welt`: far-left daily with a daily letters page; current pieces free, older
    ones login-gated.
-3. `de-junge-freiheit`: right-wing weekly with sitemaps from 1997; partly free. Pairs with
+4. `de-junge-freiheit`: right-wing weekly with sitemaps from 1997; partly free. Pairs with
    nd and jW for balance.
+5. `de-handelsblatt`: business daily; Meinung pieces free; commercial-only reservation.
 
 No large national or regional daily is open: FAZ, SZ, Welt, Bild, FR, Tagesspiegel and
-the big regionals reserve TDM, and Funke, DuMont, Berliner Zeitung and Handelsblatt limit
-use to private or own purposes. Berliner Zeitung (mostly free, sitemaps from 2010) would
-be the best general daily if the publisher agreed to research use.
+the big regionals reserve TDM, and Funke and DuMont limit use to private purposes.
 
 Magazines:
 
