@@ -155,7 +155,9 @@ noted). Magazines come from the owner's lists. We cross-checked them against Wik
 [List of magazines in the United Kingdom](https://en.wikipedia.org/wiki/List_of_magazines_in_the_United_Kingdom),
 which names every title below except UnHerd, Good Housekeeping and Reader's Digest. We found
 no cited magazine circulation figures (n/a).
-Guardian, Observer, BBC and Independent are covered above. We checked 30 titles: for each,
+Guardian, Observer, BBC and Independent are covered above. We checked 30 titles, all of
+them listed in the two tables below: 11 newspapers and 19 magazines. 13 of the 30 are
+registered (rows marked **Registry**) and 17 are not. For each,
 robots.txt, the terms page, and one to three sample article pages (paywall flag and
 whether the body is in the HTML). "Open" uses the GB rule: `tdm_all` and (per the later
 controller ruling) `all_reuse` are both open under CDPA s.29A(5).
@@ -175,43 +177,43 @@ in the tables (paywall, crawler block or no free part).
 
 #### Newspapers
 
-| Title | Scope | Circ. | Reason |
-|---|---|---|---|
-| Daily Mail / MailOnline | tdm_all | 687,063 | **Registry** `gb-daily-mail`. Open (s.29A). Debate columns served without login; Mail+ items are paywalled; sitemap from 1994. |
-| The i Paper | tdm_all | 122,487 | **Registry** `gb-inews`. Open (s.29A). 3/3 opinion pieces served; there is a subscriber tier; sitemap from 2016. |
-| Evening Standard | copyright_boilerplate | 314,285 (2023) | **Registry** `gb-evening-standard`. Free (2/2 `isAccessibleForFree` true); archive from 1998. |
-| The Times / Sunday Times | all_reuse | 368,929 (2020) | robots.txt: "The Times does not permit the unlicensed use of our content for large language models", and `User-agent: *` `Disallow: /`, so our crawler is blocked. Subscription. The terms page served a device-verification challenge. |
-| Financial Times | all_reuse | 109,995 | Terms "expressly prohibit any use of our content or data ... in any manner for any machine learning and/or artificial intelligence purposes, including ... to generate any data or content". Subscription. |
-| Daily Telegraph | unknown | 360,345 (2020) | Blocked: terms pages returned HTTP 429 to curl and WebFetch. robots.txt blocks CCBot, ClaudeBot, GPTBot and others. |
-| Daily Mirror | all_reuse | 205,332 | **Registry** `gb-mirror`. Open (s.29A(5)). Reach terms ban "any automated means, including bots, scrapers, crawlers, spiders, AI agents" and any other use without permission. 2 of 3 Opinion pieces free (one Premium); oldest page seen 2013. |
-| Manchester Evening News | all_reuse | 20,993 (2020) | **Registry** `gb-manchester-evening-news`. Open (s.29A(5)); same Reach terms. 4/4 news pages free; no opinion section found; oldest page seen 2019. |
-| The Scotsman | all_reuse | n/a | robots.txt: AI training, dataset creation or bulk extraction "NOT permitted without written agreement and payment of £650 per page viewed". The linked Iconic Media contract allows free access only for "reading by individuals for their own personal use" and search, and says "You must not make any AI Use", which includes "any use of Content to generate, ground or inform the output of an AI Model". |
-| Yorkshire Post | all_reuse | 13,284 (2020) | Identical robots.txt and contract to the Scotsman (same publisher). |
-| The Herald (Glasgow) | copyright_boilerplate | 28,872 (2020) | Newsquest terms: "you will not otherwise copy, store, distribute ... create a database ... without our written permission". Open, but two sampled opinion pages served only ~80 words of body in the HTML, so we found no free part. Not registered. |
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| Daily Mail / MailOnline | tdm_all | 687,063 | **Registry** `gb-daily-mail`. Open (s.29A). Debate columns served without login; Mail+ items are paywalled; sitemap from 1994. | `evidence_urls` of registry entry `gb-daily-mail` |
+| The i Paper | tdm_all | 122,487 | **Registry** `gb-inews`. Open (s.29A). 3/3 opinion pieces served; there is a subscriber tier; sitemap from 2016. | `evidence_urls` of registry entry `gb-inews` |
+| Evening Standard | copyright_boilerplate | 314,285 (2023) | **Registry** `gb-evening-standard`. Free (2/2 `isAccessibleForFree` true); archive from 1998. | `evidence_urls` of registry entry `gb-evening-standard` |
+| The Times / Sunday Times | all_reuse | 368,929 (2020) | robots.txt: "The Times does not permit the unlicensed use of our content for large language models", and `User-agent: *` `Disallow: /`, so our crawler is blocked. Subscription. The terms page served a device-verification challenge. | https://www.thetimes.com/robots.txt ("does not permit the unlicensed use of our content for large language models"); https://www.thetimes.com/static/terms-and-conditions (challenge page) |
+| Financial Times | all_reuse | 109,995 | Terms "expressly prohibit any use of our content or data ... in any manner for any machine learning and/or artificial intelligence purposes, including ... to generate any data or content". Subscription. | https://help.ft.com/legal-privacy/terms-and-conditions/ ("expressly prohibit any use of our content or data ... for any machine learning and/or artificial intelligence purposes"); https://www.ft.com/robots.txt |
+| Daily Telegraph | unknown | 360,345 (2020) | Blocked: terms pages returned HTTP 429 to curl and WebFetch. robots.txt blocks CCBot, ClaudeBot, GPTBot and others. | https://www.telegraph.co.uk/terms-and-conditions/ and https://www.telegraph.co.uk/customer-service/terms-conditions/ (both HTTP 429); https://www.telegraph.co.uk/robots.txt |
+| Daily Mirror | all_reuse | 205,332 | **Registry** `gb-mirror`. Open (s.29A(5)). Reach terms ban "any automated means, including bots, scrapers, crawlers, spiders, AI agents" and any other use without permission. 2 of 3 Opinion pieces free (one Premium); oldest page seen 2013. | `evidence_urls` of registry entry `gb-mirror` |
+| Manchester Evening News | all_reuse | 20,993 (2020) | **Registry** `gb-manchester-evening-news`. Open (s.29A(5)); same Reach terms. 4/4 news pages free; no opinion section found; oldest page seen 2019. | `evidence_urls` of registry entry `gb-manchester-evening-news` |
+| The Scotsman | all_reuse | n/a | robots.txt: AI training, dataset creation or bulk extraction "NOT permitted without written agreement and payment of £650 per page viewed". The linked Iconic Media contract allows free access only for "reading by individuals for their own personal use" and search, and says "You must not make any AI Use", which includes "any use of Content to generate, ground or inform the output of an AI Model". | https://www.scotsman.com/robots.txt ("payment of £650 per page viewed"); https://www.mediaconcierge.co.uk/ai-usage-contract-v1/ ("You must not make any AI Use of the Content without a written licence") |
+| Yorkshire Post | all_reuse | 13,284 (2020) | Identical robots.txt and contract to the Scotsman (same publisher). | https://www.yorkshirepost.co.uk/robots.txt (byte-identical to the Scotsman's); https://www.mediaconcierge.co.uk/ai-usage-contract-v1/ ("You must not make any AI Use") |
+| The Herald (Glasgow) | copyright_boilerplate | 28,872 (2020) | Newsquest terms: "you will not otherwise copy, store, distribute ... create a database ... without our written permission". Open, but two sampled opinion pages served only ~80 words of body in the HTML, so we found no free part. Not registered. | https://www.newsquest.co.uk/legal/terms-conditions/ (reached from the heraldscotland.com footer via https://www.newsquest.co.uk/legal/); samples https://www.heraldscotland.com/opinion/26738773.named-person-law-wouldnt-helped-family-c-scandal/, https://www.heraldscotland.com/opinion/26738516.scottish-government-owned-prestwick-airport-delivers-style/ |
 
 #### Magazines
 
-| Title | Scope | Circ. | Reason |
-|---|---|---|---|
-| The Conversation UK | ai_training_only | n/a | **Registry** `gb-conversation-uk`. CC BY-ND; only AI training banned. Free, from 2013. Written by academics. |
-| openDemocracy | none | n/a | **Registry** `gb-opendemocracy`. CC BY-NC 4.0 on article pages. Free, from 2004 or earlier. |
-| Prospect | tdm_all | n/a | **Registry** `gb-prospect`. Open (s.29A). Piano subscription; sampled pages served their body. Sitemap from 1995. |
-| UnHerd | copyright_boilerplate | n/a | **Registry** `gb-unherd`. Personal-use terms, no TDM/AI clause; 1 of 2 essays was free. From 2018. |
-| HELLO! | copyright_boilerplate | n/a | **Registry** `gb-hello`. Celebrity weekly; 1 of 2 pages free. From 2001. |
-| Good Housekeeping UK | copyright_boilerplate | n/a | **Registry** `gb-good-housekeeping-uk`. Hearst "solely for personal use"; sampled page free. |
-| Woman & Home | tdm_all | n/a | **Registry** `gb-woman-and-home`. Future terms (open, s.29A); 2/2 pages free. Sitemap from 2005. |
-| The Spectator | all_reuse | n/a | Terms: Content "may not be used, reproduced, duplicated, copied, sold, resold, accessed, modified, or otherwise exploited, in full or in part, for any purpose without our prior written consent". |
-| New Statesman | all_reuse | n/a | Terms (read via WebFetch; curl got 403): "you are not allowed to copy or use anything on our site for any other purpose, unless authorised by the New Statesman. This includes not only business and commercial but also educational purposes." |
-| The Economist | unknown | n/a | Blocked: 403 to curl, WebFetch refused. robots.txt blocks GPTBot, CCBot, Claude-* and others. |
-| London Review of Books | copyright_boilerplate | n/a | Terms: "you may not download, store, disseminate, republish, post, reproduce ... in any form without the prior written permission". Both sampled current-issue pieces had `isAccessibleForFree` false. We found no free part, so not registered. |
-| The Critic | copyright_boilerplate | n/a | "Content accessed by users is for their personal use only." Two sampled articles served ~250 words (truncated), so no free part was found. |
-| The Week (UK) | tdm_all | n/a | Future terms (open in GB), but the sampled article had `isAccessibleForFree` "False". theweek.com now mixes the US and UK editions. Not registered. |
-| Private Eye | unknown | n/a | The website "showcases a few selected highlights from the current issue". Too little web text; we found no terms page. |
-| Radio Times | all_reuse | n/a | robots.txt: "Content-signal: search=yes, ai-input = no, ai-train=no", with "As a condition of accessing this website, you agree to abide by the following content signals". `ai-input` covers feeding content to AI models, i.e. our LLM tagging. Immediate Media terms allow access only "for your own personal and non-commercial use and not for any commercial or other purposes". |
-| OK! | all_reuse | n/a | **Registry** `gb-ok-magazine`. Open (s.29A(5)); same Reach terms. 4/4 pages free; oldest page seen 2017. |
-| Woman's Weekly | tdm_all | n/a | womansweekly.com redirects (301) to goodto.com (GoodtoKnow, Future plc). The magazine has no separate web text, so not registered. |
-| Reader's Digest UK | unknown | n/a | readersdigest.co.uk: the connection failed (no HTTP response). |
-| The People's Friend | unknown | n/a | 403 to curl (homepage and robots.txt). |
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| The Conversation UK | ai_training_only | n/a | **Registry** `gb-conversation-uk`. CC BY-ND; only AI training banned. Free, from 2013. Written by academics. | `evidence_urls` of registry entry `gb-conversation-uk` |
+| openDemocracy | none | n/a | **Registry** `gb-opendemocracy`. CC BY-NC 4.0 on article pages. Free, from 2004 or earlier. | `evidence_urls` of registry entry `gb-opendemocracy` |
+| Prospect | tdm_all | n/a | **Registry** `gb-prospect`. Open (s.29A). Piano subscription; sampled pages served their body. Sitemap from 1995. | `evidence_urls` of registry entry `gb-prospect` |
+| UnHerd | copyright_boilerplate | n/a | **Registry** `gb-unherd`. Personal-use terms, no TDM/AI clause; 1 of 2 essays was free. From 2018. | `evidence_urls` of registry entry `gb-unherd` |
+| HELLO! | copyright_boilerplate | n/a | **Registry** `gb-hello`. Celebrity weekly; 1 of 2 pages free. From 2001. | `evidence_urls` of registry entry `gb-hello` |
+| Good Housekeeping UK | copyright_boilerplate | n/a | **Registry** `gb-good-housekeeping-uk`. Hearst "solely for personal use"; sampled page free. | `evidence_urls` of registry entry `gb-good-housekeeping-uk` |
+| Woman & Home | tdm_all | n/a | **Registry** `gb-woman-and-home`. Future terms (open, s.29A); 2/2 pages free. Sitemap from 2005. | `evidence_urls` of registry entry `gb-woman-and-home` |
+| The Spectator | all_reuse | n/a | Terms: Content "may not be used, reproduced, duplicated, copied, sold, resold, accessed, modified, or otherwise exploited, in full or in part, for any purpose without our prior written consent". | https://spectator.com/terms/ ("for any purpose without our prior written consent") |
+| New Statesman | all_reuse | n/a | Terms (read via WebFetch; curl got 403): "you are not allowed to copy or use anything on our site for any other purpose, unless authorised by the New Statesman. This includes not only business and commercial but also educational purposes." | https://www.newstatesman.com/terms-and-conditions (WebFetch; "not allowed to copy or use anything on our site for any other purpose") |
+| The Economist | unknown | n/a | Blocked: 403 to curl, WebFetch refused. robots.txt blocks GPTBot, CCBot, Claude-* and others. | https://www.economist.com/ (403); https://www.economist.com/legal/terms-of-use (WebFetch refused); https://www.economist.com/robots.txt |
+| London Review of Books | copyright_boilerplate | n/a | Terms: "you may not download, store, disseminate, republish, post, reproduce ... in any form without the prior written permission". Both sampled current-issue pieces had `isAccessibleForFree` false. We found no free part, so not registered. | https://www.lrb.co.uk/terms; samples https://www.lrb.co.uk/the-paper/v48/n21/alex-de-waal/an-atrocity-foretold, https://www.lrb.co.uk/the-paper/v48/n21/alexander-zevin/peace-and-goodwill; https://www.lrb.co.uk/robots.txt |
+| The Critic | copyright_boilerplate | n/a | "Content accessed by users is for their personal use only." Two sampled articles served ~250 words (truncated), so no free part was found. | https://thecritic.co.uk/terms-and-conditions/; samples https://thecritic.co.uk/against-the-porn-ban/, https://thecritic.co.uk/britains-china-problem/ |
+| The Week (UK) | tdm_all | n/a | Future terms (open in GB), but the sampled article had `isAccessibleForFree` "False". theweek.com now mixes the US and UK editions. Not registered. | https://futureplc.com/terms-and-conditions-uk/ ("You shall not conduct, facilitate, authorise or permit any text or data mining"); sample https://theweek.com/defence/china-f35-parts-hong-kong-us |
+| Private Eye | unknown | n/a | The website "showcases a few selected highlights from the current issue". Too little web text; we found no terms page. | https://www.private-eye.co.uk/about; https://www.private-eye.co.uk/robots.txt (404) |
+| Radio Times | all_reuse | n/a | robots.txt: "Content-signal: search=yes, ai-input = no, ai-train=no", with "As a condition of accessing this website, you agree to abide by the following content signals". `ai-input` covers feeding content to AI models, i.e. our LLM tagging. Immediate Media terms allow access only "for your own personal and non-commercial use and not for any commercial or other purposes". | https://www.radiotimes.com/robots.txt ("ai-input = no, ai-train=no"); https://www.immediate.co.uk/terms-and-conditions/ ("not for any commercial or other purposes") |
+| OK! | all_reuse | n/a | **Registry** `gb-ok-magazine`. Open (s.29A(5)); same Reach terms. 4/4 pages free; oldest page seen 2017. | `evidence_urls` of registry entry `gb-ok-magazine` |
+| Woman's Weekly | tdm_all | n/a | womansweekly.com redirects (301) to goodto.com (GoodtoKnow, Future plc). The magazine has no separate web text, so not registered. | https://www.womansweekly.com/ (301 to https://www.goodto.com/); https://futureplc.com/terms-and-conditions-uk/ ("You shall not conduct, facilitate, authorise or permit any text or data mining") |
+| Reader's Digest UK | unknown | n/a | readersdigest.co.uk: the connection failed (no HTTP response). | https://www.readersdigest.co.uk/ and /robots.txt (no response) |
+| The People's Friend | unknown | n/a | 403 to curl (homepage and robots.txt). | https://www.thepeoplesfriend.co.uk/ and /robots.txt (403) |
 
 #### Open titles shortlist (GB), ranked by fit
 
@@ -319,11 +321,12 @@ which names all eleven dailies below. Magazines come from the owner's lists.
 Circulation (DFP, copies per issue, 2025) is from the ACPM 2025 results as reported by
 [CB News, 28 April 2026](https://www.cbnews.fr/node/100535). That page gives no figure
 for the titles marked n/a. Le Monde, Le Figaro, RetroNews, Gallica and AgoraVox are
-covered above. We checked 33 titles: robots.txt, the CGU or mentions légales, and one or
+covered above. We checked 33 titles, all listed below: 11 newspapers and 22 magazines.
+5 are registered and 28 are not. We read robots.txt, the CGU or mentions légales, and one or
 two sample pages each.
 
 Under the EU rule, French titles fall into two groups. Bayard (La Croix, Notre Temps,
-Pèlerin), Prisma (Femme Actuelle, Télé-Loisirs), Elle and 20 Minutes make an express
+Pèlerin), Prisma (Femme Actuelle; probably Télé-Loisirs, unverified), Elle and 20 Minutes make an express
 L.122-5-3 / Art. 4(3) TDM opt-out (`tdm_all`). Most of the others use the same clause
 Le Monde uses: "seule ... l'utilisation pour un usage privé ... toute autre utilisation
 est constitutive de contrefaçon", or "de quelque nature que ce soit ... dans quelque but
@@ -336,46 +339,46 @@ that restrict only reproduction, representation or redistribution are
 
 #### Newspapers
 
-| Title | Scope | Circ. | Reason |
-|---|---|---|---|
-| L'Humanité | unknown | n/a | **Registry** `fr-humanite`. The legal notice could not be read (script shell; WebFetch refused). Partly free; sitemap from 1997. |
-| Libération | all_reuse | n/a | robots.txt: "Seuls les partenaires sont habilités à utiliser nos contenus pour un usage autre que strictement individuel" (same wording as Le Monde). |
-| La Croix | tdm_all | n/a | CGU (PDF): "BAYARD SERVICE s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". |
-| 20 Minutes | tdm_all | n/a | CGU: "20 Minutes s'oppose à la fouille de textes et de données sur l'ensemble du Site", "quel que soit le but poursuivi". |
-| La Dépêche du Midi | all_reuse | n/a | CGU: "Toute reproduction, représentation, modification, diffusion ou utilisation commerciale ou non commerciale ... sans l'autorisation écrite de l'EDITEUR est strictement interdite", and no access "par des moyens automatisés". |
-| Le Télégramme | all_reuse | n/a | robots.txt: "Tout usage de nos contenus en dehors du cadre privé, requiert une licence ... Sont inclus notamment l'entraînement et l'ancrage des grands modèles de langage (LLM) ..., la veille web ou le media monitoring"; also `User-agent: *` `Disallow: /`. |
-| Ouest-France | unknown | 581,505 | robots.txt (WebFetch): `User-agent: *` `Disallow: /`, so our crawler is blocked. The site returned 403 to curl. |
-| Le Parisien | unknown | 192,505 | Blocked: 403 to curl and WebFetch. robots.txt (curl) blocks GPTBot, CCBot, anthropic-ai and others. |
-| Les Échos | unknown | n/a | Blocked: homepage 403. Terms not read. |
-| La Voix du Nord | unknown | n/a | Blocked: 403 on homepage and robots.txt. |
-| Sud Ouest | unknown | n/a | Blocked: 302 redirect loop on homepage and robots.txt. |
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| L'Humanité | unknown | n/a | **Registry** `fr-humanite`. The legal notice could not be read (script shell; WebFetch refused). Partly free; sitemap from 1997. | `evidence_urls` of registry entry `fr-humanite` |
+| Libération | all_reuse | n/a | robots.txt: "Seuls les partenaires sont habilités à utiliser nos contenus pour un usage autre que strictement individuel" (same wording as Le Monde). | https://www.liberation.fr/robots.txt ("Seuls les partenaires sont habilités à utiliser nos contenus pour un usage autre que strictement individuel") |
+| La Croix | tdm_all | n/a | CGU (PDF): "BAYARD SERVICE s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". | https://img.aws.la-croix.com/2011/02/15/10639/CGU-LaCroix.pdf, linked from https://www.la-croix.com/ ("s'oppose à toutes opérations de moissonnage et de fouille de textes et de données") |
+| 20 Minutes | tdm_all | n/a | CGU: "20 Minutes s'oppose à la fouille de textes et de données sur l'ensemble du Site", "quel que soit le but poursuivi". | https://www.20minutes.fr/cgu ("20 Minutes s'oppose à la fouille de textes et de données sur l'ensemble du Site") |
+| La Dépêche du Midi | all_reuse | n/a | CGU: "Toute reproduction, représentation, modification, diffusion ou utilisation commerciale ou non commerciale ... sans l'autorisation écrite de l'EDITEUR est strictement interdite", and no access "par des moyens automatisés". | https://www.ladepeche.fr/page/conditions-generales-d-utilisation ("utilisation commerciale ou non commerciale ... est strictement interdite") |
+| Le Télégramme | all_reuse | n/a | robots.txt: "Tout usage de nos contenus en dehors du cadre privé, requiert une licence ... Sont inclus notamment l'entraînement et l'ancrage des grands modèles de langage (LLM) ..., la veille web ou le media monitoring"; also `User-agent: *` `Disallow: /`. | https://www.letelegramme.fr/robots.txt ("Tout usage de nos contenus en dehors du cadre privé, requiert une licence d'utilisation") |
+| Ouest-France | unknown | 581,505 | robots.txt (WebFetch): `User-agent: *` `Disallow: /`, so our crawler is blocked. The site returned 403 to curl. | https://www.ouest-france.fr/robots.txt (WebFetch); https://www.ouest-france.fr/ (403) |
+| Le Parisien | unknown | 192,505 | Blocked: 403 to curl and WebFetch. robots.txt (curl) blocks GPTBot, CCBot, anthropic-ai and others. | https://www.leparisien.fr/ (403); https://www.leparisien.fr/robots.txt (curl; WebFetch refused) |
+| Les Échos | unknown | n/a | Blocked: homepage 403. Terms not read. | https://www.lesechos.fr/ (403); https://www.lesechos.fr/robots.txt |
+| La Voix du Nord | unknown | n/a | Blocked: 403 on homepage and robots.txt. | https://www.lavoixdunord.fr/ and /robots.txt (403) |
+| Sud Ouest | unknown | n/a | Blocked: 302 redirect loop on homepage and robots.txt. | https://www.sudouest.fr/ and /robots.txt (302 loop) |
 
 #### Magazines
 
-| Title | Scope | Circ. | Reason |
-|---|---|---|---|
-| The Conversation France | none | n/a | **Registry** `fr-conversation-france`. CC BY-ND; the French guidelines have no AI clause. Free, from 2015. |
-| Slate.fr | copyright_boilerplate | n/a | **Registry** `fr-slate`. Personal-use and no-redistribution wording only; 2/2 pages free. |
-| Le Club de Mediapart | copyright_boilerplate | n/a | **Registry** `fr-mediapart-club`. Free reader blogs; Mediapart mentions légales (no TDM/AI clause). The Club charter is unread. |
-| Valeurs actuelles | unknown | n/a | **Registry** `fr-valeurs-actuelles`. No reuse clause found; partly free; sitemap from 2003. |
-| Mediapart (journal) | copyright_boilerplate | n/a | Same mentions légales; the journal is subscriber-only. The free part is Le Club (above). |
-| Le Point | unknown | 268,788 | Blocked: 403 to curl (homepage, robots.txt), WebFetch refused. |
-| L'Express | all_reuse | 124,452 | CGU: "seule est permise l'utilisation pour un usage privé"; "toute autre utilisation est constitutive de contrefaçon ... sauf autorisation préalable". robots.txt has a "Blocages et autorisation Bots et LLM" section. |
-| L'Obs | all_reuse | 166,054 | CGV: no crawling or mass collection "par quelque moyen et dans quelque but que ce soit", and "toute reproduction ... de quelque nature que ce soit ... est strictement interdite". |
-| Marianne | all_reuse | 106,990 | CGV (CMI France): "seule leur utilisation pour un usage privé est autorisée ... Toute autre utilisation est constitutive de contrefaçon". |
-| Télérama | all_reuse | n/a | Mentions légales: "Tout autre usage est soumis à autorisation préalable et expresse". |
-| Courrier international | all_reuse | 161,466 | CGVU: "toute reproduction, représentation, diffusion, traduction ou exploitation totale ou partielle, de quelque nature que ce soit et par quelque moyen que ce soit ... est strictement interdite". |
-| Le Monde diplomatique | all_reuse | n/a | CGVU: same template as L'Obs ("dans quelque but que ce soit"; "de quelque nature que ce soit"). |
-| Paris Match | all_reuse | n/a | CGU: no automatic or manual mass copying "pour quelque motif que ce soit et en particulier afin de développer ou d'entraîner tout programme logiciel (notamment les programmes basés sur l'intelligence artificielle)". |
-| Elle | tdm_all | n/a | Mentions légales 10.3: bans "toute action ou processus de crawler, moissonnage et/ou fouille de textes et de données ... pour toute finalité". |
-| Femme Actuelle | tdm_all | 284,633 | Prisma Media: opposes "toute extraction (notamment moissonnage et/ou fouille de textes et de données)" without authorisation "et selon une grille tarifaire". |
-| Télé-Loisirs | tdm_all | n/a | Same Prisma legal notice (programme-tv.net). |
-| Télé 7 Jours | copyright_boilerplate | n/a | programme-television.org (Bauer): content "exclusivement destinés à l'information et à l'usage personnel"; no TDM/AI clause found. The site is TV listings and soap recaps, and the sampled news page served ~70 words in paragraph tags. No free full text verified, so not registered. |
-| Notre Temps | tdm_all | 407,081 | Bayard CGU: "BAYARD s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". |
-| Le Pèlerin | tdm_all | n/a | Same Bayard CGU. |
-| Psychologies | all_reuse | n/a | CGU: "L'Utilisateur n'est pas autorisé à copier, utiliser, reproduire, distribuer tout ou partie desdits Contenus sur un quelconque support, à titre onéreux ou gratuit, sans l'autorisation préalable écrite". |
-| Marie Claire | all_reuse | n/a | "Sauf autorisation, toute utilisation des œuvres autres que la reproduction et la consultation individuelles et privées sont interdites." |
-| VSD | copyright_boilerplate | n/a | CGU: "Vous ne devez pas copier, modifier, distribuer ... sans l'autorisation écrite préalable". Open, but two sampled pages served only ~130-150 words alongside "abonnés" markers. No free full text verified, so not registered. |
+| Title | Scope | Circ. | Reason | Evidence |
+|---|---|---|---|---|
+| The Conversation France | none | n/a | **Registry** `fr-conversation-france`. CC BY-ND; the French guidelines have no AI clause. Free, from 2015. | `evidence_urls` of registry entry `fr-conversation-france` |
+| Slate.fr | copyright_boilerplate | n/a | **Registry** `fr-slate`. Personal-use and no-redistribution wording only; 2/2 pages free. | `evidence_urls` of registry entry `fr-slate` |
+| Le Club de Mediapart | copyright_boilerplate | n/a | **Registry** `fr-mediapart-club`. Free reader blogs; Mediapart mentions légales (no TDM/AI clause). The Club charter is unread. | `evidence_urls` of registry entry `fr-mediapart-club` |
+| Valeurs actuelles | unknown | n/a | **Registry** `fr-valeurs-actuelles`. No reuse clause found; partly free; sitemap from 2003. | `evidence_urls` of registry entry `fr-valeurs-actuelles` |
+| Mediapart (journal) | copyright_boilerplate | n/a | Same mentions légales; the journal is subscriber-only. The free part is Le Club (above). | https://www.mediapart.fr/mentions-legales |
+| Le Point | unknown | 268,788 | Blocked: 403 to curl (homepage, robots.txt), WebFetch refused. | https://www.lepoint.fr/ and https://www.lepoint.fr/robots.txt (403; WebFetch refused) |
+| L'Express | all_reuse | 124,452 | CGU: "seule est permise l'utilisation pour un usage privé"; "toute autre utilisation est constitutive de contrefaçon ... sauf autorisation préalable". robots.txt has a "Blocages et autorisation Bots et LLM" section. | https://www.lexpress.fr/outils/conditions-generales-utilisation.html ("toute autre utilisation est constitutive de contrefaçon"); https://www.lexpress.fr/robots.txt |
+| L'Obs | all_reuse | 166,054 | CGV: no crawling or mass collection "par quelque moyen et dans quelque but que ce soit", and "toute reproduction ... de quelque nature que ce soit ... est strictement interdite". | https://www.nouvelobs.com/cgv ("par quelque moyen et dans quelque but que ce soit") |
+| Marianne | all_reuse | 106,990 | CGV (CMI France): "seule leur utilisation pour un usage privé est autorisée ... Toute autre utilisation est constitutive de contrefaçon". | https://www.marianne.net/cgu-cgv ("Toute autre utilisation est constitutive de contrefaçon"); https://www.marianne.net/robots.txt |
+| Télérama | all_reuse | n/a | Mentions légales: "Tout autre usage est soumis à autorisation préalable et expresse". | https://www.telerama.fr/mentionslegales.php ("Tout autre usage est soumis à autorisation préalable et expresse") |
+| Courrier international | all_reuse | 161,466 | CGVU: "toute reproduction, représentation, diffusion, traduction ou exploitation totale ou partielle, de quelque nature que ce soit et par quelque moyen que ce soit ... est strictement interdite". | https://www.courrierinternational.com/page/cgvu ("de quelque nature que ce soit et par quelque moyen que ce soit") |
+| Le Monde diplomatique | all_reuse | n/a | CGVU: same template as L'Obs ("dans quelque but que ce soit"; "de quelque nature que ce soit"). | https://www.monde-diplomatique.fr/diplo/cgvu/ ("dans quelque but que ce soit") |
+| Paris Match | all_reuse | n/a | CGU: no automatic or manual mass copying "pour quelque motif que ce soit et en particulier afin de développer ou d'entraîner tout programme logiciel (notamment les programmes basés sur l'intelligence artificielle)". | https://www.parismatch.com/cgu ("pour quelque motif que ce soit et en particulier afin de développer ou d'entraîner") |
+| Elle | tdm_all | n/a | Mentions légales 10.3: bans "toute action ou processus de crawler, moissonnage et/ou fouille de textes et de données ... pour toute finalité". | https://www.elle.fr/pages/Mentions-Legales ("fouille de textes et de données ... pour toute finalité") |
+| Femme Actuelle | tdm_all | 284,633 | Prisma Media: opposes "toute extraction (notamment moissonnage et/ou fouille de textes et de données)" without authorisation "et selon une grille tarifaire". | https://www.prismamedia.com/mentions-legales/, linked from the femmeactuelle.fr footer ("toute extraction (notamment moissonnage et/ou fouille de textes et de données)") |
+| Télé-Loisirs | unknown | n/a | Its footer links a title-specific Prisma page that served only a script shell. The group-wide Prisma notice (`tdm_all`, see Femme Actuelle) probably applies, but programme-tv.net does not link to it, so the scope is unverified. Access was not sampled; not registered. | https://www.prismamedia.com/mentions-legales-tel/ (the footer link; served an empty script-rendered shell); the group-wide https://www.prismamedia.com/mentions-legales/ is not linked from programme-tv.net |
+| Télé 7 Jours | copyright_boilerplate | n/a | programme-television.org (Bauer): content "exclusivement destinés à l'information et à l'usage personnel"; no TDM/AI clause found. The site is TV listings and soap recaps, and the sampled news page served ~70 words in paragraph tags. No free full text verified, so not registered. | https://www.programme-television.org/mentions-legales-et-conditions-generales-dutilisation; sample https://www.programme-television.org/news/series/series-quotidiennes/demain-nous-appartient-le-reve-de-jordan-vire-au-cauchemar-que-va-t-il-se-passer-dans-les-episodes-de-cette-semaine-sur-tf1-142941 |
+| Notre Temps | tdm_all | 407,081 | Bayard CGU: "BAYARD s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". | https://www.notretemps.com/conditions-generales-dutilisation ("BAYARD s'oppose à toutes opérations de moissonnage et de fouille de textes et de données") |
+| Le Pèlerin | tdm_all | n/a | Same Bayard CGU. | https://www.lepelerin.com/cgu ("BAYARD s'oppose à toutes opérations de moissonnage et de fouille") |
+| Psychologies | all_reuse | n/a | CGU: "L'Utilisateur n'est pas autorisé à copier, utiliser, reproduire, distribuer tout ou partie desdits Contenus sur un quelconque support, à titre onéreux ou gratuit, sans l'autorisation préalable écrite". | https://www.psychologies.com/Conditions-Generales-d-Utilisation ("pas autorisé à copier, utiliser, reproduire, distribuer") |
+| Marie Claire | all_reuse | n/a | "Sauf autorisation, toute utilisation des œuvres autres que la reproduction et la consultation individuelles et privées sont interdites." | https://www.marieclaire.fr/,mentions-legales,20214,1711.asp ("toute utilisation des œuvres autres que la reproduction et la consultation individuelles et privées sont interdites") |
+| VSD | copyright_boilerplate | n/a | CGU: "Vous ne devez pas copier, modifier, distribuer ... sans l'autorisation écrite préalable". Open, but two sampled pages served only ~130-150 words alongside "abonnés" markers. No free full text verified, so not registered. | https://vsd.fr/cgu/; samples https://vsd.fr/94610-lionel-jospin-est-mort/, https://vsd.fr/90285-exclu-vsd-tina-arena-50-ans-de-carriere-la-tele-ma-rendue-forte-mais-pas-toujours-heureuse/ |
 
 #### Open titles shortlist (FR), ranked by fit
 
@@ -398,8 +401,9 @@ Magazines:
    fit.
 
 No open popular magazine with free full text was found. Every major women's, family and
-TV title has an express TDM opt-out or an any-use clause. VSD and Télé 7 Jours are open
-but thin online. French popular-magazine coverage therefore needs a licence, e.g.
+TV title we could read has an express TDM opt-out or an any-use clause. VSD and Télé 7
+Jours are open but thin online. Télé-Loisirs is `unknown` (terms page unreadable) and its
+access was not sampled. French popular-magazine coverage therefore needs a licence, e.g.
 Prisma's "grille tarifaire" or Bayard's "accord spécifique".
 
 ## BE
