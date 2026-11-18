@@ -747,6 +747,131 @@
     lifestyle; the same Future terms cover The Week UK and GoodtoKnow (Woman's Weekly's
     site), see the sources.md table.
 
+- id: gb-mirror
+  name: Daily Mirror (mirror.co.uk, incl. Opinion and leaders)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.mirror.co.uk/opinion/
+  access: partial_paywall
+  year_start: 2013
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: Reach plc terms (any other use and automated access need written permission; no AI training)
+  tdm_opt_out: "yes"
+  restriction_scope: all_reuse
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "Opinion section paginates to page 417"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.mirror.co.uk/terms-conditions/
+    - https://www.mirror.co.uk/robots.txt
+    - https://www.mirror.co.uk/opinion/
+    - https://www.mirror.co.uk/opinion/drowning-prime-minister-andy-burnham-37472922
+    - https://www.mirror.co.uk/opinion/leaders-210826-37574093
+    - https://www.mirror.co.uk/opinion/iran-trump-strait-hormuz-blockade-37428364
+    - https://www.mirror.co.uk/lifestyle/motoring/richard-hammond-mercedes-gla-1853358
+    - https://en.wikipedia.org/wiki/List_of_newspapers_in_the_United_Kingdom_by_circulation
+  notes: >-
+    Reach terms, verbatim: "Any other use of materials on the Site, including any user
+    generated content (including without limitation reproduction for a purpose (other than
+    that noted above) and any modification, distribution or republication) without our prior
+    written permission is strictly prohibited"; "Except where expressly authorised by us in
+    writing, you must not use any automated means, including bots, scrapers, crawlers,
+    spiders, AI agents or similar technology - to access, copy, collect, download or extract
+    content or data from the Site"; "You must not use any content from the Site to train,
+    test, develop or improve any artificial intelligence or machine learning system".
+    all_reuse, open in GB under CDPA s.29A(5) (controller ruling). robots.txt "User-agent: *"
+    disallows only /topics, /search/, token and ajax paths (article paths allowed),
+    "Crawl-delay: 10.0"; GPTBot, CCBot, ClaudeBot and others are blocked by name. Of three
+    sampled Opinion pieces (Jul-Aug 2026, incl. a "leaders" editorial), two had no
+    isAccessibleForFree flag and served 376-536 words; one had isAccessibleForFree false
+    (Premium), hence partial_paywall. year_start 2013 = oldest page seen (2013-04-25, on the
+    last Opinion listing page), not a verified archive start. Circulation 205,332 (ABC, Jan
+    2025). Left-of-centre tabloid; balances gb-daily-mail.
+
+- id: gb-manchester-evening-news
+  name: Manchester Evening News (manchestereveningnews.co.uk)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.manchestereveningnews.co.uk/news/greater-manchester-news/
+  access: free
+  year_start: 2019
+  year_end: null
+  languages: [en]
+  genres: [news]
+  access_method: scrape
+  licence: Reach plc terms (any other use and automated access need written permission; no AI training)
+  tdm_opt_out: "yes"
+  restriction_scope: all_reuse
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "Greater Manchester news section paginates to page 417"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.manchestereveningnews.co.uk/terms-conditions/
+    - https://www.manchestereveningnews.co.uk/robots.txt
+    - https://www.manchestereveningnews.co.uk/news/greater-manchester-news/
+    - https://www.manchestereveningnews.co.uk/news/cost-of-living/andy-burnham-government-issues-update-34929912
+    - https://www.manchestereveningnews.co.uk/news/cost-of-living/anyone-car-finance-complaint-told-34929007
+    - https://www.manchestereveningnews.co.uk/news/greater-manchester-news/50-men-premium-black-friday-34901505
+    - https://www.manchestereveningnews.co.uk/news/how-opt-out-app-pushes-17427838
+  notes: >-
+    Same Reach terms as gb-mirror ("Any other use of materials on the Site ... without our
+    prior written permission is strictly prohibited"; "you must not use any automated means,
+    including bots, scrapers, crawlers, spiders, AI agents ... to access, copy, collect,
+    download or extract content"). all_reuse, open in GB under s.29A(5). robots.txt "User-
+    agent: *" disallows only /topics, /search/, *.ece, ajax and offer paths, "Crawl-delay:
+    10.0"; GPTBot, CCBot, ClaudeBot blocked by name. access "free" is observed: four sampled
+    news pages (2019-2026) had no isAccessibleForFree flag and served their body (214-568
+    words); the shared Reach terms describe a paid "Premium Subscription", so some content
+    may be paywalled. No opinion or letters section found (/opinion/ and /news/opinion/
+    return 404), so mostly regional news: low fit for the opinion genres. year_start 2019 =
+    oldest page seen (2019-12-16), not a verified archive start. Circulation 20,993 (ABC,
+    2020).
+
+- id: gb-ok-magazine
+  name: OK! magazine (ok.co.uk)
+  country: GB
+  source_type: magazine
+  url: https://www.ok.co.uk/
+  access: free
+  year_start: 2017
+  year_end: null
+  languages: [en]
+  genres: [other, news]
+  access_method: scrape
+  licence: Reach plc terms (any other use and automated access need written permission; no AI training)
+  tdm_opt_out: "yes"
+  restriction_scope: all_reuse
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.ok.co.uk/terms-conditions/
+    - https://www.ok.co.uk/robots.txt
+    - https://www.ok.co.uk/
+    - https://www.ok.co.uk/celebrity-news/exclusive-strictlys-lacey-and-vito-37869526
+    - https://www.ok.co.uk/celebrity-news/fleur-east-strictly-disappointment-feeling-37838593
+    - https://www.ok.co.uk/celebrity-news/amy-childs-billy-delbosq-wedding-37728649
+    - https://www.ok.co.uk/lifestyle/fashion/little-mix-daring-outfits-music-14557458
+  notes: >-
+    Same Reach terms as gb-mirror ("Any other use of materials on the Site ... without our
+    prior written permission is strictly prohibited"; no "automated means, including bots,
+    scrapers, crawlers, spiders, AI agents"; no AI/ML training). all_reuse, open in GB under
+    s.29A(5). robots.txt "User-agent: *" disallows only /topics, /search/, *.ece and ajax
+    paths, "Crawl-delay: 10.0"; GPTBot, CCBot and others blocked by name. access "free" is
+    observed: four sampled pages (2017-2026, incl. one marked "exclusive") had no
+    isAccessibleForFree flag and served 666-1,867 words. year_start 2017 = oldest page seen
+    (2017-06-08), not a verified archive start. Celebrity weekly: popular-magazine stream,
+    little opinion.
+
 # ---------------------------------------------------------------- GR
 
 - id: gr-nlg-efimeris

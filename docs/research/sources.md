@@ -169,8 +169,9 @@ these as `tdm_all`, so they are open in GB. Reach plc (Mirror, MEN, OK!) instead
 bans "Any other use ... (including without limitation reproduction for a purpose ...)"
 without written permission. We class Reach as `all_reuse`. Controller ruling (after the sweep): under s.29A(5) GB
 `all_reuse` also counts as open, so Reach, the Times, FT, Scotsman, Spectator, New Statesman
-and Radio Times are not excluded by their terms; they stay unregistered for the access
-reasons in the tables (paywall, crawler block, no free part or not yet sampled).
+and Radio Times are not excluded by their terms. A follow-up access check registered the
+three Reach titles (Mirror, MEN, OK!); the others stay unregistered for the access reasons
+in the tables (paywall, crawler block or no free part).
 
 #### Newspapers
 
@@ -182,8 +183,8 @@ reasons in the tables (paywall, crawler block, no free part or not yet sampled).
 | The Times / Sunday Times | all_reuse | 368,929 (2020) | robots.txt: "The Times does not permit the unlicensed use of our content for large language models", and `User-agent: *` `Disallow: /`, so our crawler is blocked. Subscription. The terms page served a device-verification challenge. |
 | Financial Times | all_reuse | 109,995 | Terms "expressly prohibit any use of our content or data ... in any manner for any machine learning and/or artificial intelligence purposes, including ... to generate any data or content". Subscription. |
 | Daily Telegraph | unknown | 360,345 (2020) | Blocked: terms pages returned HTTP 429 to curl and WebFetch. robots.txt blocks CCBot, ClaudeBot, GPTBot and others. |
-| Daily Mirror | all_reuse | 205,332 | Reach terms: "you must not use any automated means, including bots, scrapers, crawlers, spiders, AI agents or similar technology - to access, copy, collect, download or extract content", plus an any-other-use permission clause. |
-| Manchester Evening News | all_reuse | 20,993 (2020) | Same Reach terms. robots.txt blocks GPTBot, CCBot, ClaudeBot. |
+| Daily Mirror | all_reuse | 205,332 | **Registry** `gb-mirror`. Open (s.29A(5)). Reach terms ban "any automated means, including bots, scrapers, crawlers, spiders, AI agents" and any other use without permission. 2 of 3 Opinion pieces free (one Premium); oldest page seen 2013. |
+| Manchester Evening News | all_reuse | 20,993 (2020) | **Registry** `gb-manchester-evening-news`. Open (s.29A(5)); same Reach terms. 4/4 news pages free; no opinion section found; oldest page seen 2019. |
 | The Scotsman | all_reuse | n/a | robots.txt: AI training, dataset creation or bulk extraction "NOT permitted without written agreement and payment of £650 per page viewed". The linked Iconic Media contract allows free access only for "reading by individuals for their own personal use" and search, and says "You must not make any AI Use", which includes "any use of Content to generate, ground or inform the output of an AI Model". |
 | Yorkshire Post | all_reuse | 13,284 (2020) | Identical robots.txt and contract to the Scotsman (same publisher). |
 | The Herald (Glasgow) | copyright_boilerplate | 28,872 (2020) | Newsquest terms: "you will not otherwise copy, store, distribute ... create a database ... without our written permission". Open, but two sampled opinion pages served only ~80 words of body in the HTML, so we found no free part. Not registered. |
@@ -207,7 +208,7 @@ reasons in the tables (paywall, crawler block, no free part or not yet sampled).
 | The Week (UK) | tdm_all | n/a | Future terms (open in GB), but the sampled article had `isAccessibleForFree` "False". theweek.com now mixes the US and UK editions. Not registered. |
 | Private Eye | unknown | n/a | The website "showcases a few selected highlights from the current issue". Too little web text; we found no terms page. |
 | Radio Times | all_reuse | n/a | robots.txt: "Content-signal: search=yes, ai-input = no, ai-train=no", with "As a condition of accessing this website, you agree to abide by the following content signals". `ai-input` covers feeding content to AI models, i.e. our LLM tagging. Immediate Media terms allow access only "for your own personal and non-commercial use and not for any commercial or other purposes". |
-| OK! | all_reuse | n/a | Reach terms, same as the Mirror. |
+| OK! | all_reuse | n/a | **Registry** `gb-ok-magazine`. Open (s.29A(5)); same Reach terms. 4/4 pages free; oldest page seen 2017. |
 | Woman's Weekly | tdm_all | n/a | womansweekly.com redirects (301) to goodto.com (GoodtoKnow, Future plc). The magazine has no separate web text, so not registered. |
 | Reader's Digest UK | unknown | n/a | readersdigest.co.uk: the connection failed (no HTTP response). |
 | The People's Friend | unknown | n/a | 403 to curl (homepage and robots.txt). |
@@ -219,9 +220,12 @@ Newspapers:
 1. `gb-daily-mail`: the largest daily (687k). Named opinion columnists, sitemap back to
    1994, mostly free. Open only via s.29A (the terms ban TDM). Its right-of-centre tabloid
    slant needs a counterweight.
-2. `gb-inews`: centrist opinion desk, free opinion pieces, from 2016. Also open via s.29A.
-3. `gb-evening-standard`: free Comment section, archive from 1998, boilerplate terms only.
+2. `gb-mirror`: left-of-centre tabloid (205k) with Opinion pieces and "leaders"
+   editorials; mostly free, some Premium. Oldest page seen 2013. Balances the Mail's slant.
+3. `gb-inews`: centrist opinion desk, free opinion pieces, from 2016. Also open via s.29A.
+4. `gb-evening-standard`: free Comment section, archive from 1998, boilerplate terms only.
    London-centred.
+5. `gb-manchester-evening-news`: free regional news; no opinion section found, so low fit.
 
 Magazines:
 
@@ -231,7 +235,8 @@ Magazines:
    filter to UK sections.
 3. `gb-unherd`: heterodox opinion from 2018; partly paywalled.
 4. `gb-conversation-uk`: CC BY-ND academic commentary from 2013; low "ordinary voice" fit.
-5. Popular-magazine stream: `gb-hello`, `gb-woman-and-home`, `gb-good-housekeeping-uk`.
+5. Popular-magazine stream: `gb-hello`, `gb-ok-magazine`, `gb-woman-and-home`,
+   `gb-good-housekeeping-uk`.
    They are open and largely free, but mostly celebrity and lifestyle copy.
 
 Letters pages were not checked title by title in this sweep. The s.29A conditions in spec

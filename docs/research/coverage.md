@@ -19,7 +19,7 @@ Cells show the number of usable (free or free-registration) sources per period.
 | GR | 1 | 1 | 4 | 9 |
 | ES | 1 | 1 | 1 | 2 |
 | PT | 1 | 1 | 3 | 2 |
-| GB | 0 | 0 | 6 | 13 |
+| GB | 0 | 0 | 6 | 15 |
 
 ## Usable and not opted out
 
@@ -38,7 +38,7 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 | GR | 1 | 1 | 4 | 9 |
 | ES | 1 | 1 | 1 | 2 |
 | PT | 0 | 0 | 2 | 2 |
-| GB | 0 | 0 | 6 | 13 |
+| GB | 0 | 0 | 6 | 15 |
 
 ## Open questions
 
@@ -61,6 +61,9 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - gb-hello: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gb-good-housekeeping-uk: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gb-woman-and-home: per_text_publish_allowed
+- gb-mirror: per_text_publish_allowed
+- gb-manchester-evening-news: per_text_publish_allowed
+- gb-ok-magazine: per_text_publish_allowed
 - gr-nlg-efimeris: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gr-kathimerini-historical-archive: llm_api_allowed, per_text_publish_allowed
 - gr-kathimerini-website: llm_api_allowed, per_text_publish_allowed
