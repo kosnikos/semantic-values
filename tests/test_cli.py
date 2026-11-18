@@ -12,6 +12,15 @@ def build(entries: list[dict]) -> tuple[dict, list[Source]]:
     return coverage_matrix(sources, V0_COUNTRIES, 2026), sources
 
 
+def render(entries: list[dict]) -> str:
+    sources = [Source(**e) for e in entries]
+    return render_coverage_md(
+        coverage_matrix(sources, V0_COUNTRIES, 2026),
+        sources,
+        open_matrix=coverage_matrix(sources, V0_COUNTRIES, 2026, open_only=True),
+    )
+
+
 def test_render_has_table() -> None:
     matrix, sources = build([])
     md = render_coverage_md(matrix, sources)
@@ -51,3 +60,15 @@ def test_cli_writes_file(tmp_path: Path) -> None:
     assert lines[0] == "# Source coverage"
     assert lines[1] == ""
     assert lines[2] == f"Generated from {src.as_posix()}"
+
+
+def test_render_has_two_tables() -> None:
+    md = render([make_source(country="FR", restriction_scope="tdm_all", year_start=2010,
+                             year_end=None)])  # fmt: skip
+    assert "## Usable (free access)" in md
+    assert "## Usable and not opted out" in md
+    free, rest = md.split("## Usable (free access)")[1].split("## Usable and not opted out")
+    opened = rest.split("## Open questions")[0]
+    assert "| FR | 0 | 0 | 0 | 1 |" in free
+    assert "| FR | 0 | 0 | 0 | 0 |" in opened
+    assert "s.29A" in opened

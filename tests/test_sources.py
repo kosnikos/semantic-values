@@ -4,7 +4,14 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-from semval.sources import PERIODS, V0_COUNTRIES, Source, coverage_matrix, load_sources
+from semval.sources import (
+    PERIODS,
+    V0_COUNTRIES,
+    Source,
+    coverage_matrix,
+    is_open,
+    load_sources,
+)
 
 
 def make_source(**overrides) -> dict:
@@ -22,6 +29,7 @@ def make_source(**overrides) -> dict:
         "access_method": "bulk",
         "licence": "CC-BY",
         "tdm_opt_out": "no",
+        "restriction_scope": "none",
         "llm_api_allowed": "unknown",
         "per_text_publish_allowed": "unknown",
         "text_quality": "ocr_good",
@@ -108,3 +116,28 @@ def test_all_countries_present():
     assert set(m) == set(V0_COUNTRIES)
     for c in V0_COUNTRIES:
         assert m[c] == {label: [] for label, _, _ in PERIODS}
+
+
+def test_restriction_scope_required():
+    entry = make_source()
+    del entry["restriction_scope"]
+    with pytest.raises(ValidationError, match="restriction_scope"):
+        Source(**entry)
+    with pytest.raises(ValidationError):
+        Source(**make_source(restriction_scope="maybe"))
+
+
+def test_open_only_excludes_tdm_all():
+    s = src(id="fr-x", country="FR", access="free", restriction_scope="tdm_all",
+            year_start=2010, year_end=None)  # fmt: skip
+    assert coverage_matrix([s], V0_COUNTRIES, 2026)["FR"]["2005-now"] == ["fr-x"]
+    assert coverage_matrix([s], V0_COUNTRIES, 2026, open_only=True)["FR"]["2005-now"] == []
+
+
+def test_gb_tdm_all_open_under_s29a():
+    a = src(id="gb-tdm", country="GB", restriction_scope="tdm_all", year_start=2010, year_end=None)
+    b = src(id="gb-reuse", country="GB", restriction_scope="all_reuse", year_start=2010,
+            year_end=None)  # fmt: skip
+    assert is_open(a) and not is_open(b)
+    m = coverage_matrix([a, b], V0_COUNTRIES, 2026, open_only=True)
+    assert m["GB"]["2005-now"] == ["gb-tdm"]

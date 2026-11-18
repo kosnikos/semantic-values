@@ -2,6 +2,8 @@
 
 Generated from data/sources/sources.yaml
 
+## Usable (free access)
+
 Cells show the number of usable (free or free-registration) sources per period.
 
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
@@ -18,6 +20,25 @@ Cells show the number of usable (free or free-registration) sources per period.
 | ES | 1 | 1 | 1 | 2 |
 | PT | 1 | 1 | 3 | 2 |
 | GB | 0 | 0 | 4 | 8 |
+
+## Usable and not opted out
+
+As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (`tdm_all`) or any reuse without licence (`all_reuse`); GB `tdm_all` counts as open under CDPA s.29A.
+
+| Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
+|---|---|---|---|---|
+| FR | 1 | 0 | 0 | 2 |
+| NL | 0 | 0 | 1 | 3 |
+| BE | 1 | 1 | 1 | 3 |
+| LU | 1 | 1 | 1 | 4 |
+| DE | 2 | 2 | 3 | 2 |
+| AT | 2 | 2 | 1 | 2 |
+| CH | 2 | 2 | 2 | 2 |
+| IT | 3 | 2 | 2 | 3 |
+| GR | 1 | 1 | 3 | 6 |
+| ES | 1 | 1 | 1 | 2 |
+| PT | 0 | 0 | 2 | 2 |
+| GB | 0 | 0 | 3 | 7 |
 
 ## Open questions
 
