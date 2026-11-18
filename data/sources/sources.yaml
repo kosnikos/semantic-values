@@ -1724,3 +1724,746 @@
     Same dataset as gb-common-crawl-news. nrc.nl disallows CCBot; forum.fok.nl does not.
     volkskrant.nl and nu.nl returned 403 even for robots.txt, so their status is unknown.
     Dutch coverage must be measured from the index.
+
+# ---------------------------------------------------------------- DE
+
+- id: de-zeitungsportal
+  name: Deutsches Zeitungsportal (Deutsche Digitale Bibliothek)
+  country: DE
+  source_type: national_library
+  url: https://www.deutsche-digitale-bibliothek.de/newspaper
+  access: free
+  year_start: 1609
+  year_end: 1994
+  languages: [de]
+  genres: [news, opinion, letters, other]
+  access_method: api
+  licence: per-issue licence or rights statement set by each data partner
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "3,238 newspapers, 5,875,189 issues, 37,038,414 pages from 29 data partners (landing page, Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.deutsche-digitale-bibliothek.de/newspaper
+    - https://www.deutsche-digitale-bibliothek.de/content/newspaper/fragen-antworten
+    - https://deutsche-digitale-bibliothek.de/content/die-deutsche-digitale-bibliothek-startet-das-deutsche-zeitungsportal-mit-zentralem-zugang-zu-historischen-zeitungen-von-1671-bis-1950?lang=en
+    - https://www.deutsche-digitale-bibliothek.de/robots.txt
+  notes: >-
+    Aggregator of newspapers digitised by (mostly) libraries. The landing page says
+    "Entdecken Sie historische Zeitungen aus den Jahren 1609 bis 1994". At launch the latest
+    issue was from 30 December 1950, and the portal "can be used free of charge without
+    registration". The post-1945 share was not measured. It is probably small and uneven,
+    because partners decide what goes in: the FAQ says the holdings "keine repräsentative
+    Auswahl der deutschen Zeitungshistorie darstellen". FAQ on reuse: every issue carries
+    "einer Lizenz oder einem Rechtehinweis" that defines permitted use, so rights must be
+    checked per title. API: "Ja, Nutzer*innen können über eine API ... auf Bilder,
+    Volltexte und Metadaten zugreifen". It is documented in OpenAPI. That it needs a free "Meine
+    DDB" API key was seen only in search snippets, not verified. Full text is OCR from partners "ohne
+    Änderungen", so quality varies. The site sits behind an Anubis bot challenge (curl got
+    the challenge page, WebFetch got content). robots.txt has no AI rules. Best German
+    route for 1940-1950 and for whatever post-war regional titles partners have added.
+
+- id: de-zefys-ddr-presse
+  name: ZEFYS DDR-Presse (Staatsbibliothek zu Berlin)
+  country: DE
+  source_type: national_library
+  url: https://zefys.staatsbibliothek-berlin.de/ddr-presse/
+  access: free_registration
+  year_start: 1945
+  year_end: 1994
+  languages: [de]
+  genres: [news, opinion, letters]
+  access_method: manual
+  licence: unknown (login required "aus juristischen Gründen"; terms not readable)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://zefys.staatsbibliothek-berlin.de/ddr-presse/
+    - https://zzf-potsdam.de/en/node/3159
+    - https://www.evangelisch.de/inhalte/85677/27-06-2013
+    - https://www.dwds.de/d/korpora
+  notes: >-
+    Neues Deutschland, Berliner Zeitung and Neue Zeit, the three leading GDR dailies,
+    digitised with full text. They run from each paper's first issue to 1990, and Neue
+    Zeit to its end in 1994 (evangelisch.de, 2013). year_start 1945 is the start of the
+    DWDS Berliner Zeitung corpus (DWDS lists Neues Deutschland from 1946). The portal says
+    "Die Notwendigkeit einer Anmeldung hat juristische Gründe". Login options are an SBB
+    library card, Google, ORCID or Shibboleth. ZZF: "Access for researchers is free". These
+    are state- and party-controlled papers (ND was the SED organ), so this is official
+    voice, not society's voice. Letters/opinion genres are assumed from full-newspaper
+    runs, not inspected. Use it only for East Germany 1945-1990, and with that caveat. Reuse terms were not found.
+
+- id: de-spiegel-print-archive
+  name: DER SPIEGEL print archive on spiegel.de (issues 1947-2009)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.spiegel.de/spiegel/print/
+  access: free
+  year_start: 1947
+  year_end: 2009
+  languages: [de]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: SPIEGEL Allgemeine Nutzungsbedingungen (TDM and AI reserved; automated analysis prohibited)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "weekly issues, each indexed at /spiegel/print/index-YYYY-NN.html; article count not measured"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.spiegel.de/spiegel/print/index-1947.html
+    - https://www.spiegel.de/spiegel/print/index-1965.html
+    - https://www.spiegel.de/spiegel/print/index-2005.html
+    - https://www.spiegel.de/politik/briefe-a-e281012f-0002-0001-0000-000039613376
+    - https://www.spiegel.de/spiegel/print/index-2009-50.html
+    - https://www.spiegel.de/spiegel/print/index-2010-20.html
+    - https://www.spiegel.de/nutzungsbedingungen
+    - https://www.spiegel.de/robots.txt
+  notes: >-
+    The free cut-off is observed, not documented. We sampled article pages linked from
+    issue indexes and read their isAccessibleForFree flag. 1965, 1985, 2000, 2002, 2004,
+    2005, 2006, 2008 and 2009 (issues 5, 30, 50): all true (3-4 pages each). 2010, 2015
+    and 2020 (issue 20): all false. So the archive is free to about the end of 2009 and
+    SPIEGEL+ after that (see de-spiegel-website). Each issue has a "Briefe" (readers'
+    letters) page; a 2005 letters page is flagged free. Terms, verbatim: "Die
+    SPIEGEL-Verlag Rudolf Augstein GmbH & Co. KG behält sich eine Nutzung ihrer Inhalte für
+    kommerzielles Text- und Data-Mining im Sinne von § 44b UrhG ausdrücklich vor."
+    "Insbesondere dürfen die Inhalte nicht für die Entwicklung, das Training, das
+    Programmieren, die Verbesserung und/oder das Anreichern von KI-Systemen (einschließlich,
+    aber nicht beschränkt auf generative KI-Systeme) verwendet werden, die direkt oder
+    indirekt Inhalte (unabhängig davon, ob diese urheberrechtlich geschützt sind) ausgeben
+    können." Under "Es ist insbesondere untersagt:" it lists "die Weitergabe von Inhalten
+    (auch auszugsweise) an Dritte außerhalb des privaten Bereichs sowie die entsprechende
+    Digitalisierung und Ablage in fremden Speichersystemen ("Cloud")" and "das Auslesen der
+    Inhalte aus den Produkten der SPIEGEL-Gruppe mittels technischer Hilfsmittel (bspw.
+    Crawler, Spider, Text-/Data-Mining), die Indexierung dieser für eine Suche oder die
+    automatisierte Analyse, Auswertung oder Aufbereitung in sonstiger Weise". The third-party
+    and cloud ban is why llm_api_allowed is "no". robots.txt blocks GPTBot, ClaudeBot,
+    CCBot and others. Licence: syndication@spiegel.de. The § 60d UrhG research exception
+    is a lead (see sources.md), not a permission.
+
+- id: de-spiegel-website
+  name: DER SPIEGEL website (spiegel.de, 2010 onwards, SPIEGEL+)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.spiegel.de/
+  access: partial_paywall
+  year_start: 2010
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: SPIEGEL Allgemeine Nutzungsbedingungen (TDM and AI reserved; automated analysis prohibited)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.spiegel.de/spiegel/print/index-2010-20.html
+    - https://www.spiegel.de/spiegel/print/index-2022-20.html
+    - https://www.spiegel.de/spiegel/print/index-2024-10.html
+    - https://www.spiegel.de/nutzungsbedingungen
+    - https://www.spiegel.de/robots.txt
+  notes: >-
+    Print-issue articles from 2010, 2015, 2020 and 2022 were flagged isAccessibleForFree
+    false (one 2022 "Bild der Woche" item was true). A 2024 online politics piece was also
+    false. Some online articles are free, but the share was not measured. Same terms as
+    de-spiegel-print-archive (verbatim clauses quoted there). Licence only
+    (syndication@spiegel.de).
+
+- id: de-zeit-website
+  name: DIE ZEIT / ZEIT ONLINE (zeit.de, archive from 1946)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.zeit.de/
+  access: partial_paywall
+  year_start: 1946
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: all rights reserved; robots.txt reserves commercial TDM (§ 44b UrhG) and forbids automated access without permission
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "DWDS Zeit corpus (same texts, 1946-2025): 481,233 documents, ~475M tokens"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.zeit.de/robots.txt
+    - https://www.zeit.de/2005/index
+    - https://netzpolitik.org/2012/zeit-de-wird-maschinenlesbar-und-offnet-seine-datenbank/
+    - https://developer.zeit.de/
+    - http://web.archive.org/web/20260829131824/https://www.zeit.de/2005/index
+    - https://www.dwds.de/d/korpora/zeit
+  notes: >-
+    access is partial_paywall because the free/Z+ split could not be checked. Every
+    zeit.de page except robots.txt returned 403 (a bot-protection page) to curl and
+    WebFetch. Year-archive pages (/YYYY/index) exist back to 1946. We confirmed this only
+    from an Internet Archive snapshot of /2005/index; we did not use snapshots to read
+    articles. robots.txt, verbatim: "Legal notice: zeit.de expressly reserves the right to
+    use its content for commercial text and data mining (§ 44 b UrhG). The use of robots
+    or other automated means to access zeit.de or collect or mine data without the express
+    permission of zeit.de is strictly prohibited. ... If you would like to apply for
+    permission to crawl zeit.de, collect or use data, please email crawl-request@zeit.de."
+    All crawlers not on an allow-list are disallowed. The 2012 public Content API ("Zugang
+    zu allen Texten der Print-Zeit seit 1946", but no full text in beta) is gone:
+    developer.zeit.de returns 404. The texts are in DWDS for KWIC search (see
+    de-dwds-zeitungskorpora). Check the Z+ share of old articles in a browser.
+
+- id: de-taz-website
+  name: taz.de (die tageszeitung) incl. archive
+  country: DE
+  source_type: newspaper_archive
+  url: https://taz.de/
+  access: free
+  year_start: 1991
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: all rights reserved; commercial TDM reserved (§ 44b UrhG); private databases only, other copying needs written consent
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://taz.de/robots.txt
+    - https://taz.de/Impressum/!vn5957311/
+    - https://taz.de/Archiv/!s=&Autor=Michael+Sontheimer&Seite=23/
+    - https://taz.de/!1716978/
+    - https://taz.de/!5249833/
+    - https://taz.de/!5952685/
+  notes: >-
+    access "free" is observed: articles from 1991-06-05, 2015-11-19 and 2023-08-26 are all
+    flagged isAccessibleForFree "true". The site carries "taz zahl ich" voluntary-payment
+    prompts. year_start 1991 is the oldest article we sampled. Search snippets claim the
+    online archive starts on 1 Sept 1986, but we did not verify this. Impressum, verbatim:
+    "Die TAZ Verlags- und Vertriebs GmbH behält sich eine Nutzung ihrer Inhalte für
+    kommerzielles Text- und Data-Mining im Sinne von § 44b UrhG ausdrücklich vor. ... Die
+    TAZ Verlags- und Vertriebs GmbH gestattet die Übernahme von taz.de-Inhalten in
+    Datenbestände, die ausschließlich für den privaten Gebrauch des Nutzers bestimmt sind.
+    Jede andere Übernahme bedarf der schriftlichen Zustimmung". robots.txt carries the same
+    § 44b notice ("The use of robots or other automated means to access taz.de or collect
+    or mine data without the express permission of taz.de is strictly prohibited") and
+    blocks GPTBot. The footer links a "KI-Leitlinie" (not read). A left-leaning daily, so
+    pair it with other lines. It is the strongest free German 1990s-now candidate. Ask
+    lizenzen@taz.de.
+
+- id: de-dwds-zeitungskorpora
+  name: DWDS newspaper corpora (BBAW; Zeit, Spiegel, FAZ, Berliner Zeitung, Tagesspiegel, Neues Deutschland)
+  country: DE
+  source_type: other
+  url: https://www.dwds.de/d/korpora
+  access: free_registration
+  year_start: 1945
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters, columns]
+  access_method: manual
+  licence: DWDS Nutzungsbedingungen (citation-length results only; automated use needs permission unless § 60d UrhG)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: unknown
+  volume_estimate: "Die Zeit 1946-2025: 481,233 documents, 474,547,798 tokens; other corpora not measured"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dwds.de/d/korpora
+    - https://www.dwds.de/d/korpora/zeit
+    - https://www.dwds.de/d/nutzungsbedingungen
+  notes: >-
+    A research route. Search is concordance (KWIC) only, not full-text delivery. Since 8
+    June 2026 all searches need a login. Corpora: Berliner Zeitung 1945-1993 and
+    1994-2005, Neues Deutschland 1946-1990, Der Spiegel (from 2013), Der Tagesspiegel (from
+    1996), Die Zeit 1946-2025, FAZ/FAS (years not shown), and the ZDL-Regionalkorpus (from
+    1993), which has DE, CH and AT parts. Terms, verbatim: "Jegliche Nutzung der Inhalte des
+    DWDS, einschließlich jedoch nicht beschränkt auf automatisierte Abfragen und
+    Auswertungen (Crawlen, Parsen, Text- und Data-Mining), sofern nicht über § 60d UrhG
+    zulässig, ist nur mit ausdrücklicher Genehmigung gestattet." For FAZ/FAS/Zeit/Spiegel:
+    "Die Recherche ... darf zu Zwecken der Nachvollziehbarkeit der Wörterbucheinträge
+    erfolgen. Die Recherche-Ergebnisse (Satzzitate) dürfen in wissenschaftlichen
+    Untersuchungen im Rahmen des Zitatrechts mit korrekter Quellenangabe zitiert werden",
+    and "Der Umfang darf den üblicher Zitate nicht überschreiten". Usable for checking
+    vocabulary trends, not as a text source for LLM tagging.
+
+- id: de-ids-dereko
+  name: IDS Deutsches Referenzkorpus (DeReKo) via COSMAS II / KorAP
+  country: DE
+  source_type: other
+  url: https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/
+  access: free
+  year_start: 1994
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: non-commercial query use free; full-text (TEI) handover only for three small corpora under a licence agreement
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "63.8 billion words (19.01.2026), incl. 'eine große Zahl von Zeitungstexten'"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/
+    - https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/verfuegbarkeit/
+  notes: >-
+    The largest German press corpus, but query-only. "Der weitaus größte Teil von DeReKo
+    kann für nicht-kommerzielle Zwecke kostenlos mit Hilfe von COSMAS II genutzt werden."
+    Data in TEI-XML is handed over only for Mannheimer Korpus 1/2 and Bonner Zeitungskorpus,
+    after a licence agreement and a justification of "warum Recherchen in DeReKo mit COSMAS
+    II bzw. KorAP für Ihre Zwecke nicht ausreichen". DeReKo "enthalten ausschließlich
+    urheberrechtlich abgesichertes Material". The 2026-I release adds 2025 for "fast aller
+    Pressekorpora" and completes Die ZEIT 1994. The archive (title list) page is
+    JavaScript-only, so the newspaper list, any Austrian/Swiss titles and the year range
+    are not verified. year_start 1994 is the earliest year named on a page we read (ZEIT
+    1994); older press years probably exist but were not verified. Whether COSMAS II needs registration was not checked. Contact
+    korpuslinguistik@ids-mannheim.de about a research arrangement.
+
+- id: de-dnb-web-archive
+  name: DNB Webarchiv (Deutsche Nationalbibliothek)
+  country: DE
+  source_type: web_archive
+  url: https://www.dnb.de/EN/webarchiv.html
+  access: partial_paywall
+  year_start: 2012
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: copyright; reading rooms in Leipzig and Frankfurt am Main only
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dnb.de/EN/webarchiv.html?nn=1035778
+  notes: >-
+    access is set to partial_paywall only because the schema has no "restricted" value.
+    The archive is selective (subjects, institutions, events such as federal elections),
+    not a .de domain crawl, and social media is collected only in individual cases. Because
+    of copyright, the sites are "usually only accessible in the reading rooms in Leipzig
+    and Frankfurt am Main". year_start 2012 comes from secondary sources (search results),
+    not from the DNB page. Not a practical source.
+
+- id: de-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .de domains
+  country: DE
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [de]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.de share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.spiegel.de/robots.txt
+    - https://www.zeit.de/robots.txt
+    - https://taz.de/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. spiegel.de disallows CCBot. zeit.de allow-lists
+    named bots and disallows the rest, and CCBot is not listed. taz.de does not name CCBot
+    but reserves TDM in robots.txt comments. German publishers widely state § 44b UrhG
+    reservations, so CC-NEWS is a URL-discovery layer only.
+
+# ---------------------------------------------------------------- AT
+
+- id: at-anno
+  name: ANNO - Austrian Newspapers Online (Österreichische Nationalbibliothek)
+  country: AT
+  source_type: national_library
+  url: https://anno.onb.ac.at/
+  access: free
+  year_start: 1505
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: ÖNB claims no own exploitation right in digitised content; third-party rights must be cleared by the user
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "28 million pages from more than 1,600 titles (landing page, Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://anno.onb.ac.at/
+    - https://anno.onb.ac.at/alph_list.htm
+    - https://anno.onb.ac.at/robots.txt
+    - https://www.onb.ac.at/nutzung
+    - https://wien.orf.at/stories/3059137/
+    - https://anno.onb.ac.at/cgi-content/anno?aid=nku
+  notes: >-
+    What exists: the title list includes many post-war dailies, with their publication
+    runs ("Erscheinungsverlauf"): Die Presse (1848-2023), Arbeiter-Zeitung (1889-1985),
+    Neuer Kurier (1954-2023), Kurier (1959-), Oberösterreichische Nachrichten (1945-2019),
+    Tiroler Tageszeitung (1945-1993), Vorarlberger Nachrichten (1945-1989), Volkswille (KPÖ, 1945-1989) and others. These ranges
+    describe the title, not what is digitised. What is free: the home page links post-war
+    issues directly (for example Arbeiter-Zeitung 1953-07-08, ibn/Tiroler Tageszeitung
+    1953, aid=dwp 1953, aid=etb 1957), so some 1950s dailies are open. Which later
+    years are online per title could not be checked: title calendar pages are behind a
+    Cloudflare Turnstile "Sicherheitsüberprüfung" for both curl and WebFetch, and we did
+    not try to get around it. year_end null because periodicals up to 2025 are listed
+    (e.g. Soziale Sicherheit 2025); year_start 1505 is the earliest
+    "Erscheinungsverlauf" year in the title list. ÖNB reuse page: "An diesen Inhalten macht die Österreichische
+    Nationalbibliothek kein eigenes urheberrechtliches Verwertungsrecht geltend", and
+    existing third-party rights must be cleared by the user. So post-war papers stay under
+    publishers' copyright. ANNO-Suche offers full-text search. The ÖNB Labs datasets page
+    content could not be read (JavaScript). Verify per-title online years in a browser.
+    Then ask ÖNB (and the publishers, e.g. Die Presse, Kurier) about LLM tagging.
+
+- id: at-arbeiterzeitung-archive
+  name: Arbeiter-Zeitung digital archive 1945-1989 (arbeiterzeitung.at)
+  country: AT
+  source_type: newspaper_archive
+  url: https://www.arbeiterzeitung.at/
+  access: free_registration
+  year_start: 1945
+  year_end: 1989
+  languages: [de]
+  genres: [news, opinion, letters]
+  access_method: manual
+  licence: unknown (described as a "nicht kommerzielle F+E-Projekt"; content rights holder not stated on the page)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "more than 200,000 daily newspaper pages"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.arbeiterzeitung.at/
+  notes: >-
+    The social-democratic daily, from 5 Aug 1945 to 31 Mar 1989: "digitales Blättern und
+    Volltextsuche in mehr als 200.000 Tageszeitungs-Seiten". Browsing is open; full-text
+    search needs a free "Meine AZ" account: "Die Registrierung und Nutzung sind
+    kostenlos!" Run by Andy Kaltenbrunner / Medienhaus Wien as a non-commercial R&D
+    project. Impressum and terms were not read. A party paper (SPÖ), so pair it with ANNO
+    titles of other lines. Ask Medienhaus Wien about research use.
+
+- id: at-derstandard-website
+  name: DER STANDARD (derstandard.at)
+  country: AT
+  source_type: newspaper_archive
+  url: https://www.derstandard.at/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: STANDARD AGB (private use only; commercial TDM reserved under § 42h Abs 6 UrhG and Art. 4(3) DSM Directive)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.derstandard.at/meinung
+    - https://about.derstandard.at/agb
+    - https://www.derstandard.at/robots.txt
+  notes: >-
+    access is "free" per the AGB: "Die Onlinedienste der STANDARD Verlagsgesellschaft m. b.
+    H. werden Ihnen unentgeltlich zum Abruf und zur damit verbundenen (temporären)
+    Vervielfältigung auf Ihrem Endgerät bereitgestellt. Die unentgeltliche Bereitstellung
+    ... basiert auf der Finanzierung durch Werbeeinnahmen", with an ad-free PUR
+    subscription as the alternative. We could not see article pages: both curl and
+    WebFetch got the consent wall. So archive depth is not verified (year_start is only
+    the date of our visit), and genres are assumed from the "meinung" section. AGB
+    section VI, verbatim: "Die STANDARD Verlagsgesellschaft m. b. H. behält sich eine
+    Nutzung ihrer Inhalte für kommerzielles Text- und Data-Mining im Sinne von § 42h Abs 6
+    UrhG und Art. 4 Abs 3 RL (EU) 2019/790 ausdrücklich vor. Für den Erwerb einer
+    entsprechenden Nutzungslizenz wenden Sie sich bitte an legal@derstandard.at ." Footer:
+    "Nutzung ausschließlich für den privaten Eigenbedarf. Eine Weiterverwendung und
+    Reproduktion über den persönlichen Gebrauch hinaus ist nicht gestattet." robots.txt
+    blocks CCBot, GPTBot, ClaudeBot, anthropic-ai, Google-Extended and others. The forum
+    is out of v0 scope. Ask legal@derstandard.at.
+
+- id: at-diepresse-website
+  name: Die Presse (diepresse.com)
+  country: AT
+  source_type: newspaper_archive
+  url: https://www.diepresse.com/meinung
+  access: partial_paywall
+  year_start: 2026
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: all rights reserved; robots.txt bans TDM under § 42h (6) UrhG for AI training
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.diepresse.com/robots.txt
+    - https://www.diepresse.com/meinung
+    - https://www.diepresse.com/41382933/wenigstens-kann-trump-auch-nicht-schlafen
+    - https://www.diepresse.com/41404915/sagt-man-jetzt-fleischhauer-oder-metzger
+  notes: >-
+    Of three sampled pieces linked from /meinung, two "K+L Kolumne" items were
+    isAccessibleForFree false and one was true. robots.txt, verbatim: "Legal Notice: All
+    rights are reserved. The usage of contents of this website and/or of website data for
+    the purpose of text and data mining in the meaning of § 42h (6) of the Austrian
+    Copyright Act is not permitted for the training of AI (artificial intelligence) models
+    and/or AI based technologies." The notice targets AI training. Inference/tagging use
+    is not addressed, hence llm "unknown". CCBot is allowed only /a/. year_start is only
+    the date of our sample. The 1848-2023 Presse is listed in ANNO (see at-anno).
+
+- id: at-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .at domains
+  country: AT
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [de]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.at share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.derstandard.at/robots.txt
+    - https://www.diepresse.com/robots.txt
+    - https://www.krone.at/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. derstandard.at disallows CCBot; diepresse.com
+    allows CCBot only on /a/; krone.at's robots.txt comment prohibits TDM under Art. 4 DSM
+    and § 42h (6) UrhG and "the development of any ... large language models (LLMs)".
+    URL discovery only.
+
+# ---------------------------------------------------------------- CH
+
+- id: ch-e-newspaperarchives
+  name: e-newspaperarchives.ch (Swiss National Library)
+  country: CH
+  source_type: national_library
+  url: https://www.e-newspaperarchives.ch/
+  access: free
+  year_start: 1692
+  year_end: null
+  languages: [de, fr, it, rm]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: unknown (some titles public domain; others added in cooperation with publishers)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "about 15 million pages from over 200 Swiss newspaper titles (Feb 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://law.ch/lawnews/2026/02/aus-200-schweizer-zeitungstiteln-neu-15-millionen-seiten-online-zugaenglich/
+    - https://www.admin.ch/gov/de/start/dokumentation/medienmitteilungen.msg-id-71491.html
+    - https://databases.ub.unibe.ch/en/e-newspaperarchives-ch/1340
+  notes: >-
+    The site itself returned 403 (including robots.txt) to curl and WebFetch, so every
+    fact here comes from third-party pages. law.ch (26 Feb 2026): about 15 million pages
+    from over 200 titles, oldest from 1692, free "kostenlos und ohne Registrierung". Some
+    titles are "gemeinfrei"; others are added in cooperation with publishers. The federal
+    press release (5 Jul 2018) says it covers newspapers "vom 18. Jahrhundert bis heute",
+    with Swiss publishers as partners. UniBE: "Please check directly on the website to see
+    which volumes of which titles have been digitized and made accessible." So which
+    post-1940 years are online, per title, is unknown, and so are the terms of use.
+    Languages are assumed from Switzerland's language regions, not verified. Check in a
+    browser, then ask the NL (Nationalbibliothek).
+
+- id: ch-letempsarchives
+  name: Le Temps archives (letempsarchives.ch; Journal de Genève, Gazette de Lausanne, Le Nouveau Quotidien)
+  country: CH
+  source_type: newspaper_archive
+  url: https://www.letempsarchives.ch/
+  access: free
+  year_start: 1798
+  year_end: 1998
+  languages: [fr]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: unknown (no terms page found); robots.txt disallows everything except the home page
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "JdG 550,000 pages / 2,000,000 articles; GdL 450,000 pages / 1,700,000 articles; LNQ 50,000 pages / 200,000 articles"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.letempsarchives.ch/
+    - https://www.letempsarchives.ch/a-propos
+    - https://www.letempsarchives.ch/faq
+    - https://www.letempsarchives.ch/robots.txt
+    - https://www.infoclio.ch/en/node/138098
+  notes: >-
+    The predecessors of Le Temps: Journal de Genève (6 Jan 1826 - 28 Feb 1998), Gazette de
+    Lausanne (1798-1998) and Le Nouveau Quotidien (1991 - 28 Feb 1998). Article-level
+    segmentation: "Chaque article, photographie, illustration ou publicité de chaque
+    édition est disponible". access "free" rests on infoclio.ch ("Access to the content is
+    free of cost", 2015) and on the landing page, which has no login or subscription
+    prompt. We did not open search results: robots.txt is "Disallow: /*" / "Allow: /$".
+    There is a public /sparql endpoint (named entities). No terms of use found. This is
+    the best free French-Swiss 1940-1998 run, with a liberal editorial line. Ask Le Temps
+    about research use.
+
+- id: ch-letemps-website
+  name: Le Temps website (letemps.ch, Opinions / Chroniques)
+  country: CH
+  source_type: newspaper_archive
+  url: https://www.letemps.ch/opinions
+  access: partial_paywall
+  year_start: 1998
+  year_end: null
+  languages: [fr]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: all rights reserved; robots.txt Content-Signal ai-train=no, use=reference, stated as an Art. 4 DSM reservation
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.letemps.ch/robots.txt
+    - https://www.letemps.ch/opinions
+    - https://www.letemps.ch/opinions/chroniques/de-l-avantage-de-rater-les-trains
+  notes: >-
+    A sampled chronique (2026-11-16) carries "Réservé aux abonnés" and paywall markup (no
+    isAccessibleForFree field). The free share is unknown. robots.txt: "Content-Signal:
+    search=yes,ai-train=no,use=reference", with the header "ANY RESTRICTIONS EXPRESSED VIA
+    CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN
+    UNION DIRECTIVE 2019/790". CCBot and ClaudeBot are disallowed. year_start 1998 is the
+    paper's founding (letempsarchives runs to 1998); the website's own archive depth was
+    not verified. Licence only.
+
+- id: ch-nzz-website
+  name: Neue Zürcher Zeitung (nzz.ch) incl. NZZ archive
+  country: CH
+  source_type: newspaper_archive
+  url: https://www.nzz.ch/meinung
+  access: paywall
+  year_start: 1993
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: all rights reserved; NZZ prohibits AI/ML use "outside of special agreements" (as relayed by FHNW library)
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nzz.ch/robots.txt
+    - https://www.nzz.ch/meinung
+    - https://www.nzz.ch/meinung/anschlag-auf-reichelts-auto-wie-die-linke-gewalt-legitimiert-ld.10065285
+    - https://fhnw.ch/en/about-fhnw/fhnw-library/search-and-find/e-resources/newspapers-and-press-releases
+  notes: >-
+    All 3 sampled /meinung pieces were flagged isAccessibleForFree false. The FHNW library
+    lists "NZZ Online (full-text database) Archive of the Neue Zürcher Zeitung and the NZZ
+    Folio from 1993 to the present" (year_start 1993) and states, verbatim: "The NZZ
+    prohibits the use of its content for the training of artificial intelligence (AI),
+    machine learning or the development of algorithms and similar technologies outside of
+    special agreements." llm "no" rests on that statement, which is relayed by FHNW; the
+    NZZ's own terms page was not read. robots.txt disallows GPTBot and CCBot except
+    promoted/sponsored content. NZZ is also in Swissdox (ch-swissdox-liri). Licence only.
+
+- id: ch-swissdox-liri
+  name: Swissdox@LiRI (SMD Swiss media database for research, University of Zurich)
+  country: CH
+  source_type: news_api
+  url: https://www.liri.uzh.ch/en/services/swissdox.html
+  access: partial_paywall
+  year_start: 1990
+  year_end: null
+  languages: [de, fr]
+  genres: [news, opinion, columns]
+  access_method: api
+  licence: academic project use only; data stays on own academic IT; no sharing; raw data deleted 6 months after project end
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: "about 24 million articles from ~260 sources; +5,000-6,000 per day"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.liri.uzh.ch/en/services/swissdox.html
+  notes: >-
+    The main research-access programme for Swiss press. Recorded as partial_paywall: it is
+    fee-based and academic only. Sources come from "CH Media, NZZ media group, Ringier,
+    Ringier Axel Springer Schweiz and TX Group (Tamedia), SRF/SRG, Le Temps, Weltwoche and
+    Wochenzeitung, overall 260 sources", German and French. Terms, verbatim: "access to
+    Swissdox database with API designed for big data analyses for project related academic
+    use only"; "data may be enriched optionally, automatically processed and analyzed";
+    "raw data (but not derivates) have to be deleted six months after project completion";
+    "data may not be shared with others (third parties)"; "contents received from Swissdox
+    must to be stored in one's own IT infrastructure (at an academic institution)". Fees:
+    single-user project CHF 1,000 per 30 days, research project (max 3 subscribers) CHF
+    3,500 per year, and institutional tiers above that. tdm_opt_out "no" because automated
+    analysis is the purpose of the service. Sending text to a commercial LLM API is not
+    addressed. The no-third-party and own-infrastructure clauses suggest it is not
+    allowed, and derived tags ("derivates") seem keepable. "covering many decades" is not
+    specified; year_start 1990 is a placeholder, NOT verified (start years
+    per source are on swissdox.ch/medien, which we could not read in full). Requires an academic
+    affiliation; also see essentials.swissdox.ch (library access for single texts).
+
+- id: ch-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .ch domains
+  country: CH
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [de, fr, it]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.ch share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.nzz.ch/robots.txt
+    - https://www.letemps.ch/robots.txt
+    - https://www.tagesanzeiger.ch/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. nzz.ch, letemps.ch and tagesanzeiger.ch all
+    disallow CCBot (NZZ except promoted content). URL discovery only.

@@ -10,9 +10,9 @@ Cells show the number of usable (free or free-registration) sources per period.
 | NL | 0 | 0 | 2 | 4 |
 | BE | 1 | 1 | 1 | 3 |
 | LU | 1 | 1 | 1 | 5 |
-| DE | 0 | 0 | 0 | 0 |
-| AT | 0 | 0 | 0 | 0 |
-| CH | 0 | 0 | 0 | 0 |
+| DE | 4 | 4 | 6 | 5 |
+| AT | 2 | 2 | 1 | 3 |
+| CH | 2 | 2 | 2 | 2 |
 | IT | 0 | 0 | 0 | 0 |
 | GR | 1 | 1 | 4 | 9 |
 | ES | 0 | 0 | 0 | 0 |
@@ -69,3 +69,23 @@ Cells show the number of usable (free or free-registration) sources per period.
 - nl-reddit-thenetherlands: llm_api_allowed, per_text_publish_allowed
 - nl-kb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - nl-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-zeitungsportal: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-zefys-ddr-presse: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-spiegel-print-archive: per_text_publish_allowed
+- de-spiegel-website: per_text_publish_allowed
+- de-zeit-website: llm_api_allowed, per_text_publish_allowed
+- de-taz-website: llm_api_allowed, per_text_publish_allowed
+- de-ids-dereko: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-dnb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- at-anno: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- at-arbeiterzeitung-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- at-derstandard-website: llm_api_allowed, per_text_publish_allowed
+- at-diepresse-website: llm_api_allowed, per_text_publish_allowed
+- at-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- ch-e-newspaperarchives: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- ch-letempsarchives: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- ch-letemps-website: llm_api_allowed, per_text_publish_allowed
+- ch-nzz-website: per_text_publish_allowed
+- ch-swissdox-liri: llm_api_allowed
+- ch-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out

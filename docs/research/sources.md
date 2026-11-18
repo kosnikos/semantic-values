@@ -1,8 +1,8 @@
 # Sources
 
 Archive survey for the thin-slice countries, Greece (GR) and the United Kingdom (GB),
-and for France (FR), Belgium (BE), Luxembourg (LU) and the Netherlands (NL), all
-done on 2026-11-18. For each candidate we read the landing page, the terms of use or
+and for France (FR), Belgium (BE), Luxembourg (LU) and the Netherlands (NL), and
+Germany (DE), Austria (AT) and Switzerland (CH), all done on 2026-11-18. For each candidate we read the landing page, the terms of use or
 API terms, and robots.txt. Where it helped, we also opened one or two sample article
 pages to check the paywall flag (`isAccessibleForFree` in the page metadata) or a date
 range. We read only documentation, terms and sample pages. We did not scrape, download
@@ -370,3 +370,189 @@ GeenStijl comments.
 - **NOS**: public broadcaster, reachable, but straight news. Not surveyed.
 - **r/Netherlands**: English and expat-heavy. Recorded in the notes of
   `nl-reddit-thenetherlands`.
+
+## DE
+
+Scope note for DE, AT and CH: the owner made newspapers the core v0 source (opinion,
+columns, letters, editorials first, then news). Forums, subreddits and comment sections
+are out of scope for v0 and were not surveyed. The effort went into newspaper routes and
+into research-access programmes instead.
+
+**2005–now.** *What exists:* every major title has a large online archive with opinion
+and letters sections. *What is free:* very little that we can use. **taz.de**
+(`de-taz-website`) is the exception. Articles from 1991, 2015 and 2023 were all flagged
+free, and taz relies on voluntary "taz zahl ich" payments. But its Impressum reserves
+commercial TDM (§ 44b UrhG) and allows copying into databases only "für den privaten
+Gebrauch". **DER SPIEGEL** is free up to about the end of 2009 (`de-spiegel-print-archive`,
+with readers' letters ("Briefe") in every issue). From 2010 it is mostly SPIEGEL+
+(`de-spiegel-website`). Spiegel's terms reserve TDM, ban AI use, and ban "die automatisierte
+Analyse, Auswertung oder Aufbereitung" and "Ablage in fremden Speichersystemen ('Cloud')",
+so LLM use is `no`. **DIE ZEIT** (`de-zeit-website`, archive from 1946) blocks all
+non-allow-listed bots with a 403 and a § 44b notice. We could not measure its free/Z+
+split, and its 2012 public API is gone (404). For research access, **DWDS**
+(`de-dwds-zeitungskorpora`; Zeit 1946–2025, Spiegel, FAZ, Tagesspiegel, Berliner Zeitung)
+and **IDS DeReKo** (`de-ids-dereko`, 63.8 billion words) let you search these papers. Both
+are concordance-only. Results are limited to citation-length quotes, and automated
+evaluation needs permission. Neither delivers full text for LLM tagging.
+
+**1940–2005.** The **Spiegel print archive 1947–2009** is the best free national run.
+It is a weekly magazine with letters and commentary, but it is one title with one
+editorial line. The free cut-off was observed from `isAccessibleForFree` flags on sampled
+issues (all true up to 2009, all false from 2010); it is not documented. The **Deutsches
+Zeitungsportal** (`de-zeitungsportal`, 1609–1994, 37M pages, free, with API) covers
+1940–1950 well, but post-war titles depend on what partner libraries add, and the
+post-1950 share was not measured. **ZEFYS DDR-Presse** (`de-zefys-ddr-presse`) has
+Neues Deutschland, Berliner Zeitung and Neue Zeit, 1945–1990/94, free with login. These
+are state/party papers, so they give official voice for the GDR, not society's voice.
+taz covers 1991 onward (1986 according to unverified search snippets).
+
+**Biggest gap:** a free, licensable West German daily for **1950–1990**. FAZ, SZ and
+Welt archives were not found free (not surveyed in depth). The Zeitungsportal's post-war
+holdings are patchy. From 2010 onward, the free option is taz alone (one left-leaning
+title, TDM reserved).
+
+**Legal lead (not a permission):** § 60d UrhG allows reproductions for text and data
+mining for non-commercial scientific research. It covers research organisations,
+heritage institutions and "individual researchers who pursue no commercial aim"
+(gesetze-im-internet.de/urhg/__60d.html, read via WebFetch summary). DWDS explicitly
+carves out "sofern nicht über § 60d UrhG zulässig". Whether § 60d covers sending text to
+a commercial LLM API, or publishing per-text tags in a blog, is a legal question we have
+not settled. It needs legal advice before we rely on it.
+
+**Best for opinion / letters genres:** letters: Spiegel "Briefe" 1947–2009 (free, terms
+forbid automated analysis); opinion/columns: taz (free, TDM reserved), Spiegel/Zeit
+(paywall/blocked); research search: DWDS, DeReKo (KWIC only).
+
+### Recommended sources (DE)
+
+1. `de-taz-website`: the only free daily with 1991–now opinion. Ask lizenzen@taz.de
+   whether research LLM tagging and per-text URL/tag publication is acceptable.
+2. `de-spiegel-print-archive`: 1947–2009 with letters. Ask syndication@spiegel.de for a
+   research licence. The terms as written forbid our use.
+3. `de-zeitungsportal`: 1940–1950 and whatever post-war regional titles partners have
+   added. Check rights statements per title (API with a free DDB key).
+4. `de-zeit-website`: ask crawl-request@zeit.de. Zeit would be the best opinion source
+   1946–now if it could be licensed.
+5. `de-dwds-zeitungskorpora` / `de-ids-dereko`: for vocabulary validation only, not as a
+   text source.
+
+### Dead ends and leads (DE)
+
+- **DIE ZEIT Content API** (developer.zeit.de): 404, discontinued.
+- **zeit.de pages**: 403 to curl and WebFetch. We used one Internet Archive snapshot of
+  the 2005 year index to confirm the archive structure, and stopped there.
+- **FAZ, Süddeutsche Zeitung, Welt, Bild**: not surveyed. They are known to be paywalled
+  (FAZ is in DWDS for KWIC only).
+- **DNB Webarchiv** (`de-dnb-web-archive`): selective, reading rooms in Leipzig and
+  Frankfurt only.
+- **Forums / comments** (out of v0 scope): not surveyed.
+
+## AT
+
+**2005–now.** *What exists:* Der Standard, Die Presse, Kurier and Krone, each
+with an opinion section. *What is free:* **DER STANDARD**
+(`at-derstandard-website`) is free to read. Its AGB say the service is provided
+"unentgeltlich" and financed by advertising, with an ad-free PUR subscription as the
+alternative. We could not see article pages (consent wall), so archive depth and genre
+labels are unverified. The AGB reserve commercial TDM under § 42h (6) UrhG and Art. 4(3)
+DSM, and limit use to "den privaten Eigenbedarf". **Die Presse** (`at-diepresse-website`)
+is partly paywalled (2 of 3 sampled columns locked). Its robots.txt bans TDM "for the
+training of AI", which leaves inference use unaddressed. **Krone** (krone.at) robots.txt
+prohibits TDM under § 42h (6) and "the development of any ... large language models
+(LLMs)"; no entry. Kurier was not surveyed beyond robots.txt.
+
+**1940–2005.** **ANNO** (`at-anno`, ÖNB: 28M pages, 1,600+ titles, free) is the main
+route. *What exists:* its title list includes the main post-war dailies (Die Presse to
+2023, Arbeiter-Zeitung to 1985, Kurier from 1954/1959, Oberösterreichische Nachrichten
+1945–2019, Tiroler Tageszeitung 1945–1993, Vorarlberger Nachrichten 1945–1989, KPÖ
+Volkswille). *What is free:* the home page links 1953–57 issues of several dailies
+directly, so at least the 1950s are open. We could not check which later years are
+online per title, because the title calendars sit behind a Cloudflare challenge. ÖNB
+claims no own rights in its scans but leaves third-party (publisher) rights to the user.
+**Arbeiter-Zeitung 1945–1989** (`at-arbeiterzeitung-archive`) is free with a free
+account. It has full text, 200,000+ pages, and is run as a non-commercial R&D project.
+It is the social-democratic party paper.
+
+**Biggest gap:** **1990–2005**, with no free route at all. Before 1990 coverage depends on
+ANNO's per-title online years, which are unverified. Also, no free source carries an
+open licence for post-war text.
+
+**Research access lead:** the **Austrian Media Corpus (amc)**, an ÖAW ACDH-CH / APA
+cooperation with Austrian press from 1986, is the obvious research route. All its pages
+(oeaw.ac.at, arche.acdh.oeaw.ac.at) returned 403 three times, so it gets no entry. Search
+snippets say it is searchable on-site via Sketch Engine. Its AT part also feeds the DWDS
+ZDL-Regionalkorpus, whose terms exclude "jede kommerzielle, journalistische bzw.
+publizistische Nutzung" (see `de-dwds-zeitungskorpora`). Contact ACDH-CH directly.
+
+**Best for opinion / letters genres:** opinion: Der Standard (free, TDM reserved), Die
+Presse (partly paywalled); historical letters/opinion: ANNO dailies, Arbeiter-Zeitung.
+
+### Recommended sources (AT)
+
+1. `at-anno`: verify per-title online years in a browser, then ask ÖNB and publishers
+   (Die Presse, Kurier) about research tagging.
+2. `at-derstandard-website`: ask legal@derstandard.at about a research licence for
+   2005–now opinion.
+3. `at-arbeiterzeitung-archive`: 1945–1989, with an editorial-line caveat. Ask
+   Medienhaus Wien.
+4. amc (ACDH-CH): ask about research access covering 1986–now.
+
+### Dead ends and leads (AT)
+
+- **ANNO title calendars**: Cloudflare Turnstile. We did not try to get around it.
+- **Austrian Media Corpus**: 403 (see above).
+- **ÖNB Webarchiv Österreich**: the landing page shows only a title, so access terms
+  were not verified. No entry.
+- **Kurier, Salzburger Nachrichten, Kleine Zeitung**: not surveyed.
+- **Forums / Der Standard postings** (out of v0 scope): not surveyed.
+
+## CH
+
+**2005–now.** *What exists:* NZZ, Tages-Anzeiger, Le Temps and the other big Swiss
+titles. *What is free:* nothing that we found. **NZZ** (`ch-nzz-website`) opinion is
+paywalled (3/3 locked), and per the FHNW library the NZZ prohibits AI/ML use "outside of
+special agreements". **Le Temps** (`ch-letemps-website`) marks opinion "Réservé aux
+abonnés" and signals `ai-train=no, use=reference` as an Art. 4 DSM reservation.
+tagesanzeiger.ch loops on redirects and disallows CCBot. The real route is research
+access: **Swissdox@LiRI** (`ch-swissdox-liri`, University of Zurich and SMD). It holds
+about 24M articles from 260 Swiss sources (CH Media, NZZ, Ringier, TX/Tamedia, SRG, Le
+Temps, Weltwoche, WOZ), in German and French, through an API "for project related
+academic use only". Costs run from CHF 1,000 per 30-day single-user project. Data must
+stay on academic IT and may not go to third parties, so a commercial LLM API is doubtful.
+Derived data ("derivates") need not be deleted.
+
+**1940–2005.** French-speaking Switzerland is well served. **letempsarchives.ch**
+(`ch-letempsarchives`) is free, article-segmented, and has Journal de Genève 1826–1998,
+Gazette de Lausanne 1798–1998 and Le Nouveau Quotidien 1991–1998: about 3.9M articles,
+liberal titles. For German, Italian and Romansh, **e-newspaperarchives.ch**
+(`ch-e-newspaperarchives`, Swiss National Library) is free, with 15M pages from 200+
+titles from 1692 "bis heute". The site returned 403 to us, so which post-1940 years are
+online per title is unknown, and so are the terms.
+
+**Biggest gap:** German-speaking Switzerland 1940–2005 (unverified until e-npa can be
+checked in a browser), and any free 2005–now opinion source. Swissdox is the only
+licensable 2005–now route, and it requires an academic affiliation.
+
+**Best for opinion / letters genres:** historical: Journal de Genève / Gazette de
+Lausanne (free); 2005–now: Swissdox (academic fee), NZZ/Le Temps (paywall).
+
+### Recommended sources (CH)
+
+1. `ch-letempsarchives`: French-Swiss 1940–1998, free. Ask Le Temps about LLM tagging
+   and per-text publication.
+2. `ch-swissdox-liri`: the 2005–now route, if an academic partner can hold the
+   subscription. Ask LiRI whether sending text to a commercial LLM API counts as
+   "sharing with third parties".
+3. `ch-e-newspaperarchives`: check post-1940 German-Swiss titles in a browser, then ask
+   the National Library.
+
+### Dead ends and leads (CH)
+
+- **e-newspaperarchives.ch**: 403 (curl and WebFetch, including robots.txt).
+- **impresso** (impresso-project.ch): a research platform over Swiss and Luxembourg
+  newspapers including Le Temps and NZZ collections (per a directory entry). The app and
+  terms pages are JavaScript-only. A lead for research access.
+- **Webarchiv Schweiz**: selective, "on the premises of the National Library and those
+  of its partner institutions" only, and reproduction is not permitted (NL FAQ). No entry.
+- **Tages-Anzeiger** (tagesanzeiger.ch): redirect loop; robots.txt disallows CCBot.
+- **Forums / comments** (out of v0 scope): not surveyed.
