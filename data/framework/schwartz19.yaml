@@ -1,0 +1,339 @@
+# Schwartz refined theory of basic values: 19 values plus 4 higher-order groups.
+#
+# Sources (all opened, see docs/research/framework-decision.md):
+#   - Values, definitions (paraphrased from Table 2), circle order and higher-order
+#     groups: Schwartz et al. (2012), JPSP 103(4), pp. 664-670.
+#   - Value-level `opposes`: the two bipolar dimensions as Schwartz states them for the
+#     10 values (ESS questionnaire-design chapter, p. 269), carried down to the 19 values.
+#     Border values (hedonism, face, humility) get no value-level `opposes`.
+#   - `survey_items`: ESS Human Values Scale variable names, exact codes from the ESS
+#     Round 4 data dictionary (IHSN catalogue 8935). Item -> sub-value assignment
+#     follows Schwartz et al. (2012, pp. 665-668), which classifies the PVQ items;
+#     see the memo for the three items that need a caveat (iprspot, iplylfr, ipmodst).
+#     The ESS itself scores these items at the 10-value level only.
+#   - Examples are written for this project; none is copied from a dataset.
+#
+# Structure: higher-order groups are values with parent: null and no examples.
+# The 19 tag-able values are the leaves (Framework.leaves()).
+
+id: schwartz19
+name: Schwartz refined theory of basic values (19 values)
+citation: >-
+  Schwartz, S. H., Cieciuch, J., Vecchione, M., Davidov, E., Fischer, R., Beierlein, C.,
+  et al. (2012). Refining the theory of basic individual values. Journal of Personality
+  and Social Psychology, 103(4), 663-688. https://doi.org/10.1037/a0029393.
+  Definitions are paraphrased from Table 2; groups and order from Figure 1 and pp. 668-670.
+  Survey item codes: European Social Survey Human Values Scale (ESS Round 4 data
+  dictionary, https://datacatalog.ihsn.org/catalog/8935/data-dictionary/F1/).
+
+values:
+  # ---- Higher-order groups -------------------------------------------------------
+  - id: openness_to_change
+    name: Openness to change
+    definition: >-
+      Readiness for new ideas, actions and experiences. Groups the self-direction values,
+      stimulation and (mostly) hedonism.
+    opposes: [conservation]
+
+  - id: self_enhancement
+    name: Self-enhancement
+    definition: >-
+      Pursuing one's own interests, success and standing. Groups achievement and the
+      power values.
+    opposes: [self_transcendence]
+
+  - id: conservation
+    name: Conservation
+    definition: >-
+      Self-restriction, order and avoiding change. Groups security, tradition and
+      conformity, plus the border values face and humility.
+    opposes: [openness_to_change]
+
+  - id: self_transcendence
+    name: Self-transcendence
+    definition: >-
+      Putting the interests of others above one's own. Groups the benevolence and
+      universalism values.
+    opposes: [self_enhancement]
+
+  # ---- Openness to change --------------------------------------------------------
+  - id: self_direction_thought
+    name: "Self-direction: thought"
+    definition: >-
+      Freedom to form your own ideas and develop your own abilities: independent thinking,
+      curiosity, creativity.
+    parent: openness_to_change
+    opposes: [tradition, conformity_rules, conformity_interpersonal, security_personal,
+              security_societal]
+    survey_items: ["ESS:ipcrtiv"]
+    examples_endorse:
+      - "Schools should teach children to question what they are told, not to memorise it."
+      - "The ministry's plan to vet university syllabuses is an attack on free inquiry."
+    examples_reject:
+      - "Too much questioning has left our young people believing in nothing at all."
+      - "Students are there to learn the established canon, not to invent their own theories."
+
+  - id: self_direction_action
+    name: "Self-direction: action"
+    definition: >-
+      Freedom to decide for yourself what you do and how you live your life.
+    parent: openness_to_change
+    opposes: [conformity_rules, tradition, conformity_interpersonal, security_personal,
+              security_societal]
+    survey_items: ["ESS:impfree"]
+    examples_endorse:
+      - "Adults should be free to choose how they live, as long as they harm no one."
+      - "The new curfew treats grown citizens like children who cannot run their own lives."
+    examples_reject:
+      - "People cannot be left to do as they please; someone has to set limits."
+      - "Personal choice has become an excuse for every kind of selfishness."
+
+  - id: stimulation
+    name: Stimulation
+    definition: >-
+      Excitement, novelty and change in life; seeking challenge and new experiences.
+    parent: openness_to_change
+    opposes: [security_personal, security_societal, tradition, conformity_rules,
+              conformity_interpersonal]
+    survey_items: ["ESS:impdiff", "ESS:ipadvnt"]
+    examples_endorse:
+      - "A year abroad, a new job, a risky start-up: young people should try it all."
+      - "Our towns are dying of boredom; they need festivals, new bars and new ideas."
+    examples_reject:
+      - "This endless hunger for novelty leaves people restless and unhappy."
+      - "Extreme sports are a reckless thrill that the health service ends up paying for."
+
+  - id: hedonism
+    name: Hedonism
+    definition: >-
+      Pleasure and enjoyment for oneself. A border value between openness to change and
+      self-enhancement, grouped here with openness to change.
+    parent: openness_to_change
+    survey_items: ["ESS:ipgdtim", "ESS:impfun"]
+    examples_endorse:
+      - "Life is short; there is nothing shameful about good food, wine and long holidays."
+      - "The ban on late-night music takes away one of the few simple pleasures we have."
+    examples_reject:
+      - "A society that lives only for its weekend pleasures has lost its way."
+      - "We have raised a generation that expects fun before effort."
+
+  # ---- Self-enhancement ----------------------------------------------------------
+  - id: achievement
+    name: Achievement
+    definition: >-
+      Success according to social standards: being seen by others as capable and
+      successful.
+    parent: self_enhancement
+    opposes: [universalism_concern, universalism_nature, universalism_tolerance,
+              benevolence_caring, benevolence_dependability]
+    survey_items: ["ESS:ipshabt", "ESS:ipsuces"]
+    examples_endorse:
+      - "Hard work and ambition deserve reward; we should celebrate those who succeed."
+      - "Abolishing school grades robs talented pupils of the recognition they have earned."
+    examples_reject:
+      - "Our obsession with rankings and promotions is making everyone miserable."
+      - "Success is a poor measure of a person; kindness matters more than a CV."
+
+  - id: power_dominance
+    name: "Power: dominance"
+    definition: >-
+      Power through control over other people: being in charge and having others do
+      what you say.
+    parent: self_enhancement
+    opposes: [universalism_concern, universalism_nature, universalism_tolerance,
+              benevolence_caring, benevolence_dependability]
+    survey_items: ["ESS:iprspot"]
+    examples_endorse:
+      - "The country needs a leader with the authority to impose decisions, not endless talk."
+      - "A manager who never gives orders is not managing at all."
+    examples_reject:
+      - "No one should hold that much control over other people's lives."
+      - "The mayor's habit of bullying the council into line is unacceptable."
+
+  - id: power_resources
+    name: "Power: resources"
+    definition: >-
+      Power through control of money, property and other material and social resources;
+      wealth.
+    parent: self_enhancement
+    opposes: [universalism_concern, universalism_nature, universalism_tolerance,
+              benevolence_caring, benevolence_dependability]
+    survey_items: ["ESS:imprich"]
+    examples_endorse:
+      - "There is nothing wrong with wanting to get rich; wealth is what builds a nation."
+      - "The new wealth tax punishes people for owning what they have earned."
+    examples_reject:
+      - "The pursuit of money has hollowed out every institution it touches."
+      - "Luxury yachts in the harbour are a monument to greed, not success."
+
+  - id: face
+    name: Face
+    definition: >-
+      Protecting your public image and standing, and avoiding humiliation. A border value
+      between power and security; grouped here with conservation, following the source's
+      finding that it sits with security.
+    parent: conservation
+    examples_endorse:
+      - "A country that lets itself be humiliated abroad will not be respected by anyone."
+      - "A minister caught lying has a duty to protect the dignity of the office and resign."
+    examples_reject:
+      - "Politicians care more about saving face than about admitting they were wrong."
+      - "Our fear of what the neighbours think keeps too many families silent about abuse."
+
+  # ---- Conservation --------------------------------------------------------------
+  - id: security_personal
+    name: "Security: personal"
+    definition: >-
+      Safety in your immediate surroundings: for yourself, your family and your home.
+    parent: conservation
+    opposes: [self_direction_thought, self_direction_action, stimulation]
+    survey_items: ["ESS:impsafe"]
+    examples_endorse:
+      - "Every family has a right to walk home at night without fear."
+      - "Closing the local police station leaves elderly residents feeling unprotected."
+    examples_reject:
+      - "Our fixation on safety has turned parents into anxious prison guards."
+      - "Gated estates buy a feeling of safety at the price of a shared town."
+
+  - id: security_societal
+    name: "Security: societal"
+    definition: >-
+      Safety and stability in the wider society: public order, a strong state and
+      protection from threats.
+    parent: conservation
+    opposes: [self_direction_thought, self_direction_action, stimulation]
+    survey_items: ["ESS:ipstrgv"]
+    examples_endorse:
+      - "A state that cannot guarantee public order has failed at its first task."
+      - "Stability matters more than any reform; we cannot afford another crisis."
+    examples_reject:
+      - "Every new security law is sold as protection and used for control."
+      - "Order without justice is just a quieter kind of oppression."
+
+  - id: tradition
+    name: Tradition
+    definition: >-
+      Maintaining and preserving cultural, family or religious traditions and customs.
+    parent: conservation
+    opposes: [self_direction_thought, self_direction_action, stimulation]
+    survey_items: ["ESS:imptrad"]
+    examples_endorse:
+      - "Our village feasts and saints' days are what hold this community together."
+      - "Closing the parish church would cut the town off from its own history."
+    examples_reject:
+      - "Tradition is no excuse for customs that keep women in the kitchen."
+      - "We should stop treating every old ritual as sacred just because it is old."
+
+  - id: conformity_rules
+    name: "Conformity: rules"
+    definition: >-
+      Compliance with rules, laws and formal obligations.
+    parent: conservation
+    opposes: [self_direction_action, self_direction_thought, stimulation]
+    survey_items: ["ESS:ipfrule", "ESS:ipbhprp"]
+    examples_endorse:
+      - "Rules apply to everyone, including footballers and ministers."
+      - "If drivers ignored red lights the way some politicians ignore the law, we would all be dead."
+    examples_reject:
+      - "Blind obedience to regulations is how decent officials end up doing indecent things."
+      - "Some laws deserve to be broken, and history remembers those who broke them."
+
+  - id: conformity_interpersonal
+    name: "Conformity: interpersonal"
+    definition: >-
+      Avoiding upsetting or harming other people: politeness, tact and not giving offence.
+    parent: conservation
+    opposes: [self_direction_thought, self_direction_action, stimulation]
+    examples_endorse:
+      - "Good manners cost nothing; we should think before we offend our neighbours."
+      - "Public debate would be healthier if people remembered that words can wound."
+    examples_reject:
+      - "Fear of offending anyone has made honest conversation impossible."
+      - "Politeness is often just a way of keeping uncomfortable truths quiet."
+
+  - id: humility
+    name: Humility
+    definition: >-
+      Recognising your own smallness in the larger scheme of things; modesty and not
+      seeking attention. A border value between conservation and self-transcendence;
+      grouped here with conservation, following the source's finding that it sits with
+      conformity.
+    parent: conservation
+    survey_items: ["ESS:ipmodst"]
+    examples_endorse:
+      - "The best leaders are the ones who know how little they know."
+      - "We could learn from older generations, who were content without showing off."
+    examples_reject:
+      - "Modesty is a luxury; in today's job market you have to sell yourself."
+      - "Teaching girls to be humble is teaching them to be overlooked."
+
+  # ---- Self-transcendence --------------------------------------------------------
+  - id: benevolence_caring
+    name: "Benevolence: caring"
+    definition: >-
+      Devotion to the welfare of the people close to you: family, friends and community.
+    parent: self_transcendence
+    opposes: [achievement, power_dominance, power_resources]
+    survey_items: ["ESS:iphlppl", "ESS:iplylfr"]
+    examples_endorse:
+      - "Neighbours who check on the elderly during a heatwave are the backbone of this city."
+      - "Cutting carers' leave tells families that looking after their own does not count."
+    examples_reject:
+      - "Charity begins at home has become an excuse to ignore everyone else."
+      - "Looking after your own sounds kind, but in practice it breeds favouritism."
+
+  - id: benevolence_dependability
+    name: "Benevolence: dependability"
+    definition: >-
+      Being a reliable and trustworthy member of your group: loyalty and keeping your word.
+    parent: self_transcendence
+    opposes: [achievement, power_dominance, power_resources]
+    survey_items: ["ESS:iplylfr"]
+    examples_endorse:
+      - "A promise made to colleagues should be kept, even when it becomes inconvenient."
+      - "Breaking the coalition deal a month after signing it is a betrayal of trust."
+    examples_reject:
+      - "Loyalty to the party has been put above loyalty to the truth for too long."
+      - "Sticking by your friends is no virtue when your friends are wrong."
+
+  - id: universalism_concern
+    name: "Universalism: concern"
+    definition: >-
+      Commitment to equality, justice and protection for all people, including strangers.
+    parent: self_transcendence
+    opposes: [achievement, power_dominance, power_resources]
+    survey_items: ["ESS:ipeqopt"]
+    examples_endorse:
+      - "Every child deserves the same chance in life, whatever their parents earn."
+      - "The new rules leave refugees without legal protection, and that should shame us."
+    examples_reject:
+      - "Equality of outcome is a fantasy that punishes effort."
+      - "We cannot be responsible for the injustices of the whole world."
+
+  - id: universalism_nature
+    name: "Universalism: nature"
+    definition: >-
+      Preserving the natural environment.
+    parent: self_transcendence
+    opposes: [achievement, power_dominance, power_resources]
+    survey_items: ["ESS:impenv"]
+    examples_endorse:
+      - "Protecting our rivers and forests is a duty we owe to our grandchildren."
+      - "The motorway through the wetland destroys a landscape that can never be replaced."
+    examples_reject:
+      - "Jobs come first; the environmental lobby has forgotten that people need to eat."
+      - "Green rules are strangling farmers for the sake of a few rare beetles."
+
+  - id: universalism_tolerance
+    name: "Universalism: tolerance"
+    definition: >-
+      Accepting and trying to understand people who are different from you.
+    parent: self_transcendence
+    opposes: [achievement, power_dominance, power_resources]
+    survey_items: ["ESS:ipudrst"]
+    examples_endorse:
+      - "A democracy is measured by how it treats people who think and live differently."
+      - "Banning the minority-language newspaper is an act of intolerance."
+    examples_reject:
+      - "Tolerance has become a word for accepting things we should not accept."
+      - "Newcomers must adapt to us, not the other way round."
