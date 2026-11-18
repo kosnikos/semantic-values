@@ -23,11 +23,11 @@ Cells show the number of usable (free or free-registration) sources per period.
 
 ## Usable and not opted out
 
-As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (`tdm_all`) or any reuse without licence (`all_reuse`); GB `tdm_all` counts as open under CDPA s.29A.
+As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (`tdm_all`) or any reuse without licence (`all_reuse`); GB `tdm_all` counts as open under CDPA s.29A. `copyright_boilerplate` (generic anti-republication wording) counts as open; this is an owner-adjustable setting (`OPEN_SCOPES`).
 
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
-| FR | 1 | 0 | 0 | 2 |
+| FR | 1 | 0 | 0 | 3 |
 | NL | 0 | 0 | 2 | 4 |
 | BE | 1 | 1 | 1 | 3 |
 | LU | 1 | 1 | 1 | 4 |

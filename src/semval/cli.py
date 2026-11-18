@@ -17,7 +17,8 @@ _FREE_NOTE = "Cells show the number of usable (free or free-registration) source
 _OPEN_NOTE = (
     "As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM "
     "(`tdm_all`) or any reuse without licence (`all_reuse`); GB `tdm_all` counts as open "
-    "under CDPA s.29A."
+    "under CDPA s.29A. `copyright_boilerplate` (generic anti-republication wording) counts "
+    "as open; this is an owner-adjustable setting (`OPEN_SCOPES`)."
 )
 
 

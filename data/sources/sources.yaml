@@ -950,7 +950,7 @@
   access_method: scrape
   licence: authors keep copyright and grant AgoraVox free digital reproduction rights; reproduction needs AgoraVox's prior permission
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
