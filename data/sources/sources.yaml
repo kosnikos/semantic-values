@@ -31,14 +31,22 @@
     - https://www.theguardian.com/open-platform/terms-and-conditions
     - https://cran.r-project.org/web/packages/guardianapi/index.html
   notes: >-
-    Full article text is available via the Developer key. But the OP terms clause 6(g)
-    forbids using the Content API/OP Content "for any machine learning, machine
-    learning language models and/or artificial intelligence-related purposes", "for any
-    text and data aggregation, analysis or mining purposes (including to generate any
-    patterns, trends or correlations)", or "with any machine learning and/or artificial
-    intelligence technologies to generate any data"; 6(g)(iv) is an express reservation
-    under Art. 4(3) DSM Directive. Clause 5: OP Content must not be kept longer than 24
-    hours. Clause 6(c)(i): no translating. The access page lists "training models for
+    Full article text is available via the Developer key. Verbatim OP terms (re-fetched
+    2026-11-18 by curl). Clause 6(g): "You will not: (i) use, copy, scrape, reproduce,
+    alter, modify, collect, mine and/or extract the Content API, OP Content or Guardian
+    Digital Network: (A) for any machine learning, machine learning language models and/or
+    artificial intelligence-related purposes (including the training or development of
+    such technologies); (B) for any text and data aggregation, analysis or mining purposes
+    (including to generate any patterns, trends or correlations); or (C) with any machine
+    learning and/or artificial intelligence technologies to generate any data or content
+    or to synthesise or combine with any other data or content." 6(g)(iv): "This clause
+    (g) should be treated as an express reservation by GNM of all rights in the Content
+    API, OP Content or Guardian Digital Network, including for the purposes of Article
+    4(3) of Directive (EU) 2019/790". Clause 5 (Lifecycle of OP Content): "You must either
+    replace (by re-requesting) or delete all OP Content you hold (whether or not published
+    on Your Website) at least every 24 hours. For legal reasons, you must not keep any OP
+    Content for longer than 24 hours." Clause 6(c)(i): you will not "Edit, adapt,
+    translate or otherwise alter the OP Content". The access page lists "training models for
     generative artificial intelligence services, text and data mining solutions, sentiment
     analysis" as Commercial-key use cases (price on request). per_text_publish "no" because
     generating tags from OP Content is itself prohibited by 6(g); publishing links alone
@@ -100,10 +108,17 @@
     - https://www.bbc.co.uk/usingthebbc/terms/can-i-use-bbc-content
     - https://www.journalism.co.uk/20-years-of-digital-milestones-at-bbc-online/
   notes: >-
-    robots.txt: "No scraping, crawling, or systematic extraction of content"; "No
-    retrieval-augmented generation (RAG), AI-powered search, agentic AI or grounding using
-    BBC content"; "No creating datasets from BBC content"; "No text and data mining (TDM)
-    under Article 4"; "No using BBC content to create summaries for your own use". The
+    robots.txt header, verbatim (re-fetched 2026-11-18 by curl; version
+    2323e66fcb22a9568be0b7ab535fafcd2bf666ad): "In short: Please use our site like a
+    human, not a robot. That means: - No scraping, crawling, or systematic extraction of
+    content - No use of BBC content for training or fine-tuning AI models, including large
+    language models (LLMs) - No retrieval-augmented generation (RAG), AI-powered search,
+    agentic AI or grounding using BBC content - No creating datasets from BBC content - No
+    text and data mining (TDM) under Article 4 of the EU Directive on Copyright in the
+    Digital Single Market - No using BBC content to create summaries for your own use - No
+    business use without permission ... - The BBC reserves all rights in its content and
+    expressly opts out of any statutory exceptions in any jurisdiction for text and data
+    mining, as permitted by law". It also disallows CCBot, ClaudeBot, GPTBot and others. The
     "Can I use BBC content" page says permission is needed for anything taken "to develop
     or train artificial intelligence or to do computer analysis". Public broadcaster, mostly
     straight news; low value for opinion genres. Launch December 1997 per journalism.co.uk.
@@ -379,8 +394,18 @@
     - https://www.nlg.gr/collection/ilektronikes-amp-psifiakes-sylloges/
     - http://efimeris.nlg.gr/ns/dateselect.asp
     - http://efimeris.nlg.gr/ns/ftr.asp
+    - http://efimeris.nlg.gr/ns/dateselect.asp?c=64
+    - http://efimeris.nlg.gr/ns/pages.asp?c=64&dc=15&db=1&da=1960
+    - http://efimeris.nlg.gr/ns/showpdf.asp?c=64&p=24791
     - https://digitalcollections.nlg.gr/nlg-repo/dl/el/terms.html
   notes: >-
+    access "free" was observed on the site, not stated by any page: on 2026-11-18 an
+    anonymous request (no login, no cookies) for Eleftheria, 15 Jan 1960 (pages.asp?c=64
+    ...) listed 6 pages, and showpdf.asp?c=64&p=24791 returned HTTP 200
+    application/pdf (~500 KB, a 1-bit CCITT page scan). No login or registration prompt
+    appeared in the frameset, date selector or page list. Whether the PDFs have an OCR
+    text layer was not checked (the PDF was not saved). The date selector for Eleftheria
+    gives 1944-1970 while the title list says 1944-1967.
     Linked from nlg.gr as "Ψηφιακή Συλλογή Εφημερίδων". Old ASP frameset; search form offers
     page text, article title, article text, signature (υπογραφή), categories and article
     length, which implies article-level segmentation and OCR, but OCR quality and whether
@@ -482,8 +507,12 @@
     - https://www.tovima.gr/print/opinions/esto-loipon-lepen/
     - https://www.tovima.gr/2024/09/20/media/to-vima-kalosorizei-tous-neous-syndromites-tou-me-mia-monadiki-prosfora/
   notes: >-
-    Opinion articles checked (web and /print/) carry isAccessibleForFree true;
-    subscriptions advertised are for the print edition. Earliest sitemap URL dated
+    access "free" is based on the raw HTML (curl, 2026-11-18, re-checked in the fix
+    round): both evidence articles carry a schema.org NewsArticle JSON-LD block near the
+    end of the page ("@type":"NewsArticle", "inLanguage":"el", "isAccessibleForFree":true),
+    and the full article body text is in the served HTML without login. Tools that strip
+    script tags will not show the flag. The only "premium" strings are logout-cookie
+    names (premiumAids). The subscriptions advertised are for the print edition. Earliest sitemap URL dated
     2008-11-24. Terms: content may not be sold, copied, modified, reproduced, republished,
     uploaded, transmitted or distributed in any way, except a single copy for personal use.
     No AI/TDM clause found; robots.txt has no AI-bot blocks. Same owner as Ta Nea.
