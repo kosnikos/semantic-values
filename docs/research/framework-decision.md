@@ -152,9 +152,28 @@ natural frame for EVS/WVS, possibly via a post-hoc mapping from Schwartz scores 
   item-to-value assignment, and I did not open a source that gives it. I left WVS codes out
   rather than guess. **No EVS codes**: no Schwartz battery was found in EVS (review §5.3).
 - **Validation scores at the 10-value level.** The ESS measures the 10 basic values, so
-  validation should roll our 19 up to 10 (face → security, humility → conformity, following
-  [D2] p. 675) and compare against ESS 10-value scores. Note the mismatch for `ipmodst`
-  above.
+  validation rolls our 19 up to 10 and compares against ESS 10-value scores. The exact
+  rule follows.
+
+### Validation roll-up
+
+- **Survey side: unchanged.** ESS 10-value scores are computed with the official ESS
+  scoring key, which assigns each item to one basic value as in [D1] Table 6. So
+  `ipmodst` + `imptrad` = tradition, and `ipfrule` + `ipbhprp` = conformity.
+- **Text side, for validation only:** our 19 values roll up to the 10 so that each text
+  value lands where its ESS item lands:
+  - `humility` → **tradition**, matching the ESS's scoring of `ipmodst`;
+  - `face` → security (it has no ESS item, so this choice cannot cause a mismatch);
+  - every other sub-value → the basic value named in its id (e.g. `power_dominance` →
+    power, `universalism_nature` → universalism). Hedonism, stimulation, achievement and
+    tradition map to themselves.
+- **Blog charts and other roll-ups** keep humility → conformity, following Schwartz et al.
+  ([D2] p. 675), which is also why `humility` has `parent: conservation` in the registry.
+  Both tradition and conformity belong to conservation, so the 4-group view is the same
+  under either rule.
+- **This is a mapping choice made in the validation code (Task 8), not a change to the
+  framework.** `schwartz19.yaml` is not changed by it. Validation charts and posts should
+  state which roll-up they use.
 
 ## 5. How the registry represents the framework
 
