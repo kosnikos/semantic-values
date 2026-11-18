@@ -2,7 +2,7 @@
 
 Archive survey for the thin-slice countries, Greece (GR) and the United Kingdom (GB),
 and for France (FR), Belgium (BE), Luxembourg (LU) and the Netherlands (NL), and
-Germany (DE), Austria (AT) and Switzerland (CH), all done on 2026-11-18. For each candidate we read the landing page, the terms of use or
+Germany (DE), Austria (AT) and Switzerland (CH), and Italy (IT), Spain (ES) and Portugal (PT), all done on 2026-11-18. For each candidate we read the landing page, the terms of use or
 API terms, and robots.txt. Where it helped, we also opened one or two sample article
 pages to check the paywall flag (`isAccessibleForFree` in the page metadata) or a date
 range. We read only documentation, terms and sample pages. We did not scrape, download
@@ -555,4 +555,186 @@ Lausanne (free); 2005–now: Swissdox (academic fee), NZZ/Le Temps (paywall).
 - **Webarchiv Schweiz**: selective, "on the premises of the National Library and those
   of its partner institutions" only, and reproduction is not permitted (NL FAQ). No entry.
 - **Tages-Anzeiger** (tagesanzeiger.ch): redirect loop; robots.txt disallows CCBot.
+- **Forums / comments** (out of v0 scope): not surveyed.
+
+## IT
+
+Scope note for IT, ES and PT: as for DE/AT/CH, newspapers are the core v0 source and
+forums/comments were not surveyed. The type of restriction is marked (a) bans any
+TDM/automated analysis, (b) bans any reuse without licence, (c) bans only AI training,
+(d) only blocks AI crawlers in robots.txt.
+
+**2005–now.** *What exists:* Corriere della Sera, la Repubblica and La Stampa, each with
+opinion and letters sections ("Lettere al direttore", "Lo dico al Corriere", Repubblica
+"lettere" and "Commenti"). *What is free:* little that we could confirm. **Corriere**
+(`it-corriere-archive`) opinion was 5/5 paywalled, and its archive is account-based.
+**la Repubblica** (`it-repubblica-archive`) is the interesting case. Its 1984–now archive
+pages on ricerca.repubblica.it served text without login for 1995 and 2005 samples, and a
+2016 page also loaded without login. But the search results for 2005–2021 point to the paid
+"edicola", so the free cut-off is unknown. All three GEDI/RCS sites block AI crawlers in
+robots.txt (type d: GPTBot, CCBot, anthropic-ai, Google-Extended; Corriere adds
+"__usage_ai-training"). We did not find GEDI's or RCS's written terms, so we do not know
+whether they also have type (a) or (b) clauses. **CC-NEWS** (`it-common-crawl-news`)
+is thin for Italy because all three big dailies disallow CCBot.
+
+**1940–2005.** **Archivio storico La Stampa** (`it-archivio-lastampa`) is the standout. It
+is free, with no login, and holds the full run 1867–2005 plus Stampa Sera 1931–1992 (1.76M
+pages). Articles are segmented from 1910, and article text files are downloadable from 1910
+on. The site posts no reuse, TDM or AI terms at all; OCR is admittedly uneven. **l'Unità
+1946–2014** (`it-unita-archive`) is free online with full-text search. It is the PCI/PDS
+party paper, the site looks like a volunteer mirror, and its rights status is unclear.
+**Internet Culturale** (`it-internet-culturale-emeroteca`) is CC BY-NC-SA, but it has
+almost nothing after 1945 (a handful of Liberation-era titles to 1951).
+
+**Biggest gap:** a licensable 2005–now source. La Stampa's free archive stops in 2005, and
+the free share of Repubblica after 2005 is unknown. There is also no free centre or right
+counterweight to l'Unità for 1946–1990 apart from La Stampa.
+
+**Best for opinion / letters genres:** 2005–now: Repubblica archive pages (free share
+unknown; type d block); historical: La Stampa 1945–2005 (free, terms silent), l'Unità
+1946–2014 (party paper).
+
+### Recommended sources (IT)
+
+1. `it-archivio-lastampa`: 1945–2005, free, no stated terms. Ask the archive (Contatti
+   page) and La Stampa/GEDI about research tagging and per-text URLs.
+2. `it-repubblica-archive`: measure the free cut-off in a browser, then ask GEDI for a
+   research licence covering 1984–now (letters and Commenti).
+3. `it-unita-archive`: 1946–2014 left voice, only after the rights holder is identified.
+4. `it-corriere-archive`: paywalled. Ask RCS only if 1 and 2 fail.
+
+### Dead ends and leads (IT)
+
+- **GEDI / RCS terms pages**: three GEDI URL guesses returned 404. archivio.corriere.it
+  is refused by WebFetch, and its pricing and FAQ were not reached.
+- **Corpus la Repubblica** (SSLMIT/dipintra, 1985–2000 research corpus): the query
+  interface returned 401 (login), and the info page did not resolve. A lead for KWIC-style
+  research access, like DWDS.
+- **Italian national web archive**: no public archive found. Search results mention a
+  single BNCF harvest of .it in 2006 and an Archive-It collection, but we could not
+  verify either. No entry.
+- **il manifesto** (ilmanifesto.it): publishes a TDMRep `tdm-reservation: 1` file pointing
+  to a "tdm-disclaimer" page. Not surveyed further.
+- **Avvenire, Il Fatto Quotidiano, Il Post**: not surveyed. ilpost.it returned 403.
+- **Forums / comments** (out of v0 scope): not surveyed.
+
+## ES
+
+**2005–now.** *What exists:* El País, ABC, La Vanguardia, El Mundo and elDiario.es, all
+with opinion and letters ("Cartas al director") sections. *What is free:* almost nothing
+that we can use. The legacy dailies state explicit art. 67.3 RDL 24/2021 / Art. 4(3) DSM
+reservations of type (a)+(b). **El País** (`es-elpais-website`): 4/4 sampled archive and
+opinion pages were not free. Its terms reserve TDM "así como frente a cualquier
+utilización de sus contenidos por tecnologías de inteligencia artificial, sea cual sea su
+naturaleza y finalidad". **ABC** (`es-abc-hemeroteca`) forbids use "para fines de minería
+de datos o textos ni para cualquier otro fin". **La Vanguardia**
+(`es-lavanguardia-hemeroteca`) explicitly extends its ban to inference and RAG. Under the
+owner's source-use rule all three are excluded. The one possible exception is
+**elDiario.es** (`es-eldiario-website`, 2012–now, member-funded). It says readers "No
+pagan para leer la información", and its robots.txt blocks no AI crawler. But 5/5
+sampled opinion pages carried `isAccessibleForFree: false`, and its legal page did not
+render, so it stays partial_paywall/unknown until checked in a browser.
+
+**1940–2005.** *What exists:* a lot. The **BNE Hemeroteca Digital**
+(`es-bne-hemeroteca-digital`) holds full runs of ABC, El País, Diario 16 and La Nueva
+España, Cuadernos para el diálogo and Cambio 16, the 1999–2009 current press, and about
+200 dailies deposited since 2014. *What is free:* none of that. In BNE's own words, "solo
+pueden consultarse desde las propias instalaciones de la BNE" (since 2021 also in
+regional conservation centres). The open part stops in the 1930s. **ABC** 1891–now and
+**La Vanguardia** 1881–now have page archives with free viewing (ABC: previews and
+watermarked weekly PDFs; La Vanguardia: free per a dated XTEC guide, captcha-blocked
+for us). Both terms forbid TDM. **BVPH** (`es-bvph-prensa-historica`) is free, mostly CC
+BY 4.0, with an OAI-PMH endpoint and issues dated up to 2026. Its post-1940 share is
+unmeasured and probably mostly local titles.
+
+**Biggest gap:** everything after 1939 that we could legally tag. The Franco-era and
+Transition press (1940–1982) is either in BNE reading rooms or in publisher archives
+with type (a)/(b) reservations. 2005–now has no confirmed free, unreserved opinion source.
+
+**Best for opinion / letters genres:** 2005–now: elDiario.es (to verify); historical:
+ABC and La Vanguardia page archives (licence needed), BNE on-site (agreement needed).
+
+### Recommended sources (ES)
+
+1. `es-bvph-prensa-historica`: list post-1940 titles with CC BY 4.0 records (OAI-PMH
+   metadata), since it is the only licence-clean route.
+2. `es-eldiario-website`: check the paywall and aviso legal in a browser. If it is open
+   and unreserved, it is the 2012–now opinion source.
+3. `es-bne-hemeroteca-digital`: ask BNE about an on-site research agreement (the
+   1940–2009 national press is all there).
+4. `es-abc-hemeroteca` / `es-lavanguardia-hemeroteca`: licence requests only
+   (profesionales.archivo@abc.es; La Vanguardia via aviso legal contact).
+
+### Dead ends and leads (ES)
+
+- **hemerotecadigital.bne.es**: bot-check 403 (curl and WebFetch). robots.txt allows only
+  Googlebot and bingbot. We used BNE's PDF guide instead.
+- **hemeroteca.lavanguardia.com**: AWS WAF captcha. We did not try to get around it.
+- **ARCA** (arca.bnc.cat, Catalan historical magazines): connection refused or timed out 3 times.
+- **Galiciana** (Biblioteca de Galicia): DNS failure and timeouts.
+- **Liburuklik** (Basque digital library): TLS protocol error and 503.
+- **Archivo de la Web Española** (BNE): bulk .es crawls since 2009, but per search
+  snippets and the BNE collection policy PDF, consultation is in-room only, by URL. No
+  entry.
+- **El Mundo, 20minutos, Público.es**: not surveyed.
+- **MyNews Hemeroteca**: a commercial press database licensed by university libraries
+  (seen in search results only). A research-access lead.
+- **Forums / comments** (out of v0 scope): not surveyed.
+
+## PT
+
+**2005–now.** *What exists:* Público, Diário de Notícias, Expresso and Observador, with
+opinion columns and letters ("Cartas ao director", "Cartas dos Leitores"). *What is
+free:* more than elsewhere in southern Europe. **Público** (`pt-publico-website`) had
+5 of 8 sampled opinion pages free, including the daily "Cartas ao director". Its terms
+carry generic all-rights-reserved wording with no TDM/AI clause, and robots.txt blocks
+AI crawlers (type d only). **Diário de Notícias** (`pt-dn-website`) has a letters
+section, is partly subscriber-only, and blocks no AI crawler. Its terms bar copying or
+commercial use "sem autorização prévia" (ambiguous wording, possibly type b).
+**Arquivo.pt** (`pt-arquivo-pt`) is the key infrastructure. It is a national web archive
+with daily crawls of selected publications, a public JSON full-text search API with
+extracted text, a one-year embargo, and terms that make access free "to support for work
+of an educational, scientific or research nature" with "Use for commercial purposes ...
+strictly forbidden". A test query found ~13,750 publico.pt "cartas ao director" captures
+for 2012–2015.
+
+**1940–2005.** **Casa Comum** (`pt-casa-comum-diario-de-lisboa`) has the near-complete
+**Diário de Lisboa 1921–1990**, free to browse: 200–1,100 issues per year, the
+"jornal dos intelectuais" of the "oposição possível". Using its images "requer
+autorização prévia", and OCR availability is unknown. Pre-1974 issues are censored
+press. **CETEMPúblico** (`pt-cetempublico`) covers Público 1991–1998: ~180M words, free
+with registration for research, with an `opi` (opinion) section tag per extract. But
+articles are cut into shuffled ~2-paragraph extracts that, by protocol, cannot be
+reconstituted, so it allows paragraph-level analysis by half-year without per-text URLs.
+
+**Biggest gap:** **1990–2005 full articles** (CETEMPúblico gives extracts only; Arquivo.pt
+captures start ~2000 and are sparse early) and any free daily other than Diário de Lisboa
+for 1940–1990.
+
+**Best for opinion / letters genres:** 2005–now: Público opinion and "Cartas ao director"
+(free share high, type d only), via the site or Arquivo.pt; 1991–1998: CETEMPúblico `opi`
+extracts; 1940–1990: Diário de Lisboa (permission needed).
+
+### Recommended sources (PT)
+
+1. `pt-arquivo-pt`: the bulk route for 2005–now Portuguese press (API, research terms).
+   Ask FCT|FCCN whether LLM tagging and publishing per-text Arquivo.pt URLs plus tags fits
+   "educational, scientific or research" use and the "not forwarded" clause.
+2. `pt-publico-website`: best single title (letters plus free opinion). Ask Público about
+   research tagging, since its terms defer to "condições de uso livre permitidas por lei".
+3. `pt-cetempublico`: 1991–1998 opinion at paragraph level, immediately usable for
+   research.
+4. `pt-casa-comum-diario-de-lisboa`: 1940–1990. Ask the Fundação about OCR and research
+   use.
+
+### Dead ends and leads (PT)
+
+- **Hemeroteca Digital de Lisboa** (hemerotecadigital.cm-lisboa.pt): Cloudflare challenge
+  (403 to curl and WebFetch). robots.txt carries `Content-Signal: search=yes,
+  ai-train=no, use=reference` and blocks CCBot, ClaudeBot and GPTBot. Search snippets say
+  it targets public-domain periodicals only, so it is likely nothing post-1940. No entry.
+- **Expresso** (expresso.pt): opinion page 403 to curl, and WebFetch refused. robots.txt
+  disallows CCBot, ClaudeBot and GPTBot. Paywall status unknown. No entry.
+- **Diário de Notícias historical archive**: no online archive found.
+- **Observador, Correio da Manhã**: not surveyed.
 - **Forums / comments** (out of v0 scope): not surveyed.

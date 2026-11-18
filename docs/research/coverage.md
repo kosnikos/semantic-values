@@ -13,10 +13,10 @@ Cells show the number of usable (free or free-registration) sources per period.
 | DE | 4 | 4 | 6 | 5 |
 | AT | 2 | 2 | 1 | 3 |
 | CH | 2 | 2 | 2 | 2 |
-| IT | 0 | 0 | 0 | 0 |
+| IT | 3 | 2 | 2 | 3 |
 | GR | 1 | 1 | 4 | 9 |
-| ES | 0 | 0 | 0 | 0 |
-| PT | 0 | 0 | 0 | 0 |
+| ES | 1 | 1 | 1 | 2 |
+| PT | 1 | 1 | 3 | 2 |
 | GB | 0 | 0 | 4 | 8 |
 
 ## Open questions
@@ -89,3 +89,19 @@ Cells show the number of usable (free or free-registration) sources per period.
 - ch-nzz-website: per_text_publish_allowed
 - ch-swissdox-liri: llm_api_allowed
 - ch-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- it-archivio-lastampa: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- it-unita-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- it-repubblica-archive: llm_api_allowed, per_text_publish_allowed
+- it-corriere-archive: llm_api_allowed, per_text_publish_allowed
+- it-internet-culturale-emeroteca: llm_api_allowed, per_text_publish_allowed
+- it-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-bne-hemeroteca-digital: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-bvph-prensa-historica: llm_api_allowed, per_text_publish_allowed
+- es-eldiario-website: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- pt-arquivo-pt: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- pt-publico-website: llm_api_allowed, per_text_publish_allowed
+- pt-dn-website: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- pt-cetempublico: llm_api_allowed
+- pt-casa-comum-diario-de-lisboa: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- pt-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out

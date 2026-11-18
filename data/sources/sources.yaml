@@ -2467,3 +2467,745 @@
   notes: >-
     Same dataset as gb-common-crawl-news. nzz.ch, letemps.ch and tagesanzeiger.ch all
     disallow CCBot (NZZ except promoted content). URL discovery only.
+
+# ---------------------------------------------------------------- IT
+
+- id: it-archivio-lastampa
+  name: Archivio storico La Stampa (archiviolastampa.it, incl. Stampa Sera)
+  country: IT
+  source_type: newspaper_archive
+  url: http://www.archiviolastampa.it/
+  access: free
+  year_start: 1867
+  year_end: 2005
+  languages: [it]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: unknown (no terms page on the site; footer links only the Regione Piemonte "Note legali e privacy")
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: ocr_poor
+  volume_estimate: "1,761,000 pages; La Stampa 47,243 daily editions (1867-2005), Stampa Sera 18,314 editions (1931-1992) (FAQ)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - http://www.archiviolastampa.it/
+    - http://www.archiviolastampa.it/component/option,com_lastampa/task,faq/Itemid,4/
+    - http://www.archiviolastampa.it/component/option,com_lastampa/task,contatti/Itemid,6/
+    - http://www.archiviolastampa.it/robots.txt
+    - http://www.archiviolastampa.it/component/option,com_lastampa/task,search/mod,libera/Itemid,3,/action,viewer/page,1/articleid,0140_01_1971_0291_0001_4903200/
+  notes: >-
+    Turin daily, full run 1867-2005 scanned from microfilm. "free" is observation-based: the
+    home page, the search form and a sampled 1971 article viewer page loaded over plain HTTP
+    with no login, subscription or payment wording (the HTTPS host serves a certificate for a
+    different domain). FAQ: articles are segmented "a partire dal 1910"; article text files
+    can be downloaded except 1867-1909 "per la scarsa qualità dei testi"; page PDFs need a
+    captcha. OCR quality is admitted to be uneven ("Una percentuale di errore ... è
+    tollerata"; brief items appear as untitled "Notizia"), so ocr_poor. No reuse, TDM or AI
+    terms were found on the site; the footer links only the Regione Piemonte legal notice.
+    robots.txt allows all agents except a few CMS paths and, oddly, disallows googlebot
+    entirely. The 2005-now La Stampa (lastampa.it, GEDI) is a separate site whose robots.txt
+    disallows GPTBot, CCBot, anthropic-ai and Google-Extended. Ask La Stampa / the archive
+    (via the Contatti page) about research tagging. Best Italian route for 1940-2005.
+
+- id: it-unita-archive
+  name: Archivio storico de l'Unità (archivio.unita.news)
+  country: IT
+  source_type: newspaper_archive
+  url: https://archivio.unita.news/
+  access: free
+  year_start: 1946
+  year_end: 2014
+  languages: [it]
+  genres: [news, opinion, letters]
+  access_method: manual
+  licence: unknown (no terms on the site; rights status of the mirror not stated)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://archivio.unita.news/
+    - https://archivio.unita.news/robots.txt
+    - https://archivio.unita.news/assets/main/2011/10/02/page_027.pdf
+    - https://www.ilfattoquotidiano.it/2024/02/12/i-centanni-de-lunita-un-patrimonio-scomparso-almeno-sul-fronte-storico-ce-una-buona-notizia/7437103/
+  notes: >-
+    Landing page: "Archivio storico digitale (1946-2014)", with full-text search and
+    browse-by-date. Contact "archiviounita@insiberia.net" and a "Contesto" link to
+    archiviounita.noblogs.org, which did not resolve. The operator looks like a volunteer
+    mirror, not the publisher; who holds the rights and on what basis the pages are online
+    is not stated. "free" is observation-based: the landing page and a sampled page PDF
+    (2011) returned 200 with no login. robots.txt only lists individual PDFs to hide.
+    l'Unità was the PCI party paper (to 1991), later PDS/DS-aligned, so it carries one
+    political camp's voice. The physical archive was in court-ordered custody at the
+    Archivio di Stato di Milano in 2024 (il Fatto Quotidiano); that article does not mention
+    the online mirror. Treat reuse as unsettled until the rights holder is identified.
+
+- id: it-repubblica-archive
+  name: la Repubblica archive (ricerca.repubblica.it, from 1984)
+  country: IT
+  source_type: newspaper_archive
+  url: https://ricerca.repubblica.it/ricerca/repubblica
+  access: partial_paywall
+  year_start: 1984
+  year_end: null
+  languages: [it]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: unknown (GEDI terms page not found); robots.txt disallows AI crawlers
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://ricerca.repubblica.it/ricerca/repubblica
+    - https://ricerca.repubblica.it/robots.txt
+    - https://www.repubblica.it/robots.txt
+    - https://ricerca.repubblica.it/repubblica/archivio/repubblica/1995/03/29/mani-pulite-entra-in-sacrestia-nel-mirino.html
+    - https://ricerca.repubblica.it/repubblica/archivio/repubblica/2005/04/02/cuffaro-niente-concorso-esterno-il-giudice-ha.html
+    - https://ricerca.repubblica.it/repubblica/archivio/repubblica/2016/10/11/corruzione-da-strada-chiesti-due-anni-per-il-tecnico-comunaleMilano11.html
+  notes: >-
+    The search form offers "Repubblica dal 1984" with year filters 1984-2026. Two routes
+    behave differently. (1) Archive article pages
+    (ricerca.repubblica.it/repubblica/archivio/repubblica/YYYY/MM/DD/...) returned the
+    article text in raw HTML without login for samples from 1995 and 2005; the 2016 sample
+    also loaded without login, but we did not check that its full text was present
+    (observation, 3 pages; no text kept). (2) Search results for 2005-2021 link to
+    quotidiano.repubblica.it/edicola (the paid digital edition); a sampled 2021 "le
+    lettere" result redirected to the subscription shop. So the free share and its cut-off
+    year are unknown, hence partial_paywall. robots.txt (both hosts) has "User-agent:
+    GPTBot / Disallow: /" and the same for Google-Extended, CCBot, anthropic-ai, cohere-ai,
+    PerplexityBot and others, with no TDM wording. That is an AI-crawler block only (type
+    d), recorded as tdm_opt_out "yes" per house convention. GEDI terms were not found (3
+    URL guesses 404; the repubblica.it footer shows only a JS privacy link). Letters
+    ("lettere") and opinion ("Commenti") exist as sections. Ask GEDI about research access
+    to the 1984-now archive.
+
+- id: it-corriere-archive
+  name: Corriere della Sera archive and website (archivio.corriere.it, corriere.it)
+  country: IT
+  source_type: newspaper_archive
+  url: https://archivio.corriere.it/Archivio/interface/landing.html
+  access: paywall
+  year_start: 1876
+  year_end: null
+  languages: [it]
+  genres: [news, opinion, letters, columns]
+  access_method: manual
+  licence: unknown (terms not read); robots.txt blocks AI crawlers and "__usage_ai-training"
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://archivio.corriere.it/Archivio/interface/landing.html
+    - https://www.corriere.it/robots.txt
+    - https://archiviostorico.corriere.it/robots.txt
+    - https://www.corriere.it/opinioni/
+    - https://www.corriere.it/opinioni/26_novembre_07/democrazia-e-governi-elitari-0831e0dd-3624-4d54-927a-935e0363bxlk.shtml
+  notes: >-
+    archiviostorico.corriere.it redirects to archivio.corriere.it, an account-based archive
+    (login, "CODICE ATTIVAZIONE", "Abbonamento" in the error-report form; the page warns
+    "hai superato il limite massimo di articoli da visualizzare"). The pricing page and FAQ
+    were not reached (WebFetch refused the host). year_start 1876 is the paper's first issue
+    and was seen only in search snippets, not on a visited page. On corriere.it, 5 of 5
+    sampled /opinioni/ pieces (Nov 2026) were isAccessibleForFree "False". The site has
+    "Lettere al direttore" and "Lo dico al Corriere" letters sections. robots.txt disallows
+    CCBot, GPTBot, ClaudeBot, Claude-User, Claude-SearchBot, Applebot-Extended,
+    Arquivo-web-crawler and many others, plus a "User-Agent: __usage_ai-training /
+    Disallow: /" line. That is a crawler block (type d); no terms text was read. Paywalled;
+    recorded for completeness.
+
+- id: it-internet-culturale-emeroteca
+  name: Internet Culturale - Emeroteca digitale italiana (ICCU)
+  country: IT
+  source_type: national_library
+  url: https://www.internetculturale.it/it/913/emeroteca-digitale-italiana
+  access: free
+  year_start: 1848
+  year_end: 1951
+  languages: [it]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: CC BY-NC-SA 3.0 IT for digital content; CC0 for metadata
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "170 newspaper titles in the 'Newspaper' filter; a handful run past 1940 (1944-1951)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.internetculturale.it/
+    - https://www.internetculturale.it/it/913/emeroteca-digitale-italiana/periodic/?filterPeriodic=3
+    - https://www.internetculturale.it/it/15/termini-d-uso
+    - https://www.internetculturale.it/robots.txt
+  notes: >-
+    National aggregator run by ICCU. The newspaper filter lists 170 titles. Scanning all 11
+    result pages, the only post-1938 year ranges were 1944-1945, 1944-1946 (2), 1945 (2),
+    1945-1946, 1945-1947 and 1949-1951 (Liberation-era papers), so post-war coverage is
+    negligible. Terms: digital content under "licenza Creative Commons 3.0 ITA"
+    attribution, non-commercial, share-alike; reuse explicitly includes "copiare,
+    trasmettere, pubblicare, rendere disponibile, riprodurre, distribuire, estrarre,
+    riutilizzare"; "Per l'uso commerciale è fatto obbligo di rivolgersi ai proprietari dei
+    contenuti digitali." No TDM or AI clause; tdm_opt_out "no" because the licence permits
+    extraction. robots.txt blocks GPTBot, PerplexityBot, Meta-ExternalAgent, python-requests
+    and others (type d). Useful only for 1944-1951. CC BY-NC-SA would allow publishing tags
+    with attribution if the blog stays non-commercial.
+
+- id: it-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .it domains
+  country: IT
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [it]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.it share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.corriere.it/robots.txt
+    - https://www.repubblica.it/robots.txt
+    - https://www.lastampa.it/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. corriere.it, repubblica.it and lastampa.it all
+    disallow CCBot, so the three largest Italian dailies should be missing or thin.
+    URL discovery only.
+
+# ---------------------------------------------------------------- ES
+
+- id: es-bne-hemeroteca-digital
+  name: Hemeroteca Digital, Biblioteca Nacional de España (BNE)
+  country: ES
+  source_type: national_library
+  url: https://hemerotecadigital.bne.es/hd/es/inicio
+  access: partial_paywall
+  year_start: 1999
+  year_end: null
+  languages: [es, ca, gl, eu]
+  genres: [news, opinion, letters, other]
+  access_method: manual
+  licence: public-domain titles CC BY 4.0 or equivalent (per search snippets); in-copyright press reading-room only
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "about 200 daily titles deposited as PDF since 2014, plus 1999-2009 current press and full runs of ABC, El País, Diario 16 and others (guide, 2022)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://hemerotecadigital.bne.es/robots.txt
+    - https://hemerotecadigital.bne.es/hd/es/inicio
+    - https://www.bne.es/sites/default/files/repositorio-archivos/guia_uso_hd.pdf
+  notes: >-
+    Two collections. The open part is public-domain press "desde el siglo XVIII hasta los
+    años 30" (guide), so it adds nothing for 1940 onward. The post-1940 holdings are
+    in-copyright and reading-room only. Guide (25/08/2022), verbatim: "la mayor parte de la
+    colección consiste en los ejemplares de prensa actual que se digitalizaron entre 1999 y
+    2009, y los ejemplares depositados por los editores desde 2014. Estos fondos se han
+    ampliado con las colecciones completas ... de periódicos como ABC, El País, El Faro de
+    Vigo, La Nueva España, Diario 16, etc., así como ... Hola, Interviú, La Codorniz,
+    Cuadernos para el diálogo, Cambio 16 ... Al tener derechos de propiedad intelectual
+    vigentes estos fondos solo pueden consultarse desde las propias instalaciones de la
+    BNE. En el caso de la prensa actual, desde 2021 también es posible hacerlo desde los
+    centros de conservación de las Comunidades Autónomas." The 2014 deposit deal with
+    AEDE/AMI brings "alrededor de 200 títulos de prensa diaria". Recorded as
+    partial_paywall: post-1940 material is on-site only (year_start 1999 marks the
+    current-press collection; the purchased runs go back further). The site returned a
+    bot-check 403 to curl and WebFetch; robots.txt is "User-agent: * / Disallow: /" with
+    only Googlebot and bingbot allowed. Search snippets (not verified: bnelab.bne.es also
+    returned 403) say BNE Lab offers plain-text downloads of the public-domain titles and
+    that they are CC BY 4.0. A huge post-1940 holding if a
+    research agreement for on-site analysis could be made; ask BNE.
+
+- id: es-bvph-prensa-historica
+  name: Biblioteca Virtual de Prensa Histórica (BVPH, Ministerio de Cultura)
+  country: ES
+  source_type: national_library
+  url: https://prensahistorica.mcu.es/es/inicio/inicio.do
+  access: free
+  year_start: 1730
+  year_end: null
+  languages: [es, ca, gl, eu]
+  genres: [news, opinion, other]
+  access_method: api
+  licence: mostly CC BY 4.0 (per-record licence in the bibliographic record); some works under other licences or in copyright
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "4,523 titles, 2,101,057 issues, 18,433,927 images (17.6M with OCR) from 133 libraries; issues dated 1730-2026 (statistics page)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://prensahistorica.mcu.es/es/inicio/inicio.do
+    - https://prensahistorica.mcu.es/es/consulta/estadistica.do
+    - https://prensahistorica.mcu.es/es/contenido/aviso-legal.do
+    - https://prensahistorica.mcu.es/i18n/oai/oai.cmd?verb=Identify
+  notes: >-
+    The Ministry of Culture's cooperative press portal, fed by regional and local
+    libraries. Home page: "más de 17 millones de páginas ... en acceso abierto y gratuito".
+    The statistics page gives the oldest issue as 1730 and the newest as 2026, but the
+    post-1940 share was not measured. Featured titles are mostly pre-1940, so it is
+    probably small and mostly local or official titles. Aviso legal, verbatim: "La mayoría
+    de las obras de la BVPH se ofrecen en este portal bajo licencia CC-BY 4.0 ... lo que
+    significa que los usuarios pueden descargarlas y utilizarlas como deseen (incluso con
+    fines comerciales) siempre que mencionen a la BVPH como fuente"; "algunas obras están
+    sujetas a derechos o se distribuyen bajo otras licencias". Otherwise only private use
+    of intact copies is allowed "salvo que las licencias asociadas ... indiquen otra cosa".
+    So check the licence per title, especially for post-1940 issues. No TDM or AI clause.
+    OAI-PMH endpoint answers Identify (metadata harvesting). robots.txt returns 404.
+    Best Spanish candidate for licensable 1940-1975 local press, if post-war titles turn
+    out to be CC BY. Check the post-1940 title list in a browser.
+
+- id: es-abc-hemeroteca
+  name: ABC Archivo / Hemeroteca (abc.es/archivo, from 1891)
+  country: ES
+  source_type: newspaper_archive
+  url: https://www.abc.es/archivo/periodicos/
+  access: partial_paywall
+  year_start: 1891
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, letters, columns]
+  access_method: manual
+  licence: all rights reserved; Art. 4(3) DSM / art. 67.3 RDL 24/2021 TDM reservation; paid per-page licences
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.abc.es/archivo/periodicos/
+    - https://www.abc.es/archivo/faqs/
+    - https://www.abc.es/archivo/planes-precios/
+    - https://www.abc.es/archivo/aviso-legal/
+    - https://www.abc.es/contacto/condiciones.html
+    - https://www.abc.es/robots.txt
+  notes: >-
+    Full runs of ABC Madrid, ABC Sevilla, ABC Córdoba and Blanco y Negro. Browse by year
+    from 1891, with issues up to Nov 2026. Free part: page previews (JPG) and, per FAQ,
+    "Se puede descargar en PDF, con marca de agua con una frecuencia de una semana la
+    página o periódico que desees". Clean PDFs are sold (private use: 20 EUR per page, 60
+    EUR per issue). Hence partial_paywall. Whether OCR text is exposed was not checked.
+    abc.es Condiciones de uso, verbatim: "No está permitido el uso, reproducción o
+    extracción del contenido de este Sitio Web para fines de minería de datos o textos ni
+    para cualquier otro fin, como, por ejemplo, la inteligencia artificial, sea cual sea su
+    naturaleza, y/o el entrenamiento de modelos de lenguaje (machine learning) y el
+    ofrecimiento de respuestas por parte de estos modelos. ... la Sociedad realiza una
+    reserva expresa ... para fines de minería de textos y datos ... de conformidad con lo
+    previsto en el artículo 4.3 de la Directiva (UE) 2019/790 ... así como con el artículo
+    67.3 del Real Decreto-ley 24/2021"; and "quedan expresamente prohibidas la
+    reproducción, la transformación, la distribución y la comunicación pública ... de la
+    totalidad o parte de los contenidos ... cualquiera que sea su finalidad, sin la
+    autorización expresa y por escrito de la Sociedad." This forbids any TDM (type a) and
+    any reuse without licence (type b). robots.txt "#BEGIN IA TRAINING" block disallows
+    CCBot, GPTBot, ClaudeBot, archive.org_bot, ia_archiver and others. Monarchist and
+    conservative daily, the main right-of-centre run for 1940-now. per_text_publish "no" because tagging is
+    itself TDM that the terms forbid. Usable only under a licence; ask
+    profesionales.archivo@abc.es.
+
+- id: es-lavanguardia-hemeroteca
+  name: La Vanguardia Hemeroteca (hemeroteca.lavanguardia.com, from 1881)
+  country: ES
+  source_type: newspaper_archive
+  url: https://www.lavanguardia.com/hemeroteca
+  access: partial_paywall
+  year_start: 1881
+  year_end: null
+  languages: [es, ca]
+  genres: [news, opinion, letters, columns]
+  access_method: manual
+  licence: all rights reserved; Art. 4 DSM / art. 67.3 RDL 24/2021 reservation incl. AI inference and RAG
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: unknown
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lavanguardia.com/hemeroteca
+    - https://hemeroteca.lavanguardia.com/
+    - https://www.lavanguardia.com/avisolegal.html
+    - https://www.lavanguardia.com/robots.txt
+    - https://ateneu.xtec.cat/wikiform/wikiexport/_export/pdf/cmd/bib/berd/modul_3/tema_7
+  notes: >-
+    The PDF page archive (hemeroteca.lavanguardia.com) returned an AWS WAF "Human
+    Verification" captcha (and 405 on robots.txt), so its current access could not be
+    checked. A Catalan education ministry (XTEC) course page, undated and probably years
+    old, says: "trobeu l'arxiu de totes les edicions del diari des dels seus inicis, l'any
+    1881, i les podeu consultar de manera gratuïta"; it also says full articles on the web
+    side need a subscription. Free status is therefore unverified, hence partial_paywall.
+    The www.lavanguardia.com/hemeroteca page is an editorial "Hemeroteca" column series,
+    not the archive. Aviso legal 7.2, verbatim: "No está permitido el uso, reproducción o
+    extracción del contenido de esta Web para fines de minería de datos o textos ni para
+    cualquier otro fin, como, por ejemplo, la inteligencia artificial y/o el
+    entrenamiento, ajuste o mejora de modelos de lenguaje (machine learning) ... ya sea
+    mediante el acceso a dicho contenido durante el proceso de entrenamiento o mediante el
+    acceso, consulta, recuperación o procesamiento del mismo en tiempo real ... incluyendo
+    ... RAG"; reservation under "artículo 67.3 del Real Decreto-ley 24/2021 ... y ...
+    artículo 4 de la Directiva (UE) 2019/790"; reproduction "incluyendo su acceso, copia,
+    procesamiento, resumen o reproducción ... por parte de sistemas de inteligencia
+    artificial generativa, sin la autorización previa y expresa" is prohibited. This
+    forbids any TDM (type a) and reuse without licence (type b). robots.txt disallows
+    CCBot, GPTBot, ClaudeBot, ia_archiver and others. Barcelona daily, the longest
+    continuous run in Spain. per_text_publish "no" because tagging is itself TDM that the terms forbid. Usable only
+    under a licence.
+
+- id: es-elpais-website
+  name: EL PAÍS (elpais.com) incl. hemeroteca from 1976
+  country: ES
+  source_type: newspaper_archive
+  url: https://elpais.com/hemeroteca/
+  access: paywall
+  year_start: 1976
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: all rights reserved; art. 67.3 RDL 24/2021 TDM reservation and opposition to "cualquier utilización ... por tecnologías de inteligencia artificial"
+  tdm_opt_out: "yes"
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://elpais.com/hemeroteca/
+    - https://elpais.com/hemeroteca/1980-05-04/opinion/
+    - https://elpais.com/diario/1980/05/04/espana/326239224_850215.html
+    - https://elpais.com/diario/1995/05/04/portada/799538410_850215.html
+    - https://elpais.com/diario/2008/05/04/eps/1209882411_850215.html
+    - https://elpais.com/mexico/opinion/2024-05-04/ciudad-de-mexico-la-hora-decisiva-para-morena.html
+    - https://elpais.com/info/aviso-legal/
+    - https://elpais.com/robots.txt
+  notes: >-
+    The hemeroteca has day pages with section lists (e.g. /hemeroteca/1980-05-04/opinion/),
+    linking to /diario/YYYY/MM/DD/... article pages. Sampled articles from 1980, 1995 and
+    2008, and a 2024 opinion piece, were all isAccessibleForFree false (4/4), so the
+    archive is behind the subscription wall. A metered free quota was not checked.
+    year_start 1976 was not checked on a 1976 page (the earliest sample was 1980). Aviso
+    legal, verbatim: "EDICIONES EL PAIS ... realiza una reserva expresa de las
+    reproducciones y usos de las obras y otras prestaciones accesibles desde este sitio
+    web a medios de lectura mecánica u otros medios que resulten adecuados a tal fin de
+    conformidad con el artículo 67.3 del Real Decreto - ley 24/2021 ..., así como frente a
+    cualquier utilización de sus contenidos por tecnologías de inteligencia artificial,
+    sea cual sea su naturaleza y finalidad. ... quedan expresamente prohibidas la
+    reproducción, la transformación, la distribución y la comunicación pública ... de la
+    totalidad o parte de los Contenidos cualquiera que sea su finalidad ... sin la
+    autorización de EDICIONES EL PAIS." This forbids any TDM (type a), any AI use, and
+    reuse without licence (type b). robots.txt ("Bloque bots global confirmado 20260505")
+    disallows CCBot, ClaudeBot, Claude-User, Claude-SearchBot, Arquivo-web-crawler and
+    many more. per_text_publish "no" because tagging is itself TDM that the terms forbid (as for
+    fr-lefigaro-website). Paywalled and reserved; also in BNE's on-site collection.
+
+- id: es-eldiario-website
+  name: elDiario.es (eldiario.es)
+  country: ES
+  source_type: newspaper_archive
+  url: https://www.eldiario.es/opinion/
+  access: partial_paywall
+  year_start: 2012
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: unknown (aviso legal body did not render without JavaScript)
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.eldiario.es/opinion/
+    - https://www.eldiario.es/que-es-eldiario-es/
+    - https://www.eldiario.es/aviso_legal/
+    - https://www.eldiario.es/robots.txt
+    - https://www.eldiario.es/opinion/tribuna-abierta/elecciones-hay-hablar-politica-internacional_129_13668558.html
+  notes: >-
+    Digital-only daily, "fundado en 2012", reader-member funded. Its "Qué es" page says:
+    "No pagan para leer la información, pagan para que la información se difunda." Yet 5 of
+    5 sampled "Tribuna abierta" opinion pieces (Nov 2026) carried isAccessibleForFree
+    false, and article pages contain many "paywall" strings. So the free/paid split is
+    unclear, hence partial_paywall until checked in a browser. robots.txt blocks no AI
+    crawler (only API, comment and search paths). The aviso legal page body did not render
+    without JavaScript, so TDM terms are unknown. Left-of-centre. If the opinion pages are
+    in fact readable, this is the best free 2012-now Spanish opinion candidate. Check the
+    terms in a browser and ask the publisher.
+
+- id: es-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .es domains
+  country: ES
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [es, ca, gl, eu]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.es share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://elpais.com/robots.txt
+    - https://www.abc.es/robots.txt
+    - https://www.lavanguardia.com/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. elpais.com (a .com), abc.es and lavanguardia.com
+    (a .com) all disallow CCBot. Spanish publishers also state art. 67.3 RDL 24/2021 TDM
+    reservations in their terms, so CC-NEWS is a URL-discovery layer only. Note that big
+    Spanish titles sit on .com, so a .es filter misses them.
+
+# ---------------------------------------------------------------- PT
+
+- id: pt-arquivo-pt
+  name: Arquivo.pt (Portuguese web archive, FCT|FCCN) incl. full-text search API
+  country: PT
+  source_type: web_archive
+  url: https://arquivo.pt/
+  access: free
+  year_start: 2000
+  year_end: null
+  languages: [pt]
+  genres: [news, opinion, letters, columns, other]
+  access_method: api
+  licence: "Arquivo.pt Terms and Conditions: free access for educational, scientific or research work; commercial use forbidden; cite as [source: Arquivo.pt, dd/mm/yyyy]"
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "23,048 million files, 73 million websites, 1.6 PB (Jan 2026); e.g. ~13,750 publico.pt hits for 'cartas ao director' 2012-2015 via API"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://sobre.arquivo.pt/en/
+    - https://sobre.arquivo.pt/en/legal-information/terms-and-conditions/
+    - https://sobre.arquivo.pt/en/help/crawling-and-archiving-web-content/
+    - https://sobre.arquivo.pt/en/about/press/the-portuguese-web-archive-in-numbers/
+    - https://sobre.arquivo.pt/en/about/press/history/
+    - https://github.com/arquivo/pwa-technologies/wiki/Arquivo.pt-API
+    - https://arquivo.pt/robots.txt
+    - https://arquivo.pt/textsearch?q=cartas%20ao%20director&siteSearch=publico.pt&from=2012&to=20151231235959&maxItems=5
+  notes: >-
+    The strongest PT route for 2005-now. It archives the Portuguese web 3-4 times a year and
+    "We collect daily a selected set of online publications". Content is "only available
+    for consultation after one year". Public API (arquivo.pt/textsearch, JSON) filters by
+    site (siteSearch), date range (from/to) and type, and each result's
+    linkToExtractedText returns plain text. A test call for publico.pt "cartas ao
+    director" 2012-2015 estimated 13,753 results. year_start 2000 is the earliest capture
+    we saw (a 1999 publico.pt page captured 2000-12-14). The site says files were
+    "collected from the web since the 1990's"; the official service started in 2007.
+    Terms, verbatim: "Access to the contents is available free-of-charge and is intended
+    to support for work of an educational, scientific or research nature. Use for
+    commercial purposes is strictly forbidden." "The accessed contents may not be used for
+    commercial purposes or for distribution, nor may they be modified or forwarded to
+    other sites, except if there is a legal provision to the contrary." Users "must
+    scrupulously comply with the applicable law, including ... Copyright". No TDM or AI
+    clause. The "forwarded to other sites" clause may bear on sending text to a
+    third-party LLM API (unknown). The archived publishers' own terms (e.g.
+    pt-publico-website) still apply to the texts. robots.txt asks for a 5-second crawl
+    delay and disallows /wayback, /services, /cdxj and similar paths; /textsearch is not
+    listed. Some publishers (elpais.com,
+    corriere.it) disallow Arquivo-web-crawler, but publico.pt, dn.pt and expresso.pt do
+    not. Recommended: research use fits the stated purpose; ask FCT|FCCN
+    (secretaria@fccn.pt) about LLM tagging and per-text URL publication.
+
+- id: pt-publico-website
+  name: PÚBLICO (publico.pt) incl. opinion and "Cartas ao director"
+  country: PT
+  source_type: newspaper_archive
+  url: https://www.publico.pt/opiniao
+  access: partial_paywall
+  year_start: 2009
+  year_end: null
+  languages: [pt]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: all rights reserved; no use "fora das condições de uso livre permitidas por lei" without written consent
+  tdm_opt_out: "yes"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.publico.pt/opiniao
+    - https://www.publico.pt/nos/termos-e-condicoes
+    - https://www.publico.pt/robots.txt
+    - https://www.publico.pt/2026/11/18/opiniao/opiniao/cartas-director-2195254
+    - https://www.publico.pt/2026/11/18/opiniao/opiniao/sns-precisa-solucoes-nao-preconceitos-2195133
+    - https://www.publico.pt/2009/12/26/jornal/cartas-ao-director-18465235
+    - https://www.publico.pt/2012/02/19/politica/noticia/ps-reabre-polemica-de-olivenca-por-causa-da-guerra-das-laranjas-1534448
+    - https://www.linguateca.pt/cetempublico/informacoes.html
+  notes: >-
+    Lisbon national daily, "fundado em 1991" (per the CETEMPúblico page). Of 8 sampled opinion pieces from
+    Nov 2026, 5 were isAccessibleForFree true, including the daily "Cartas ao director"
+    (letters) page, and 3 were false. A 2012 news article was true; a 2009 letters page
+    loaded with no flag. year_start 2009 is the oldest page sampled, not the archive
+    start. Terms, verbatim: "Todos os conteúdos são protegidos por Direitos de Autor ...
+    não podendo ser utilizados fora das condições de uso livre permitidas por lei, sem o
+    consentimento expresso e escrito do Público"; "Alguns conteúdos do site e das
+    aplicações do Público são pagos." This is generic all-rights-reserved wording with no
+    TDM or AI clause (its effect on TDM depends on the statutory exception; not type a
+    explicitly). robots.txt disallows CCBot, ClaudeBot, GPTBot and other AI crawlers
+    (type d), hence tdm_opt_out "yes" per convention. Letters plus free opinion make this
+    the best PT 2005-now newspaper source. Also reachable through pt-arquivo-pt. Its 1991-1998
+    text is in pt-cetempublico.
+
+- id: pt-dn-website
+  name: Diário de Notícias (dn.pt, Global Media Group)
+  country: PT
+  source_type: newspaper_archive
+  url: https://www.dn.pt/opiniao
+  access: partial_paywall
+  year_start: 2026
+  year_end: null
+  languages: [pt]
+  genres: [news, opinion, letters, columns]
+  access_method: scrape
+  licence: GMG terms; no copying, modification, distribution or commercial use without prior authorisation
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dn.pt/opiniao
+    - https://www.dn.pt/termos-de-utilizacao
+    - https://www.dn.pt/robots.txt
+  notes: >-
+    Lisbon daily. The site menu has "Opinião", "Colunistas" and "Cartas dos
+    Leitores" (letters). Terms of the Global Media Group (GMG), verbatim: "Ao subscrever
+    uma assinatura digital o utilizador adquire acesso a todos os conteúdos digitais de
+    sites, incluindo conteúdos exclusivos", so part of the content is subscriber-only,
+    hence partial_paywall. Also: "o utilizador não pode copiar, modificar, distribuir ou
+    utilizar o conteúdo para fins comerciais sem autorização prévia". The sentence is
+    ambiguous between "copy ... without authorisation" and "use for commercial purposes";
+    there is no TDM or AI clause. robots.txt is minimal (sitemaps, "Allow: /") and blocks
+    no AI crawler. We could not extract article URLs from the JS-rendered opinion page, so
+    no paywall flags were sampled; year_start is the date of the visit only. A historical
+    DN archive (pre-2000s) was not found online. Also reachable through pt-arquivo-pt.
+
+- id: pt-cetempublico
+  name: CETEMPúblico corpus (Linguateca; PÚBLICO extracts 1991-1998)
+  country: PT
+  source_type: other
+  url: https://www.linguateca.pt/cetempublico/
+  access: free_registration
+  year_start: 1991
+  year_end: 1998
+  languages: [pt]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: research and technological development use; commercialisation forbidden; cite PÚBLICO; articles cannot be reconstituted
+  tdm_opt_out: "no"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "no"
+  text_quality: born_digital
+  volume_estimate: "about 180-190 million words; 1,567,625 extracts (v1.0) from about 2,600 editions"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.linguateca.pt/cetempublico/index_info.html
+    - https://www.linguateca.pt/cetempublico/informacoes.html
+  notes: >-
+    Built under a 2000 protocol between the Portuguese Ministry of Science and PÚBLICO.
+    Download after a registration form, or online query via AC/DC. Terms, verbatim: "pode
+    ser utilizado para fins de investigação e desenvolvimento tecnológico, apenas sendo
+    vedada a sua comercialização"; "O Público deverá ser sempre referido como fonte".
+    Key limitation, verbatim: "O protocolo ... obrigou-nos a retalhar os artigos em
+    extractos de modo a ser impossível reconstituir os artigos originais." Extracts are
+    "normalmente dois parágrafos", shuffled, but each carries section and semester tags:
+    "opi (opinião)" is one section value, and semesters run 91a to 98b. So opinion
+    paragraphs can be selected by half-year, but not whole articles or per-text URLs
+    (per_text_publish "no": the protocol bars reconstitution, and extracts have no URLs).
+    Automated processing is the stated purpose (tdm_opt_out "no"). The fastest licensed
+    route for PT 1991-1998 opinion at paragraph level. Sending extracts to a commercial
+    LLM API is not addressed.
+
+- id: pt-casa-comum-diario-de-lisboa
+  name: Casa Comum - Diário de Lisboa 1921-1990 (Fundação Mário Soares e Maria Barroso)
+  country: PT
+  source_type: newspaper_archive
+  url: https://casacomum.org/arquivos?set=e_529
+  access: free
+  year_start: 1921
+  year_end: 1990
+  languages: [pt]
+  genres: [news, opinion, other]
+  access_method: manual
+  licence: use of images requires prior authorisation; rights holders' permission is the requester's responsibility
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: unknown
+  volume_estimate: "Diário de Lisboa: 30,086 documents (issues), e.g. 388 in 1940, 518 in 1960, 851 in 1970, 230 in 1990; Sempre Fixe 1926-1959: 1,741"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://casacomum.org/arquivos
+    - https://casacomum.org/arquivos?set=e_529
+    - https://casacomum.org/sobre
+  notes: >-
+    The fonds "Ruella Ramos (Diário de Lisboa e Sempre Fixe)" holds "as coleções
+    praticamente completas" of the Lisbon evening daily Diário de Lisboa (1921-1990),
+    described as "o 'jornal dos intelectuais'" that practised "a 'oposição possível' sob
+    censura". The year tree shows 200-1,100 documents per year for 1940-1990. "free" is
+    observation-based: the archive tree and descriptions load without login. Whether page
+    images open without login, and whether OCR text exists, were not checked. Rights,
+    verbatim: "A utilização das imagens disponibilizadas na Casa Comum requer autorização
+    prévia"; "Alguns dos documentos ... podem encontrar-se protegidos por direitos de
+    autor. A utilização das imagens e demais conteúdos poderá depender da autorização dos
+    respetivos titulares de direitos". This is reuse-without-licence wording (type b), not
+    a TDM clause. Under the Estado Novo (to 1974) everything passed the censor, so read
+    1940-1974 as censored press. The best PT candidate for 1940-1990; ask
+    geral@fmsoaresbarroso.pt about research use and OCR.
+
+- id: pt-common-crawl-news
+  name: Common Crawl News (CC-NEWS), filtered to .pt domains
+  country: PT
+  source_type: web_archive
+  url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+  access: free
+  year_start: 2016
+  year_end: null
+  languages: [pt]
+  genres: [news, opinion]
+  access_method: bulk
+  licence: Common Crawl Terms of Use; crawled content remains subject to each publisher's terms
+  tdm_opt_out: "unknown"
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown (.pt share not measured)
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
+    - https://commoncrawl.org/terms-of-use
+    - https://www.publico.pt/robots.txt
+    - https://expresso.pt/robots.txt
+    - https://www.dn.pt/robots.txt
+  notes: >-
+    Same dataset as gb-common-crawl-news. publico.pt and expresso.pt disallow CCBot; dn.pt
+    does not. For PT, pt-arquivo-pt is a better bulk route (national, with an API and
+    research-use terms), so CC-NEWS adds little.
