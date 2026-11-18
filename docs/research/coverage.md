@@ -7,7 +7,7 @@ Cells show the number of usable (free or free-registration) sources per period.
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
 | FR | 1 | 0 | 0 | 3 |
-| NL | 2 | 2 | 4 | 4 |
+| NL | 0 | 0 | 2 | 4 |
 | BE | 1 | 1 | 1 | 3 |
 | LU | 1 | 1 | 1 | 5 |
 | DE | 0 | 0 | 0 | 0 |

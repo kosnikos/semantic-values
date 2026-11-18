@@ -1456,47 +1456,53 @@
   country: NL
   source_type: national_library
   url: https://www.delpher.nl/
-  access: free
+  access: partial_paywall
   year_start: 1618
   year_end: 1995
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: manual
-  licence: public domain after 140 years; later newspapers under copyright, online under publisher agreements
+  licence: public domain after 140 years; later newspapers under copyright, partly online under publisher agreements
   tdm_opt_out: "yes"
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: unknown
-  volume_estimate: "almost 2 million newspaper issues 1618-1995; 11M+ pages text-searchable (2017)"
+  volume_estimate: "almost 2 million newspaper issues 1618-1995 exist in the collection; free online share unknown"
   verified_on: 2026-11-18
   evidence_urls:
     - https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
     - https://www.kb.nl/en/research-find/datasets/delpher-newspapers
     - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
     - https://www.computable.nl/2017/03/31/de-persgroep-verruimt-krantenaanbod-online-project-kb
+    - https://www.kb.nl/en/ai-statement
     - https://www.delpher.nl/robots.txt
   notes: >-
-    The strongest free 1940-1995 newspaper run in this batch. KB: "edities van alle
+    access is partial_paywall (not a fee, but only part is open, and the schema has no
+    "restricted" value). What exists: KB says the collection holds "edities van alle
     jaargangen van de belangrijkste landelijke Nederlandse kranten, zoals De Telegraaf, De
-    Volkskrant en Het Parool", as scans with OCR and ALTO word coordinates. Computable (31 Mar
-    2017): the post-war Volkskrant, Trouw and Het Parool runs were digitised with publisher
-    consent and "online ontsloten"; the permission list includes De Volkskrant (1920-1995),
-    Trouw (1945-1995), Het Parool (1941-1995) and AD (1946-1960). access "free" rests on
-    these pages, not on observation: delpher.nl returned 403 to curl and WebFetch for every
-    page except robots.txt, so the online availability of each post-1945 title and year was
-    not checked (some may be reading-room only). robots.txt blocks all crawlers except a
-    search-engine whitelist and also blocks Google-Extended and /pageocr, hence tdm_opt_out
-    "yes". KB: newer newspapers "zijn vaak nog wel auteursrechtelijk en privacyrechtelijk
-    beschermd. Gebruik van deze kranten voor niet-commercieel wetenschappelijk onderzoek is
-    in sommige gevallen mogelijk." Readers' letters columns exist in these dailies but were
-    not inspected. For machine access see nl-kb-delpher-data.
+    Volkskrant en Het Parool", 1618-1995, as OCR scans. What is free: KB says only that the
+    files are "voor een deel vrij toegankelijk" (EN page: "Some of the files can be freely
+    accessed"), that newspapers older than 140 years are public domain, and that newer ones
+    "zijn vaak nog wel auteursrechtelijk en privacyrechtelijk beschermd". Computable (31 Mar
+    2017) reports that the post-war Volkskrant, Trouw and Het Parool runs were digitised with
+    publisher consent and "online ontsloten"; the permission list includes De Volkskrant
+    (1920-1995), Trouw (1945-1995), Het Parool (1941-1995) and AD (1946-1960). No page we
+    could open gives the free/restricted split by title or year: delpher.nl (including its
+    "wat zit er in Delpher / kranten" help page) returned 403 to curl and WebFetch for every
+    page except robots.txt (re-tried 2026-11-18). KB AI statement: KB has "adapted our terms
+    of use and taken technical measures to combat crawling of our websites Delpher and DBNL
+    by commercial parties", while promising that academic reuse "shall not be hindered".
+    robots.txt blocks all crawlers except a search-engine whitelist and also blocks
+    Google-Extended and /pageocr, hence tdm_opt_out "yes". Readers' letters columns exist in
+    these dailies but were not inspected. Verify in a browser which post-1940 years are
+    viewable without login. For machine access see nl-kb-delpher-data.
 
 - id: nl-kb-delpher-data
   name: KB Delpher newspapers dataset (SRU / OAI-PMH APIs and bulk)
   country: NL
   source_type: national_library
   url: https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
-  access: free_registration
+  access: partial_paywall
   year_start: 1618
   year_end: 1995
   languages: [nl]
@@ -1512,18 +1518,23 @@
   evidence_urls:
     - https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
     - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
+    - https://www.kb.nl/en/ai-statement
   notes: >-
-    "Er zijn 2 API's beschikbaar: een metadata-harvest-API op basis van OAI-PMH en een
-    zoek-API op basis van SRU. Handleidingen voor deze API's worden ter beschikking gesteld
-    nadat rechtmatige toegang is verkregen via @email" (access on request, hence
-    free_registration). The open archive covers only 1618-1879 ("mogen onbeperkt worden
-    hergebruikt"), outside the v0 window. For protected material: "Voor niet-commercieel
+    access is partial_paywall (no fee, but only part is open, and the schema has no
+    "restricted" value). Free part: the open archive with "de teksten (OCR, ALTO, XML) van
+    alle kranten uit de periode 1618 t/m 1879" ("mogen onbeperkt worden hergebruikt"), which
+    is outside the v0 window. Everything later is by agreement: "Er zijn 2 API's beschikbaar:
+    een metadata-harvest-API op basis van OAI-PMH en een zoek-API op basis van SRU.
+    Handleidingen voor deze API's worden ter beschikking gesteld nadat rechtmatige toegang is
+    verkregen via @email", and for protected material "Voor niet-commercieel
     wetenschappelijk onderzoek zijn er soms mogelijkheden. Wel kan het zijn dat je eerst een
     contract moet ondertekenen of dat de toegang tot de data beperkt is tot het KB-gebouw"
-    (KB_Datalab and the SANE secure environment). The KB explicitly welcomes TDM, ML and AI
-    research on its collections (hence tdm_opt_out "no" for this route). Whether post-1940
-    text may be sent to a commercial LLM API is not addressed; the secure-environment
-    model suggests it would not be. Ask the KB (dataservices) with a concrete plan.
+    (KB_Datalab and the SANE secure environment). The KB welcomes TDM, ML and AI research on
+    its collections (hence tdm_opt_out "no" for this route), and its AI statement promises
+    that academic reuse "shall not be hindered" by its anti-crawling measures. Whether
+    post-1940 text may be sent to a commercial LLM API is not addressed; the
+    secure-environment model suggests it would not be. Ask the KB (dataservices) with a
+    concrete plan.
 
 - id: nl-nrc-website
   name: NRC website (nrc.nl, Opinie and Lezersbrieven)

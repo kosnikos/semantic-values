@@ -201,6 +201,10 @@ allows LLM tagging of public-domain issues (the `access=fayes` documents).
 - **Le Club de Mediapart** (blogs.mediapart.fr): reader-written blogs. A strong lead, but
   WebFetch could not fetch the participation charter and robots.txt blocks CCBot,
   ClaudeBot and GPTBot. Check it manually.
+- **Le Monde pre-2005 archive**: could not be reached (lemonde.fr served a bot challenge
+  to curl and WebFetch). The only access evidence is next.ink (2020), which says the
+  subscription includes "l'ensemble des contenus et des archives". Treat it as
+  subscriber-only, unverified.
 - **Libération**: robots.txt has the same "licence only" wording as Le Monde and blocks
   CCBot. No separate entry.
 - **20 Minutes**: robots.txt disallows GPTBot, CCBot and ClaudeBot. Its access model
@@ -321,19 +325,29 @@ ban copying beyond personal use, with no AI clause. **GeenStijl** (since 2003) i
 and has very active reader comments, but it is a one-sided provocative blog, and we found
 no reuse terms.
 
-**1940–2005.** **Delpher** (`nl-delpher-kranten`) is the strongest single archive in this
-batch. It holds almost 2 million newspaper issues 1618–1995, including all years of the
-main national dailies (De Telegraaf, de Volkskrant 1920–1995, Trouw 1945–1995, Het Parool
-1941–1995), with OCR. Post-war in-copyright runs are online under publisher agreements.
-delpher.nl returned 403 to us, so we could not check per-title online access. For
-machine access, the KB (`nl-kb-delpher-data`) offers SRU and OAI-PMH APIs on request. It
-supports TDM/AI research but restricts in-copyright data to "niet-commercieel
-wetenschappelijk onderzoek", sometimes only in its secure environments (KB_Datalab,
-SANE). Sending post-1940 text to a commercial LLM API is not addressed.
+**1940–2005.** **Delpher** (`nl-delpher-kranten`) is the largest archive in this batch,
+but only part of it is free. *What exists:* almost 2 million newspaper issues 1618–1995,
+including all years of the main national dailies (De Telegraaf, de Volkskrant 1920–1995,
+Trouw 1945–1995, Het Parool 1941–1995), with OCR. *What is free:* the KB says only that
+the files are "voor een deel vrij toegankelijk". Newspapers older than 140 years are
+public domain, and newer ones are "vaak nog wel auteursrechtelijk ... beschermd". A 2017
+press report says the post-war Volkskrant, Trouw and Parool runs were put online with
+publisher consent. No page we could open gives the free/restricted split by title or
+year: delpher.nl, including its help pages, returned 403 again on re-try. Both Delpher
+routes are therefore recorded as `partial_paywall`, and the post-1940 free share must be
+checked in a browser before we rely on it. For machine access, the KB
+(`nl-kb-delpher-data`) offers SRU and OAI-PMH APIs on request. Only its 1618–1879 bulk
+set is open. It supports TDM/AI research but restricts in-copyright data to
+"niet-commercieel wetenschappelijk onderzoek", sometimes only in its secure environments
+(KB_Datalab, SANE). Sending post-1940 text to a commercial LLM API is not addressed. The
+KB's AI statement says it has blocked commercial crawling of Delpher but will not hinder
+academic reuse.
 
 **Biggest gap (1940–2005):** **1996–2004**. Delpher stops at 1995, the KB web archive
 starts in 2007 (reading room only), and Reddit starts in 2014. FOK! and GeenStijl
-(2002/2003 onwards) partly fill it.
+(2002/2003 onwards) partly fill it. Until the free share of Delpher is verified,
+**1940–1995** is also only conditionally covered: the content exists, but free access
+is unconfirmed.
 
 **Best for opinion / letters / forum genres:** opinion/letters: NRC (paywall, TDM
 reserved), Delpher dailies' letters columns (1940–1995); forum: r/thenetherlands, FOK!,
