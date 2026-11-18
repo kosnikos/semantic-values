@@ -140,7 +140,7 @@
   access_method: scrape
   licence: Independent user policies (personal, non-commercial use only; all rights reserved)
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -442,7 +442,7 @@
   access_method: manual
   licence: kathimerini.gr Terms of Use (all rights reserved)
   tdm_opt_out: "yes"
-  restriction_scope: all_reuse
+  restriction_scope: unknown
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: unknown
@@ -473,7 +473,7 @@
   access_method: scrape
   licence: kathimerini.gr Terms of Use (all rights reserved; single personal copy allowed)
   tdm_opt_out: "yes"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -509,7 +509,7 @@
   access_method: scrape
   licence: tovima.gr Όροι Χρήσης (Alter Ego Media; all rights reserved)
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -546,7 +546,7 @@
   access_method: scrape
   licence: tanea.gr Όροι Χρήσης (Alter Ego Media; all rights reserved)
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -578,7 +578,7 @@
   access_method: scrape
   licence: efsyn.gr Όροι Χρήσης (all rights reserved)
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -1668,7 +1668,7 @@
   access_method: scrape
   licence: FOK! algemene voorwaarden (all rights reserved; users keep copyright and grant FOK! a use licence)
   tdm_opt_out: "unknown"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -2055,7 +2055,7 @@
     erfolgen. Die Recherche-Ergebnisse (Satzzitate) dürfen in wissenschaftlichen
     Untersuchungen im Rahmen des Zitatrechts mit korrekter Quellenangabe zitiert werden",
     and "Der Umfang darf den üblicher Zitate nicht überschreiten". Usable for checking
-    vocabulary trends, not as a text source for LLM tagging.
+    vocabulary trends, not as a text source for LLM tagging. (scope: § 60d non-commercial research use permitted by clause)
 
 - id: de-ids-dereko
   name: IDS Deutsches Referenzkorpus (DeReKo) via COSMAS II / KorAP
@@ -2241,7 +2241,7 @@
   access_method: scrape
   licence: STANDARD AGB (private use only; commercial TDM reserved under § 42h Abs 6 UrhG and Art. 4(3) DSM Directive)
   tdm_opt_out: "yes"
-  restriction_scope: all_reuse
+  restriction_scope: copyright_boilerplate
   llm_api_allowed: "unknown"
   per_text_publish_allowed: "unknown"
   text_quality: born_digital
@@ -2266,7 +2266,7 @@
     "Nutzung ausschließlich für den privaten Eigenbedarf. Eine Weiterverwendung und
     Reproduktion über den persönlichen Gebrauch hinaus ist nicht gestattet." robots.txt
     blocks CCBot, GPTBot, ClaudeBot, anthropic-ai, Google-Extended and others. The forum
-    is out of v0 scope. Ask legal@derstandard.at.
+    is out of v0 scope. Ask legal@derstandard.at. (scope: commercial-only reservation)
 
 - id: at-diepresse-website
   name: Die Presse (diepresse.com)

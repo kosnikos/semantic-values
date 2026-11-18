@@ -29,11 +29,16 @@ ISO_COUNTRIES = frozenset(
 Tri = Literal["yes", "no", "unknown"]
 
 RestrictionScope = Literal[
-    "none", "ai_training_only", "crawler_block_only", "tdm_all", "all_reuse", "unknown"
-]
+    "none", "ai_training_only", "crawler_block_only", "copyright_boilerplate",
+    "tdm_all", "all_reuse", "unknown",
+]  # fmt: skip
 
 # Scopes that do not exclude a source under the source-use rule (spec section 3).
-OPEN_SCOPES: set[str] = {"none", "ai_training_only", "crawler_block_only", "unknown"}
+# copyright_boilerplate = generic "no copying/republication except a personal copy",
+# silent on automated use, analysis or AI; treated as open (owner may flip this).
+OPEN_SCOPES: set[str] = {
+    "none", "ai_training_only", "crawler_block_only", "copyright_boilerplate", "unknown",
+}  # fmt: skip
 
 # Extra scopes treated as open in a given jurisdiction. UK CDPA s.29A: contract terms
 # restricting non-commercial research TDM are unenforceable; all_reuse stays closed.

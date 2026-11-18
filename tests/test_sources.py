@@ -141,3 +141,10 @@ def test_gb_tdm_all_open_under_s29a():
     assert is_open(a) and not is_open(b)
     m = coverage_matrix([a, b], V0_COUNTRIES, 2026, open_only=True)
     assert m["GB"]["2005-now"] == ["gb-tdm"]
+
+
+def test_copyright_boilerplate_is_open():
+    s = src(id="fr-b", country="FR", restriction_scope="copyright_boilerplate", year_start=2010,
+            year_end=None)  # fmt: skip
+    assert is_open(s)
+    assert coverage_matrix([s], V0_COUNTRIES, 2026, open_only=True)["FR"]["2005-now"] == ["fr-b"]
