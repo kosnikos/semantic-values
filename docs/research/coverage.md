@@ -12,12 +12,12 @@ Cells show the number of usable (free or free-registration) sources per period.
 | NL | 0 | 0 | 2 | 12 |
 | BE | 1 | 1 | 1 | 7 |
 | LU | 1 | 1 | 1 | 5 |
-| DE | 4 | 4 | 6 | 5 |
+| DE | 4 | 4 | 7 | 8 |
 | AT | 2 | 2 | 1 | 3 |
 | CH | 2 | 2 | 2 | 2 |
 | IT | 3 | 2 | 2 | 3 |
 | GR | 1 | 1 | 4 | 9 |
-| ES | 1 | 1 | 1 | 2 |
+| ES | 1 | 1 | 2 | 11 |
 | PT | 1 | 1 | 3 | 2 |
 | GB | 0 | 0 | 6 | 15 |
 
@@ -31,12 +31,12 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 | NL | 0 | 0 | 2 | 12 |
 | BE | 1 | 1 | 1 | 7 |
 | LU | 1 | 1 | 1 | 4 |
-| DE | 2 | 2 | 3 | 2 |
+| DE | 2 | 2 | 4 | 5 |
 | AT | 2 | 2 | 1 | 3 |
 | CH | 2 | 2 | 2 | 2 |
 | IT | 3 | 2 | 2 | 3 |
 | GR | 1 | 1 | 4 | 9 |
-| ES | 1 | 1 | 1 | 2 |
+| ES | 1 | 1 | 2 | 11 |
 | PT | 0 | 0 | 2 | 2 |
 | GB | 0 | 0 | 6 | 15 |
 
@@ -131,6 +131,14 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - de-ids-dereko: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-dnb-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - de-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-berliner-zeitung: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-nd-aktuell: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-junge-welt: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- de-handelsblatt: llm_api_allowed, per_text_publish_allowed
+- de-junge-freiheit: llm_api_allowed, per_text_publish_allowed
+- de-brigitte: llm_api_allowed, per_text_publish_allowed
+- de-gala: llm_api_allowed, per_text_publish_allowed
+- de-eltern: llm_api_allowed, per_text_publish_allowed
 - at-anno: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - at-arbeiterzeitung-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - at-derstandard-website: llm_api_allowed, per_text_publish_allowed
@@ -152,6 +160,16 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - es-bvph-prensa-historica: llm_api_allowed, per_text_publish_allowed
 - es-eldiario-website: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - es-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-larazon: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-rtve-noticias: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-hola: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-diezminutos: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-muy-interesante: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-mia: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-ctxt: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-jotdown: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-elsalto: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- es-lamarea: llm_api_allowed, per_text_publish_allowed
 - pt-arquivo-pt: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - pt-publico-website: llm_api_allowed, per_text_publish_allowed
 - pt-dn-website: llm_api_allowed, per_text_publish_allowed, tdm_opt_out

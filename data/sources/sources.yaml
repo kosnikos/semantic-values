@@ -3320,6 +3320,324 @@
     but reserves TDM in robots.txt comments. German publishers widely state § 44b UrhG
     reservations, so CC-NEWS is a URL-discovery layer only.
 
+# --- DE wider sweep (Task 5e batch iii)
+
+- id: de-berliner-zeitung
+  name: Berliner Zeitung (berliner-zeitung.de)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.berliner-zeitung.de/
+  access: partial_paywall
+  year_start: 2010
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns, letters]
+  access_method: scrape
+  licence: Allgemeine Nutzungsbedingungen (use for own non-commercial purposes; commercial use needs consent)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "monthly article sitemaps from 2010-01 to 2026-11 (245 sub-sitemaps)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.berliner-zeitung.de/allgemeine-nutzungsbedingungen
+    - https://www.berliner-zeitung.de/robots.txt
+    - https://www.berliner-zeitung.de/sitemap.xml
+    - https://www.berliner-zeitung.de/article/organisierte-unzustaendigkeit-was-nuetzt-der-rechtsstaat-wenn-er-im-alltag-versagt-10583901
+    - https://www.berliner-zeitung.de/article/geschichten-formen-das-gehirn-was-beim-lesen-und-hoeren-im-kopf-passiert-10601172
+    - https://www.berliner-zeitung.de/article/deutsche-bank-leak-warum-trump-und-die-bank-sich-gegenseitig-in-der-hand-haben-10611560
+    - https://www.berliner-zeitung.de/article/chemnitzer-fc-regionalliga-nordost-aufstieg-duda-kolumne-10605755
+  notes: >-
+    Berlin daily (Berliner Verlag). Nutzungsbedingungen § 4, verbatim: "4.2. Die Nutzung
+    unserer Publikationen bzw. Inhalten ist ausschließlich zu eigenen, nichtkommerziellen
+    Zwecken zulässig. Jede Nutzung von Inhalten ... außerhalb der engen gesetzlichen Grenzen
+    des Urheberrechts ist unzulässig ... 4.3. Jede Nutzung der Inhalte für gewerbliche Zwecke
+    ist untersagt". No TDM, automated or AI clause, and robots.txt blocks no AI crawler.
+    Judgement call: the only use class it forbids is commercial use, and the statutory
+    limits it defers to include § 44b/§ 60d, so we class it copyright_boilerplate
+    (scope: commercial-only reservation). It is closed if the owner reads "eigenen"
+    narrowly. Access is observed: 3 of 4 sampled Nov 2026 pages (Politik, Panorama,
+    Geopolitik) had isAccessibleForFree "True"; a sport column was "False" (B+). The site
+    has Meinung and "Open Source" (reader contributions) sections, which we did not sample.
+    year_start 2010 = oldest article sitemap.
+
+- id: de-nd-aktuell
+  name: nd (nd-aktuell.de, formerly Neues Deutschland)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.nd-aktuell.de/
+  access: free
+  year_start: 2002
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: nd.Genossenschaft AGB (commercial use of the online service not permitted)
+  tdm_opt_out: "unknown"
+  restriction_scope: crawler_block_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~1,203,900 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.nd-aktuell.de/agb.php
+    - https://www.nd-aktuell.de/robots.txt
+    - https://www.nd-aktuell.de/artikel/1203855.ungleichheit-reichtum-wann-reicht-s.html
+    - https://www.nd-aktuell.de/artikel/1203888.kulturpolitik-nobel-musiktempel-statt-kultur-fuer-alle.html
+    - https://www.nd-aktuell.de/artikel/1203896.nachhaltigkeit-die-brille-meiner-mutter.html
+    - https://www.nd-aktuell.de/artikel/1203918.gaza-krieg-situation-in-gaza-krieg-mit-anderen-mitteln.html
+    - https://www.nd-aktuell.de/artikel/100000.bvg-kontrolleure-auf-dem-rueckzug.html
+    - https://www.nd-aktuell.de/artikel/20000.freund-und-feind.html
+  notes: >-
+    Left-wing daily run by a cooperative. The AGB's only reuse rule is "2.4 Die Nutzung des
+    Onlineangebotes zu gewerblichen Zwecken ist nicht gestattet"; § 4 "Urheberrecht" covers
+    user comments only. No TDM or AI clause. robots.txt: "Block all known AI crawlers and
+    assistants from using content for training AI models" (GPTBot, CCBot, ClaudeBot), so
+    crawler_block_only. access "free" is observed, not stated: four Nov 2026 articles
+    (incl. one Meinung piece) served 900-2,400 words in paragraph tags with no
+    isAccessibleForFree field; articles from 2006-11-08 (id 100000) and 2002-07-04 (id
+    20000) also opened. The site sells nd.Digital subscriptions; whether any article is
+    locked was not established. year_start 2002 = oldest article seen.
+
+- id: de-junge-welt
+  name: junge Welt (jungewelt.de)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.jungewelt.de/
+  access: partial_paywall
+  year_start: 2008
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, letters]
+  access_method: scrape
+  licence: Verlag 8. Mai online terms (no reproduction in other publications without consent)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~533,450 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.jungewelt.de/kontakt/agb/user.php
+    - https://www.jungewelt.de/kontakt/impressum.php
+    - https://www.jungewelt.de/robots.txt
+    - https://www.jungewelt.de/aktuell/rubrik/leserbriefe.php
+    - https://www.jungewelt.de/artikel/533344.mehr-ideologie-wagen.html
+    - https://www.jungewelt.de/artikel/533387.aus-leserbriefen-an-die-redaktion.html
+    - https://www.jungewelt.de/artikel/533347.parteigründer-des-tages-issa-remmo.html
+    - https://www.jungewelt.de/artikel/500000.html
+    - https://www.jungewelt.de/artikel/520000.html
+    - https://www.jungewelt.de/artikel/100000.html
+  notes: >-
+    Far-left (Marxist) daily with a daily Leserbriefe page. Online terms § 3, verbatim:
+    "Eine Vervielfältigung oder Verwendung solcher Grafiken, Tondokumente, Videosequenzen
+    und Texte in anderen elektronischen oder gedruckten Publikationen ist ohne
+    ausdrückliche Zustimmung der Verlag 8. Mai GmbH nicht gestattet." This restricts
+    republication only, with no TDM, automated or AI clause, so copyright_boilerplate.
+    robots.txt blocks no AI crawler. The paywall is per article: three Nov 2026 pages
+    (two Ansichten pieces, one "Aus Leserbriefen an die Redaktion") served full text with a
+    voluntary "Ich abonniere" prompt, and id 500000 (2025-05-14) opened, but ids 520000
+    (2026-03-28), 300000 (2016) and 100000 (2008-02-01) redirected to loginFailed.php. No
+    isAccessibleForFree field. year_start 2008 = oldest article page seen (login-gated).
+    One editorial line; pair with others.
+
+- id: de-handelsblatt
+  name: Handelsblatt (handelsblatt.com)
+  country: DE
+  source_type: newspaper_archive
+  url: https://www.handelsblatt.com/meinung/
+  access: partial_paywall
+  year_start: 2011
+  year_end: null
+  languages: [de]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: Handelsblatt Group AGB (use for private or own non-commercial purposes); commercial TDM reserved (§ 44b UrhG)
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "yearly sitemap indexes 2011-2026"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.handelsblatt.com/impressum/
+    - https://handelsblattgroup.com/agb/
+    - https://www.handelsblatt.com/robots.txt
+    - https://www.handelsblatt.com/sitemapExternal/sitemaps_index.xml
+    - https://www.handelsblatt.com/meinung/gastbeitraege/gastkommentar-abschluss-in-etappen-wie-ungelernte-zu-fachkraeften-werden/100269994.html
+    - https://www.handelsblatt.com/meinung/kommentare/kommentar-ein-schwarzer-tag-fuer-das-vertrauen-in-die-deutsche-bank/100270494.html
+    - https://www.handelsblatt.com/meinung/kommentare/kommentar-stromsteuersenkung-drei-currywuerste-im-monat-retten-koalition/100270730.html
+  notes: >-
+    Business daily, economically liberal. Impressum: "Die Handelsblatt GmbH behält sich eine
+    Nutzung ihrer Inhalte für kommerzielles Text- und Data-Mining im Sinne des § 44b UrhG
+    ausdrücklich vor." AGB, Urheberrecht: "Sie dürfen diese daher ohne unsere gesonderte
+    Zustimmung nur zu privaten oder sonstigen eigenen, nicht-kommerziellen und/oder
+    -gewerblichen Zwecken nutzen und dafür auch auf Ihrem Computer speichern ... Jede
+    darüber hinausgehende Nutzung unserer Inhalte außerhalb der gesetzlichen
+    Schrankenbestimmungen, insbesondere jede Vervielfältigung, Speicherung, Verbreitung,
+    öffentliche Zugänglichmachung, etc. zu kommerziellen und/oder gewerblichen ...". Only
+    commercial use is reserved, so copyright_boilerplate (scope: commercial-only
+    reservation). The AGB's MCP-server clause bans training and "systematische Extrahieren
+    oder Harvesting" but applies only to that interface. robots.txt blocks GPTBot, CCBot,
+    ClaudeBot and others. The AGB says unlocking all content needs a product (Digitalpass,
+    ePaper), and a premium-news sitemap exists, so partial_paywall; all 3 sampled Meinung
+    pieces (Nov 2026) had isAccessibleForFree "True" with ~580 words of body text.
+    year_start 2011 = oldest yearly sitemap. Business focus, so lower fit for societal
+    values.
+
+- id: de-junge-freiheit
+  name: Junge Freiheit (jungefreiheit.de)
+  country: DE
+  source_type: newspaper_archive
+  url: https://jungefreiheit.de/
+  access: partial_paywall
+  year_start: 1997
+  year_end: null
+  languages: [de]
+  genres: [news, opinion]
+  access_method: scrape
+  licence: Impressum (downloads and copies for private non-commercial use only); robots.txt content signals ai-train=no
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "yearly sitemaps 1997-2026"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://jungefreiheit.de/impressum.html
+    - https://jungefreiheit.de/agb.html
+    - https://jungefreiheit.de/robots.txt
+    - https://jungefreiheit.de/sitemap.xml
+    - https://jungefreiheit.de/news-sitemap.xml
+    - https://jungefreiheit.de/ausland/11657-afrikaner-stuermen-kanaren-in-nur-16-tagen.html
+    - https://jungefreiheit.de/meinung/bremens-verfassungsschutz-verlaesst-der-mut.html
+    - https://jungefreiheit.de/meinung/trump-ist-ein-warnendes-beispiel-fuer-europas-rechte.html
+  notes: >-
+    Right-wing conservative weekly (Wikipedia list: 25,868 copies, 4/2015). Impressum:
+    "Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen
+    Gebrauch gestattet." This restricts copying, not use, so copyright_boilerplate. The AGB
+    licence ("für den persönlichen, nicht kommerziellen Gebrauch") binds subscribers only.
+    robots.txt has "Content-Signal: search=yes,ai-train=no,use=reference" and calls these
+    "EXPRESS RESERVATIONS OF RIGHTS UNDER ARTICLE 4" (AI training only). Of three Nov 2026
+    pages, one news item and one Meinung piece had isAccessibleForFree "true" and one
+    Meinung piece "false" (~160 words served). The /kommentar/ index returned 403.
+    year_start 1997 = oldest yearly sitemap. One-sided; useful as the right-wing
+    counterweight to jW and nd.
+
+- id: de-brigitte
+  name: BRIGITTE (brigitte.de)
+  country: DE
+  source_type: magazine
+  url: https://www.brigitte.de/
+  access: partial_paywall
+  year_start: 2026
+  year_end: null
+  languages: [de]
+  genres: [columns, other]
+  access_method: scrape
+  licence: Nutzungsbedingungen für brigitte.de (commercial TDM not permitted; copying only as needed for normal use)
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.brigitte.de/service/nutzungsbedingungen-fuer-brigitte-de-10119198.html
+    - https://www.brigitte.de/robots.txt
+    - https://www.brigitte.de/leben/brigitte-filmtipps--filme-und-serien--die-unser-expertin-ariane-heimbach-empfiehlt-14113894.html
+    - https://www.brigitte.de/academy/finanzen/kinderdepots--wann-und-fuer-wen-ist-es-sinnvoll--14077144.html
+  notes: >-
+    Women's general-interest magazine, now "Ein Produkt der FUNKE Mediengruppe". Terms § 7:
+    "Die Nutzung sämtlicher Inhalte dieses Angebots ... für kommerzielles Text- und
+    Data-Mining im Sinne des § 44b UrhG ist nicht statthaft." § 8.2: "Dem Nutzer ist es
+    untersagt, Texte, Inhalte, Software oder Scripts der Plattform zu blockieren, zu
+    überschreiben, zu modifizieren oder zu kopieren, soweit dies nicht für die
+    ordnungsgemäße Nutzung der Plattform erforderlich ist." So copyright_boilerplate
+    (scope: commercial-only reservation). robots.txt blocks GPTBot, CCBot and ClaudeBot.
+    The pages carry a login prompt for content "für registrierte Nutzer:innen" and paywall
+    markup, so partial_paywall; both sampled Nov 2026 pages served 375-1,180 words with no
+    isAccessibleForFree field. year_start 2026 = date of the pages we sampled; archive
+    depth not checked. Lifestyle-heavy; columns and reader-life pieces fit best.
+
+- id: de-gala
+  name: GALA (gala.de)
+  country: DE
+  source_type: magazine
+  url: https://www.gala.de/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [de]
+  genres: [news, other]
+  access_method: scrape
+  licence: Gala.de AGB (commercial TDM not permitted; copies for personal non-commercial use)
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.gala.de/service/allgemeine-geschaeftsbedingungen-20103684.html
+    - https://www.gala.de/service/impressum-20103686.html
+    - https://www.gala.de/robots.txt
+    - https://www.gala.de/beauty-fashion/beauty/katharina-saalfrank--so-sieht-die--super-nanny--heute-aus-24719244.html
+    - https://www.gala.de/stars/news/-supercool-gelaufen---sarah-kuttner-ueber-erste-chemo-erfahrungen-24719706.html
+  notes: >-
+    Celebrity weekly (FUNKE). AGB: "Die Nutzung sämtlicher Inhalte dieses Angebots ... für
+    kommerzielles Text- und Data-Mining im Sinne des § 44b UrhG ist nicht statthaft." and
+    "Jede Verwertung außerhalb der engen Grenzen des Urhebergesetzes bedarf der vorh[erigen
+    Zustimmung]"; users may copy "für den ausschließlich persönlichen, nicht-kommerziellen
+    Gebrauch". The bans cover exploitation and copying acts, with no general use,
+    automated or AI clause, so copyright_boilerplate (scope: commercial-only reservation).
+    robots.txt blocks GPTBot, CCBot and ClaudeBot. access "free" is observed: two Nov 2026
+    pages served 365-470 words with no isAccessibleForFree field. year_start 2026 =
+    sampled pages only. Celebrity news; low opinion content.
+
+- id: de-eltern
+  name: ELTERN (eltern.de)
+  country: DE
+  source_type: magazine
+  url: https://www.eltern.de/
+  access: free
+  year_start: 2025
+  year_end: null
+  languages: [de]
+  genres: [columns, other]
+  access_method: scrape
+  licence: eltern.de AGB (commercial TDM not permitted; copying only as needed for normal use)
+  tdm_opt_out: "yes"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.eltern.de/services/agb-12357508.html
+    - https://www.eltern.de/robots.txt
+    - https://www.eltern.de/baby/baby-weint-im-schlaf--die-10-haeufigsten-gruende-13208130.html
+    - https://www.eltern.de/baby/babyentwicklung/so-lernen-babys-laufen-12356224.html
+  notes: >-
+    Parenting monthly. AGB § 11: "Die Nutzung sämtlicher Inhalte dieses Angebots ... für
+    kommerzielles Text- und Data-Mining im Sinne des § 44b UrhG ist nicht statthaft."
+    § 12.2: "Dem Nutzer ist es untersagt, Texte, Inhalte, Software oder Scripts der
+    Plattform zu blockieren, zu überschreiben, zu modifizieren oder zu kopieren, soweit
+    dies nicht für die ordnungsgemäße Nutzung der Plattform erforderlich ist." So
+    copyright_boilerplate (scope: commercial-only reservation). robots.txt blocks GPTBot,
+    CCBot and ClaudeBot. access "free" is observed: two sampled pages (2025) served
+    1,670-2,260 words with no isAccessibleForFree field. year_start 2025 = oldest page
+    seen. Advice content; family values are the fit.
+
 # ---------------------------------------------------------------- AT
 
 - id: at-anno
@@ -4231,6 +4549,356 @@
     (a .com) all disallow CCBot. Spanish publishers also state art. 67.3 RDL 24/2021 TDM
     reservations in their terms, so CC-NEWS is a URL-discovery layer only. Note that big
     Spanish titles sit on .com, so a .es filter misses them.
+
+# --- ES wider sweep (Task 5e batch iii)
+
+- id: es-larazon
+  name: La Razón (larazon.es)
+  country: ES
+  source_type: newspaper_archive
+  url: https://www.larazon.es/opinion/
+  access: free
+  year_start: 2000
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: unknown (the linked "aviso legal" page is a privacy policy; no content-use terms found)
+  tdm_opt_out: "unknown"
+  restriction_scope: crawler_block_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "content sitemaps from 2000 to 2026"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.larazon.es/aviso-legal/
+    - https://www.larazon.es/robots.txt
+    - https://www.larazon.es/sitemaps/sitemap-index.xml
+    - https://www.larazon.es/sitemaps/content_sitemap_index.xml
+    - https://www.larazon.es/opinion/decretazos-sanchez_202611176afcbf0c103a0e0a474e232d.html
+    - https://www.larazon.es/opinion/dificil-viaje-centro_202611186afce38818c34d33accd0b3f.html
+    - https://www.larazon.es/opinion/huevos-echeverria_202611186afce394a6f8072789ecee0a.html
+  notes: >-
+    Conservative Madrid daily (Planeta), 119,060 copies (OJD 2013, Wikipedia list). The
+    page at /aviso-legal/ holds only the privacy policy; it has no intellectual-property,
+    TDM or AI clause, and /condiciones-de-uso/ and /terminos-y-condiciones/ returned 404.
+    robots.txt has an "#AI data scrappers" block (anthropic-ai, CCBot, Bytespider and
+    others disallowed; Google-Extended allowed), so crawler_block_only on what we could
+    read. access "free" is observed: three Nov 2026 opinion columns served 475-530 words
+    with no isAccessibleForFree field and no paywall markup. year_start 2000 = oldest
+    content sitemap. The real terms may sit elsewhere; check in a browser before use. The
+    only open national daily found in ES; right-of-centre, so it needs a left-leaning pair.
+
+- id: es-rtve-noticias
+  name: RTVE Noticias (rtve.es/noticias)
+  country: ES
+  source_type: newspaper_archive
+  url: https://www.rtve.es/noticias/
+  access: free
+  year_start: 2021
+  year_end: null
+  languages: [es]
+  genres: [news]
+  access_method: scrape
+  licence: RTVE aviso legal (reproduction and other IP rights reserved)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "noticias sitemap entries from 2021-09 to 2026-11"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.rtve.es/comunes/aviso_legal.html
+    - https://www.rtve.es/robots.txt
+    - https://www.rtve.es/sitemaps/noticias/sitemap.xml
+    - https://www.rtve.es/noticias/20261118/debate-electoral-sanchez-feijoo-claves-elecciones-2026/17318482.shtml
+    - https://www.rtve.es/noticias/20261118/diputacion-permanente-congreso-decretos-leyes-gobierno/17319188.shtml
+  notes: >-
+    Public broadcaster news site. Aviso legal: "RTVE se reserva los derechos de
+    reproducción, modificación, adaptación, comunicación pública, mantenimiento, corrección
+    de errores, cesión, venta, alquiler, préstamo y/o cualquier otro derecho de propiedad
+    intelectual o industrial que pueda corresponderle ... Cualquier ejercicio de los
+    anteriores derechos ... requiere autorización previa y por escrito". These are copyright
+    acts only, with no TDM, art. 67.3, automated or AI clause, so copyright_boilerplate.
+    robots.txt names no AI crawler. access "free" is observed: two Nov 2026 news pages
+    served 840-1,280 words with no isAccessibleForFree field and no paywall markup.
+    year_start 2021 = oldest entry in the noticias sitemap; older archive not checked. News
+    only, no opinion section, so it is a news-genre source.
+
+- id: es-hola
+  name: ¡HOLA! (hola.com)
+  country: ES
+  source_type: magazine
+  url: https://www.hola.com/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [es]
+  genres: [news, other]
+  access_method: scrape
+  licence: HOLA aviso legal (no reproduction, distribution, modification or copying unless authorised or legally allowed)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.hola.com/aviso-legal/
+    - https://www.hola.com/robots.txt
+    - https://www.hola.com/actualidad/20261117935485/woody-allen-foto-hija-bechet/
+    - https://www.hola.com/actualidad/20261117935491/carlos-franganillo-asturiano-y-de-familia-de-6/
+  notes: >-
+    Celebrity weekly. Aviso legal lists among forbidden acts: "Reproducir, distribuir,
+    modificar o copiar el contenido de este Sitio Web, salvo que de disponga de la
+    autorización de HOLA, S.L. o esté legalmente autorizado." No TDM, art. 67.3, automated
+    or AI clause, so copyright_boilerplate. robots.txt names no AI crawler. Both sampled Nov
+    2026 pages had isAccessibleForFree "true" (530-790 words). year_start 2026 = sampled
+    pages only. Celebrity news; low opinion content.
+
+- id: es-diezminutos
+  name: Diez Minutos (diezminutos.es)
+  country: ES
+  source_type: magazine
+  url: https://www.diezminutos.es/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [es]
+  genres: [news, other]
+  access_method: scrape
+  licence: Hearst España aviso legal (private copy for personal use only; no distribution or other unauthorised acts)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.hearst.es/aviso-legal
+    - https://www.diezminutos.es/robots.txt
+    - https://www.diezminutos.es/cocina/alimentos-nutricion/a73973543/huevo-nutricion-experta-ana-maria-lopez-sobaler-salud-cerebro-alimentos-funcion-cognitiva/
+    - https://www.diezminutos.es/estilo-de-vida/a74345476/naturgy-transicion-energetica-hitos-historia/
+  notes: >-
+    Celebrity weekly (Hearst). Hearst aviso legal: "únicamente podrá visualizar y obtener
+    copia privada de los contenidos siempre y cuando dicha copia sea, única y
+    exclusivamente, para su uso personal y privado; quedando terminantemente prohibida su
+    utilización para fines comerciales. La distribución, modificación, cesión, comunicación
+    pública y cualquier otro acto que no hay sido expresamente autorizado ... queda
+    prohibido." The bans name copyright acts, so copyright_boilerplate. robots.txt blocks
+    GPTBot and CCBot. access "free" is observed: two pages (Oct-Nov 2026) served 660-730
+    words with no isAccessibleForFree field; the page code carries a paywall toggle
+    ("fre.cds.enable-paywall") whose state we could not see. The second sample is sponsored
+    content. year_start 2026 = sampled pages only.
+
+- id: es-muy-interesante
+  name: Muy Interesante (muyinteresante.okdiario.com)
+  country: ES
+  source_type: magazine
+  url: https://muyinteresante.okdiario.com/
+  access: free
+  year_start: 2025
+  year_end: null
+  languages: [es]
+  genres: [news, other]
+  access_method: scrape
+  licence: Zinet Media aviso legal (copies for personal and private use only)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://muyinteresante.okdiario.com/aviso-legal.html
+    - https://www.muyinteresante.com/robots.txt
+    - https://muyinteresante.okdiario.com/actualidad/china-descubre-yacimiento-supergigante-oro-1100-toneladas-historia.html
+    - https://muyinteresante.okdiario.com/actualidad/3-kgm-torres-hibrido-electrico-y-suv-coupe.html
+  notes: >-
+    Popular-science monthly; muyinteresante.com now redirects to an okdiario.com subdomain
+    (Zinet Media). Aviso legal: the user may "imprimirlos, copiarlos y almacenarlos ...
+    siempre y cuando sea, única y exclusivamente, para su uso personal y privado." No TDM,
+    art. 67.3, automated or AI clause, so copyright_boilerplate. robots.txt blocks GPTBot
+    and CCBot. access "free" is observed: two pages (2025-08, 2026-10) served 1,640-2,090
+    words with no isAccessibleForFree field and no paywall markup. year_start 2025 = oldest
+    page seen. Science and car items; low opinion content.
+
+- id: es-mia
+  name: Mía (miarevista.okdiario.com)
+  country: ES
+  source_type: magazine
+  url: https://miarevista.okdiario.com/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [es]
+  genres: [columns, other]
+  access_method: scrape
+  licence: Zinet Media aviso legal (copies for personal and private use only)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://miarevista.okdiario.com/aviso-legal.html
+    - https://www.miarevista.es/robots.txt
+    - https://miarevista.okdiario.com/actualidad/claves-acompanar-hijos-adolescentes-en-redes-sociales-sin-invadir-su-intimidad.html
+    - https://miarevista.okdiario.com/actualidad/periodismo-mafia-y-poder-asi-es-un-hombre-de-honor-la-nueva-novela-de-paloma-sanchez-garnica.html
+  notes: >-
+    Women's weekly; miarevista.es redirects to an okdiario.com subdomain (Zinet Media
+    Global). Same aviso legal template as es-muy-interesante: copies "única y
+    exclusivamente, para su uso personal y privado"; no TDM, automated or AI clause, so
+    copyright_boilerplate. robots.txt blocks GPTBot and CCBot. access "free" is observed:
+    two Nov 2026 pages served 1,380-2,470 words with no isAccessibleForFree field and no
+    paywall markup. year_start 2026 = sampled pages only.
+
+- id: es-ctxt
+  name: CTXT, Contexto y Acción (ctxt.es)
+  country: ES
+  source_type: magazine
+  url: https://ctxt.es/
+  access: free
+  year_start: 2015
+  year_end: null
+  languages: [es]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: CC BY-NC 4.0 (site-wide notice); aviso legal also limits copies to personal and private use
+  tdm_opt_out: "unknown"
+  restriction_scope: none
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~54,760 (Aug 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://ctxt.es/es/20150115/redaccion/1705/?tpl=11
+    - https://ctxt.es/es/20150115/redaccion/33897/
+    - https://ctxt.es/robots.txt
+    - https://ctxt.es/es/20260201/Politica/52165/ignacio-sanchez-cuenca-adam-przeworski-diarios-perez-libro-prologo-eeuu-trump-democracia.htm
+    - https://ctxt.es/es/20260801/Culturas/54760/Guillem-Martinez-como-los-griegos-hierbas-marinas-robar-a-la-naturaleza-salicornia-hinojo.htm
+  notes: >-
+    Reader-funded left-of-centre opinion and culture magazine (Fundación Contexto y
+    Acción). Licence page: "Está web está registrada bajo la licencia Creative Commons
+    Attribution-NonCommercial 4.0 International License." So scope none (non-commercial
+    reuse explicitly allowed). The aviso legal, older boilerplate, still says copies are
+    allowed "única y exclusivamente, para su uso personal y privado"; we read the CC licence
+    as the governing grant (same reading as the BE Médor row), but flag the conflict. robots.txt
+    blocks GPTBot and CCBot. access "free" is observed: two 2026 pieces served 3,800-4,000
+    words with no isAccessibleForFree field and no paywall markup. year_start 2015 = date
+    of the site's own licence and legal pages (20150115).
+
+- id: es-jotdown
+  name: Jot Down (jotdown.es)
+  country: ES
+  source_type: magazine
+  url: https://www.jotdown.es/
+  access: free
+  year_start: 2025
+  year_end: null
+  languages: [es]
+  genres: [columns, other]
+  access_method: scrape
+  licence: Jot Down aviso legal (no reproduction, distribution or communication; personal and private copies allowed)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.jotdown.es/aviso-legal/
+    - https://www.jotdown.es/robots.txt
+    - https://www.jotdown.es/2025/12/josep-r-casals-entrevista/
+    - https://www.jotdown.es/2026/02/gilipollas-y-estupidos-de-la-naturaleza-humana/
+  notes: >-
+    Long-form culture and interview magazine (WABI SABI). Aviso legal: "quedan
+    expresamente prohibidas la reproducción, la distribución y la comunicación pública ...
+    de la totalidad o parte de los contenidos", but the user may "imprimirlos, copiarlos y
+    almacenarlos ... para su uso personal y privado". No TDM, automated or AI clause, so
+    copyright_boilerplate. robots.txt names no AI crawler. access "free" is observed: two
+    pieces (Dec 2025, Feb 2026) served 2,100-6,600 words with no isAccessibleForFree field;
+    "premium" strings in the page are plugin asset paths. year_start 2025 = oldest page
+    seen (the aviso legal is dated 2011-05-13). Comment threads are out of v0 scope.
+
+- id: es-elsalto
+  name: El Salto (elsaltodiario.com)
+  country: ES
+  source_type: magazine
+  url: https://www.elsaltodiario.com/
+  access: partial_paywall
+  year_start: 2026
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: texts CC BY-SA 3.0 ES (images excluded)
+  tdm_opt_out: "unknown"
+  restriction_scope: none
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.elsaltodiario.com/salto-de-carro/licencia
+    - https://www.elsaltodiario.com/info/terminos-y-condiciones
+    - https://www.elsaltodiario.com/robots.txt
+    - https://www.elsaltodiario.com/sitemap_index.xml
+    - https://www.elsaltodiario.com/alicante/movilizacion-vecinal-sindical-frena-un-intento-desalojo-extrajudicial-alacant
+    - https://www.elsaltodiario.com/arte/aniversario-centenario-nacimiento-escritor-pensador-critico-john-berger-trilogia-fatigas-modos-ver
+  notes: >-
+    Member-funded left-wing monthly and daily site. Licence page: "Los textos publicados en
+    El Salto son Creative Commons con la licencia CC BY-SA 3.0 ES, que permite compartir
+    los contenidos escritos siempre que se mencione la autoría y el medio de procedencias y
+    se comparta con la misma licencia." So scope none. robots.txt names no AI crawler. The
+    navigation has a "Solo para socias" section, so partial_paywall; two Nov 2026 articles
+    served 930-2,650 words with no isAccessibleForFree field. Sitemaps are by topic, so
+    archive depth was not measured; year_start 2026 = sampled pages only. One-sided.
+
+- id: es-lamarea
+  name: La Marea (lamarea.com)
+  country: ES
+  source_type: magazine
+  url: https://www.lamarea.com/
+  access: free
+  year_start: 2013
+  year_end: null
+  languages: [es]
+  genres: [news, opinion, columns]
+  access_method: scrape
+  licence: CC BY-SA 3.0 with a footer ban on AI training
+  tdm_opt_out: "yes"
+  restriction_scope: ai_training_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.lamarea.com/
+    - https://www.lamarea.com/robots.txt
+    - https://www.lamarea.com/2013/
+    - https://www.lamarea.com/2026/10/22/agresores-y-victimas-al-mismo-tiempo/
+    - https://www.lamarea.com/2026/04/20/que-tema-mas-feo/
+  notes: >-
+    Cooperative-owned left-wing monthly (MásPúblico). Footer, verbatim: "No se permite el
+    uso del contenido para entrenamiento de IA | The use of this content for AI training is
+    not permitted" and "MásPúblico sociedad cooperativa. Licencia CC BY-SA 3.0." Only AI
+    training is excluded, so ai_training_only. No separate aviso legal found (/aviso-legal/
+    404). robots.txt blocks GPTBot and CCBot. access "free" is observed: two 2026 pieces
+    served 880-930 words with no isAccessibleForFree field and no paywall markup.
+    year_start 2013 = the /2013/ archive page lists December 2013 articles (not sampled for
+    access). One-sided.
 
 # ---------------------------------------------------------------- PT
 
