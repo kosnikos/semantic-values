@@ -382,6 +382,371 @@
     nothing post-1940 is free. Main paid route to 1940-2005 regional and national UK press
     including letters pages. Recorded as paywall.
 
+# GB wider sweep (Task 5e): open titles with a free part. See sources.md "Wider sweep".
+
+- id: gb-daily-mail
+  name: Daily Mail / MailOnline (dailymail.co.uk, incl. "Debate" opinion)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.dailymail.co.uk/debate/index.html
+  access: partial_paywall
+  year_start: 1994
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: DMG Media terms (personal, non-commercial use; TDM and scraping reserved, except where the law does not allow it to be excluded by contract)
+  tdm_opt_out: "yes"
+  restriction_scope: tdm_all
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "sitemap archive lists 372 monthly pages from 1994-01"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.dailymail.co.uk/terms
+    - https://www.dailymail.co.uk/robots.txt
+    - https://www.dailymail.co.uk/home/sitemaparchive/index.html
+    - https://www.dailymail.co.uk/debate/index.html
+    - https://www.dailymail.co.uk/debate/article-16257071/STEPHEN-GLOVER-Burnham-comments-slavery-destructive-blunder.html
+    - https://en.wikipedia.org/wiki/List_of_newspapers_in_the_United_Kingdom_by_circulation
+  notes: >-
+    Terms clause 2.2 bans use "for the purpose of text/ data mining or analysis to generate
+    information which includes but is not limited to patterns, trends and correlations" and
+    copying "by way of any 'bot/robot', 'spider', 'scraper'"; it "should be treated as an
+    express reservation of our rights" but "shall not apply insofar as (but only to the
+    extent that) we are unable to exclude or limit text/data mining or web scraping activity
+    by contract under the laws which are applicable to us". So tdm_all, open in GB under CDPA
+    s.29A. robots.txt header repeats the ban (Art. 4 DSM TDM, ML/AI/LLM development);
+    licensing: partnerships@dmgmedia.co.uk. Two sampled Debate columns (Nov 2026) served
+    623-1,250 words of body text without login (no isAccessibleForFree flag); the page code
+    has an "isPaywalled" switch (Mail+), hence partial_paywall. Sitemap archive months start
+    at 1994-01 (observed; old-content completeness not checked). Circulation 687,063 (ABC,
+    Jan 2025, per Wikipedia list). Mass-market right-of-centre tabloid; strong opinion columns.
+
+- id: gb-inews
+  name: The i Paper (inews.co.uk)
+  country: GB
+  source_type: newspaper_archive
+  url: https://inews.co.uk/opinion
+  access: partial_paywall
+  year_start: 2016
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: i Paper terms (DMG Media template; TDM and scraping reserved, except where the law does not allow it to be excluded by contract)
+  tdm_opt_out: "yes"
+  restriction_scope: tdm_all
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://inews.co.uk/terms-and-conditions
+    - https://inews.co.uk/robots.txt
+    - https://inews.co.uk/sitemap.xml
+    - https://inews.co.uk/opinion
+    - https://inews.co.uk/opinion/disturbing-thing-russell-brands-prison-message-4904367
+    - https://inews.co.uk/opinion/economist-gave-britain-dangerous-debt-addiction-4833447
+    - https://inews.co.uk/opinion/defeat-trump-doesnt-mean-end-maga-4878557
+    - https://en.wikipedia.org/wiki/List_of_newspapers_in_the_United_Kingdom_by_circulation
+  notes: >-
+    Same clause 2.2 as gb-daily-mail: no use "for the purpose of text/ data mining or
+    analysis", treated as "an express reservation of our rights", but it "shall not apply
+    insofar as ... we are unable to exclude or limit text/data mining or web scraping
+    activity by contract under the laws which are applicable to us". tdm_all, open in GB
+    under s.29A. Three sampled opinion pieces (Nov 2026) served 538-1,026 words without
+    login (no isAccessibleForFree flag); the page data marks some products
+    "subscriber_only": true and the terms describe paid Subscriptions, hence
+    partial_paywall. Daily sitemaps run back to 2016 (plus one 2000-01-01 placeholder);
+    year_start 2016 from that. Circulation 122,487 (ABC, Jan 2025). Centrist, broadsheet
+    style; good opinion desk.
+
+- id: gb-evening-standard
+  name: Evening Standard (standard.co.uk, incl. Comment)
+  country: GB
+  source_type: newspaper_archive
+  url: https://www.standard.co.uk/comment
+  access: free
+  year_start: 1998
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: Standard terms of use (personal, non-commercial use; no copying without permission)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.standard.co.uk/service/terms-of-use-6902768.html
+    - https://www.standard.co.uk/robots.txt
+    - https://www.standard.co.uk/archive
+    - https://www.standard.co.uk/comment
+    - https://www.standard.co.uk/comment/ai-will-not-replace-human-art-gen-z-b1301035.html
+    - https://www.standard.co.uk/comment/alastair-campbell-book-extract-persevilience-andy-burnham-b1303439.html
+  notes: >-
+    Terms: "The Website and the Content may only be used for your personal, non-commercial
+    use"; "you agree not to download, copy, reproduce, modify, store, archive, show in
+    public, redistribute or commercially exploit in any way any part of the Content without
+    the prior written permission of Standard.co.uk". Same template as gb-independent; no
+    TDM, automated or AI clause, so copyright_boilerplate. robots.txt blocks only Nutch.
+    access "free" is observed: both sampled Comment pieces had isAccessibleForFree true and
+    served ~1,000 words. The date archive lists years from 1998. Circulation 314,285 (ABC,
+    Jan 2023; no later figure). London title; national-politics comment.
+
+- id: gb-conversation-uk
+  name: The Conversation UK (theconversation.com/uk)
+  country: GB
+  source_type: magazine
+  url: https://theconversation.com/uk
+  access: free
+  year_start: 2013
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: CC BY-ND (article text); no AI/ML training
+  tdm_opt_out: "unknown"
+  restriction_scope: ai_training_only
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "yes"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://theconversation.com/uk/republishing-guidelines
+    - https://theconversation.com/uk/who-we-are
+    - https://theconversation.com/robots.txt
+    - https://theconversation.com/25-years-of-the-police-service-of-northern-ireland-the-leadership-and-culture-challenges-that-remain-286919
+  notes: >-
+    Republishing guidelines: "The text of our articles (excluding images) is published under
+    a Creative Commons Attribution-No Derivatives licence"; "You cannot use our articles for
+    training artificial intelligence or machine learning models"; "You can't systematically
+    republish all of our articles". Only AI training is banned, so ai_training_only.
+    robots.txt blocks a long list of AI crawlers (CCBot, anthropic-ai and others); the "*"
+    group only blocks /metrics/, /auth/, /content/ and similar paths. "The UK edition
+    launched in May 2013" (who-we-are). Free, no paywall seen. Written by academics, not
+    the public; explanatory commentary rather than op-eds. UK edition pages are mixed with
+    other editions on the same domain, so filter by edition.
+
+- id: gb-opendemocracy
+  name: openDemocracy (opendemocracy.net)
+  country: GB
+  source_type: magazine
+  url: https://www.opendemocracy.net/
+  access: free
+  year_start: 2004
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: CC BY-NC 4.0 (stated on article pages)
+  tdm_opt_out: "no"
+  restriction_scope: none
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "yes"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.opendemocracy.net/
+    - https://www.opendemocracy.net/robots.txt
+    - https://www.opendemocracy.net/en/clarity-is-more-important-than-money/
+    - https://www.opendemocracy.net/en/article-2186jsp/
+  notes: >-
+    Sampled article pages (2017 and 2004) carry "Creative Commons Attribution-NonCommercial
+    4.0 International licence" linking creativecommons.org/licenses/by-nc/4.0, so non-
+    commercial reuse is explicitly allowed (scope none). robots.txt only disallows
+    /.ghost/analytics/api/; no AI-crawler blocks. The 2004-10-26 article (/en/article-2186jsp/)
+    is the oldest seen; year_start 2004 from that (the site may go back further). Free, no
+    paywall seen. London-based but international, left-leaning; only part of it is about the
+    UK (filter by section). Did not find a separate terms page (/en/terms-and-conditions/
+    returned 404).
+
+- id: gb-prospect
+  name: Prospect magazine (prospectmagazine.co.uk)
+  country: GB
+  source_type: magazine
+  url: https://www.prospectmagazine.co.uk/
+  access: partial_paywall
+  year_start: 1995
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: Prospect terms of use (no TDM or scraping, except where the law does not allow it to be excluded by contract)
+  tdm_opt_out: "yes"
+  restriction_scope: tdm_all
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~75,660 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.prospectmagazine.co.uk/terms-of-use
+    - https://www.prospectmagazine.co.uk/robots.txt
+    - https://www.prospectmagazine.co.uk/sitemap.xml
+    - https://www.prospectmagazine.co.uk/ideas/law/the-weekly-constitutional/75659/trump-lawyer-seeks-to-bully-congress
+    - https://www.prospectmagazine.co.uk/politics/the-insider/75635/its-time-to-really-pressure-donald-trump-iran-ukraine-tarrifs
+    - https://www.prospectmagazine.co.uk/ideas/technology/75560/ai-railroad-to-corruption-alphabet-meta-microsoft-amazon
+  notes: >-
+    Terms: "You shall not conduct, facilitate, authorise or permit any text or data mining or
+    web scraping in relation to our site", covering "Any automated analytical technique aimed
+    at analysing text and data in digital form", but "This clause shall not apply insofar as
+    (but only to the extent that) we are unable to exclude or limit text or data mining or
+    web scraping activity by contract under the laws which are applicable to us". tdm_all,
+    open in GB under s.29A. robots.txt blocks GPTBot and Google-Extended only. Three sampled
+    articles served 553-1,217 words in the HTML, but the site runs a Piano subscription
+    system and the terms describe "Individual Subscriber Users", hence partial_paywall (meter
+    behaviour not tested). Sitemap months start at 1995-10. Monthly centre-left essay magazine.
+
+- id: gb-unherd
+  name: UnHerd (unherd.com)
+  country: GB
+  source_type: magazine
+  url: https://unherd.com/
+  access: partial_paywall
+  year_start: 2018
+  year_end: null
+  languages: [en]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: UnHerd terms (personal, private, non-commercial use)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://unherd.com/terms-conditions/
+    - https://unherd.com/robots.txt
+    - https://unherd.com/post-sitemap.xml
+    - https://unherd.com/2026/10/a-dangerous-push-to-criminalize-sex/
+    - https://unherd.com/2026/10/a-halloween-ghost-story/
+  notes: >-
+    Terms: "you may use our services for personal, private and non-commercial purposes" and
+    "you must not commercially exploit, or sell any content"; "Parts of our services are only
+    accessible to our subscribers and not to visitors". No TDM, scraping or AI clause on the
+    page, so copyright_boilerplate. robots.txt blocks GPTBot, CCBot, anthropic-ai, Claude-Web
+    and other AI agents. Of two sampled essays, one served its full body (~2,270 words; JSON
+    wordCount 3,624) and one only ~70 of 1,683 words, hence partial_paywall. First
+    post-sitemap entries are from 2018-01. Heterodox opinion magazine.
+
+- id: gb-hello
+  name: HELLO! magazine (hellomagazine.com)
+  country: GB
+  source_type: magazine
+  url: https://www.hellomagazine.com/
+  access: partial_paywall
+  year_start: 2001
+  year_end: null
+  languages: [en]
+  genres: [other, news]
+  access_method: scrape
+  licence: HELLO! terms of use (reproduction prohibited without authorisation)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: "article ids reach ~934,800 (Nov 2026)"
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.hellomagazine.com/terms-of-use/
+    - https://www.hellomagazine.com/robots.txt
+    - https://www.hellomagazine.com/sitemap.xml
+    - https://www.hellomagazine.com/celebrities/934823/calista-flockhart-part-of-marriage-that-scares-harrison-ford/
+    - https://www.hellomagazine.com/celebrities/934843/brian-blessed-at-90-exclusive-hello-interview/
+  notes: >-
+    Terms forbid "Reproducing, distributing, modifying or copying the content of this
+    Website, except where authorised by HELLO! or otherwise legally permitted" and state
+    "Copying, reproduction, distribution, public communication and adaptation of this
+    content is therefore prohibited". No TDM or AI clause, so copyright_boilerplate.
+    robots.txt (header "AI training & data-resale crawlers: blocked") blocks GPTBot,
+    ClaudeBot, CCBot and others. Of two sampled celebrity pages, one had
+    isAccessibleForFree true and one (an "exclusive" interview) false, hence
+    partial_paywall. Sitemap starts in 2001. Celebrity/royalty weekly: popular-magazine
+    genre stream, little opinion.
+
+- id: gb-good-housekeeping-uk
+  name: Good Housekeeping UK (goodhousekeeping.com/uk)
+  country: GB
+  source_type: magazine
+  url: https://www.goodhousekeeping.com/uk/
+  access: free
+  year_start: 2024
+  year_end: null
+  languages: [en]
+  genres: [other]
+  access_method: scrape
+  licence: Hearst UK terms (personal, non-commercial use)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.hearst.co.uk/terms-and-conditions/
+    - https://www.goodhousekeeping.com/robots.txt
+    - https://www.goodhousekeeping.com/uk/
+    - https://www.goodhousekeeping.com/uk/beauty/hair/a74435941/hair-thinning-after-50/
+  notes: >-
+    Hearst UK terms: "Hearst Magazines grants you a limited, non-exclusive, revocable,
+    non-transferable licence to use the Site content solely for personal use"; you may
+    "store such pages in electronic form on disk (but not on any server ...) for your own
+    personal, non-commercial use". No TDM or AI clause, so copyright_boilerplate. robots.txt
+    blocks CCBot, Google-Extended, anthropic-ai and others, and GPTBot from /uk/. access
+    "free": the sampled article had isAccessibleForFree true. year_start 2024 is the oldest
+    page seen (an About page dated 2024-12-16), not the archive start. Content is mostly
+    home, health and beauty service journalism; little opinion.
+
+- id: gb-woman-and-home
+  name: Woman & Home (womanandhome.com, Future plc)
+  country: GB
+  source_type: magazine
+  url: https://www.womanandhome.com/
+  access: free
+  year_start: 2005
+  year_end: null
+  languages: [en]
+  genres: [other]
+  access_method: scrape
+  licence: Future plc UK terms (no TDM or scraping, except where the law does not allow it to be excluded by contract)
+  tdm_opt_out: "yes"
+  restriction_scope: tdm_all
+  llm_api_allowed: "no"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://futureplc.com/terms-and-conditions-uk/
+    - https://www.womanandhome.com/robots.txt
+    - https://www.womanandhome.com/sitemap.xml
+    - https://www.womanandhome.com/health-wellbeing/dr-amir-khan-strong-thighs/
+    - https://www.womanandhome.com/beauty/beauty-team-autumn-winter-perfumes/
+  notes: >-
+    Future UK terms: "You shall not conduct, facilitate, authorise or permit any text or data
+    mining or web scraping in relation to our sites ... for any purpose, including the
+    development, training, fine-tuning or validation of AI systems or models", but "This
+    clause will not apply insofar as (but only to the extent that) we are unable to exclude
+    or limit text or data mining or web scraping activity by contract under the laws which
+    are applicable to us". tdm_all, open in GB under s.29A. robots.txt has no AI-crawler
+    blocks. access "free" is observed: two sampled pages served ~1,000-1,300 words, no
+    isAccessibleForFree false. Sitemap months start at 2005-11. Women's monthly, mostly
+    lifestyle; the same Future terms cover The Week UK and GoodtoKnow (Woman's Weekly's
+    site), see the sources.md table.
+
 # ---------------------------------------------------------------- GR
 
 - id: gr-nlg-efimeris
@@ -1064,6 +1429,185 @@
     20minutes.fr all disallow CCBot, so the main national titles are likely absent from
     recent crawls; agoravox.fr does not block CCBot. French coverage must be measured from
     the index.
+
+# FR wider sweep (Task 5e): open titles with a free part. See sources.md "Wider sweep".
+
+- id: fr-conversation-france
+  name: The Conversation France (theconversation.com/fr)
+  country: FR
+  source_type: magazine
+  url: https://theconversation.com/fr
+  access: free
+  year_start: 2015
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns]
+  access_method: scrape
+  licence: CC BY-ND ("Creative Commons Attribution/Pas de modification")
+  tdm_opt_out: "unknown"
+  restriction_scope: none
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "yes"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://theconversation.com/fr/republishing-guidelines
+    - https://theconversation.com/fr/legal-notices
+    - https://theconversation.com/uk/who-we-are
+    - https://theconversation.com/robots.txt
+    - https://theconversation.com/a-lecole-les-arts-peuvent-ils-liberer-la-parole-des-enfants-sur-les-violences-291525
+  notes: >-
+    French republishing guidelines: articles are published "sous licence Creative Commons
+    Attribution/Pas de modification"; "Vous ne pouvez pas vendre nos articles"; "Vous ne
+    pouvez pas republier la totalité de nos articles". Unlike the UK page, the French page
+    has no AI or TDM sentence, so scope none (explicit open licence). robots.txt (shared
+    domain) blocks many AI crawlers, and the UK guidelines ban AI training; treat training
+    as excluded anyway. The France edition launched in 2015 (UK who-we-are page). Free; the
+    sampled article served ~510 words with no paywall markers. Written by academics.
+
+- id: fr-slate
+  name: Slate.fr
+  country: FR
+  source_type: magazine
+  url: https://www.slate.fr/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [fr]
+  genres: [opinion, columns, news]
+  access_method: scrape
+  licence: Slate.fr mentions légales (strictly personal, private, non-collective use; no redistribution)
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.slate.fr/mentions-legales
+    - https://www.slate.fr/robots.txt
+    - https://www.slate.fr/sciences/chats-egypte-antique-divinite-bastet-momie-sacrifice-violence-blessure
+    - https://www.slate.fr/culture/fouilles-camp-goulag-secret-russie-union-sovietique-kazakhstan-prisonniers
+  notes: >-
+    Mentions légales: "Slate.fr consent à l'internaute le droit de reproduire tout ou partie
+    du contenu du site pour stockage aux fins de représentation sur écran monoposte et de
+    reproduction, en un exemplaire, pour copie de sauvegarde ou tirage sur papier. Ce droit
+    est consenti dans le cadre d'un usage strictement personnel, privé et non collectif,
+    toute mise en réseau, toute rediffusion ou commercialisation totale ou partielle de ce
+    contenu, auprès des tiers, sous quelque forme que ce soit, étant strictement interdite."
+    The ban targets redistribution to third parties; no TDM, automated or AI clause, so
+    copyright_boilerplate. robots.txt blocks anthropic-ai and other AI crawlers ("Robots
+    exclus"). access "free" is observed: both sampled articles had isAccessibleForFree true.
+    year_start 2026 = oldest page seen; archive depth not verified (the sitemap returned a
+    redirect with no entries).
+
+- id: fr-mediapart-club
+  name: Le Club de Mediapart (blogs.mediapart.fr, reader blogs)
+  country: FR
+  source_type: other
+  url: https://blogs.mediapart.fr/
+  access: free
+  year_start: 2026
+  year_end: null
+  languages: [fr]
+  genres: [opinion]
+  access_method: scrape
+  licence: Mediapart mentions légales (strictly personal, private use; no redistribution); Club charter not read
+  tdm_opt_out: "unknown"
+  restriction_scope: copyright_boilerplate
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://blogs.mediapart.fr/robots.txt
+    - https://www.mediapart.fr/mentions-legales
+    - https://blogs.mediapart.fr/charte-de-participation
+    - https://blogs.mediapart.fr/violaridolfi1/blog/171126/accord-ue-rwanda-la-sous-traitance-des-droits-humains-est-un-scandale-europeen
+  notes: >-
+    Reader-written blogs (subscribers post; anyone reads), so close to the project's
+    "ordinary people" target, like fr-agoravox. Mediapart mentions légales: the right to
+    reproduce "est consenti dans le cadre d'un usage strictement personnel, privé et non
+    collectif, toute mise en réseau, toute rediffusion ou commercialisation totale ou
+    partielle de ce contenu, auprès des tiers, sous quelque forme que ce soit, étant
+    strictement interdite"; no TDM or AI clause, so copyright_boilerplate. The participation
+    charter loaded by curl but its text is rendered by script and WebFetch was refused, so
+    the bloggers' licence terms are unread. robots.txt: "User-agent: *" "Crawl-delay: 3"
+    "Allow: /"; CCBot, ClaudeBot, GPTBot and others are disallowed. access "free" is
+    observed: the sampled blog post (17 Nov 2026) served ~1,480 words without login.
+    year_start 2026 = oldest page seen; archive depth not verified. Left-leaning
+    self-selected authors (selection bias). The Mediapart journal itself is subscriber-only.
+
+- id: fr-humanite
+  name: L'Humanité (humanite.fr, incl. "En débat")
+  country: FR
+  source_type: newspaper_archive
+  url: https://www.humanite.fr/
+  access: partial_paywall
+  year_start: 1997
+  year_end: null
+  languages: [fr]
+  genres: [opinion, news]
+  access_method: scrape
+  licence: unknown (legal notice not readable); CGV say access is for personal use
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.humanite.fr/robots.txt
+    - https://www.humanite.fr/sitemap.xml
+    - https://www.humanite.fr/conditions-generales-de-vente-cgv
+    - https://legales.humanite.fr/
+    - https://www.humanite.fr/en-debat/legitime-defense/le-senat-doit-rejeter-la-loi-qui-etablit-une-presomption-de-legitime-defense-pour-la-police
+    - https://www.humanite.fr/en-debat/capitalisme/face-aux-mouvements-sociaux-comment-le-capitalisme-en-crise-genere-t-il-la-violence-et-sen-sert-il
+  notes: >-
+    The legal-notice site (legales.humanite.fr) returned a script shell to curl and WebFetch
+    was refused, so the site terms are unread: scope unknown (open in the EU rule). The CGV
+    only say "Les accès sont destinés à un usage personnel, sauf conditions particulières".
+    robots.txt (dated 20260723, section "#IA") blocks Google-Extended, OAI-SearchBot,
+    Claude-User, Claude-SearchBot and others; "*" is not blocked. Of two sampled "En débat"
+    pieces, one had isAccessibleForFree "False" and one had no flag and served ~470 words,
+    hence partial_paywall. The daily sitemap index runs back to 1997. Communist daily;
+    debate pages carry reader-facing tribunes. Read the legal notice in a browser before use.
+
+- id: fr-valeurs-actuelles
+  name: Valeurs actuelles (valeursactuelles.com)
+  country: FR
+  source_type: magazine
+  url: https://www.valeursactuelles.com/
+  access: partial_paywall
+  year_start: 2003
+  year_end: null
+  languages: [fr]
+  genres: [opinion, news]
+  access_method: scrape
+  licence: unknown (no reuse clause found on the legal notice)
+  tdm_opt_out: "unknown"
+  restriction_scope: unknown
+  llm_api_allowed: "unknown"
+  per_text_publish_allowed: "unknown"
+  text_quality: born_digital
+  volume_estimate: unknown
+  verified_on: 2026-11-18
+  evidence_urls:
+    - https://www.valeursactuelles.com/mentions-legales
+    - https://www.valeursactuelles.com/robots.txt
+    - https://www.valeursactuelles.com/post-sitemap.xml
+    - https://www.valeursactuelles.com/politique/presidentielle-2027-david-lisnard-sinvite-sur-le-podium-et-bouscule-la-droite-selon-un-sondage
+  notes: >-
+    The mentions-légales page we fetched with curl had no reproduction, TDM or AI clause and
+    no CGU link; WebFetch was refused, so scope unknown (open in the EU rule). robots.txt
+    has no AI-crawler blocks; its only comment concerns ExaSearchBot pagination. The sampled
+    article had isAccessibleForFree "true", and pages carry "Réservé aux abonnés" markers,
+    hence partial_paywall. Earliest post-sitemap lastmod is 2003-01-23. Hard-right weekly;
+    opinion-heavy. Check for a CGU page in a browser before use.
 
 # ---------------------------------------------------------------- BE
 

@@ -8,7 +8,7 @@ Cells show the number of usable (free or free-registration) sources per period.
 
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
-| FR | 1 | 0 | 0 | 3 |
+| FR | 1 | 0 | 0 | 6 |
 | NL | 0 | 0 | 2 | 4 |
 | BE | 1 | 1 | 1 | 3 |
 | LU | 1 | 1 | 1 | 5 |
@@ -19,7 +19,7 @@ Cells show the number of usable (free or free-registration) sources per period.
 | GR | 1 | 1 | 4 | 9 |
 | ES | 1 | 1 | 1 | 2 |
 | PT | 1 | 1 | 3 | 2 |
-| GB | 0 | 0 | 4 | 8 |
+| GB | 0 | 0 | 6 | 13 |
 
 ## Usable and not opted out
 
@@ -27,7 +27,7 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 
 | Country | 1940-1969 | 1970-1989 | 1990-2004 | 2005-now |
 |---|---|---|---|---|
-| FR | 1 | 0 | 0 | 3 |
+| FR | 1 | 0 | 0 | 6 |
 | NL | 0 | 0 | 2 | 4 |
 | BE | 1 | 1 | 1 | 3 |
 | LU | 1 | 1 | 1 | 4 |
@@ -38,7 +38,7 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 | GR | 1 | 1 | 4 | 9 |
 | ES | 1 | 1 | 1 | 2 |
 | PT | 0 | 0 | 2 | 2 |
-| GB | 0 | 0 | 3 | 7 |
+| GB | 0 | 0 | 5 | 12 |
 
 ## Open questions
 
@@ -51,6 +51,16 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - gb-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gb-gdelt-url-index: llm_api_allowed, per_text_publish_allowed
 - gb-british-newspaper-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- gb-daily-mail: per_text_publish_allowed
+- gb-inews: per_text_publish_allowed
+- gb-evening-standard: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- gb-conversation-uk: llm_api_allowed, tdm_opt_out
+- gb-opendemocracy: llm_api_allowed
+- gb-prospect: per_text_publish_allowed
+- gb-unherd: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- gb-hello: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- gb-good-housekeeping-uk: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- gb-woman-and-home: per_text_publish_allowed
 - gr-nlg-efimeris: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - gr-kathimerini-historical-archive: llm_api_allowed, per_text_publish_allowed
 - gr-kathimerini-website: llm_api_allowed, per_text_publish_allowed
@@ -70,6 +80,11 @@ As above, minus sources whose terms or an Art. 4(3) reservation forbid all TDM (
 - fr-reddit-france: llm_api_allowed, per_text_publish_allowed
 - fr-bnf-web-archive: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - fr-common-crawl-news: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-conversation-france: llm_api_allowed, tdm_opt_out
+- fr-slate: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-mediapart-club: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-humanite: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
+- fr-valeurs-actuelles: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - be-kbr-belgicapress: llm_api_allowed, per_text_publish_allowed, tdm_opt_out
 - be-lalibre-website: per_text_publish_allowed
 - be-politics-be-forum: llm_api_allowed, per_text_publish_allowed

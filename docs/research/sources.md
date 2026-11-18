@@ -134,7 +134,9 @@ request succeeds. That request should be sent now.
 
 ### Dead ends and leads (GB)
 
-- **Spectator Archive**: see above (lead, unverified).
+- **Spectator Archive**: see above (lead, unverified). Task 5e read spectator.com/terms:
+  any use "for any purpose" needs prior written consent (`all_reuse`), so it is closed
+  in GB too unless licensed.
 - **British Newspaper Archive** pages (.co.uk redirects to .com) and the
   **UK Web Archive** site (webarchive.org.uk) returned 403. Facts for both come from
   British Library pages instead.
@@ -143,6 +145,94 @@ request succeeds. That request should be sent now.
 - **Free letters-to-the-editor collections**: none found. Letters pages exist at the
   Guardian (restricted terms) and the Independent (Member exclusive). Historical letters
   are in the paid BNA and, if it proves accessible, the Spectator Archive.
+
+### Wider sweep (Task 5e)
+
+**Title list.** National dailies and Sundays, and the main regional dailies, come from
+Wikipedia's [List of newspapers in the United Kingdom by circulation](https://en.wikipedia.org/wiki/List_of_newspapers_in_the_United_Kingdom_by_circulation)
+(ABC figures). Circulation below is the latest figure that page gives (Jan 2025 unless
+noted). Magazines come from the owner's lists. We cross-checked them against Wikipedia's
+[List of magazines in the United Kingdom](https://en.wikipedia.org/wiki/List_of_magazines_in_the_United_Kingdom),
+which names every title below except UnHerd, Good Housekeeping and Reader's Digest. We found
+no cited magazine circulation figures (n/a).
+Guardian, Observer, BBC and Independent are covered above. We checked 30 titles: for each,
+robots.txt, the terms page, and one to three sample article pages (paywall flag and
+whether the body is in the HTML). "Open" uses the GB rule: `tdm_all` is open under CDPA
+s.29A, `all_reuse` is not.
+
+One judgement call matters for GB. DMG Media (Daily Mail, i), Future plc (Woman & Home,
+The Week) and Prospect use near-identical TDM clauses. Each one bans TDM and scraping but
+says it "shall not apply insofar as ... we are unable to exclude or limit text/data mining
+or web scraping activity by contract under the laws which are applicable to us". We class
+these as `tdm_all`, so they are open in GB. Reach plc (Mirror, MEN, OK!) instead bans
+"any automated means, including bots, scrapers, crawlers, spiders, AI agents" outright, and
+bans "Any other use ... (including without limitation reproduction for a purpose ...)"
+without written permission. We class Reach as `all_reuse`, so it is closed.
+
+#### Newspapers
+
+| Title | Scope | Circ. | Reason |
+|---|---|---|---|
+| Daily Mail / MailOnline | tdm_all | 687,063 | **Registry** `gb-daily-mail`. Open (s.29A). Debate columns served without login; Mail+ items are paywalled; sitemap from 1994. |
+| The i Paper | tdm_all | 122,487 | **Registry** `gb-inews`. Open (s.29A). 3/3 opinion pieces served; there is a subscriber tier; sitemap from 2016. |
+| Evening Standard | copyright_boilerplate | 314,285 (2023) | **Registry** `gb-evening-standard`. Free (2/2 `isAccessibleForFree` true); archive from 1998. |
+| The Times / Sunday Times | all_reuse | 368,929 (2020) | robots.txt: "The Times does not permit the unlicensed use of our content for large language models", and `User-agent: *` `Disallow: /`, so our crawler is blocked. Subscription. The terms page served a device-verification challenge. |
+| Financial Times | all_reuse | 109,995 | Terms "expressly prohibit any use of our content or data ... in any manner for any machine learning and/or artificial intelligence purposes, including ... to generate any data or content". Subscription. |
+| Daily Telegraph | unknown | 360,345 (2020) | Blocked: terms pages returned HTTP 429 to curl and WebFetch. robots.txt blocks CCBot, ClaudeBot, GPTBot and others. |
+| Daily Mirror | all_reuse | 205,332 | Reach terms: "you must not use any automated means, including bots, scrapers, crawlers, spiders, AI agents or similar technology - to access, copy, collect, download or extract content", plus an any-other-use permission clause. |
+| Manchester Evening News | all_reuse | 20,993 (2020) | Same Reach terms. robots.txt blocks GPTBot, CCBot, ClaudeBot. |
+| The Scotsman | all_reuse | n/a | robots.txt: AI training, dataset creation or bulk extraction "NOT permitted without written agreement and payment of £650 per page viewed". The linked Iconic Media contract allows free access only for "reading by individuals for their own personal use" and search, and says "You must not make any AI Use", which includes "any use of Content to generate, ground or inform the output of an AI Model". |
+| Yorkshire Post | all_reuse | 13,284 (2020) | Identical robots.txt and contract to the Scotsman (same publisher). |
+| The Herald (Glasgow) | copyright_boilerplate | 28,872 (2020) | Newsquest terms: "you will not otherwise copy, store, distribute ... create a database ... without our written permission". Open, but two sampled opinion pages served only ~80 words of body in the HTML, so we found no free part. Not registered. |
+
+#### Magazines
+
+| Title | Scope | Circ. | Reason |
+|---|---|---|---|
+| The Conversation UK | ai_training_only | n/a | **Registry** `gb-conversation-uk`. CC BY-ND; only AI training banned. Free, from 2013. Written by academics. |
+| openDemocracy | none | n/a | **Registry** `gb-opendemocracy`. CC BY-NC 4.0 on article pages. Free, from 2004 or earlier. |
+| Prospect | tdm_all | n/a | **Registry** `gb-prospect`. Open (s.29A). Piano subscription; sampled pages served their body. Sitemap from 1995. |
+| UnHerd | copyright_boilerplate | n/a | **Registry** `gb-unherd`. Personal-use terms, no TDM/AI clause; 1 of 2 essays was free. From 2018. |
+| HELLO! | copyright_boilerplate | n/a | **Registry** `gb-hello`. Celebrity weekly; 1 of 2 pages free. From 2001. |
+| Good Housekeeping UK | copyright_boilerplate | n/a | **Registry** `gb-good-housekeeping-uk`. Hearst "solely for personal use"; sampled page free. |
+| Woman & Home | tdm_all | n/a | **Registry** `gb-woman-and-home`. Future terms (open, s.29A); 2/2 pages free. Sitemap from 2005. |
+| The Spectator | all_reuse | n/a | Terms: Content "may not be used, reproduced, duplicated, copied, sold, resold, accessed, modified, or otherwise exploited, in full or in part, for any purpose without our prior written consent". |
+| New Statesman | all_reuse | n/a | Terms (read via WebFetch; curl got 403): "you are not allowed to copy or use anything on our site for any other purpose, unless authorised by the New Statesman. This includes not only business and commercial but also educational purposes." |
+| The Economist | unknown | n/a | Blocked: 403 to curl, WebFetch refused. robots.txt blocks GPTBot, CCBot, Claude-* and others. |
+| London Review of Books | copyright_boilerplate | n/a | Terms: "you may not download, store, disseminate, republish, post, reproduce ... in any form without the prior written permission". Both sampled current-issue pieces had `isAccessibleForFree` false. We found no free part, so not registered. |
+| The Critic | copyright_boilerplate | n/a | "Content accessed by users is for their personal use only." Two sampled articles served ~250 words (truncated), so no free part was found. |
+| The Week (UK) | tdm_all | n/a | Future terms (open in GB), but the sampled article had `isAccessibleForFree` "False". theweek.com now mixes the US and UK editions. Not registered. |
+| Private Eye | unknown | n/a | The website "showcases a few selected highlights from the current issue". Too little web text; we found no terms page. |
+| Radio Times | all_reuse | n/a | robots.txt: "Content-signal: search=yes, ai-input = no, ai-train=no", with "As a condition of accessing this website, you agree to abide by the following content signals". `ai-input` covers feeding content to AI models, i.e. our LLM tagging. Immediate Media terms allow access only "for your own personal and non-commercial use and not for any commercial or other purposes". |
+| OK! | all_reuse | n/a | Reach terms, same as the Mirror. |
+| Woman's Weekly | tdm_all | n/a | womansweekly.com redirects (301) to goodto.com (GoodtoKnow, Future plc). The magazine has no separate web text, so not registered. |
+| Reader's Digest UK | unknown | n/a | readersdigest.co.uk: the connection failed (no HTTP response). |
+| The People's Friend | unknown | n/a | 403 to curl (homepage and robots.txt). |
+
+#### Open titles shortlist (GB), ranked by fit
+
+Newspapers:
+
+1. `gb-daily-mail`: the largest daily (687k). Named opinion columnists, sitemap back to
+   1994, mostly free. Open only via s.29A (the terms ban TDM). Its right-of-centre tabloid
+   slant needs a counterweight.
+2. `gb-inews`: centrist opinion desk, free opinion pieces, from 2016. Also open via s.29A.
+3. `gb-evening-standard`: free Comment section, archive from 1998, boilerplate terms only.
+   London-centred.
+
+Magazines:
+
+1. `gb-prospect`: monthly essays and politics from 1995; open via s.29A. The paywall's
+   effect on bulk access has not been tested.
+2. `gb-opendemocracy`: CC BY-NC, free, from 2004. Left-leaning and international, so
+   filter to UK sections.
+3. `gb-unherd`: heterodox opinion from 2018; partly paywalled.
+4. `gb-conversation-uk`: CC BY-ND academic commentary from 2013; low "ordinary voice" fit.
+5. Popular-magazine stream: `gb-hello`, `gb-woman-and-home`, `gb-good-housekeeping-uk`.
+   They are open and largely free, but mostly celebrity and lifestyle copy.
+
+Letters pages were not checked title by title in this sweep. The s.29A conditions in spec
+§3 apply to everything above.
 
 ## FR
 
@@ -198,7 +288,8 @@ allows LLM tagging of public-domain issues (the `access=fayes` documents).
   read. It is a major youth forum; check it manually.
 - **Doctissimo forums**: the landing page loaded, but we found no terms link and the guessed
   CGU URLs returned 404.
-- **Le Club de Mediapart** (blogs.mediapart.fr): reader-written blogs. A strong lead, but
+- **Le Club de Mediapart** (blogs.mediapart.fr): now registered as `fr-mediapart-club`
+  (Task 5e). Earlier note: reader-written blogs. A strong lead, but
   WebFetch could not fetch the participation charter and robots.txt blocks CCBot,
   ClaudeBot and GPTBot. Check it manually.
 - **Le Monde pre-2005 archive**: could not be reached (lemonde.fr served a bot challenge
@@ -208,8 +299,97 @@ allows LLM tagging of public-domain issues (the `access=fayes` documents).
 - **Libération**: robots.txt has the same "licence only" wording as Le Monde and blocks
   CCBot. No separate entry.
 - **20 Minutes**: robots.txt disallows GPTBot, CCBot and ClaudeBot. Its access model
-  and terms were not read. **Ouest-France** returned 403.
+  and terms were not read. **Ouest-France** returned 403. (Task 5e read both: 20 Minutes
+  is `tdm_all`; Ouest-France's robots.txt blocks all agents. See Wider sweep.)
 - **GDELT**: no FR-specific facts gathered. See `gb-gdelt-url-index`.
+
+### Wider sweep (Task 5e)
+
+**Title list.** Newspapers come from French Wikipedia's
+[Liste de journaux en France](https://fr.wikipedia.org/wiki/Liste_de_journaux_en_France),
+which names all eleven dailies below. Magazines come from the owner's lists.
+Circulation (DFP, copies per issue, 2025) is from the ACPM 2025 results as reported by
+[CB News, 28 April 2026](https://www.cbnews.fr/node/100535). That page gives no figure
+for the titles marked n/a. Le Monde, Le Figaro, RetroNews, Gallica and AgoraVox are
+covered above. We checked 33 titles: robots.txt, the CGU or mentions légales, and one or
+two sample pages each.
+
+Under the EU rule, French titles fall into two groups. Bayard (La Croix, Notre Temps,
+Pèlerin), Prisma (Femme Actuelle, Télé-Loisirs), Elle and 20 Minutes make an express
+L.122-5-3 / Art. 4(3) TDM opt-out (`tdm_all`). Most of the others use the same clause
+Le Monde uses: "seule ... l'utilisation pour un usage privé ... toute autre utilisation
+est constitutive de contrefaçon", or "de quelque nature que ce soit ... dans quelque but
+que ce soit". We class that as `all_reuse`, following the Le Monde and La Libre entries.
+Only redistribution-only boilerplate (Slate.fr, Mediapart, VSD) and titles whose terms we
+could not read stay open.
+
+#### Newspapers
+
+| Title | Scope | Circ. | Reason |
+|---|---|---|---|
+| L'Humanité | unknown | n/a | **Registry** `fr-humanite`. The legal notice could not be read (script shell; WebFetch refused). Partly free; sitemap from 1997. |
+| Libération | all_reuse | n/a | robots.txt: "Seuls les partenaires sont habilités à utiliser nos contenus pour un usage autre que strictement individuel" (same wording as Le Monde). |
+| La Croix | tdm_all | n/a | CGU (PDF): "BAYARD SERVICE s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". |
+| 20 Minutes | tdm_all | n/a | CGU: "20 Minutes s'oppose à la fouille de textes et de données sur l'ensemble du Site", "quel que soit le but poursuivi". |
+| La Dépêche du Midi | all_reuse | n/a | CGU: "Toute reproduction, représentation, modification, diffusion ou utilisation commerciale ou non commerciale ... sans l'autorisation écrite de l'EDITEUR est strictement interdite", and no access "par des moyens automatisés". |
+| Le Télégramme | all_reuse | n/a | robots.txt: "Tout usage de nos contenus en dehors du cadre privé, requiert une licence ... Sont inclus notamment l'entraînement et l'ancrage des grands modèles de langage (LLM) ..., la veille web ou le media monitoring"; also `User-agent: *` `Disallow: /`. |
+| Ouest-France | unknown | 581,505 | robots.txt (WebFetch): `User-agent: *` `Disallow: /`, so our crawler is blocked. The site returned 403 to curl. |
+| Le Parisien | unknown | 192,505 | Blocked: 403 to curl and WebFetch. robots.txt (curl) blocks GPTBot, CCBot, anthropic-ai and others. |
+| Les Échos | unknown | n/a | Blocked: homepage 403. Terms not read. |
+| La Voix du Nord | unknown | n/a | Blocked: 403 on homepage and robots.txt. |
+| Sud Ouest | unknown | n/a | Blocked: 302 redirect loop on homepage and robots.txt. |
+
+#### Magazines
+
+| Title | Scope | Circ. | Reason |
+|---|---|---|---|
+| The Conversation France | none | n/a | **Registry** `fr-conversation-france`. CC BY-ND; the French guidelines have no AI clause. Free, from 2015. |
+| Slate.fr | copyright_boilerplate | n/a | **Registry** `fr-slate`. Personal-use and no-redistribution wording only; 2/2 pages free. |
+| Le Club de Mediapart | copyright_boilerplate | n/a | **Registry** `fr-mediapart-club`. Free reader blogs; Mediapart mentions légales (no TDM/AI clause). The Club charter is unread. |
+| Valeurs actuelles | unknown | n/a | **Registry** `fr-valeurs-actuelles`. No reuse clause found; partly free; sitemap from 2003. |
+| Mediapart (journal) | copyright_boilerplate | n/a | Same mentions légales; the journal is subscriber-only. The free part is Le Club (above). |
+| Le Point | unknown | 268,788 | Blocked: 403 to curl (homepage, robots.txt), WebFetch refused. |
+| L'Express | all_reuse | 124,452 | CGU: "seule est permise l'utilisation pour un usage privé"; "toute autre utilisation est constitutive de contrefaçon ... sauf autorisation préalable". robots.txt has a "Blocages et autorisation Bots et LLM" section. |
+| L'Obs | all_reuse | 166,054 | CGV: no crawling or mass collection "par quelque moyen et dans quelque but que ce soit", and "toute reproduction ... de quelque nature que ce soit ... est strictement interdite". |
+| Marianne | all_reuse | 106,990 | CGV (CMI France): "seule leur utilisation pour un usage privé est autorisée ... Toute autre utilisation est constitutive de contrefaçon". |
+| Télérama | all_reuse | n/a | Mentions légales: "Tout autre usage est soumis à autorisation préalable et expresse". |
+| Courrier international | all_reuse | 161,466 | CGVU: "toute reproduction, représentation, diffusion, traduction ou exploitation totale ou partielle, de quelque nature que ce soit et par quelque moyen que ce soit ... est strictement interdite". |
+| Le Monde diplomatique | all_reuse | n/a | CGVU: same template as L'Obs ("dans quelque but que ce soit"; "de quelque nature que ce soit"). |
+| Paris Match | all_reuse | n/a | CGU: no automatic or manual mass copying "pour quelque motif que ce soit et en particulier afin de développer ou d'entraîner tout programme logiciel (notamment les programmes basés sur l'intelligence artificielle)". |
+| Elle | tdm_all | n/a | Mentions légales 10.3: bans "toute action ou processus de crawler, moissonnage et/ou fouille de textes et de données ... pour toute finalité". |
+| Femme Actuelle | tdm_all | 284,633 | Prisma Media: opposes "toute extraction (notamment moissonnage et/ou fouille de textes et de données)" without authorisation "et selon une grille tarifaire". |
+| Télé-Loisirs | tdm_all | n/a | Same Prisma legal notice (programme-tv.net). |
+| Télé 7 Jours | copyright_boilerplate | n/a | programme-television.org (Bauer): content "exclusivement destinés à l'information et à l'usage personnel"; no TDM/AI clause found. The site is TV listings and soap recaps, and the sampled news page served ~70 words in paragraph tags. No free full text verified, so not registered. |
+| Notre Temps | tdm_all | 407,081 | Bayard CGU: "BAYARD s'oppose à toutes opérations de moissonnage et de fouille de textes et de données". |
+| Le Pèlerin | tdm_all | n/a | Same Bayard CGU. |
+| Psychologies | all_reuse | n/a | CGU: "L'Utilisateur n'est pas autorisé à copier, utiliser, reproduire, distribuer tout ou partie desdits Contenus sur un quelconque support, à titre onéreux ou gratuit, sans l'autorisation préalable écrite". |
+| Marie Claire | all_reuse | n/a | "Sauf autorisation, toute utilisation des œuvres autres que la reproduction et la consultation individuelles et privées sont interdites." |
+| VSD | copyright_boilerplate | n/a | CGU: "Vous ne devez pas copier, modifier, distribuer ... sans l'autorisation écrite préalable". Open, but two sampled pages served only ~130-150 words alongside "abonnés" markers. No free full text verified, so not registered. |
+
+#### Open titles shortlist (FR), ranked by fit
+
+Newspapers:
+
+1. `fr-humanite`: the only open national daily we found. It has debate pages and a
+   sitemap from 1997, but it is partly paywalled and its terms are unread (read them in a
+   browser first). Communist; one-sided.
+
+Magazines:
+
+1. `fr-mediapart-club`: free reader-written opinion blogs (an "ordinary people" fit
+   similar to `fr-agoravox`). Left-leaning self-selected authors. Archive depth not
+   verified.
+2. `fr-valeurs-actuelles`: right-wing opinion weekly, partly free, from 2003. Terms
+   unread. Pair it with the Club to balance the slant.
+3. `fr-slate`: free commentary and features with boilerplate terms only. Archive depth not
+   verified.
+4. `fr-conversation-france`: CC BY-ND academic commentary from 2015; low "ordinary voice"
+   fit.
+
+No open popular magazine with free full text was found. Every major women's, family and
+TV title has an express TDM opt-out or an any-use clause. VSD and Télé 7 Jours are open
+but thin online. French popular-magazine coverage therefore needs a licence, e.g.
+Prisma's "grille tarifaire" or Bayard's "accord spécifique".
 
 ## BE
 
