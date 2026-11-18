@@ -39,7 +39,8 @@ values, and each value correlated uniquely with external variables [R3].
 - *Stance:* the ValueEval'24 data label each value reference as **attained or constrained** [R22, R23]
   (details and caveat in §2.3).
 - *Survey mapping:* the ESS has carried a 21-item PVQ in every round since 2002 [R44, R45], and WVS
-  waves 5–6 carry a 10-item version [R52, R53] (§5).
+  waves 5–6 carry a 10-item version [R52, R53]. I found none in wave 7, based on one national data
+  dictionary [R55] and not checked against the master questionnaire (§5.3).
 - *Multilingual:* ValueEval'24 covers 9 languages, 6 of them v0 languages (DE, EL, EN, FR, IT, NL) [R22].
 - *Readability:* the 10 values read well. Some of the 19 sub-values ("power: resources",
   "conformity: interpersonal") need a gloss for blog readers (interpretation).
@@ -61,10 +62,15 @@ network varies across cultures [R8].
   1,010 US news articles from 2016–17. It gives 3,270 words, each with a probability weight and a
   VADER-based valence per foundation. A 689-word virtue/vice version also exists. Found: the eMFD
   separated partisan outlets better than MFD/MFD 2.0 and predicted share counts better. The authors
-  caution that it may transfer less well to text far from news [R7].
+  caution that it may transfer less well to text far from news [R7]. These numbers were re-checked in
+  the published PDF: annotator counts and the 1,010 annotated articles are on p. 236 ("Annotators,
+  training, and highlight procedure"; "Text material"), the 3,270 words are in the Fig. 1 caption on
+  p. 237, and the 689-word version is on p. 238.
 - **Multilingual MFD:** Husson & Palma (2024) translated and validated the MFD into **French, German,
-  Italian and Spanish**. They validated against formally translated documents (not multilingual
-  surveys or coders) and applied it to 31 elections in nine European multiparty systems [R11].
+  Italian and Spanish** (abstract, p. 487; introduction, p. 488; validation section, p. 494). They
+  validated against formally translated documents (not multilingual surveys or coders) and applied it
+  to party manifestos: 329,004 statements from 31 elections in nine European multiparty systems
+  (pp. 487, 494) [R11].
   Simonsen & Widmann (2025) built multilingual moral dictionaries for parliamentary immigration speeches
   in eight Western democracies over six decades [R12]. I found **no validated Greek, Portuguese or
   Dutch MFD** in this search. That is a gap, not proof of absence.
@@ -131,7 +137,7 @@ criteria.
 | Stance support | attained/constrained (2024); polarity F1 0.83 given the value [R22] | virtue/vice poles [R6, R7] | n/a | n/a | n/a |
 | Multi-label | yes | yes | n/a (2 dims) | n/a | no (ranking) |
 | Multilingual resources | 9-lang ValueEval'24 incl. DE/EL/EN/FR/IT/NL [R22] | MFD in FR/DE/IT/ES [R11]; others [R12] | – | – | – |
-| Survey mapping | ESS PVQ-21 every round 2002–2023/24 [R44, R45]; WVS w5–6 10 items [R52, R53] | none in EVS/WVS/ESS | defined by EVS/WVS items [R14] | none | none |
+| Survey mapping | ESS PVQ-21 every round 2002–2023/24 [R44, R45]; WVS w5–6 10 items [R52, R53]; none found in w7 (one data dictionary checked, not the master questionnaire) [R55] | none in EVS/WVS/ESS | defined by EVS/WVS items [R14] | none | none |
 | Blog readability | good (10), fair (19) | good | good (2 axes) | fair | fair |
 
 **Implications for this project**
@@ -441,7 +447,8 @@ CAWI/mail) in DE, NL and CH, which is a comparability caveat [R67].
 
 ### 5.4 What maps to what
 
-- **Schwartz:** ESS HVS (21 items, every round to R11) [R44, R61]; WVS-5/6 10 items [R52, R53].
+- **Schwartz:** ESS HVS (21 items, every round to R11) [R44, R61]; WVS-5/6 10 items [R52, R53]. None found in WVS-7,
+  from one national data dictionary [R55]; not checked against the master questionnaire.
 - **Inglehart–Welzel:** EVS and WVS by construction [R14].
 - **MFT:** no direct items. Proxies such as EVS/WVS "justifiability" items (abortion, divorce,
   homosexuality) relate to purity/care, but that is my interpretation, not a validated mapping.
