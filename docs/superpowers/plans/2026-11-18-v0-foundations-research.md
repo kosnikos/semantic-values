@@ -174,7 +174,7 @@ Same method and checks as Task 4, for FR, NL, BE, LU, DE, AT, CH, IT, ES, PT. Ca
 
 Research task, same method and evidence rules as Task 4. Countries: GB, FR, BE, NL, plus any of DE/AT/CH where batch 5b found most major titles opted out.
 
-- [ ] **Step 1:** Per country, list general-interest national and major regional newspapers and news/opinion/culture magazines (weekly and monthly; exclude sport, fashion, lifestyle, trade). Cite the list's source (e.g. press-council, circulation-audit or Wikipedia list page).
+- [ ] **Step 1:** Per country, list general-interest national and major regional newspapers and news/opinion/culture magazines (weekly and monthly), and popular general-audience magazines (family, women's, men's, TV-guide, people, general-interest; record circulation where a cited page gives it); exclude pure sport, pure fashion/beauty, trade. Magazines use `source_type: magazine` (added in batch 5e-i). Cite the list's source (e.g. press-council, circulation-audit or Wikipedia list page).
 - [ ] **Step 2:** For each title, check: online archive depth, access, ToS/robots.txt text on TDM/AI, `restriction_scope`, and whether a research/academic licence route exists. Add registry entries only for titles with `access` usable or a research-licence route; list the rest in a per-country table in `sources.md` (title, scope, one-line reason).
 - [ ] **Step 3:** In `sources.md`, per country: "open titles" shortlist ranked by fit (opinion/letters/editorials, archive depth).
 - [ ] **Step 4:** `python -m semval coverage`, `pytest -q` → PASS. **Commit** `research: wider newspaper sweep for restriction-heavy countries`.
