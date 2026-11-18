@@ -40,9 +40,9 @@ OPEN_SCOPES: set[str] = {
     "none", "ai_training_only", "crawler_block_only", "copyright_boilerplate", "unknown",
 }  # fmt: skip
 
-# Extra scopes treated as open in a given jurisdiction. UK CDPA s.29A: contract terms
-# restricting non-commercial research TDM are unenforceable; all_reuse stays closed.
-JURISDICTION_OPEN_SCOPES: dict[str, set[str]] = {"GB": {"tdm_all"}}
+# Extra scopes treated as open in a given jurisdiction. UK CDPA s.29A(5): any contract
+# term restricting non-commercial research TDM copies is unenforceable, whatever its wording.
+JURISDICTION_OPEN_SCOPES: dict[str, set[str]] = {"GB": {"tdm_all", "all_reuse"}}
 
 
 class Source(BaseModel):

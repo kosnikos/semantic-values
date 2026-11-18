@@ -157,8 +157,8 @@ which names every title below except UnHerd, Good Housekeeping and Reader's Dige
 no cited magazine circulation figures (n/a).
 Guardian, Observer, BBC and Independent are covered above. We checked 30 titles: for each,
 robots.txt, the terms page, and one to three sample article pages (paywall flag and
-whether the body is in the HTML). "Open" uses the GB rule: `tdm_all` is open under CDPA
-s.29A, `all_reuse` is not.
+whether the body is in the HTML). "Open" uses the GB rule: `tdm_all` and (per the later
+controller ruling) `all_reuse` are both open under CDPA s.29A(5).
 
 One judgement call matters for GB. DMG Media (Daily Mail, i), Future plc (Woman & Home,
 The Week) and Prospect use near-identical TDM clauses. Each one bans TDM and scraping but
@@ -167,7 +167,10 @@ or web scraping activity by contract under the laws which are applicable to us".
 these as `tdm_all`, so they are open in GB. Reach plc (Mirror, MEN, OK!) instead bans
 "any automated means, including bots, scrapers, crawlers, spiders, AI agents" outright, and
 bans "Any other use ... (including without limitation reproduction for a purpose ...)"
-without written permission. We class Reach as `all_reuse`, so it is closed.
+without written permission. We class Reach as `all_reuse`. Controller ruling (after the sweep): under s.29A(5) GB
+`all_reuse` also counts as open, so Reach, the Times, FT, Scotsman, Spectator, New Statesman
+and Radio Times are not excluded by their terms; they stay unregistered for the access
+reasons in the tables (paywall, crawler block, no free part or not yet sampled).
 
 #### Newspapers
 
@@ -321,7 +324,10 @@ Le Monde uses: "seule ... l'utilisation pour un usage privé ... toute autre uti
 est constitutive de contrefaçon", or "de quelque nature que ce soit ... dans quelque but
 que ce soit". We class that as `all_reuse`, following the Le Monde and La Libre entries.
 Only redistribution-only boilerplate (Slate.fr, Mediapart, VSD) and titles whose terms we
-could not read stay open.
+could not read stay open. The line (controller ruling): clauses that restrict *use* ("toute autre
+utilisation", "dans quelque but que ce soit", "for any purpose") are `all_reuse`; clauses
+that restrict only reproduction, representation or redistribution are
+`copyright_boilerplate`.
 
 #### Newspapers
 
