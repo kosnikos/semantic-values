@@ -1,3 +1,4 @@
+import typing
 from pathlib import Path
 
 import pytest
@@ -6,13 +7,20 @@ from pydantic import ValidationError
 
 from conftest import make_source
 from semval.sources import (
+    EXCLUDED_SOURCE_TYPES,
+    JURISDICTION_OPEN_SCOPES,
+    OPEN_SCOPES,
+    OVERRIDE_EXCLUDED_ACCESS_METHODS,
     PERIODS,
     V0_COUNTRIES,
+    RestrictionScope,
     Source,
     coverage_matrix,
     is_open,
     load_sources,
 )
+
+REGISTRY = Path(__file__).resolve().parents[1] / "data" / "sources" / "sources.yaml"
 
 
 def write(tmp_path: Path, entries: list[dict]) -> Path:
@@ -130,3 +138,55 @@ def test_copyright_boilerplate_is_open():
 
 def test_magazine_source_type_accepted():
     assert Source(**make_source(source_type="magazine")).source_type == "magazine"
+
+
+def test_forum_excluded_from_coverage():
+    assert "forum" in EXCLUDED_SOURCE_TYPES
+    forum = src(id="gr-forum", source_type="forum", genres=["forum"], year_start=2010,
+                year_end=None)  # fmt: skip
+    mixed = src(id="gr-archive", source_type="web_archive", genres=["news", "forum"],
+                year_start=2010, year_end=None)  # fmt: skip
+    for open_only in (False, True):
+        m = coverage_matrix([forum, mixed], V0_COUNTRIES, 2026, open_only=open_only)
+        assert m["GR"]["2005-now"] == ["gr-archive"]
+
+
+def test_gb_api_route_not_overridden():
+    assert "api" in OVERRIDE_EXCLUDED_ACCESS_METHODS
+    api = src(id="gb-api", country="GB", access_method="api", restriction_scope="tdm_all",
+              year_start=2010, year_end=None)  # fmt: skip
+    web = src(id="gb-web", country="GB", access_method="scrape", restriction_scope="tdm_all",
+              year_start=2010, year_end=None)  # fmt: skip
+    plain = src(id="gb-open-api", country="GB", access_method="api", restriction_scope="none",
+                year_start=2010, year_end=None)  # fmt: skip
+    assert not is_open(api)
+    assert is_open(web)
+    assert is_open(plain)
+    m = coverage_matrix([api, web, plain], V0_COUNTRIES, 2026, open_only=True)
+    assert m["GB"]["2005-now"] == ["gb-web", "gb-open-api"]
+
+
+def test_scope_constants_are_typed_subsets():
+    scopes = set(typing.get_args(RestrictionScope))
+    assert isinstance(OPEN_SCOPES, frozenset)
+    assert OPEN_SCOPES <= scopes
+    for country, extra in JURISDICTION_OPEN_SCOPES.items():
+        assert isinstance(extra, frozenset), country
+        assert extra <= scopes, country
+
+
+def test_unknown_source_field_rejected():
+    with pytest.raises(ValidationError, match="licnce"):
+        Source(**make_source(licnce="CC0"))
+
+
+def test_non_list_yaml_rejected(tmp_path):
+    p = tmp_path / "sources.yaml"
+    p.write_text(yaml.safe_dump({"id": "src-1"}), encoding="utf-8")
+    with pytest.raises(ValueError, match="list"):
+        load_sources(p)
+
+
+def test_registry_loads():
+    sources = load_sources(REGISTRY)
+    assert sources
