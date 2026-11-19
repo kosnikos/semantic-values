@@ -26,6 +26,8 @@ from semval.tagging.fewshot import DEFAULT_FEWSHOT_PATH
 from semval.tagging.label_examples import DEFAULT_LOCAL_PATH as DEFAULT_LOCAL_FEWSHOT_PATH
 from semval.tagging.runfiles import DEFAULT_RUNS_DIR
 
+DEFAULT_LEXICON_PATH = Path("data/lexicon/basic10_seed.yaml")
+
 DEFAULT_SOURCES = Path("data/sources/sources.yaml")
 DEFAULT_OUT = Path("docs/research/coverage.md")
 _TRI_FIELDS = ("llm_api_allowed", "per_text_publish_allowed", "tdm_opt_out")
@@ -186,12 +188,16 @@ def _default_framework() -> str | None:
 
 
 def _tag(args: argparse.Namespace) -> int:
-    from semval.tagging.base import RunStatus, TaggerKind, TaggerSpec
+    from semval.tagging.base import TaggerKind, TaggerSpec
     from semval.tagging.claude import make_client
     from semval.tagging.fewshot import load_fewshot_files
     from semval.tagging.runner import run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    if args.kind == TaggerKind.LEXICON:
+        return _tag_lexicon(args)
+    if missing := [f"--{n}" for n in ("model", "effort", "level") if getattr(args, n) is None]:
+        raise SystemExit(f"--kind claude needs {', '.join(missing)}")
     few_shot = []
     files = args.few_shot_file or [DEFAULT_FEWSHOT_PATH]
     if args.few_shot == "on":
@@ -222,6 +228,36 @@ def _tag(args: argparse.Namespace) -> int:
         few_shot=few_shot,
         few_shot_files=[str(f) for f in files] if few_shot else (),
     )
+    return _report_run(m)
+
+
+def _tag_lexicon(args: argparse.Namespace) -> int:
+    from semval.tagging.lexicon import LexiconTagger
+    from semval.tagging.runner import run_tagging
+
+    given = [
+        f"--{n.replace('_', '-')}"
+        for n in ("model", "effort", "framework")
+        if getattr(args, n) is not None
+    ] + (["--few-shot"] if args.few_shot == "on" else [])
+    if given:
+        raise SystemExit(f"--kind lexicon does not take {', '.join(given)}")
+    try:
+        tagger = LexiconTagger(args.lexicon_file)
+    except (OSError, ValueError, KeyError) as e:
+        raise SystemExit(f"cannot load lexicon file: {e}") from None
+    if args.level is not None and args.level != tagger.level_id:
+        raise SystemExit(f"--level {args.level} differs from the lexicon's level {tagger.level_id}")
+    m = run_tagging(
+        tagger.spec, args.sample, run_id=args.run_id, limit=args.limit,
+        limit_per_country=args.limit_per_country, unit=args.unit, tagger=tagger,
+    )  # fmt: skip
+    return _report_run(m)
+
+
+def _report_run(m: Any) -> int:
+    from semval.tagging.base import RunStatus
+
     u = m.usage_totals
     print(f"run {m.run_id}: {m.status}, {len(m.segments_done)} segments done")
     print(
@@ -482,9 +518,18 @@ def build_parser() -> argparse.ArgumentParser:
         description="Exit status: 0 done, 1 failed segments or error, 3 stopped at the budget cap.",
     )
     tag.add_argument("--sample", required=True, help="name of data/samples/<name>.yaml")
-    tag.add_argument("--model", type=ModelId, choices=list(ModelId), required=True)
-    tag.add_argument("--effort", type=Effort, choices=list(Effort), required=True)
-    tag.add_argument("--level", required=True, help="framework level id, e.g. leaf")
+    from semval.tagging.base import TaggerKind
+
+    tag.add_argument("--kind", type=TaggerKind, choices=list(TaggerKind), default=TaggerKind.CLAUDE)
+    tag.add_argument("--model", type=ModelId, choices=list(ModelId), help="required for claude")
+    tag.add_argument("--effort", type=Effort, choices=list(Effort), help="required for claude")
+    tag.add_argument("--level", help="framework level id, e.g. leaf (required for claude)")
+    tag.add_argument(
+        "--lexicon-file",
+        type=Path,
+        default=DEFAULT_LEXICON_PATH,
+        help=f"word list for --kind lexicon (default: {DEFAULT_LEXICON_PATH})",
+    )
     tag.add_argument("--unit", type=UnitLevel, choices=list(UnitLevel), required=True)
     tag.add_argument("--framework", help="framework id (default: the only framework file)")
     tag.add_argument("--few-shot", choices=["on", "off"], default="off")

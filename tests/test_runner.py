@@ -406,3 +406,56 @@ def test_cli_exit_code_follows_status(monkeypatch, status, code):
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
             "--level", "leaf", "--unit", "article", "--framework", "toy"]  # fmt: skip
     assert main(argv) == code
+
+
+def _lex_file(tmp_path: Path, level: str = "leaf") -> Path:
+    lex = tmp_path / "lex.yaml"
+    lex.write_text(
+        f"framework_id: toy\nlevel_id: {level}\ntargets:\n  alpha: [alpha]\n  beta: [beta]\n",
+        encoding="utf-8",
+    )
+    return lex
+
+
+def _cli_lexicon(monkeypatch, tmp_path, *extra) -> tuple[int, RunPaths]:
+    import functools
+
+    from semval.cli import main
+    from semval.tagging import runner
+
+    paths = setup(tmp_path)
+    monkeypatch.setattr(runner, "run_tagging", functools.partial(runner.run_tagging, paths=paths))
+    argv = ["tag", "--kind", "lexicon", "--sample", "toy-sample", "--unit", "paragraph",
+            "--lexicon-file", str(_lex_file(tmp_path)), "--run-id", "lx", *extra]  # fmt: skip
+    return main(argv), paths
+
+
+def test_cli_lexicon_run(monkeypatch, tmp_path):
+    code, paths = _cli_lexicon(monkeypatch, tmp_path)
+    assert code == 0
+    m = RunManifest.model_validate_json((paths.runs_dir / "lx" / "manifest.json").read_text())
+    assert m.status == RunStatus.DONE and m.cost_usd == 0 and m.spec.kind == TaggerKind.LEXICON
+    assert not (paths.runs_dir / "ledger.jsonl").exists()
+    tags = tags_of(paths.runs_dir / "lx")
+    assert {t.value_id for t in tags} == {"alpha", "beta"}
+    assert all(t.stance.value == "mention" for t in tags)
+    assert all(t.segment_id.startswith("src-gb") for t in tags)  # none on the Greek text
+
+
+def test_cli_claude_needs_model_effort_level(capsys):
+    from semval.cli import main
+
+    with pytest.raises(SystemExit, match="--model"):
+        main(["tag", "--sample", "x", "--unit", "article"])
+
+
+@pytest.mark.parametrize("extra", [["--model", "claude-haiku-5-5"], ["--effort", "low"],
+                                   ["--few-shot", "on"]])  # fmt: skip
+def test_cli_lexicon_rejects_claude_options(monkeypatch, tmp_path, extra):
+    with pytest.raises(SystemExit, match="lexicon"):
+        _cli_lexicon(monkeypatch, tmp_path, *extra)
+
+
+def test_cli_lexicon_level_must_match_file(monkeypatch, tmp_path):
+    with pytest.raises(SystemExit, match="level"):
+        _cli_lexicon(monkeypatch, tmp_path, "--level", "other")
