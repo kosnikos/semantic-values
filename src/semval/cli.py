@@ -1,6 +1,7 @@
 """Command-line interface for semval."""
 
 import argparse
+import logging
 import typing
 from datetime import date
 from pathlib import Path
@@ -141,6 +142,35 @@ def _coverage(args: argparse.Namespace) -> int:
     return 0
 
 
+def _sample(args: argparse.Namespace) -> int:
+    from semval.sampling.adapters import ADAPTERS
+    from semval.sampling.fetch import PoliteFetcher
+    from semval.sampling.sample import collect_sample, sources_for_countries
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    source_ids = args.source or sources_for_countries(
+        args.countries, load_sources(args.sources), ADAPTERS
+    )
+    manifest = collect_sample(
+        source_ids,
+        args.per_country,
+        args.since,
+        args.until,
+        name=args.name,
+        registry_path=args.sources,
+        fetcher=PoliteFetcher(max_requests=args.max_requests),
+    )
+    for sid, counts in manifest.stats.items():
+        print(f"{sid}: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+    countries = sorted({d.country for d in manifest.documents})
+    for c in countries:
+        print(f"{c}: {sum(d.country == c for d in manifest.documents)} documents")
+    print(f"requests: {manifest.requests}")
+    if manifest.stopped_early:
+        print(f"stopped early: {manifest.stopped_early}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="semval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -154,6 +184,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="year that open-ended sources and the last period run to (default: this year)",
     )
     cov.set_defaults(func=_coverage)
+
+    smp = sub.add_parser("sample", help="collect an opinion sample through the source adapters")
+    smp.add_argument("--countries", nargs="+", default=[], help="ISO codes, e.g. GR GB")
+    smp.add_argument("--source", nargs="+", default=[], help="source ids (default: by country)")
+    smp.add_argument("--per-country", type=int, default=40)
+    smp.add_argument("--since", type=date.fromisoformat, required=True)
+    smp.add_argument("--until", type=date.fromisoformat, default=date.today())
+    smp.add_argument("--name", required=True, help="writes data/samples/<name>.yaml")
+    smp.add_argument("--sources", type=Path, default=DEFAULT_SOURCES, help="registry file")
+    smp.add_argument("--max-requests", type=int, default=600, help="stop after this many")
+    smp.set_defaults(func=_sample)
     return parser
 
 
