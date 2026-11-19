@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import yaml
-from tests.test_sources import make_source
 
+from conftest import make_source
 from semval.cli import main, render_coverage_md
 from semval.sources import PERIODS, V0_COUNTRIES, Source, coverage_matrix
 

@@ -4,6 +4,7 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
+from conftest import make_source
 from semval.sources import (
     PERIODS,
     V0_COUNTRIES,
@@ -12,33 +13,6 @@ from semval.sources import (
     is_open,
     load_sources,
 )
-
-
-def make_source(**overrides) -> dict:
-    base = {
-        "id": "src-1",
-        "name": "Test Source",
-        "country": "GR",
-        "source_type": "newspaper_archive",
-        "url": "https://example.org/",
-        "access": "free",
-        "year_start": 1950,
-        "year_end": 2000,
-        "languages": ["el"],
-        "genres": ["opinion"],
-        "access_method": "bulk",
-        "licence": "CC-BY",
-        "tdm_opt_out": "no",
-        "restriction_scope": "none",
-        "llm_api_allowed": "unknown",
-        "per_text_publish_allowed": "unknown",
-        "text_quality": "ocr_good",
-        "volume_estimate": "1M pages",
-        "verified_on": "2026-11-18",
-        "evidence_urls": ["https://example.org/terms"],
-    }
-    base.update(overrides)
-    return base
 
 
 def write(tmp_path: Path, entries: list[dict]) -> Path:
