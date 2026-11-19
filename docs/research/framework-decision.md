@@ -171,14 +171,16 @@ natural frame for EVS/WVS, possibly via a post-hoc mapping from Schwartz scores 
   ([D2] p. 675), which is also why `humility` has `parent: conservation` in the registry.
   Both tradition and conformity belong to conservation, so the 4-group view is the same
   under either rule.
-- **This is a mapping choice made in the validation code (Task 8), not a change to the
-  framework.** `schwartz19.yaml` is not changed by it. Validation charts and posts should
-  state which roll-up they use.
+- **Both roll-ups are encoded as data** in the `levels` of `schwartz19.yaml` (see §5):
+  `basic10` (humility → conformity) and `basic10_validation` (same 10 targets, humility →
+  tradition). The values themselves (definitions, `parent`) are unchanged by the choice;
+  validation code picks the `basic10_validation` level by name. Validation charts and posts
+  should state which roll-up they use.
 
 ## 5. How the registry represents the framework
 
-- **One file per framework**, `data/framework/<id>.yaml`, holding `id`, `name`, `citation`
-  and `values`. `values.py` contains no framework names. A second framework (e.g. MFT as a
+- **One file per framework**, `data/framework/<id>.yaml`, holding `id`, `name`, `citation`,
+  `values` and, optionally, `levels`. `values.py` contains no framework names. A second framework (e.g. MFT as a
   robustness lens) is a second YAML file, and both load side by side
   (`test_two_frameworks_coexist`).
 - **Higher-order groups are values too.** `openness_to_change`, `self_enhancement`,
@@ -205,6 +207,20 @@ natural frame for EVS/WVS, possibly via a post-hoc mapping from Schwartz scores 
   none, and their opposition is carried by their group.
 - **Definitions** are short paraphrases of [D2] Table 2, written for blog readers; the
   framework `citation` attributes them.
+- **Levels and roll-ups are data.** Besides the built-in level `leaf` (the 19 leaves), the
+  file declares named `levels`, each with its targets and a `map` that sends every leaf to
+  exactly one target (checked on load):
+  - `basic10`: the 10 basic values, with their own plain-English definitions and examples.
+    Sub-values map to the basic value named in their id (e.g. `power_dominance` → power);
+    face → security and humility → conformity ([D2] p. 675).
+  - `basic10_validation`: reuses the `basic10` targets (`targets_from`); humility →
+    tradition, the validation roll-up of §4.
+  - `group4`: the 4 higher-order groups, using their own `ValueDef`s as targets
+    (`value_targets`); each leaf maps to its `parent`.
+
+  A tagger only sees a `TargetSet` built from one level (`Framework.target_set`), and
+  `Framework.rollup_map` gives the leaf → target map. A new level or another framework's
+  levels need only YAML.
 
 ## 6. Open points for the owner
 
@@ -213,8 +229,8 @@ natural frame for EVS/WVS, possibly via a post-hoc mapping from Schwartz scores 
    attitudes to immigration differently in [D2] p. 665). But agreement and accuracy fall
    as label sets grow (54 values: α = 0.49 [R19]; 19 values per sentence: F1 0.39 [R22]).
    `parent` maps the 19 directly to the 4 groups, so nothing is lost by tagging at 19 and
-   reporting at 4; the cost is tagging difficulty. The 19 → 10 roll-up is not yet encoded
-   as data; it is planned as the first task of the next plan.
+   reporting at 4; the cost is tagging difficulty. The 19 → 10 roll-up is encoded as data in
+   the `levels` of `schwartz19.yaml` (§5).
 2. **Benevolence: dependability is the weakest value.** The paper itself notes little
    prior evidence for it ([D2] p. 670). Watch its agreement in Task 4.
 3. **ES, PT and LB have no ValueEval'24 data** [R22]. Cross-language consistency for these
@@ -238,9 +254,8 @@ Reasons, in order of weight:
 3. Its values are motivational goals, so endorse/reject is well posed for every value; the
    examples in the registry make the difference from attained/constrained explicit (§3).
 4. It nests: 19 → 10 → 4, which serves blog readability and ESS validation without
-   re-tagging (§4, §5). In the registry, `parent` currently maps the 19 directly to the 4
-   groups; the 19 → 10 roll-up is not yet encoded as data and is planned as the first task
-   of the next plan.
+   re-tagging (§4, §5). In the registry, the 19 → 10 and 19 → 4 roll-ups (and the
+   validation variant) are encoded as data in `levels` (§5).
 
 **Runner-up: Moral Foundations Theory**, as a secondary lens or robustness check. It has the
 best dictionary resources, including translated MFDs for FR, DE, IT and ES [R11], and good

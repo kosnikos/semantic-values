@@ -1,40 +1,11 @@
 from pathlib import Path
 
 import pytest
-import yaml
 
-from semval.values import FRAMEWORK_DIR, Framework, ValueDef, load_framework
+from conftest import make_value, toy_values, write_framework
+from semval.values import FRAMEWORK_DIR, LEAF_LEVEL, Framework, ValueDef, load_framework
 
 FRAMEWORK_FILES = sorted(FRAMEWORK_DIR.glob("*.yaml"))
-
-
-def make_value(**overrides) -> dict:
-    base = {
-        "id": "alpha",
-        "name": "Alpha",
-        "definition": "Wanting alpha things.",
-        "opposes": [],
-        "examples_endorse": ["Alpha is good."],
-        "examples_reject": ["Alpha is overrated."],
-    }
-    base.update(overrides)
-    return base
-
-
-def write_framework(tmp_path: Path, values: list[dict], fid: str = "toy") -> Path:
-    path = tmp_path / f"{fid}.yaml"
-    doc = {"id": fid, "name": "Toy framework", "citation": "Nobody (2026).", "values": values}
-    path.write_text(yaml.safe_dump(doc), encoding="utf-8")
-    return path
-
-
-def toy_values() -> list[dict]:
-    return [
-        make_value(id="group_a", name="Group A", definition="The A side."),
-        make_value(id="group_b", name="Group B", definition="The B side."),
-        make_value(id="alpha", parent="group_a", opposes=["beta"]),
-        make_value(id="beta", name="Beta", parent="group_b", opposes=["alpha"]),
-    ]
 
 
 def test_framework_files_exist() -> None:
@@ -142,3 +113,46 @@ def test_two_frameworks_coexist(tmp_path: Path) -> None:
     assert {v.framework for v in fw_a.values} == {"frame_a"}
     assert {v.framework for v in fw_b.values} == {"frame_b"}
     assert {v.id for v in fw_a.values}.isdisjoint({v.id for v in fw_b.values})
+
+
+def test_duplicate_opposes_rejected(tmp_path: Path) -> None:
+    values = toy_values()
+    values[2]["opposes"] = ["beta", "beta"]
+    path = write_framework(tmp_path, values)
+    with pytest.raises(ValueError, match="duplicate opposes entry 'beta'"):
+        load_framework(path)
+
+
+def test_childless_group_is_leaf_documented(tmp_path: Path) -> None:
+    values = [*toy_values(), make_value(id="group_c", name="Group C", definition="Nobody here.")]
+    fw = load_framework(write_framework(tmp_path, values))
+    assert "group_c" in [v.id for v in fw.leaves()]
+    assert "group_c" not in [v.id for v in fw.groups()]
+    doc = Framework.leaves.__doc__ or ""
+    assert "no children" in doc and "even" in doc
+
+
+def test_duplicate_yaml_key_rejected(tmp_path: Path) -> None:
+    path = write_framework(tmp_path, toy_values())
+    text = path.read_text(encoding="utf-8").replace("id: toy\n", "id: toy\nid: toy\n", 1)
+    path.write_text(text, encoding="utf-8")
+    with pytest.raises(ValueError, match="duplicate key 'id'"):
+        load_framework(path)
+
+
+def test_schwartz19_shape() -> None:
+    fw = load_framework(FRAMEWORK_DIR / "schwartz19.yaml")
+    assert len(fw.leaves()) == 19
+    assert len(fw.groups()) == 4
+    assert fw.level_ids()[0] == LEAF_LEVEL
+    assert {"basic10", "basic10_validation", "group4"} <= set(fw.level_ids())
+    assert len(fw.target_set("basic10").ids()) == 10
+    assert fw.target_set("group4").ids() == [g.id for g in fw.groups()]
+    for t in fw.target_set("basic10").targets:
+        assert t.examples_endorse and t.examples_reject, t.id
+    leaf_to_parent = {v.id: v.parent for v in fw.leaves()}
+    assert fw.rollup_map("group4") == leaf_to_parent
+    basic = fw.rollup_map("basic10")
+    validation = fw.rollup_map("basic10_validation")
+    assert {k for k in basic if basic[k] != validation[k]} == {"humility"}
+    assert basic["face"] == validation["face"] == "security"

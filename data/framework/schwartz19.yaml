@@ -337,3 +337,178 @@ values:
     examples_reject:
       - "Tolerance has become a word for accepting things we should not accept."
       - "Newcomers must adapt to us, not the other way round."
+
+# ---- Levels and roll-ups ----------------------------------------------------------
+# The leaves are the level `leaf` (built in). Each level below maps every leaf to one of
+# its targets. Sub-values roll up to the basic value named in their id; the border values
+# follow Schwartz et al. (2012, p. 675): face -> security, humility -> conformity.
+# `basic10_validation` differs only in humility -> tradition, matching how the ESS scores
+# its item `ipmodst` (see docs/research/framework-decision.md, §4 "Validation roll-up").
+# Definitions and examples of the 10 are written for this project; the official
+# definitions are added separately (`official`).
+
+levels:
+  - id: basic10
+    targets:
+      - id: self_direction
+        name: Self-direction
+        definition: >-
+          Freedom to think for yourself and to choose your own goals and way of life.
+        examples_endorse:
+          - "Citizens should be trusted to make up their own minds, not told what to think."
+        examples_reject:
+          - "Too much freedom to choose has left people without any shared direction."
+
+      - id: stimulation
+        name: Stimulation
+        definition: >-
+          Seeking excitement, new experiences and challenges in life.
+        examples_endorse:
+          - "A city needs new venues, new festivals and a bit of risk to stay alive."
+        examples_reject:
+          - "The thirst for constant novelty leaves people restless and never satisfied."
+
+      - id: hedonism
+        name: Hedonism
+        definition: >-
+          Enjoying life and seeking pleasure for yourself.
+        examples_endorse:
+          - "There is nothing wrong with spending your savings on a good meal and a long holiday."
+        examples_reject:
+          - "A culture built around pleasure has nothing to offer when hard times come."
+
+      - id: achievement
+        name: Achievement
+        definition: >-
+          Being successful, and being seen by others as capable by the standards of your
+          society.
+        examples_endorse:
+          - "Pupils who work hard and come top deserve to be praised in public."
+        examples_reject:
+          - "Chasing grades and promotions has made our schools and offices anxious places."
+
+      - id: power
+        name: Power
+        definition: >-
+          Having status and wealth, and control over other people and resources.
+        examples_endorse:
+          - "A country needs strong leaders and the wealth to make others take it seriously."
+        examples_reject:
+          - "Too much money and influence now sits in the hands of a few."
+
+      - id: security
+        name: Security
+        definition: >-
+          Safety and stability for yourself, your family and the wider society.
+        examples_endorse:
+          - "People have a right to feel safe in their streets and sure the state will protect them."
+        examples_reject:
+          - "Each new security law trades away a little more of our freedom."
+
+      - id: conformity
+        name: Conformity
+        definition: >-
+          Following rules and social expectations, and holding back from behaviour that
+          would upset or harm others.
+        examples_endorse:
+          - "Laws and good manners exist for a reason, and everyone should respect them."
+        examples_reject:
+          - "Doing what you are told is how ordinary people end up going along with injustice."
+
+      - id: tradition
+        name: Tradition
+        definition: >-
+          Respecting and keeping the customs, beliefs and religious practices handed down
+          by your culture or family.
+        examples_endorse:
+          - "Our festivals and religious holidays connect us with the generations before us."
+        examples_reject:
+          - "Customs should not be kept just because our grandparents kept them."
+
+      - id: benevolence
+        name: Benevolence
+        definition: >-
+          Caring for the well-being of the people close to you, and being someone they can
+          rely on.
+        examples_endorse:
+          - "Families and neighbours who look after each other are what keep this town going."
+        examples_reject:
+          - "Loyalty to your own circle too often becomes an excuse for favouritism."
+
+      - id: universalism
+        name: Universalism
+        definition: >-
+          Concern for the welfare of all people and of nature: equality, justice, tolerance
+          and care for the environment.
+        examples_endorse:
+          - "Every person deserves equal rights, and the planet deserves protection too."
+        examples_reject:
+          - "We cannot take responsibility for every injustice and every species on Earth."
+    map:
+      self_direction_thought: self_direction
+      self_direction_action: self_direction
+      stimulation: stimulation
+      hedonism: hedonism
+      achievement: achievement
+      power_dominance: power
+      power_resources: power
+      face: security
+      security_personal: security
+      security_societal: security
+      tradition: tradition
+      conformity_rules: conformity
+      conformity_interpersonal: conformity
+      humility: conformity
+      benevolence_caring: benevolence
+      benevolence_dependability: benevolence
+      universalism_concern: universalism
+      universalism_nature: universalism
+      universalism_tolerance: universalism
+
+  # Validation only: same targets as basic10; humility -> tradition, as the ESS scores it.
+  - id: basic10_validation
+    targets_from: basic10
+    map:
+      self_direction_thought: self_direction
+      self_direction_action: self_direction
+      stimulation: stimulation
+      hedonism: hedonism
+      achievement: achievement
+      power_dominance: power
+      power_resources: power
+      face: security
+      security_personal: security
+      security_societal: security
+      tradition: tradition
+      conformity_rules: conformity
+      conformity_interpersonal: conformity
+      humility: tradition
+      benevolence_caring: benevolence
+      benevolence_dependability: benevolence
+      universalism_concern: universalism
+      universalism_nature: universalism
+      universalism_tolerance: universalism
+
+  # The 4 higher-order groups, using their own definitions above; map = each leaf's parent.
+  - id: group4
+    value_targets: [openness_to_change, self_enhancement, conservation, self_transcendence]
+    map:
+      self_direction_thought: openness_to_change
+      self_direction_action: openness_to_change
+      stimulation: openness_to_change
+      hedonism: openness_to_change
+      achievement: self_enhancement
+      power_dominance: self_enhancement
+      power_resources: self_enhancement
+      face: conservation
+      security_personal: conservation
+      security_societal: conservation
+      tradition: conservation
+      conformity_rules: conservation
+      conformity_interpersonal: conservation
+      humility: conservation
+      benevolence_caring: self_transcendence
+      benevolence_dependability: self_transcendence
+      universalism_concern: self_transcendence
+      universalism_nature: self_transcendence
+      universalism_tolerance: self_transcendence
