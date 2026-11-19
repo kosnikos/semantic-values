@@ -249,6 +249,37 @@ def _review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _touche_download(args: argparse.Namespace) -> int:
+    from semval.datasets.touche23 import download, load_split
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    download(args.dir)
+    for split in ("train", "validation", "test"):
+        print(f"{split}: {len(load_split(split, args.dir))} items")
+    return 0
+
+
+def _touche_build_proxy(args: argparse.Namespace) -> int:
+    from semval.datasets.touche23 import ClaudeTranslator, build_greek_proxy, load_proxy
+    from semval.tagging.claude import make_client
+    from semval.tagging.ledger import BudgetExceeded, CostLedger
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    ledger = CostLedger()
+    ledger.total()  # fail closed on a damaged ledger before spending anything
+    before = ledger.total()
+    translator = ClaudeTranslator(make_client(), ledger)
+    try:
+        path = build_greek_proxy(
+            translator, n=args.n, seed=args.seed, split=args.split, data_dir=args.dir
+        )
+    except BudgetExceeded as e:
+        print(f"stopped at the budget cap: {e}")
+        return 3
+    print(f"{path}: {len(load_proxy(args.dir))} items; cost ${ledger.total() - before:.4f}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="semval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -314,6 +345,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     rev.add_argument("--open", action="store_true", help="open the page in the browser")
     rev.set_defaults(func=_review)
+    from semval.datasets.touche23 import DEFAULT_DIR as TOUCHE_DIR
+
+    tou = sub.add_parser("touche23", help="Touché23-ValueEval data and the Greek proxy")
+    tou_sub = tou.add_subparsers(dest="touche_command", required=True)
+    dl = tou_sub.add_parser("download", help="fetch the raw TSVs (CC BY 4.0) from Zenodo")
+    dl.add_argument("--dir", type=Path, default=TOUCHE_DIR)
+    dl.set_defaults(func=_touche_download)
+    bp = tou_sub.add_parser(
+        "build-proxy",
+        help="machine-translate a seeded sample into Greek with Claude (costs money)",
+        description="Exit status: 0 done, 3 stopped at the budget cap.",
+    )
+    bp.add_argument("--n", type=int, default=100)
+    bp.add_argument("--seed", type=int, default=1)
+    bp.add_argument("--split", choices=["train", "validation", "test"], default="test")
+    bp.add_argument("--dir", type=Path, default=TOUCHE_DIR)
+    bp.set_defaults(func=_touche_build_proxy)
     return parser
 
 
