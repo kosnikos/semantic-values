@@ -8,14 +8,14 @@ import yaml
 
 from semval.tagging.base import RawTag, TagBatchResult, TaggerKind, TaggerSpec
 from semval.targets import TargetSet
-from semval.units import Segment, UnitLevel
+from semval.units import DocumentMeta, Segment
 
 
 class LexiconTagger:
-    """``languages`` maps document id to language code; segments of any document not
-    marked ``en`` (including unknown ones) are skipped and get an empty tag list."""
+    """English only: segments whose document language is not ``en`` get an empty tag list.
+    ``documents`` (keyed by document id) must cover every segment."""
 
-    def __init__(self, path: Path, languages: Mapping[str, str], unit: UnitLevel):
+    def __init__(self, path: Path):
         data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
         self.framework_id: str = data["framework_id"]
         self.level_id: str = data["level_id"]
@@ -25,16 +25,18 @@ class LexiconTagger:
             )
             for tid, stems in data["targets"].items()
         }
-        self.languages = languages
         self.spec = TaggerSpec(
             kind=TaggerKind.LEXICON,
             framework_id=self.framework_id,
             level_id=self.level_id,
-            unit=unit,
         )
 
     def tag(
-        self, segments: list[Segment], texts: dict[str, str], targets: TargetSet
+        self,
+        segments: list[Segment],
+        texts: dict[str, str],
+        targets: TargetSet,
+        documents: Mapping[str, DocumentMeta],
     ) -> TagBatchResult:
         if targets.level_id != self.level_id or targets.framework_id != self.framework_id:
             raise ValueError(
@@ -45,7 +47,10 @@ class LexiconTagger:
         out: dict[str, list[RawTag]] = {}
         for seg in segments:
             out[seg.id] = []
-            if self.languages.get(seg.document_id) != "en":
+            meta = documents.get(seg.document_id)
+            if meta is None:
+                raise ValueError(f"no document metadata for {seg.document_id!r}")
+            if meta.language != "en":
                 continue
             for tid, pat in self.patterns.items():
                 if tid not in wanted:

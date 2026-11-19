@@ -2,7 +2,7 @@ import pytest
 
 from semval.config import PRICES, ModelId
 from semval.tagging.base import Usage
-from semval.tagging.ledger import BudgetExceeded, CostLedger
+from semval.tagging.ledger import BudgetExceeded, CostLedger, LedgerCorrupt
 
 ONE_M = Usage(input_tokens=1_000_000, output_tokens=1_000_000)
 
@@ -46,3 +46,47 @@ def test_ledger_persists_across_instances(tmp_path):
     again.record("r2", ONE_M, ModelId.HAIKU_5_5, batch=False)
     assert CostLedger(path, cap=100.0).total() == pytest.approx(1.2)
     assert len(path.read_text().splitlines()) == 2
+
+
+def test_ledger_exact_cap_is_allowed(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=12.0)
+    assert ledger.can_spend(12.0)
+    ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False)  # exactly 12 USD
+    assert ledger.total() == pytest.approx(12.0)
+    assert not ledger.can_spend(0.01)
+
+
+def _truncated(tmp_path):
+    path = tmp_path / "l.jsonl"
+    ledger = CostLedger(path, cap=100.0)
+    ledger.record("r1", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    with path.open("a", encoding="utf-8") as f:
+        f.write('{"run_id": "r2", "cost_u')
+    return path, ledger
+
+
+def test_ledger_corrupt_line_fails_closed(tmp_path):
+    _, ledger = _truncated(tmp_path)
+    with pytest.raises(LedgerCorrupt, match="line 2"):
+        ledger.total()
+    with pytest.raises(LedgerCorrupt):
+        ledger.can_spend(1.0)
+
+
+def test_ledger_repair_moves_truncated_final_line(tmp_path):
+    path, ledger = _truncated(tmp_path)
+    assert ledger.repair() is True
+    assert ledger.total() == pytest.approx(0.6)
+    assert path.with_name("l.jsonl.corrupt").read_text().startswith('{"run_id": "r2"')
+    assert ledger.repair() is False
+    ledger.record("r3", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    assert ledger.total() == pytest.approx(1.2)
+
+
+def test_ledger_repair_refuses_mid_file_damage(tmp_path):
+    path = tmp_path / "l.jsonl"
+    good = '{"cost_usd": 1.0}'
+    path.write_text(f"{good}\nnot json\n{good}\n", encoding="utf-8")
+    with pytest.raises(LedgerCorrupt, match="line 2"):
+        CostLedger(path, cap=100.0).repair()
+    assert not path.with_name("l.jsonl.corrupt").exists()

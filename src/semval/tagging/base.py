@@ -4,14 +4,15 @@ Nothing here knows a framework, a source or a model; taggers receive a ``TargetS
 """
 
 import datetime
+from collections.abc import Mapping
 from enum import StrEnum
 from typing import Literal, Protocol, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from semval.config import Effort, ModelId
 from semval.targets import TargetSet
-from semval.units import Segment, UnitLevel
+from semval.units import DocumentMeta, Segment, UnitLevel
 
 
 class TaggerKind(StrEnum):
@@ -50,7 +51,7 @@ class TaggerSpec(BaseModel):
     effort: Effort | None = None
     framework_id: str
     level_id: str
-    unit: UnitLevel
+    unit: UnitLevel | None = None  # None: the tagger works at any level (lexicon)
     few_shot: bool = False
     batch: bool = False
 
@@ -61,6 +62,7 @@ class RawTag(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     value_id: str
+    # Kept equal to Stance minus CONTESTED by a test.
     stance: Literal["endorse", "reject", "mention"]
     quotes: list[str] = Field(default_factory=list)
     confidence: float | None = None
@@ -86,6 +88,15 @@ class RunManifest(BaseModel):
     cost_usd: float = 0.0
     # Count of targets whose prompt used each DefinitionWording value.
     definition_wording: dict[str, int] = Field(default_factory=dict)
+
+    @field_validator("definition_wording")
+    @classmethod
+    def _wording_keys(cls, v: dict[str, int]) -> dict[str, int]:
+        bad = set(v) - {w.value for w in DefinitionWording}
+        if bad:
+            raise ValueError(f"unknown definition wording keys {sorted(bad)}")
+        return v
+
     started: datetime.datetime | None = None
     finished: datetime.datetime | None = None
 
@@ -95,5 +106,9 @@ class Tagger(Protocol):
     spec: TaggerSpec
 
     def tag(
-        self, segments: list[Segment], texts: dict[str, str], targets: TargetSet
+        self,
+        segments: list[Segment],
+        texts: dict[str, str],
+        targets: TargetSet,
+        documents: Mapping[str, DocumentMeta],
     ) -> TagBatchResult: ...

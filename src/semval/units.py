@@ -22,6 +22,15 @@ class UnitLevel(StrEnum):
         return list(UnitLevel).index(self)
 
 
+class DocumentMeta(BaseModel):
+    """What a tagger may know about a segment's document."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    language: str
+    genre: str
+
+
 class Document(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -36,6 +45,9 @@ class Document(BaseModel):
     # Committed samples carry only a hash of the title; the title itself stays in data/raw.
     title_sha256: str | None = None
     text_sha256: str
+
+    def meta(self) -> DocumentMeta:
+        return DocumentMeta(language=self.language, genre=self.genre)
 
 
 class Segment(BaseModel):
