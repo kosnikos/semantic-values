@@ -1,6 +1,6 @@
 import pytest
 
-from semval.units import Segment, UnitLevel, segment
+from semval.units import Segment, UnitLevel, document_id_of, segment
 
 TEXT = "Πρώτη πρόταση. Δεύτερη!  Third one?\n\nΝέα παράγραφος εδώ. Τέλος"
 
@@ -67,3 +67,11 @@ def test_crlf_offsets_reconstruct():
     sents = [text[s.start : s.end] for s in segs if s.level is UnitLevel.SENTENCE]
     assert paras == ["One. Two.", "Three here.\r\nStill three. Four"]
     assert sents == ["One.", "Two.", "Three here.", "Still three.", "Four"]
+
+
+def test_document_id_of_segment_ids() -> None:
+    doc = "gr-tovima-website:0daddc3a3140"
+    segs = segment(doc, "One. Two.\n\nThree.", UnitLevel.SENTENCE)
+    assert {document_id_of(s.id) for s in segs} == {doc}
+    with pytest.raises(ValueError, match="segment id"):
+        document_id_of("no-level-suffix")

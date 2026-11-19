@@ -95,6 +95,17 @@ def _split(text: str, start: int, end: int, pattern: re.Pattern[str]) -> list[tu
     return [s for s in spans if s]
 
 
+_SEGMENT_ID = re.compile(r"(?P<doc>.+):(?:a|p\d+(?::s\d+)?)")
+
+
+def document_id_of(segment_id: str) -> str:
+    """The document id inside a segment id made by ``segment``."""
+    m = _SEGMENT_ID.fullmatch(segment_id)
+    if m is None:
+        raise ValueError(f"not a segment id: {segment_id!r}")
+    return m["doc"]
+
+
 def segment(doc_id: str, text: str, level: UnitLevel) -> list[Segment]:
     """Segments down to ``level``, coarse to fine, so every parent id resolves.
 

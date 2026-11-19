@@ -8,11 +8,9 @@ the same ``run_id`` resumes it without re-tagging finished segments. ``tags.json
 """
 
 import datetime
-import hashlib
 import logging
 import os
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
@@ -20,12 +18,6 @@ import yaml
 
 from semval.config import priced_model, retry_max_tokens
 from semval.fsutil import atomic_write_text
-from semval.sampling.sample import (
-    DEFAULT_RAW_DIR,
-    DEFAULT_SAMPLES_DIR,
-    SampleManifest,
-    doc_text_path,
-)
 from semval.tagging.base import (
     CallPath,
     RunManifest,
@@ -39,15 +31,20 @@ from semval.tagging.claude import ClaudeTagger, make_client
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
 from semval.tagging.prompt import FewShotExample
 from semval.tagging.quotes import resolve_quotes
+from semval.tagging.runfiles import (  # noqa: F401 (re-exported)
+    DEFAULT_PATHS,
+    DEFAULT_RUNS_DIR,
+    MANIFEST,
+    TAGS,
+    RunPaths,
+    load_sample,
+    read_text,
+)
 from semval.tags import Stance, ValueTag
 from semval.units import Document, Segment, UnitLevel, segment
-from semval.values import FRAMEWORK_DIR, load_framework
+from semval.values import load_framework
 
 log = logging.getLogger(__name__)
-
-DEFAULT_RUNS_DIR = Path("data/runs")
-MANIFEST = "manifest.json"
-TAGS = "tags.jsonl"
 
 
 @runtime_checkable
@@ -64,14 +61,6 @@ class BatchResumable(Protocol):
 @runtime_checkable
 class MaxTokensAware(Protocol):
     max_tokens_for: dict[str, int]
-
-
-@dataclass(frozen=True)
-class RunPaths:
-    samples_dir: Path = DEFAULT_SAMPLES_DIR
-    raw_dir: Path = DEFAULT_RAW_DIR
-    framework_dir: Path = FRAMEWORK_DIR
-    runs_dir: Path = DEFAULT_RUNS_DIR
 
 
 def make_run_id(
@@ -100,11 +89,6 @@ def load_few_shot(path: Path) -> list[FewShotExample]:
     return [FewShotExample.model_validate(x) for x in items]
 
 
-def load_sample(name: str, samples_dir: Path) -> SampleManifest:
-    path = Path(samples_dir) / f"{name}.yaml"
-    return SampleManifest.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
-
-
 def select_documents(
     docs: list[Document], limit: int | None, limit_per_country: int | None
 ) -> list[Document]:
@@ -117,14 +101,6 @@ def select_documents(
         per[d.country] = per.get(d.country, 0) + 1
         out.append(d)
     return out if limit is None else out[:limit]
-
-
-def read_text(raw_dir: Path, doc: Document) -> str:
-    """The cached text, byte-exact (offsets depend on it) and checked against its hash."""
-    data = doc_text_path(raw_dir, doc.id).read_bytes()
-    if hashlib.sha256(data).hexdigest() != doc.text_sha256:
-        raise ValueError(f"cached text of {doc.id} does not match its text_sha256")
-    return data.decode("utf-8")
 
 
 def _save(run_dir: Path, m: RunManifest) -> None:
@@ -252,7 +228,7 @@ def run_tagging(
     client: Any = None,
     few_shot: Sequence[FewShotExample] = (),
     ledger: CostLedger | None = None,
-    paths: RunPaths = RunPaths(),
+    paths: RunPaths = DEFAULT_PATHS,
 ) -> RunManifest:
     """Create or resume run ``run_id`` over sample ``sample_name`` and return its manifest.
 

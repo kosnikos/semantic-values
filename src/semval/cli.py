@@ -226,6 +226,29 @@ def _tag(args: argparse.Namespace) -> int:
     return exit_codes.get(m.status, 1)
 
 
+def _review(args: argparse.Namespace) -> int:
+    from semval.review.server import serve
+    from semval.review.session import open_session
+    from semval.review.texts import ReviewSource
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    if args.source == ReviewSource.TOUCHE23_FEWSHOT:
+        raise SystemExit(
+            "--source touche23-fewshot is not available yet: it needs the Touché23 loader"
+        )
+    if not args.run:
+        raise SystemExit("give at least one --run RUN_ID (repeat it to pool several runs)")
+    try:
+        session = open_session(args.run, blind=args.blind, labeller=args.labeller)
+    except ValueError as e:
+        raise SystemExit(str(e)) from None
+    try:
+        serve(session, args.port, open_browser=args.open)
+    except OSError as e:
+        raise SystemExit(f"cannot serve on 127.0.0.1:{args.port}: {e}") from None
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="semval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -272,6 +295,25 @@ def build_parser() -> argparse.ArgumentParser:
     tag.add_argument("--limit", type=int, help="documents in all")
     tag.add_argument("--run-id", help="resume this run, or name a new one")
     tag.set_defaults(func=_tag)
+
+    from semval.review.texts import ReviewSource
+
+    rev = sub.add_parser(
+        "review",
+        help="open the local review page (http://127.0.0.1 only) to judge tags",
+        description="Verdicts autosave to data/labels/<labeller>/labels.jsonl.",
+    )
+    rev.add_argument("--run", action="append", default=[], help="run id; repeat to pool runs")
+    rev.add_argument(
+        "--blind", action="store_true", help="only unjudged tags, without saying which run"
+    )
+    rev.add_argument("--labeller", default="owner", help="who is judging (default: owner)")
+    rev.add_argument("--port", type=int, default=8765, help="0 picks a free port")
+    rev.add_argument(
+        "--source", type=ReviewSource, choices=list(ReviewSource), default=ReviewSource.RUNS
+    )
+    rev.add_argument("--open", action="store_true", help="open the page in the browser")
+    rev.set_defaults(func=_review)
     return parser
 
 
