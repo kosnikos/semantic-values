@@ -10,6 +10,7 @@ import pytest
 import yaml
 
 from conftest import make_source
+from semval.datasets.touche23_samples import NO_COUNTRY
 from semval.sampling.adapters.base import Genre, ParsedArticle
 from semval.sampling.article import NOT_SAMPLED
 from semval.sampling.fetch import FetchOutcome, PoliteFetcher, Response
@@ -205,7 +206,7 @@ def test_gives_up_after_attempt_cap(tmp_path: Path) -> None:
 
 
 def test_committed_samples_have_no_titles() -> None:
-    """Every committed sample file holds Document references without titles."""
+    """Committed sample files hold references without titles; news documents carry a title hash."""
     samples = Path(__file__).resolve().parents[1] / "data" / "samples"
     files = sorted(samples.glob("*.yaml"))
     assert files
@@ -213,4 +214,5 @@ def test_committed_samples_have_no_titles() -> None:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
         for d in data["documents"]:
             assert "title" not in d, (path.name, d["id"])
-            assert Document(**d).title_sha256, (path.name, d["id"])
+            if d["country"] != NO_COUNTRY:  # news documents keep a title hash
+                assert Document(**d).title_sha256, (path.name, d["id"])
