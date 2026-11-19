@@ -14,7 +14,7 @@
   url: https://open-platform.theguardian.com/
   access: free_registration
   year_start: 1999
-  year_start_basis: verified
+  year_start_basis: unknown
   year_end: null
   year_end_basis: observed
   languages: [en]
@@ -99,7 +99,7 @@
   url: https://www.bbc.co.uk/news
   access: free
   year_start: 1997
-  year_start_basis: verified
+  year_start_basis: unknown
   year_end: null
   year_end_basis: observed
   languages: [en]
@@ -299,7 +299,7 @@
     - https://www.bl.uk/ukwebarchive
     - https://www.bl.uk/stories/blogs/posts/the-uk-web-archive-continuing-our-work-behind-the-scenes
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value:
+    access is restricted (reading-room or on-site only):
     there is no fee, but "most of the archived websites can only be viewed within a Legal
     Deposit Library reading room"; a subset is viewable from anywhere. After the 2023
     cyber-attack the platform is restored but "Only websites archived before December 2022
@@ -929,9 +929,9 @@
   url: http://efimeris.nlg.gr/ns/main.html
   access: free
   year_start: 1883
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: 1983
-  year_end_basis: verified
+  year_end_basis: observed
   languages: [el]
   genres: [news]
   access_method: manual
@@ -1153,7 +1153,7 @@
   url: https://www.rizospastis.gr/
   access: free
   year_start: 1997
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [el]
@@ -1310,6 +1310,7 @@
     Same dataset as gb-common-crawl-news. kathimerini.gr and insomnia.gr block CCBot in
     robots.txt, so they are likely absent from recent crawls; tovima.gr, tanea.gr and
     efsyn.gr do not block it. Greek coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 - id: gr-gdelt-url-index
   name: GDELT GKG 2.1 as URL index (.gr sources)
@@ -1340,6 +1341,7 @@
     URLs + metadata only (see gb-gdelt-url-index). GDELT machine-translates 65 languages;
     whether Greek is among them was not verified. Text behind URLs is under each
     publisher's terms.
+    year_start 2015: see gb-gdelt-url-index (GKG 2.1 from February 2015).
 
 # ---------------------------------------------------------------- FR
 
@@ -1600,8 +1602,7 @@
   evidence_urls:
     - https://www.bnf.fr/fr/archives-de-linternet
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value (as
-    in gb-uk-web-archive): consultation needs a "pass recherche" in the BnF "salles
+    access is restricted (reading-room only): consultation needs a "pass recherche" in the BnF "salles
     Recherche" or in regional legal-deposit libraries; there is no remote access. The page
     says French web content is, "depuis le début des années 2000, mieux couverts dans les
     collections de la BnF que dans les collections d'Internet Archive"; year_start 2000 is
@@ -1642,6 +1643,7 @@
     20minutes.fr all disallow CCBot, so the main national titles are likely absent from
     recent crawls; agoravox.fr does not block CCBot. French coverage must be measured from
     the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # FR wider sweep (Task 5e): open titles with a free part. See sources.md "Wider sweep".
 
@@ -2017,6 +2019,7 @@
     Same dataset as gb-common-crawl-news. standaard.be and lalibre.be disallow CCBot;
     lesoir.be and hln.be returned 403 even for robots.txt, so their status is unknown.
     Belgian coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- BE wider sweep (Task 5e batch ii)
 
@@ -2425,7 +2428,7 @@
   url: https://www.webarchive.lu/
   access: restricted
   year_start: 2016
-  year_start_basis: verified
+  year_start_basis: unknown
   year_end: null
   year_end_basis: observed
   languages: [lb, fr, de, en]
@@ -2443,7 +2446,7 @@
     - https://www.webarchive.lu/
     - https://www.webarchive.lu/luxembourg-news-media/
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value:
+    access is restricted (reading-room or on-site only):
     "Browsing the actual archive is only possible from within the National library of
     Luxembourg." Scope: all .lu sites plus sites published or hosted in Luxembourg; 2 domain
     crawls per year, with the Internet Archive as partner ("working with the Internet
@@ -2483,6 +2486,7 @@
     Same dataset as gb-common-crawl-news. wort.lu and tageblatt.lu disallow CCBot;
     lessentiel.lu disallows CCBot on story paths; rtl.lu does not block it. Luxembourg
     coverage must be measured from the index and is likely small.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- NL
 
@@ -2515,8 +2519,7 @@
     - https://www.kb.nl/en/ai-statement
     - https://www.delpher.nl/robots.txt
   notes: >-
-    access is partial_paywall (not a fee, but only part is open, and the schema has no
-    "restricted" value). What exists: KB says the collection holds "edities van alle
+    access is restricted (only part is openly available). What exists: KB says the collection holds "edities van alle
     jaargangen van de belangrijkste landelijke Nederlandse kranten, zoals De Telegraaf, De
     Volkskrant en Het Parool", 1618-1995, as OCR scans. What is free: KB says only that the
     files are "voor een deel vrij toegankelijk" (EN page: "Some of the files can be freely
@@ -2544,7 +2547,7 @@
   year_start: 1618
   year_start_basis: verified
   year_end: 1995
-  year_end_basis: verified
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: api
@@ -2561,8 +2564,7 @@
     - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
     - https://www.kb.nl/en/ai-statement
   notes: >-
-    access is partial_paywall (no fee, but only part is open, and the schema has no
-    "restricted" value). Free part: the open archive with "de teksten (OCR, ALTO, XML) van
+    access is restricted (only part is openly available). Free part: the open archive with "de teksten (OCR, ALTO, XML) van
     alle kranten uit de periode 1618 t/m 1879" ("mogen onbeperkt worden hergebruikt"), which
     is outside the v0 window. Everything later is by agreement: "Er zijn 2 API's beschikbaar:
     een metadata-harvest-API op basis van OAI-PMH en een zoek-API op basis van SRU.
@@ -2748,7 +2750,7 @@
   evidence_urls:
     - https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value.
+    access is restricted (reading-room or on-site only).
     "Contents: selection of Dutch websites collected by the KB from 2007 onwards"; "Access:
     can be inspected by KB members in the KB reading room"; sites are "collected and stored
     once or twice per year". Selective, not a .nl domain crawl. Not a practical source for us.
@@ -2783,6 +2785,7 @@
     Same dataset as gb-common-crawl-news. nrc.nl disallows CCBot; forum.fok.nl does not.
     volkskrant.nl and nu.nl returned 403 even for robots.txt, so their status is unknown.
     Dutch coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- NL wider sweep (Task 5e batch ii)
 
@@ -3200,7 +3203,7 @@
   year_start: 1947
   year_start_basis: observed
   year_end: 2009
-  year_end_basis: verified
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3251,7 +3254,7 @@
   url: https://www.spiegel.de/
   access: partial_paywall
   year_start: 2010
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [de]
@@ -3285,7 +3288,7 @@
   url: https://www.zeit.de/
   access: partial_paywall
   year_start: 1946
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [de]
@@ -3412,7 +3415,7 @@
   url: https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/
   access: free
   year_start: 1994
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [de]
@@ -3466,7 +3469,7 @@
   evidence_urls:
     - https://www.dnb.de/EN/webarchiv.html?nn=1035778
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value.
+    access is restricted (reading-room or on-site only).
     The archive is selective (subjects, institutions, events such as federal elections),
     not a .de domain crawl, and social media is collected only in individual cases. Because
     of copyright, the sites are "usually only accessible in the reading rooms in Leipzig
@@ -3505,6 +3508,7 @@
     named bots and disallows the rest, and CCBot is not listed. taz.de does not name CCBot
     but reserves TDM in robots.txt comments. German publishers widely state § 44b UrhG
     reservations, so CC-NEWS is a URL-discovery layer only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- DE wider sweep (Task 5e batch iii)
 
@@ -3853,7 +3857,7 @@
   url: https://anno.onb.ac.at/
   access: free
   year_start: 1505
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [de]
@@ -4034,6 +4038,7 @@
     allows CCBot only on /a/; krone.at's robots.txt comment prohibits TDM under Art. 4 DSM
     and § 42h (6) UrhG and "the development of any ... large language models (LLMs)".
     URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- CH
 
@@ -4044,7 +4049,7 @@
   url: https://www.e-newspaperarchives.ch/
   access: free
   year_start: 1692
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [de, fr, it, rm]
@@ -4254,6 +4259,7 @@
   notes: >-
     Same dataset as gb-common-crawl-news. nzz.ch, letemps.ch and tagesanzeiger.ch all
     disallow CCBot (NZZ except promoted content). URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- IT
 
@@ -4428,9 +4434,9 @@
   url: https://www.internetculturale.it/it/913/emeroteca-digitale-italiana
   access: free
   year_start: 1848
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: 1951
-  year_end_basis: verified
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, other]
   access_method: manual
@@ -4491,6 +4497,7 @@
     Same dataset as gb-common-crawl-news. corriere.it, repubblica.it and lastampa.it all
     disallow CCBot, so the three largest Italian dailies should be missing or thin.
     URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- ES
 
@@ -4531,8 +4538,7 @@
     vigentes estos fondos solo pueden consultarse desde las propias instalaciones de la
     BNE. En el caso de la prensa actual, desde 2021 también es posible hacerlo desde los
     centros de conservación de las Comunidades Autónomas." The 2014 deposit deal with
-    AEDE/AMI brings "alrededor de 200 títulos de prensa diaria". Recorded as
-    partial_paywall: post-1940 material is on-site only (year_start 1999 marks the
+    AEDE/AMI brings "alrededor de 200 títulos de prensa diaria". Recorded as restricted: post-1940 material is on-site only (year_start 1999 marks the
     current-press collection; the purchased runs go back further). The site returned a
     bot-check 403 to curl and WebFetch; robots.txt is "User-agent: * / Disallow: /" with
     only Googlebot and bingbot allowed. Search snippets (not verified: bnelab.bne.es also
@@ -4547,7 +4553,7 @@
   url: https://prensahistorica.mcu.es/es/inicio/inicio.do
   access: free
   year_start: 1730
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [es, ca, gl, eu]
@@ -4589,7 +4595,7 @@
   url: https://www.abc.es/archivo/periodicos/
   access: partial_paywall
   year_start: 1891
-  year_start_basis: verified
+  year_start_basis: observed
   year_end: null
   year_end_basis: observed
   languages: [es]
@@ -4803,6 +4809,7 @@
     (a .com) all disallow CCBot. Spanish publishers also state art. 67.3 RDL 24/2021 TDM
     reservations in their terms, so CC-NEWS is a URL-discovery layer only. Note that big
     Spanish titles sit on .com, so a .es filter misses them.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- ES wider sweep (Task 5e batch iii)
 
@@ -5179,9 +5186,9 @@
   url: https://www.linguateca.pt/cetempublico/
   access: free_registration
   year_start: 1991
-  year_start_basis: verified
+  year_start_basis: unknown
   year_end: 1998
-  year_end_basis: verified
+  year_end_basis: unknown
   languages: [pt]
   genres: [news, opinion]
   access_method: bulk
@@ -5282,3 +5289,5 @@
     Same dataset as gb-common-crawl-news. publico.pt and expresso.pt disallow CCBot; dn.pt
     does not. For PT, pt-arquivo-pt is a better bulk route (national, with an API and
     research-use terms), so CC-NEWS adds little.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
+
