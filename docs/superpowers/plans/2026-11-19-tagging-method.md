@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python ≥3.11, pydantic v2, PyYAML, `anthropic` (Python SDK), `httpx` only if the SDK already pulls it, stdlib `http.server` + plain JS for review, pytest, ruff.
 
-**Spec:** `docs/superpowers/specs/2026-11-19-tagging-method-design.md` (parent: `docs/superpowers/specs/2026-11-18-semantic-values-design.md`)
+**Spec:** `docs/superpowers/specs/2026-11-19-tagging-method-design.md` (its `leaf19` level is the framework's `leaf` level here; parent: `docs/superpowers/specs/2026-11-18-semantic-values-design.md`)
 
 ## Global Constraints
 
@@ -305,9 +305,10 @@ docs/research/tagging-evaluation.md
   - CLI:
     - `python -m semval review --run <id> [--run <id> ...] [--blind] --labeller owner [--port 8765]`
     - `--source touche23-fewshot` to review few-shot candidates.
+  - `TextProvider` protocol: `text(document_id) -> str`. Implementations: raw sample documents (`data/raw/docs`) and Touché23 items (Task 10, used by `--source touche23-fewshot`). The server takes a provider and never reads files directly.
   - JSON API:
     - `GET /api/items`
-    - `GET /api/doc/<id>` (text read from `data/raw`)
+    - `GET /api/doc/<id>` (text via the `TextProvider`)
     - `POST /api/verdict`
   - Static UI as approved in the spec:
     - layout A: article left, tag table right;
