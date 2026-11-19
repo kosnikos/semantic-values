@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from semval.review.labels import DEFAULT_LABELS_DIR
+from semval.sampling.sample import DEFAULT_RAW_DIR, DEFAULT_SAMPLES_DIR
 from semval.sources import (
     EXCLUDED_SOURCE_TYPES,
     JURISDICTION_OPEN_SCOPES,
@@ -22,6 +23,8 @@ from semval.sources import (
     load_sources,
 )
 from semval.tagging.fewshot import DEFAULT_FEWSHOT_PATH
+from semval.tagging.label_examples import DEFAULT_LOCAL_PATH as DEFAULT_LOCAL_FEWSHOT_PATH
+from semval.tagging.runfiles import DEFAULT_RUNS_DIR
 
 DEFAULT_SOURCES = Path("data/sources/sources.yaml")
 DEFAULT_OUT = Path("docs/research/coverage.md")
@@ -185,14 +188,15 @@ def _default_framework() -> str | None:
 def _tag(args: argparse.Namespace) -> int:
     from semval.tagging.base import RunStatus, TaggerKind, TaggerSpec
     from semval.tagging.claude import make_client
-    from semval.tagging.fewshot import load_fewshot
+    from semval.tagging.fewshot import load_fewshot_files
     from semval.tagging.runner import run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     few_shot = []
+    files = args.few_shot_file or [DEFAULT_FEWSHOT_PATH]
     if args.few_shot == "on":
         try:
-            few_shot = load_fewshot(args.few_shot_file)
+            few_shot = load_fewshot_files(files)
         except (OSError, ValueError) as e:
             raise SystemExit(f"cannot load few-shot examples: {e}") from None
     framework = args.framework or _default_framework()
@@ -216,6 +220,7 @@ def _tag(args: argparse.Namespace) -> int:
         limit_per_country=args.limit_per_country,
         client=make_client(),
         few_shot=few_shot,
+        few_shot_files=[str(f) for f in files] if few_shot else (),
     )
     u = m.usage_totals
     print(f"run {m.run_id}: {m.status}, {len(m.segments_done)} segments done")
@@ -317,6 +322,33 @@ def _fewshot_finalize(args: argparse.Namespace) -> int:
     return 0
 
 
+def _fewshot_from_labels(args: argparse.Namespace) -> int:
+    from semval.tagging.label_examples import assess, pick, write_local_fewshot
+    from semval.tagging.runfiles import RunPaths
+
+    paths = RunPaths(samples_dir=args.samples_dir, raw_dir=args.raw_dir, runs_dir=args.runs_dir)
+    try:
+        a = assess(args.run, args.labeller, paths=paths, labels_dir=args.labels_dir)
+    except (OSError, ValueError) as e:
+        raise SystemExit(str(e)) from None
+    examples = pick(a.candidates, args.n)
+    print(
+        f"{len(a.candidates)} qualifying paragraphs of {a.paragraphs_with_reject_or_mention} "
+        f"with a reject or mention tag; disqualified by rule: {dict(a.disqualified)}"
+    )
+    if not examples:
+        raise SystemExit("no paragraph qualifies; nothing written")
+    docs = write_local_fewshot(args.out, examples, run_id=args.run, labeller=args.labeller)
+    from collections import Counter
+
+    langs = Counter(e.language for e in examples)
+    stances = Counter(t.stance for e in examples for t in e.tags)
+    print(f"{args.out}: {len(examples)} examples (local only, not for commit)")
+    print(f"by language: {dict(langs)}; tags by stance: {dict(stances)}")
+    print(f"source documents (exclude from scoring): {docs}")
+    return 0
+
+
 def _touche_download(args: argparse.Namespace) -> int:
     from semval.datasets.touche23 import download, load_split
 
@@ -389,7 +421,10 @@ def build_parser() -> argparse.ArgumentParser:
     tag.add_argument("--framework", help="framework id (default: the only framework file)")
     tag.add_argument("--few-shot", choices=["on", "off"], default="off")
     tag.add_argument(
-        "--few-shot-file", type=Path, default=DEFAULT_FEWSHOT_PATH, help="YAML few-shot examples"
+        "--few-shot-file",
+        type=Path,
+        action="append",
+        help=f"YAML few-shot examples; repeat to concatenate in order (default: {DEFAULT_FEWSHOT_PATH})",
     )
     tag.add_argument("--batch", action="store_true", help="use Message Batches (50%% cost)")
     tag.add_argument("--limit-per-country", type=int, help="documents per country")
@@ -434,6 +469,20 @@ def build_parser() -> argparse.ArgumentParser:
     fz.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
     fz.add_argument("--out", type=Path, default=DEFAULT_FEWSHOT_PATH)
     fz.set_defaults(func=_fewshot_finalize)
+
+    fl = fsh_sub.add_parser(
+        "from-labels",
+        help="local in-domain examples from paragraphs the owner confirmed (never committed)",
+    )
+    fl.add_argument("--run", required=True, help="paragraph-unit run id")
+    fl.add_argument("--labeller", default="owner")
+    fl.add_argument("--n", type=int, default=6)
+    fl.add_argument("--out", type=Path, default=DEFAULT_LOCAL_FEWSHOT_PATH)
+    fl.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
+    fl.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
+    fl.add_argument("--samples-dir", type=Path, default=DEFAULT_SAMPLES_DIR)
+    fl.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    fl.set_defaults(func=_fewshot_from_labels)
 
     tou = sub.add_parser("touche23", help="Touché23-ValueEval data and the Greek proxy")
     tou_sub = tou.add_subparsers(dest="touche_command", required=True)

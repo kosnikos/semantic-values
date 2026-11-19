@@ -344,5 +344,5 @@ def test_cli_parses_fewshot_and_defaults() -> None:
         ["tag", "--sample", "s", "--model", "claude-haiku-5-5", "--effort", "low",
          "--level", "leaf", "--unit", "paragraph"]
     )  # fmt: skip
-    assert tag.few_shot_file == fs.DEFAULT_FEWSHOT_PATH
+    assert tag.few_shot_file is None  # _tag falls back to [DEFAULT_FEWSHOT_PATH]
     assert ReviewSource.TOUCHE23_FEWSHOT == "touche23-fewshot"

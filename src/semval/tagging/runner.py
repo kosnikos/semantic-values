@@ -217,6 +217,7 @@ def run_tagging(
     tagger: Tagger | None = None,
     client: Any = None,
     few_shot: Sequence[FewShotExample] = (),
+    few_shot_files: Sequence[str] = (),
     ledger: CostLedger | None = None,
     paths: RunPaths = DEFAULT_PATHS,
 ) -> RunManifest:
@@ -249,6 +250,8 @@ def run_tagging(
     run_id = run_id or make_run_id(run_spec)
     run_dir = Path(paths.runs_dir) / run_id
     m = _open(run_dir, run_id, run_spec, sample_name, info.prompt_sha256, info.definition_wording)
+    if few_shot_files and not m.few_shot_files:
+        m.few_shot_files = list(few_shot_files)
     _save(run_dir, m)
 
     sample_docs = load_sample(sample_name, paths.samples_dir).documents

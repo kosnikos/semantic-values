@@ -286,7 +286,7 @@ def test_cli_few_shot_on_needs_a_readable_file(tmp_path):
     args = build_parser().parse_args([*argv, "--batch", "--limit-per-country", "2"])
     assert args.model == ModelId.HAIKU_5_5 and args.unit == UnitLevel.ARTICLE and args.batch
     assert args.few_shot == "off" and args.limit_per_country == 2
-    assert args.few_shot_file == Path("data/fewshot/touche23.yaml")
+    assert args.few_shot_file is None  # _tag falls back to data/fewshot/touche23.yaml
     with pytest.raises(SystemExit, match="cannot load few-shot"):
         main([*argv, "--few-shot", "on", "--few-shot-file", str(tmp_path / "missing.yaml")])
 

@@ -152,6 +152,8 @@ class RunManifest(BaseModel):
     cost_usd: float = 0.0
     # Count of targets whose prompt used each DefinitionWording value.
     definition_wording: dict[str, int] = Field(default_factory=dict)
+    # Few-shot files the prompt's examples came from, in order (empty: none, or an old run).
+    few_shot_files: list[str] = Field(default_factory=list)
 
     @field_validator("definition_wording")
     @classmethod

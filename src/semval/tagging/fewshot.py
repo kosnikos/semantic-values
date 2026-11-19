@@ -51,6 +51,11 @@ def load_fewshot(path: Path) -> list[FewShotExample]:
     return [FewShotExample.model_validate(x) for x in items]
 
 
+def load_fewshot_files(paths: Iterable[Path]) -> list[FewShotExample]:
+    """The examples of several files, concatenated in the order given."""
+    return [ex for p in paths for ex in load_fewshot(p)]
+
+
 def write_fewshot(path: Path, examples: Sequence[FewShotExample]) -> None:
     """Write the attribution header and the examples (Unicode kept, readable)."""
     doc: dict[str, Any] = {
