@@ -269,3 +269,7 @@ in `opposes` for analysis, not enforced at tagging time.
   summary of Rudnev, Magun & Schwartz (2018) (PDF p. 15).
   https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS_Findings_HVS.pdf
   (full text; the booklet prints two pages per PDF page, so PDF page numbers are given)
+
+## Decision
+
+Owner, 2026-11-19: **approved**. Schwartz refined theory (19 values, `data/framework/schwartz19.yaml`), rolled up to 10 basic values and 4 higher-order groups for reporting. Values overlap, so tagging is multi-label. Validation is against ESS PVQ-21 using the validation roll-up in §4. Moral Foundations Theory stays an optional secondary lens for later.

@@ -1,5 +1,7 @@
 # Data licence
 
+Copyright (c) 2026 Kostas Nikolakopoulos
+
 Derived data in this repository (extracted value scores, references and aggregated
 time series) is licensed under the
 [Creative Commons Attribution 4.0 International licence (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
