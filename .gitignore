@@ -8,3 +8,7 @@ data/raw/
 data/cache/
 .superpowers/
 data/framework/local/
+
+# Owner labels (notes may quote article text) and run outputs (tag evidence quotes): not committed until decided
+data/labels/
+data/runs/

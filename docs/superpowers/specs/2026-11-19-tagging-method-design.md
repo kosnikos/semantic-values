@@ -47,7 +47,7 @@ general: swappable in **method**, **targets** (framework/level) and **text unit*
 | Topic | Decision |
 |---|---|
 | Comparison scope | **(a)**: Claude configurations + a word-list baseline. The three-way comparison (b) goes to the backlog. |
-| Unit | Start at **whole article**; code supports paragraph/sentence and merging. **Revisit after the first owner-corrected batch, on the actual data** (explicit checkpoint, §7 step 6). |
+| Unit | Start at **whole article**; code supports paragraph/sentence and merging. **Revisit after the first owner-corrected batch, on the actual data** (explicit checkpoint, §7 step 6). **Decided 2026-11-19 at the checkpoint: tag per paragraph, report per article via merge.** On the same 20 articles (Sonnet 5.5, medium, leaf) the owner judged both runs: article level found 65 of the 103 values the owner confirmed (recall 0.63, precision 0.92, $0.17); paragraph level found 94 (recall 0.91, precision 0.89, $0.44). Paragraph level also fixed two stance calls the owner flagged. Sentence level was not tried: about 10× the calls and less context. |
 | Targets | Framework file + level chosen per run; recorded in every run. |
 | Owner corrections | **Review web page, layout A** (article left, tag table right), **underline highlights** (one colour per value, matching chip in the table), ✓ correct / ✗ not present / ⟲ wrong call (pick endorse/reject/mention), "+ add missed value", per-article notes, autosave. Local Python server, e.g. `python -m semval review`. No translation toggle. |
 | Correction storage | Article id, value id, model call, owner verdict, notes, evidence as **character offsets only** — no text. Committed to the repo. |
