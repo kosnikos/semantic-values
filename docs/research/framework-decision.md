@@ -291,3 +291,105 @@ in `opposes` for analysis, not enforced at tagging time.
 ## Decision
 
 Owner, 2026-11-19: **approved**. Schwartz refined theory (19 values, `data/framework/schwartz19.yaml`), rolled up to 10 basic values and 4 higher-order groups for reporting. Values overlap, so tagging is multi-label. Validation is against ESS PVQ-21 using the validation roll-up in §4. Moral Foundations Theory stays an optional secondary lens for later.
+
+---
+
+## Official definitions
+
+Added 2026-11-19 (tagging-method plan, Task 3). The tagger should judge texts against the
+sources' own definitions, not our paraphrases. Our `definition` fields stay as they are,
+for the review page and the blog. Each `official` block records where the source's
+definition is (`citation`, `page`) and, where the licence allows, the verbatim `text`.
+
+### What each source says, and what its licence allows
+
+| Source | What it defines | Licence or copyright, as found | Decision |
+|---|---|---|---|
+| Schwartz et al. (2012), JPSP [D2] | **Table 2, p. 669**: the 19 values, "each defined in terms of its motivational goal". **Table 1, p. 664**, column 2: the 10 basic values; the table note says they are "adapted from" Schwartz (1994), *Journal of Social Issues* 50, p. 22, © 1994 John Wiley & Sons | © 2012 American Psychological Association (printed on p. 663 of the copy opened, [D2]). APA's policy [D5] lists "tables, figures" among uses that **require permission**, and exempts only "single text extracts of 400 words or fewer" with attribution | **`local_only`** for all 29 texts (19 leaves from Table 2, 10 `basic10` targets from Table 1) |
+| Schwartz (2012), ORPC 2(1) [D6] | The 10 basic values (overview paper) | **CC BY-NC-ND 3.0**, stated on the ScholarWorks@GVSU article page [D6]. The site footer also says "Copyright © 2011 International Association for Cross-Cultural Psychology. All Rights Reserved"; I read that as the journal's copyright notice, with the article-level CC licence granting reuse | **Not used**: the full text could not be opened (see below) |
+| Kiesel et al. (2022), ACL [D7] | No definitions in the paper itself: Table 1 (p. 4462) lists the 54 Level-1 values (e.g. "Be broadminded") under their Schwartz categories; the "taxonomy description" is published with the dataset [D8] | Paper: **CC BY 4.0** ("Materials published in or after 2016 are licensed on a Creative Commons Attribution 4.0 International License", ACL Anthology page [D7]). Dataset Webis-ArgValues-22: **CC BY-NC 4.0** (Zenodo metadata [D8]) | **Documented alternative only**; nothing added to the framework file |
+
+**Why the JPSP texts are local, not public.** The texts are short (29 noun phrases, 247
+words in all), so APA's exemption for text extracts of up to 400 words might cover them.
+But they are the whole content of two tables, and APA lists tables separately as needing
+permission. Table 1's definitions are also third-party material (adapted from a Wiley
+article), which APA says the reuser must clear. That is not explicit permission. Under
+this task's rule, the verbatim texts stay out of the public repository. If the owner
+wants them public, the route is a CCC Marketplace request for "Website" use [D5]. It
+would need to cover both tables, and Wiley's rights for Table 1.
+
+**Why ORPC is not used.** The ORPC article page opened and shows the CC licence. But the
+PDF (`https://scholarworks.gvsu.edu/cgi/viewcontent.cgi?article=1116&context=orpc`, the
+only open-access copy Semantic Scholar lists [D9]) returned HTTP 403 to automated
+requests. I did not use unofficial uploads (Scribd, SlideShare), and I wrote nothing from
+memory. For the 10 basic values I used Table 1 of [D2] instead: Schwartz's own conceptual
+definitions of the 10, from a paper I could open. (`text: null` with `local_only: false`,
+the fallback for an unopened source, is not a valid `OfficialDefinition`. Table 1 avoids
+the need for it.)
+
+**Owner action, optional:** open the ORPC PDF in a browser. If its definitions are
+preferred, they can be **inline and public**. CC BY-NC-ND permits copying the work
+verbatim with attribution for non-commercial purposes. A definition quoted word for word,
+with citation and page, is an unmodified, attributed, non-commercial redistribution. This
+holds only while the project stays non-commercial.
+
+### What the framework file holds
+
+- **Leaves (19):** `official: {citation: "Schwartz et al. (2012), JPSP 103(4), Table 2",
+  page: "p. 669", local_only: true}`.
+- **`basic10` targets (10):** citation "Schwartz et al. (2012), JPSP 103(4), Table 1,
+  column 2; adapted there from Schwartz (1994), Journal of Social Issues 50, p. 22",
+  page "p. 664", `local_only: true`. `basic10_validation` reuses these targets
+  (`targets_from`).
+- **Groups (`group4`):** no `official` (it is optional). [D2] p. 669 defines the four
+  higher-order values in running text ("Openness to change values emphasize readiness
+  for new ideas, actions, and experiences", and so on), so they could be added the same
+  way later.
+- **Local file:** `data/framework/local/schwartz19.official.yaml` (git-ignored) holds the
+  29 verbatim texts, copied from [D2]. A script checked them against the PDF's extracted
+  text, both as strings and as table rows (value name followed by its definition). They
+  are kept exactly as printed: curly apostrophes, the em dash in self-direction, and the
+  final period that Table 1 prints after hedonism only. They are noun phrases, not
+  sentences.
+
+Counts: **0 inline, 29 local-only, 0 missing.**
+
+### How the tagger uses them (prompt-use note)
+
+- For each target, the prompt shows the **official text when present**, with its citation
+  and page, and **falls back to our `definition`** when `official.text` is `None`. In a
+  fresh clone, every `local_only` block has no text, so all of them fall back.
+- **Reproducibility.** All 29 texts are local-only, so a fresh clone tags with our
+  paraphrases and the owner's machine tags with the official texts: the prompts differ. A
+  run should record which wording each target used (official or fallback), for example
+  through the prompt hash in the run manifest, so that results from the two setups are not
+  pooled by mistake.
+- `test_every_target_has_official_citation` loads the public file alone (`local_dir=None`)
+  and checks that every leaf, `basic10` and `basic10_validation` target has an `official`
+  block with a citation and page. `test_local_official_file_covers_every_local_only_target`
+  checks that every one of them gets its text when the local file exists, and skips
+  otherwise.
+
+### Sources opened for this section
+
+- [D2] as above: Table 1 p. 664, © notice p. 663, Table 2 p. 669.
+- [D5] American Psychological Association. *APA copyright and permissions for scholarly
+  journals and books* (page metadata: last updated 2025-05-21).
+  https://www.apa.org/about/contact/copyright/. The live page served a bot-protection
+  page, so I read the Internet Archive snapshot of 2026-11-11:
+  https://web.archive.org/web/20261111223418/https://www.apa.org/about/contact/copyright/
+- [D6] Schwartz, S. H. (2012). An overview of the Schwartz theory of basic values.
+  *Online Readings in Psychology and Culture*, 2(1). https://doi.org/10.9707/2307-0919.1116,
+  which resolves to the article page https://scholarworks.gvsu.edu/orpc/vol2/iss1/11/.
+  The licence was read there; the PDF was not retrievable (HTTP 403).
+- [D7] Kiesel, J., Alshomary, M., Handke, N., Cai, X., Wachsmuth, H., & Stein, B. (2022).
+  Identifying the human values behind arguments. *Proceedings of the 60th Annual Meeting
+  of the ACL (Vol. 1)*, 4459–4471. https://doi.org/10.18653/v1/2022.acl-long.306.
+  Anthology page https://aclanthology.org/2022.acl-long.306/ (licence); PDF
+  https://aclanthology.org/2022.acl-long.306.pdf (Table 1 and data pointer, p. 4462).
+- [D8] Webis-ArgValues-22, Zenodo record 5657249 (https://doi.org/10.5281/zenodo.5657249).
+  Metadata read through https://zenodo.org/api/records/5657249: licence `cc-by-nc-4.0`,
+  version 2022-07-18.
+- [D9] Semantic Scholar API record for doi:10.9707/2307-0919.1116,
+  https://api.semanticscholar.org/graph/v1/paper/DOI:10.9707/2307-0919.1116?fields=title,openAccessPdf,externalIds.
+  The only open-access PDF it lists is the GVSU one.

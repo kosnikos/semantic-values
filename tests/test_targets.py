@@ -80,6 +80,25 @@ def test_target_set_leaf_equals_leaves() -> None:
         assert (t.examples_endorse, t.examples_reject) == (v.examples_endorse, v.examples_reject)
 
 
+def test_every_target_has_official_citation() -> None:
+    # The public file alone (local_dir=None): what a fresh clone sees.
+    fw = load_framework(SCHWARTZ19, local_dir=None)
+    for level_id in (LEAF_LEVEL, "basic10", "basic10_validation"):
+        for t in fw.target_set(level_id).targets:
+            assert t.official is not None, (level_id, t.id)
+            assert t.official.citation.strip() and t.official.page.strip(), (level_id, t.id)
+            assert t.official.local_only or t.official.text, (level_id, t.id)
+
+
+def test_local_official_file_covers_every_local_only_target() -> None:
+    if not (FRAMEWORK_DIR / "local" / "schwartz19.official.yaml").exists():
+        pytest.skip("no local official texts in this checkout")
+    fw = load_framework(SCHWARTZ19)
+    for level_id in (LEAF_LEVEL, "basic10"):
+        for t in fw.target_set(level_id).targets:
+            assert t.official.text, (level_id, t.id)
+
+
 # ---- level mechanics on a toy framework ------------------------------------------------
 
 
