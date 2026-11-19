@@ -157,7 +157,7 @@ def assess(
 
 def _wanted(c: _Candidate, have: Counter[str]) -> int:
     """The candidate's reject/mention coverage still missing, summed over its stances."""
-    stances = {t.stance for t in c.example.tags} & {"reject", "mention"}
+    stances = {t.stance for t in c.example.tags} & {Stance.REJECT, Stance.MENTION}
     return sum(max(0, TARGET_PER_STANCE - have[s]) for s in stances)
 
 
