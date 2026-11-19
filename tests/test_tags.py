@@ -55,7 +55,7 @@ def test_merge_evidence_confidence_unresolved():
     ]
     t = _one(tags)
     assert t.segment_id == "d:p0"
-    assert sorted((e.start, e.end) for e in t.evidence) == [(0, 3), (5, 8)]
+    assert [(e.start, e.end) for e in t.evidence] == [(0, 3), (5, 8)]
     assert t.confidence == 0.9
     assert t.evidence_unresolved is True
     assert _one([_tag("d:p0:s0", Stance.MENTION)]).confidence is None
@@ -102,3 +102,27 @@ def test_rollup_contested():
 def test_rollup_unknown_value_raises():
     with pytest.raises(ValueError, match="unknown"):
         rollup_tags([_tag("d:a", Stance.ENDORSE, "zzz")], {"a": "b"})
+
+
+def test_merge_unknown_segment_raises():
+    with pytest.raises(ValueError, match="unknown segment"):
+        merge([_tag("d:nope", Stance.ENDORSE)], SEGS, UnitLevel.PARAGRAPH)
+
+
+def test_merge_contested_input_stays_contested():
+    tags = [_tag("d:p0:s0", Stance.CONTESTED), _tag("d:p0:s1", Stance.MENTION)]
+    assert _one(tags).stance is Stance.CONTESTED
+
+
+def test_rollup_run_id_mismatch_raises():
+    tags = [_tag("d:a", Stance.ENDORSE, "x"), _tag("d:a", Stance.ENDORSE, "x", run="r2")]
+    with pytest.raises(ValueError, match="run_id"):
+        rollup_tags(tags, {"x": "y"})
+
+
+def test_run_id_strict_across_different_values():
+    tags = [_tag("d:p0:s0", Stance.ENDORSE, "a"), _tag("d:p0:s1", Stance.ENDORSE, "b", run="r2")]
+    with pytest.raises(ValueError, match="run_id"):
+        merge(tags, SEGS, UnitLevel.PARAGRAPH)
+    with pytest.raises(ValueError, match="run_id"):
+        rollup_tags(tags, {"a": "a", "b": "b"})

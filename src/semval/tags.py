@@ -41,9 +41,6 @@ class ValueTag(BaseModel):
 def _combine(segment_id: str, value_id: str, group: list[ValueTag]) -> ValueTag:
     """The one combination rule: contested if any endorse and any reject, else the
     strongest of endorse > reject > mention; evidence unioned, confidence the max."""
-    run_ids = {t.run_id for t in group}
-    if len(run_ids) != 1:
-        raise ValueError(f"cannot combine tags from different run_id values: {sorted(run_ids)}")
     stances = {t.stance for t in group}
     if Stance.CONTESTED in stances or {Stance.ENDORSE, Stance.REJECT} <= stances:
         stance = Stance.CONTESTED
@@ -58,8 +55,14 @@ def _combine(segment_id: str, value_id: str, group: list[ValueTag]) -> ValueTag:
         evidence=list(evidence),
         evidence_unresolved=any(t.evidence_unresolved for t in group),
         confidence=max(confs) if confs else None,
-        run_id=run_ids.pop(),
+        run_id=group[0].run_id,
     )
+
+
+def _check_single_run(tags: list[ValueTag]) -> None:
+    run_ids = {t.run_id for t in tags}
+    if len(run_ids) > 1:
+        raise ValueError(f"cannot combine tags from different run_id values: {sorted(run_ids)}")
 
 
 def _combine_groups(keyed: Iterable[tuple[tuple[str, str], ValueTag]]) -> list[ValueTag]:
@@ -71,6 +74,7 @@ def _combine_groups(keyed: Iterable[tuple[tuple[str, str], ValueTag]]) -> list[V
 
 def merge(tags: list[ValueTag], segments: list[Segment], to_level: UnitLevel) -> list[ValueTag]:
     """Lift tags to their ancestor segment at ``to_level`` and combine per (segment, value)."""
+    _check_single_run(tags)
     by_id = {s.id: s for s in segments}
 
     def ancestor(segment_id: str) -> str:
@@ -90,6 +94,7 @@ def merge(tags: list[ValueTag], segments: list[Segment], to_level: UnitLevel) ->
 
 def rollup_tags(tags: list[ValueTag], rollup_map: dict[str, str]) -> list[ValueTag]:
     """Map each tag's value id through ``rollup_map`` and combine per (segment, target)."""
+    _check_single_run(tags)
     keyed = []
     for t in tags:
         if t.value_id not in rollup_map:

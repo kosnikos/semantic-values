@@ -1,6 +1,6 @@
 import pytest
 
-from semval.units import UnitLevel, segment
+from semval.units import Segment, UnitLevel, segment
 
 TEXT = "Πρώτη πρόταση. Δεύτερη!  Third one?\n\nΝέα παράγραφος εδώ. Τέλος"
 
@@ -56,7 +56,14 @@ def test_no_split_on_lowercase_or_decimal():
 
 
 def test_segment_offsets_validated():
-    from semval.units import Segment
-
     with pytest.raises(ValueError):
         Segment(id="x", document_id="d", level=UnitLevel.ARTICLE, parent_id=None, start=5, end=2)
+
+
+def test_crlf_offsets_reconstruct():
+    text = "One. Two.\r\n\r\nThree here.\r\nStill three. Four"
+    segs = segment("d", text, UnitLevel.SENTENCE)
+    paras = [text[s.start : s.end] for s in segs if s.level is UnitLevel.PARAGRAPH]
+    sents = [text[s.start : s.end] for s in segs if s.level is UnitLevel.SENTENCE]
+    assert paras == ["One. Two.", "Three here.\r\nStill three. Four"]
+    assert sents == ["One.", "Two.", "Three here.", "Still three.", "Four"]
