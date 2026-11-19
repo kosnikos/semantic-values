@@ -14,7 +14,9 @@
   url: https://open-platform.theguardian.com/
   access: free_registration
   year_start: 1999
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: api
@@ -63,7 +65,9 @@
   url: https://www.theguardian.com/
   access: free
   year_start: 1999
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -95,7 +99,9 @@
   url: https://www.bbc.co.uk/news
   access: free
   year_start: 1997
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: scrape
@@ -134,7 +140,9 @@
   url: https://www.independent.co.uk/archive
   access: partial_paywall
   year_start: 1995
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -170,7 +178,9 @@
   url: https://www.reddit.com/r/unitedkingdom/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -207,7 +217,9 @@
   url: https://www.reddit.com/r/AskUK/
   access: free_registration
   year_start: 2011
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -234,7 +246,9 @@
   url: https://www.mumsnet.com/talk
   access: free
   year_start: 2000
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: scrape
@@ -265,9 +279,11 @@
   country: GB
   source_type: web_archive
   url: https://www.webarchive.org.uk/
-  access: partial_paywall
+  access: restricted
   year_start: 2004
+  year_start_basis: verified
   year_end: 2022
+  year_end_basis: verified
   languages: [en]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -298,7 +314,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news, opinion]
   access_method: bulk
@@ -330,7 +348,9 @@
   url: https://www.gdeltproject.org/data.html
   access: free
   year_start: 2015
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: bulk
@@ -361,7 +381,9 @@
   url: https://www.britishnewspaperarchive.co.uk/
   access: paywall
   year_start: 1720
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: unknown
   languages: [en]
   genres: [news, letters, opinion]
   access_method: manual
@@ -391,7 +413,9 @@
   url: https://www.dailymail.co.uk/debate/index.html
   access: partial_paywall
   year_start: 1994
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -431,7 +455,9 @@
   url: https://inews.co.uk/opinion
   access: partial_paywall
   year_start: 2016
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -471,7 +497,9 @@
   url: https://www.standard.co.uk/comment
   access: free
   year_start: 1998
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -507,7 +535,9 @@
   url: https://theconversation.com/uk
   access: free
   year_start: 2013
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -542,7 +572,9 @@
   url: https://www.opendemocracy.net/
   access: free
   year_start: 2004
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -576,7 +608,9 @@
   url: https://www.prospectmagazine.co.uk/
   access: partial_paywall
   year_start: 1995
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -613,7 +647,9 @@
   url: https://unherd.com/
   access: partial_paywall
   year_start: 2018
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -647,7 +683,9 @@
   url: https://www.hellomagazine.com/
   access: partial_paywall
   year_start: 2001
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other, news]
   access_method: scrape
@@ -683,7 +721,9 @@
   url: https://www.goodhousekeeping.com/uk/
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other]
   access_method: scrape
@@ -717,7 +757,9 @@
   url: https://www.womanandhome.com/
   access: free
   year_start: 2005
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other]
   access_method: scrape
@@ -754,7 +796,9 @@
   url: https://www.mirror.co.uk/opinion/
   access: partial_paywall
   year_start: 2013
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -800,7 +844,9 @@
   url: https://www.manchestereveningnews.co.uk/news/greater-manchester-news/
   access: free
   year_start: 2019
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: scrape
@@ -841,7 +887,9 @@
   url: https://www.ok.co.uk/
   access: free
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other, news]
   access_method: scrape
@@ -881,7 +929,9 @@
   url: http://efimeris.nlg.gr/ns/main.html
   access: free
   year_start: 1883
+  year_start_basis: verified
   year_end: 1983
+  year_end_basis: verified
   languages: [el]
   genres: [news]
   access_method: manual
@@ -926,7 +976,9 @@
   url: https://archive.kathimerini.gr/
   access: paywall
   year_start: 1919
+  year_start_basis: verified
   year_end: 2010
+  year_end_basis: verified
   languages: [el]
   genres: [news, opinion, letters]
   access_method: manual
@@ -957,7 +1009,9 @@
   url: https://www.kathimerini.gr/opinion/
   access: partial_paywall
   year_start: 2001
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -993,7 +1047,9 @@
   url: https://www.tovima.gr/category/opinions/
   access: free
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1030,7 +1086,9 @@
   url: https://www.tanea.gr/category/opinions/
   access: free
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1062,7 +1120,9 @@
   url: https://www.efsyn.gr/stiles/
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1093,7 +1153,9 @@
   url: https://www.rizospastis.gr/
   access: free
   year_start: 1997
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -1122,7 +1184,9 @@
   url: https://www.insomnia.gr/forums/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [forum]
   access_method: scrape
@@ -1154,7 +1218,9 @@
   url: https://www.reddit.com/r/greece/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el, en]
   genres: [forum]
   access_method: api
@@ -1183,7 +1249,9 @@
   url: https://webarchive.nlg.gr/
   access: free
   year_start: 1996
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -1215,7 +1283,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion]
   access_method: bulk
@@ -1248,7 +1318,9 @@
   url: https://www.gdeltproject.org/data.html
   access: free
   year_start: 2015
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news]
   access_method: bulk
@@ -1278,7 +1350,9 @@
   url: https://gallica.bnf.fr/
   access: free
   year_start: 1940
+  year_start_basis: window
   year_end: 1953
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, other]
   access_method: api
@@ -1322,7 +1396,9 @@
   url: https://www.retronews.fr/
   access: paywall
   year_start: 1631
+  year_start_basis: verified
   year_end: 1954
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, other]
   access_method: manual
@@ -1357,7 +1433,9 @@
   url: https://www.lemonde.fr/idees/
   access: partial_paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1397,7 +1475,9 @@
   url: https://www.lefigaro.fr/vox
   access: partial_paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1434,7 +1514,9 @@
   url: https://www.agoravox.fr/
   access: free
   year_start: 2005
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, forum]
   access_method: scrape
@@ -1471,7 +1553,9 @@
   url: https://www.reddit.com/r/france/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [forum]
   access_method: api
@@ -1497,9 +1581,11 @@
   country: FR
   source_type: web_archive
   url: https://www.bnf.fr/fr/archives-de-linternet
-  access: partial_paywall
+  access: restricted
   year_start: 2000
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -1529,7 +1615,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion]
   access_method: bulk
@@ -1564,7 +1652,9 @@
   url: https://theconversation.com/fr
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns]
   access_method: scrape
@@ -1598,7 +1688,9 @@
   url: https://www.slate.fr/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1635,7 +1727,9 @@
   url: https://blogs.mediapart.fr/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion]
   access_method: scrape
@@ -1673,7 +1767,9 @@
   url: https://www.humanite.fr/
   access: partial_paywall
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1709,7 +1805,9 @@
   url: https://www.valeursactuelles.com/
   access: partial_paywall
   year_start: 2003
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1743,7 +1841,9 @@
   url: https://www.belgicapress.be/
   access: free_registration
   year_start: 1814
+  year_start_basis: verified
   year_end: 1982
+  year_end_basis: verified
   languages: [fr, nl, de]
   genres: [news, opinion, other]
   access_method: manual
@@ -1786,7 +1886,9 @@
   url: https://www.lalibre.be/debats/
   access: partial_paywall
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1825,7 +1927,9 @@
   url: https://forum.politics.be/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: scrape
@@ -1856,7 +1960,9 @@
   url: https://www.reddit.com/r/belgium/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -1888,7 +1994,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl, fr]
   genres: [news, opinion]
   access_method: bulk
@@ -1919,7 +2027,9 @@
   url: https://www.lavenir.net/opinions/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1958,7 +2068,9 @@
   url: https://www.rtbf.be/dossier/opinions
   access: free
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1998,7 +2110,9 @@
   url: https://www.rtl.be/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news]
   access_method: scrape
@@ -2032,7 +2146,9 @@
   url: https://www.mo.be/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -2072,7 +2188,9 @@
   url: https://www.dewereldmorgen.be/
   access: free
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news, other]
   access_method: scrape
@@ -2109,7 +2227,9 @@
   url: https://eluxemburgensia.lu/
   access: free
   year_start: 1848
+  year_start_basis: verified
   year_end: 2014
+  year_end_basis: verified
   languages: [de, fr, lb]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -2159,7 +2279,9 @@
   url: https://www.rtl.lu/news/meenung
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [lb]
   genres: [letters, opinion, news, forum]
   access_method: scrape
@@ -2199,7 +2321,9 @@
   url: https://www.tageblatt.lu/
   access: partial_paywall
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de, fr]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -2235,7 +2359,9 @@
   url: https://www.lessentiel.lu/fr
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, forum]
   access_method: scrape
@@ -2269,7 +2395,9 @@
   url: https://www.reddit.com/r/Luxembourg/
   access: free_registration
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -2295,9 +2423,11 @@
   country: LU
   source_type: web_archive
   url: https://www.webarchive.lu/
-  access: partial_paywall
+  access: restricted
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [lb, fr, de, en]
   genres: [news, opinion, other]
   access_method: manual
@@ -2328,7 +2458,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [lb, fr, de]
   genres: [news, opinion]
   access_method: bulk
@@ -2359,9 +2491,11 @@
   country: NL
   source_type: national_library
   url: https://www.delpher.nl/
-  access: partial_paywall
+  access: restricted
   year_start: 1618
+  year_start_basis: verified
   year_end: 1995
+  year_end_basis: verified
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -2406,9 +2540,11 @@
   country: NL
   source_type: national_library
   url: https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
-  access: partial_paywall
+  access: restricted
   year_start: 1618
+  year_start_basis: verified
   year_end: 1995
+  year_end_basis: verified
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: api
@@ -2448,7 +2584,9 @@
   url: https://www.nrc.nl/opinie/
   access: paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -2487,7 +2625,9 @@
   url: https://www.geenstijl.nl/
   access: free
   year_start: 2003
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, forum]
   access_method: scrape
@@ -2521,7 +2661,9 @@
   url: https://forum.fok.nl/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: scrape
@@ -2557,7 +2699,9 @@
   url: https://www.reddit.com/r/thenetherlands/
   access: free_registration
   year_start: 2014
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: api
@@ -2585,9 +2729,11 @@
   country: NL
   source_type: web_archive
   url: https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
-  access: partial_paywall
+  access: restricted
   year_start: 2007
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -2614,7 +2760,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion]
   access_method: bulk
@@ -2645,7 +2793,9 @@
   url: https://www.nhnieuws.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news]
   access_method: scrape
@@ -2682,7 +2832,9 @@
   url: https://www.omroepbrabant.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news]
   access_method: scrape
@@ -2713,7 +2865,9 @@
   url: https://www.metronieuws.nl/
   access: free
   year_start: 2020
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, other]
   access_method: scrape
@@ -2747,7 +2901,9 @@
   url: https://decorrespondent.nl/
   access: free
   year_start: 2023
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -2781,7 +2937,9 @@
   url: https://tpo.nl/
   access: partial_paywall
   year_start: 2023
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news]
   access_method: scrape
@@ -2816,7 +2974,9 @@
   url: https://www.wyniasweek.nl/
   access: free
   year_start: 2019
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns]
   access_method: scrape
@@ -2851,7 +3011,9 @@
   url: https://www.dagelijksestandaard.nl/
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news]
   access_method: scrape
@@ -2883,7 +3045,9 @@
   url: https://www.viva.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [columns, other]
   access_method: scrape
@@ -2919,7 +3083,9 @@
   url: https://www.opzij.nl/
   access: free
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, other]
   access_method: scrape
@@ -2954,7 +3120,9 @@
   url: https://www.deutsche-digitale-bibliothek.de/newspaper
   access: free
   year_start: 1609
+  year_start_basis: verified
   year_end: 1994
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: api
@@ -2993,7 +3161,9 @@
   url: https://zefys.staatsbibliothek-berlin.de/ddr-presse/
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: 1994
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters]
   access_method: manual
@@ -3028,7 +3198,9 @@
   url: https://www.spiegel.de/spiegel/print/
   access: free
   year_start: 1947
+  year_start_basis: observed
   year_end: 2009
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3079,7 +3251,9 @@
   url: https://www.spiegel.de/
   access: partial_paywall
   year_start: 2010
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3111,7 +3285,9 @@
   url: https://www.zeit.de/
   access: partial_paywall
   year_start: 1946
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3152,7 +3328,9 @@
   url: https://taz.de/
   access: free
   year_start: 1991
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3194,7 +3372,9 @@
   url: https://www.dwds.de/d/korpora
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -3232,7 +3412,9 @@
   url: https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/
   access: free
   year_start: 1994
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3265,9 +3447,11 @@
   country: DE
   source_type: web_archive
   url: https://www.dnb.de/EN/webarchiv.html
-  access: partial_paywall
+  access: restricted
   year_start: 2012
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, other]
   access_method: manual
@@ -3296,7 +3480,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: bulk
@@ -3329,7 +3515,9 @@
   url: https://www.berliner-zeitung.de/
   access: partial_paywall
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns, letters]
   access_method: scrape
@@ -3370,7 +3558,9 @@
   url: https://www.nd-aktuell.de/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3409,7 +3599,9 @@
   url: https://www.jungewelt.de/
   access: partial_paywall
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters]
   access_method: scrape
@@ -3454,7 +3646,9 @@
   url: https://www.handelsblatt.com/meinung/
   access: partial_paywall
   year_start: 2011
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3499,7 +3693,9 @@
   url: https://jungefreiheit.de/
   access: partial_paywall
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: scrape
@@ -3541,7 +3737,9 @@
   url: https://www.brigitte.de/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [columns, other]
   access_method: scrape
@@ -3578,7 +3776,9 @@
   url: https://www.gala.de/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, other]
   access_method: scrape
@@ -3614,7 +3814,9 @@
   url: https://www.eltern.de/
   access: free
   year_start: 2025
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [columns, other]
   access_method: scrape
@@ -3651,7 +3853,9 @@
   url: https://anno.onb.ac.at/
   access: free
   year_start: 1505
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3696,7 +3900,9 @@
   url: https://www.arbeiterzeitung.at/
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: 1989
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters]
   access_method: manual
@@ -3725,7 +3931,9 @@
   url: https://www.derstandard.at/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3765,7 +3973,9 @@
   url: https://www.diepresse.com/meinung
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3799,7 +4009,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: bulk
@@ -3832,7 +4044,9 @@
   url: https://www.e-newspaperarchives.ch/
   access: free
   year_start: 1692
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de, fr, it, rm]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3867,7 +4081,9 @@
   url: https://www.letempsarchives.ch/
   access: free
   year_start: 1798
+  year_start_basis: verified
   year_end: 1998
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3903,7 +4119,9 @@
   url: https://www.letemps.ch/opinions
   access: partial_paywall
   year_start: 1998
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3935,7 +4153,9 @@
   url: https://www.nzz.ch/meinung
   access: paywall
   year_start: 1993
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3969,7 +4189,9 @@
   url: https://www.liri.uzh.ch/en/services/swissdox.html
   access: partial_paywall
   year_start: 1990
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: unknown
   languages: [de, fr]
   genres: [news, opinion, columns]
   access_method: api
@@ -4009,7 +4231,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de, fr, it]
   genres: [news, opinion]
   access_method: bulk
@@ -4040,7 +4264,9 @@
   url: http://www.archiviolastampa.it/
   access: free
   year_start: 1867
+  year_start_basis: observed
   year_end: 2005
+  year_end_basis: verified
   languages: [it]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -4079,7 +4305,9 @@
   url: https://archivio.unita.news/
   access: free
   year_start: 1946
+  year_start_basis: observed
   year_end: 2014
+  year_end_basis: verified
   languages: [it]
   genres: [news, opinion, letters]
   access_method: manual
@@ -4115,7 +4343,9 @@
   url: https://ricerca.repubblica.it/ricerca/repubblica
   access: partial_paywall
   year_start: 1984
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4158,7 +4388,9 @@
   url: https://archivio.corriere.it/Archivio/interface/landing.html
   access: paywall
   year_start: 1876
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4196,7 +4428,9 @@
   url: https://www.internetculturale.it/it/913/emeroteca-digitale-italiana
   access: free
   year_start: 1848
+  year_start_basis: verified
   year_end: 1951
+  year_end_basis: verified
   languages: [it]
   genres: [news, opinion, other]
   access_method: manual
@@ -4233,7 +4467,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion]
   access_method: bulk
@@ -4263,9 +4499,11 @@
   country: ES
   source_type: national_library
   url: https://hemerotecadigital.bne.es/hd/es/inicio
-  access: partial_paywall
+  access: restricted
   year_start: 1999
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -4309,7 +4547,9 @@
   url: https://prensahistorica.mcu.es/es/inicio/inicio.do
   access: free
   year_start: 1730
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion, other]
   access_method: api
@@ -4349,7 +4589,9 @@
   url: https://www.abc.es/archivo/periodicos/
   access: partial_paywall
   year_start: 1891
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4398,7 +4640,9 @@
   url: https://www.lavanguardia.com/hemeroteca
   access: partial_paywall
   year_start: 1881
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4446,7 +4690,9 @@
   url: https://elpais.com/hemeroteca/
   access: paywall
   year_start: 1976
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4494,7 +4740,9 @@
   url: https://www.eldiario.es/opinion/
   access: partial_paywall
   year_start: 2012
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4530,7 +4778,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion]
   access_method: bulk
@@ -4563,7 +4813,9 @@
   url: https://www.larazon.es/opinion/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4601,7 +4853,9 @@
   url: https://www.rtve.es/noticias/
   access: free
   year_start: 2021
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news]
   access_method: scrape
@@ -4638,7 +4892,9 @@
   url: https://www.hola.com/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, other]
   access_method: scrape
@@ -4670,7 +4926,9 @@
   url: https://ctxt.es/
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -4708,7 +4966,9 @@
   url: https://www.elsaltodiario.com/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4743,7 +5003,9 @@
   url: https://www.lamarea.com/
   access: free
   year_start: 2013
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4780,7 +5042,9 @@
   url: https://arquivo.pt/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns, other]
   access_method: api
@@ -4832,7 +5096,9 @@
   url: https://www.publico.pt/opiniao
   access: partial_paywall
   year_start: 2009
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4875,7 +5141,9 @@
   url: https://www.dn.pt/opiniao
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4911,7 +5179,9 @@
   url: https://www.linguateca.pt/cetempublico/
   access: free_registration
   year_start: 1991
+  year_start_basis: verified
   year_end: 1998
+  year_end_basis: verified
   languages: [pt]
   genres: [news, opinion]
   access_method: bulk
@@ -4948,7 +5218,9 @@
   url: https://casacomum.org/arquivos?set=e_529
   access: free
   year_start: 1921
+  year_start_basis: verified
   year_end: 1990
+  year_end_basis: verified
   languages: [pt]
   genres: [news, opinion, other]
   access_method: manual
@@ -4986,7 +5258,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion]
   access_method: bulk

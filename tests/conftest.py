@@ -11,6 +11,8 @@ def make_source(**overrides) -> dict:
         "access": "free",
         "year_start": 1950,
         "year_end": 2000,
+        "year_start_basis": "verified",
+        "year_end_basis": "verified",
         "languages": ["el"],
         "genres": ["opinion"],
         "access_method": "bulk",
