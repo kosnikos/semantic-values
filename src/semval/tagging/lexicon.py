@@ -1,12 +1,14 @@
 """Word-list baseline: a MENTION wherever a target's stems occur in English text."""
 
+import hashlib
+import json
 import re
 from collections.abc import Mapping
 from pathlib import Path
 
 import yaml
 
-from semval.tagging.base import RawTag, TagBatchResult, TaggerKind, TaggerSpec
+from semval.tagging.base import PromptInfo, RawTag, TagBatchResult, TaggerKind, TaggerSpec
 from semval.targets import TargetSet
 from semval.units import DocumentMeta, Segment
 
@@ -19,6 +21,7 @@ class LexiconTagger:
         data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
         self.framework_id: str = data["framework_id"]
         self.level_id: str = data["level_id"]
+        self.stems: dict[str, list[str]] = data["targets"]
         self.patterns = {
             tid: re.compile(
                 r"\b(?:" + "|".join(re.escape(s) for s in stems) + r")\w*", re.IGNORECASE
@@ -30,6 +33,11 @@ class LexiconTagger:
             framework_id=self.framework_id,
             level_id=self.level_id,
         )
+
+    def prompt_info(self, targets: TargetSet) -> PromptInfo:
+        """The word lists stand in for a prompt: their hash identifies the run's method."""
+        blob = json.dumps(self.stems, sort_keys=True, ensure_ascii=False)
+        return PromptInfo(prompt_sha256=hashlib.sha256(blob.encode("utf-8")).hexdigest())
 
     def tag(
         self,

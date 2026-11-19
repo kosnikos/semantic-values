@@ -171,6 +171,55 @@ def _sample(args: argparse.Namespace) -> int:
     return 0
 
 
+def _default_framework() -> str | None:
+    """The framework id when exactly one framework file exists, else None."""
+    from semval.values import FRAMEWORK_DIR
+
+    files = sorted(FRAMEWORK_DIR.glob("*.yaml"))
+    return files[0].stem if len(files) == 1 else None
+
+
+def _tag(args: argparse.Namespace) -> int:
+    from semval.tagging.base import TaggerKind, TaggerSpec
+    from semval.tagging.runner import load_few_shot, run_tagging
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    few_shot = []
+    if args.few_shot == "on":
+        if args.few_shot_file is None:
+            raise SystemExit("--few-shot on needs --few-shot-file PATH (no default file yet)")
+        few_shot = load_few_shot(args.few_shot_file)
+    framework = args.framework or _default_framework()
+    if framework is None:
+        raise SystemExit("several framework files exist: pass --framework ID")
+    spec = TaggerSpec(
+        kind=TaggerKind.CLAUDE,
+        model=args.model,
+        effort=args.effort,
+        framework_id=framework,
+        level_id=args.level,
+        unit=args.unit,
+        few_shot=args.few_shot == "on",
+        batch=args.batch,
+    )
+    m = run_tagging(
+        spec,
+        args.sample,
+        run_id=args.run_id,
+        limit=args.limit,
+        limit_per_country=args.limit_per_country,
+        few_shot=few_shot,
+    )
+    u = m.usage_totals
+    print(f"run {m.run_id}: {m.status}, {len(m.segments_done)} segments done")
+    print(
+        f"tokens: in={u.input_tokens} out={u.output_tokens} "
+        f"cache_write={u.cache_creation_input_tokens} cache_read={u.cache_read_input_tokens}"
+    )
+    print(f"cost: ${m.cost_usd:.4f}; refused: {len(m.refused_segments)}; failed: {len(m.failures)}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="semval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -195,6 +244,24 @@ def build_parser() -> argparse.ArgumentParser:
     smp.add_argument("--sources", type=Path, default=DEFAULT_SOURCES, help="registry file")
     smp.add_argument("--max-requests", type=int, default=600, help="stop after this many")
     smp.set_defaults(func=_sample)
+
+    from semval.config import Effort, ModelId
+    from semval.units import UnitLevel
+
+    tag = sub.add_parser("tag", help="tag a sample with Claude (resumable; see data/runs/)")
+    tag.add_argument("--sample", required=True, help="name of data/samples/<name>.yaml")
+    tag.add_argument("--model", type=ModelId, choices=list(ModelId), required=True)
+    tag.add_argument("--effort", type=Effort, choices=list(Effort), required=True)
+    tag.add_argument("--level", required=True, help="framework level id, e.g. leaf")
+    tag.add_argument("--unit", type=UnitLevel, choices=list(UnitLevel), required=True)
+    tag.add_argument("--framework", help="framework id (default: the only framework file)")
+    tag.add_argument("--few-shot", choices=["on", "off"], default="off")
+    tag.add_argument("--few-shot-file", type=Path, help="YAML few-shot examples")
+    tag.add_argument("--batch", action="store_true", help="use Message Batches (50%% cost)")
+    tag.add_argument("--limit-per-country", type=int, help="documents per country")
+    tag.add_argument("--limit", type=int, help="documents in all")
+    tag.add_argument("--run-id", help="resume this run, or name a new one")
+    tag.set_defaults(func=_tag)
     return parser
 
 

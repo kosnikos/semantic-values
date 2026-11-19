@@ -2,10 +2,12 @@
 
 import datetime
 import json
+import math
 import os
 from pathlib import Path
 
-from semval.config import BATCH_FACTOR, BUDGET_USD, PRICES, ModelId
+from semval.config import BATCH_FACTOR, BUDGET_USD, PRICES, ModelId, PricedModel
+from semval.fsutil import atomic_write_text
 from semval.tagging.base import Usage
 
 
@@ -17,14 +19,21 @@ class LedgerCorrupt(Exception):
     """A ledger line cannot be read. Skipping it would undercount spend, so we stop."""
 
 
+def _valid_cost(cost: float) -> bool:
+    return math.isfinite(cost) and cost >= 0
+
+
 def _parse(line: str, number: int) -> float:
     try:
-        return float(json.loads(line)["cost_usd"])
+        cost = float(json.loads(line)["cost_usd"])
     except (ValueError, KeyError, TypeError) as e:
         raise LedgerCorrupt(f"ledger line {number} is unreadable: {e!r}") from e
+    if not _valid_cost(cost):
+        raise LedgerCorrupt(f"ledger line {number} has an invalid cost_usd {cost!r}")
+    return cost
 
 
-def cost_of(usage: Usage, model: ModelId, batch: bool) -> float:
+def cost_of(usage: Usage, model: PricedModel, batch: bool) -> float:
     p = PRICES[model]
     usd = (
         usage.input_tokens * p.input
@@ -74,15 +83,22 @@ class CostLedger:
         side = self.path.with_name(self.path.name + ".corrupt")
         with side.open("a", encoding="utf-8") as f:
             f.write(lines[-1] + "\n")
-        self.path.write_text("".join(line + "\n" for line in lines[:-1]), encoding="utf-8")
+            f.flush()
+            os.fsync(f.fileno())
+        atomic_write_text(self.path, "".join(line + "\n" for line in lines[:-1]))
         return True
 
     def can_spend(self, usd: float) -> bool:
         return self.total() + usd <= self.cap
 
-    def record(self, run_id: str, usage: Usage, model: ModelId, batch: bool) -> float:
-        """Append the cost line, then raise ``BudgetExceeded`` if the cap is now passed."""
+    def record(self, run_id: str, usage: Usage, model: PricedModel, batch: bool) -> float:
+        """Append the cost line, then raise ``BudgetExceeded`` if the cap is now passed.
+
+        A non-finite or negative cost (bad usage numbers) raises ``ValueError`` unwritten.
+        """
         cost = cost_of(usage, model, batch)
+        if not _valid_cost(cost):
+            raise ValueError(f"refusing to record invalid cost {cost!r} for run {run_id}")
         line = {
             "timestamp": datetime.datetime.now(datetime.UTC).isoformat(),
             "run_id": run_id,

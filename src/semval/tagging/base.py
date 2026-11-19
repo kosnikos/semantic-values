@@ -8,7 +8,7 @@ from collections.abc import Mapping
 from enum import StrEnum
 from typing import Literal, Protocol, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from semval.config import Effort, ModelId
 from semval.targets import TargetSet
@@ -34,6 +34,13 @@ class DefinitionWording(StrEnum):
     FALLBACK = "fallback"
 
 
+class CallPath(StrEnum):
+    """How a request reached the API."""
+
+    SYNC = "sync"
+    BATCH = "batch"
+
+
 class Usage(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -41,6 +48,9 @@ class Usage(BaseModel):
     output_tokens: int = 0
     cache_creation_input_tokens: int = 0
     cache_read_input_tokens: int = 0
+
+    def __add__(self, other: "Usage") -> "Usage":
+        return Usage(**{k: getattr(self, k) + getattr(other, k) for k in Usage.model_fields})
 
 
 class TaggerSpec(BaseModel):
@@ -55,6 +65,14 @@ class TaggerSpec(BaseModel):
     few_shot: bool = False
     batch: bool = False
 
+    @model_validator(mode="after")
+    def _claude_needs_settings(self) -> "TaggerSpec":
+        if self.kind == TaggerKind.CLAUDE:
+            missing = [f for f in ("model", "effort", "unit") if getattr(self, f) is None]
+            if missing:
+                raise ValueError(f"a claude tagger spec needs {', '.join(missing)}")
+        return self
+
 
 class RawTag(BaseModel):
     """A tag as a tagger reports it: quotes are text, not yet resolved to spans."""
@@ -68,11 +86,51 @@ class RawTag(BaseModel):
     confidence: float | None = None
 
 
+class CallRecord(BaseModel):
+    """One billed model attempt. ``model`` is the model that ran, as the API named it: with
+    a server-side fallback one request yields a record per model."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    segment_id: str
+    model: str
+    usage: Usage
+    path: CallPath
+    refused: bool = False
+    refusal_category: str | None = None
+
+
+class RefusalEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    segment_id: str
+    path: CallPath
+    category: str | None = None
+
+
 class TagBatchResult(BaseModel):
+    """What a tagger did with a list of segments. Every segment it was given lands in
+    exactly one of ``tags_by_segment`` (an empty list is a valid result), ``refused``,
+    ``failed`` (retry later) or ``skipped`` (not attempted: the spend guard said no)."""
+
     model_config = ConfigDict(extra="forbid")
 
     tags_by_segment: dict[str, list[RawTag]]
     usage: Usage = Field(default_factory=Usage)
+    calls: list[CallRecord] = Field(default_factory=list)
+    refusals: list[RefusalEvent] = Field(default_factory=list)
+    refused: list[str] = Field(default_factory=list)
+    failed: dict[str, str] = Field(default_factory=dict)
+    skipped: list[str] = Field(default_factory=list)
+
+
+class PromptInfo(BaseModel):
+    """What a run manifest records about a tagger's prompt for one target set."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    prompt_sha256: str
+    definition_wording: dict[str, int] = Field(default_factory=dict)
 
 
 class RunManifest(BaseModel):
@@ -99,11 +157,21 @@ class RunManifest(BaseModel):
 
     started: datetime.datetime | None = None
     finished: datetime.datetime | None = None
+    # Every refusal seen; ``refused_segments`` are those whose final answer was a refusal
+    # (done, with no tags).
+    refusals: list[RefusalEvent] = Field(default_factory=list)
+    refused_segments: list[str] = Field(default_factory=list)
+    # Segments that got no usable answer (e.g. truncated output); a resume retries them.
+    failures: dict[str, str] = Field(default_factory=dict)
+    # A submitted message batch whose results are not yet stored; a resume fetches it.
+    pending_batch_id: str | None = None
 
 
 @runtime_checkable
 class Tagger(Protocol):
     spec: TaggerSpec
+
+    def prompt_info(self, targets: TargetSet) -> PromptInfo: ...
 
     def tag(
         self,
