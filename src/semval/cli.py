@@ -392,6 +392,45 @@ def _touche_make_sample(args: argparse.Namespace) -> int:
     return 0
 
 
+def _touche_gold_for_evaluate(fw: Any, data_dir: Path) -> Any:
+    from semval.datasets.touche23_samples import touche_gold
+
+    return lambda sample, level: touche_gold(sample, fw, level, data_dir)
+
+
+def _evaluate(args: argparse.Namespace) -> int:
+    from semval.evaluation.report import EvalSetup, build_results, write_report
+    from semval.review.labels import LabelStore, label_paths
+    from semval.tagging.runfiles import RunPaths, load_run
+    from semval.values import load_framework
+
+    paths = RunPaths(
+        samples_dir=args.samples_dir,
+        raw_dir=args.raw_dir,
+        framework_dir=args.framework_dir,
+        runs_dir=args.runs_dir,
+    )
+    try:
+        framework_id = load_run(args.runs_dir, args.run[0]).spec.framework_id
+        fw = load_framework(args.framework_dir / f"{framework_id}.yaml")
+        setup = EvalSetup(
+            framework=fw,
+            paths=paths,
+            labels=LabelStore(label_paths(args.labels_dir, args.labeller)[0]).all(),
+            gold=_touche_gold_for_evaluate(fw, args.touche_dir),
+            en_sample=args.en_sample,
+            el_sample=args.el_sample,
+            owner_sample=args.owner_sample,
+            scoring_level=args.scoring_level,
+        )
+        results = build_results(args.run, setup)
+    except (OSError, ValueError) as e:
+        raise SystemExit(str(e)) from None
+    out = write_report(results, args.out, args.scoring_level)
+    print(f"{out}: {len(results)} configurations from {len(args.run)} runs")
+    return 0
+
+
 def _sample_derive(args: argparse.Namespace) -> int:
     from semval.sampling.sample import derive_sample, write_manifest
     from semval.tagging.runfiles import load_sample
@@ -545,6 +584,38 @@ def build_parser() -> argparse.ArgumentParser:
     sd.add_argument("--id", action="append", default=[], help="document id (repeatable)")
     sd.add_argument("--ids-file", type=Path, help="file with one document id per line")
     sd.set_defaults(func=_sample_derive)
+
+    from semval.evaluation.report import (
+        DEFAULT_EL_SAMPLE,
+        DEFAULT_EN_SAMPLE,
+        DEFAULT_OWNER_SAMPLE,
+        SCORING_LEVEL,
+    )
+    from semval.evaluation.report import (
+        DEFAULT_OUT as DEFAULT_EVAL_OUT,
+    )
+    from semval.values import FRAMEWORK_DIR as FW_DIR
+
+    ev = sub.add_parser(
+        "evaluate",
+        help="score tagging runs and write the evaluation report",
+        description="Groups runs into configurations by spec; each input is told by the "
+        "run's input_sample.",
+    )
+    ev.add_argument("--run", action="append", required=True, help="run id; repeat for all runs")
+    ev.add_argument("--labeller", default="owner", help="whose labels are the stance gold")
+    ev.add_argument("--out", type=Path, default=DEFAULT_EVAL_OUT)
+    ev.add_argument("--scoring-level", default=SCORING_LEVEL)
+    ev.add_argument("--en-sample", default=DEFAULT_EN_SAMPLE)
+    ev.add_argument("--el-sample", default=DEFAULT_EL_SAMPLE)
+    ev.add_argument("--owner-sample", default=DEFAULT_OWNER_SAMPLE)
+    ev.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
+    ev.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
+    ev.add_argument("--samples-dir", type=Path, default=DEFAULT_SAMPLES_DIR)
+    ev.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    ev.add_argument("--framework-dir", type=Path, default=FW_DIR)
+    ev.add_argument("--touche-dir", type=Path, default=TOUCHE_DIR)
+    ev.set_defaults(func=_evaluate)
     return parser
 
 
