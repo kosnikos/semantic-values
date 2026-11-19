@@ -225,13 +225,13 @@ def test_batch_custom_ids_are_api_safe_and_map_back():
     tagger = ClaudeTagger(spec(batch=True), client)
     tagger.sleep = lambda s: None
     submitted = []
-    tagger.on_batch_submitted = submitted.append
+    tagger.on_batch_submitted = lambda bid, sids: submitted.append((bid, sids))
     res = run(tagger)
     ids = [r["custom_id"] for r in client.batch_requests[0]]
     assert all(len(i) <= 64 and all(ch.isalnum() or ch in "_-" for ch in i) for i in ids)
     assert len(set(ids)) == 2
     assert set(res.tags_by_segment) == {"d1:a", "d2:a"}
-    assert submitted == ["batch-1"]
+    assert submitted == [("batch-1", ["d1:a", "d2:a"])]
     assert all(c.path == CallPath.BATCH for c in res.calls)
 
 
@@ -283,3 +283,107 @@ def test_failed_sync_retry_keeps_batch_calls():
     res = run(tagger)
     assert "d1:a" in res.failed and res.tags_by_segment == {"d2:a": []}
     assert len(res.calls) == 2  # both batch items are still reported for the ledger
+
+
+def test_max_tokens_follow_effort_and_overrides():
+    from semval.config import MAX_TOKENS_BY_EFFORT, retry_max_tokens
+
+    assert MAX_TOKENS_BY_EFFORT == {Effort.LOW: 8000, Effort.MEDIUM: 12000, Effort.HIGH: 16000}
+    assert retry_max_tokens(Effort.LOW) == 12000 and retry_max_tokens(Effort.HIGH) == 20000
+    for effort, cap in MAX_TOKENS_BY_EFFORT.items():
+        client = FakeClient([message([])])
+        run(ClaudeTagger(spec(effort=effort), client), SEGS[:1])
+        assert client.sync_calls[0]["max_tokens"] == cap
+    client = FakeClient([message([]), message([])])
+    tagger = ClaudeTagger(spec(effort=Effort.HIGH), client)
+    tagger.max_tokens_for = {"d2:a": 20000}
+    run(tagger)
+    assert [c["max_tokens"] for c in client.sync_calls] == [16000, 20000]
+
+
+def test_truncation_reports_the_cap_used():
+    msg = message([ALPHA])
+    msg.stop_reason = "max_tokens"
+    res = run(ClaudeTagger(spec(effort=Effort.LOW), FakeClient([msg])), SEGS[:1])
+    assert res.truncated == {"d1:a": 8000} and "d1:a" in res.failed
+
+
+def test_fallback_served_answer_is_attributed():
+    its = [
+        SimpleNamespace(type="message", model=None, input_tokens=900, output_tokens=0,
+                        cache_creation_input_tokens=0, cache_read_input_tokens=0),
+        SimpleNamespace(type="fallback_message", model="claude-opus-4-8", input_tokens=950,
+                        output_tokens=300, cache_creation_input_tokens=0, cache_read_input_tokens=0),
+    ]  # fmt: skip
+    msg = message([ALPHA], u=usage(950, 300, iterations=its), model="claude-opus-4-8")
+    block = SimpleNamespace(
+        type="fallback", trigger=SimpleNamespace(type="refusal", category="cyber"),
+        from_=SimpleNamespace(model="claude-opus-5-5"), to=SimpleNamespace(model="claude-opus-4-8"),
+    )  # fmt: skip
+    msg.content.insert(0, block)
+    res = run(ClaudeTagger(spec(model=ModelId.OPUS_5_5), FakeClient([msg])), SEGS[:1])
+    # the declined attempt has no model: it ran on, and is priced at, the requested model
+    assert [c.model for c in res.calls] == ["claude-opus-5-5", "claude-opus-4-8"]
+    assert res.served_by == {"d1:a": "claude-opus-4-8"}
+    assert [(e.segment_id, e.category, e.served_by) for e in res.refusals] == [
+        ("d1:a", "cyber", "claude-opus-4-8")
+    ]
+    assert res.tags_by_segment["d1:a"][0].value_id == "alpha" and res.refused == []
+
+    # a sticky-routed turn: no fallback block, still one event without a category
+    msg = message([ALPHA], u=usage(950, 300, iterations=its[1:]), model="claude-opus-4-8")
+    res = run(ClaudeTagger(spec(model=ModelId.OPUS_5_5), FakeClient([msg])), SEGS[:1])
+    assert [(e.category, e.served_by) for e in res.refusals] == [(None, "claude-opus-4-8")]
+
+
+def test_unknown_batch_custom_id_is_still_costed():
+    client = FakeClient(batch_result_for=lambda req: message([]))
+    real_results = client.messages.batches.results
+
+    def results(batch_id):
+        extra = SimpleNamespace(
+            custom_id="stranger",
+            result=SimpleNamespace(type="succeeded", message=message([], u=usage(77, 7))),
+        )
+        return [*real_results(batch_id), extra]
+
+    client.messages.batches.results = results
+    tagger = ClaudeTagger(spec(batch=True), client)
+    tagger.sleep = lambda s: None
+    res = run(tagger)
+    strangers = [c for c in res.calls if c.segment_id.endswith("stranger")]
+    assert len(strangers) == 1 and strangers[0].usage.input_tokens == 77
+    assert set(res.tags_by_segment) == {"d1:a", "d2:a"}
+
+
+def test_make_client_prefers_project_key(monkeypatch):
+    import anthropic
+
+    from semval.tagging import claude
+
+    seen = []
+    monkeypatch.setattr(anthropic, "Anthropic", lambda **kw: seen.append(kw) or "client")
+    monkeypatch.setenv("ANTHROPIC_API_KEY_SEMANTIC_VALUES", "sk-project")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-general")
+    assert claude.make_client() == "client" and seen[-1] == {"api_key": "sk-project"}
+    monkeypatch.delenv("ANTHROPIC_API_KEY_SEMANTIC_VALUES")
+    claude.make_client()
+    assert seen[-1] == {"api_key": "sk-general"}
+    monkeypatch.delenv("ANTHROPIC_API_KEY")
+    claude.make_client()
+    assert seen[-1] == {}  # the SDK resolves tokens or profiles itself
+
+
+def test_make_client_never_logs_the_key(monkeypatch, caplog):
+    import logging
+
+    import anthropic
+
+    from semval.tagging import claude
+
+    monkeypatch.setattr(anthropic, "Anthropic", lambda **kw: "client")
+    monkeypatch.setenv("ANTHROPIC_API_KEY_SEMANTIC_VALUES", "sk-secret-123")
+    with caplog.at_level(logging.DEBUG):
+        claude.make_client()
+    assert "sk-secret-123" not in caplog.text
+    assert "ANTHROPIC_API_KEY_SEMANTIC_VALUES" in caplog.text

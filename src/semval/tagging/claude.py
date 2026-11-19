@@ -13,6 +13,7 @@ import hashlib
 import json
 import logging
 import math
+import os
 import re
 import time
 from collections.abc import Callable, Mapping, Sequence
@@ -23,7 +24,13 @@ import anthropic
 from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
 from anthropic.types.messages.batch_create_params import Request
 
-from semval.config import SERVER_FALLBACK_MODELS, ModelId, priced_model
+from semval.config import (
+    API_KEY_ENV_VARS,
+    MAX_TOKENS_BY_EFFORT,
+    SERVER_FALLBACK_MODELS,
+    ModelId,
+    priced_model,
+)
 from semval.tagging.base import (
     CallPath,
     CallRecord,
@@ -50,11 +57,22 @@ from semval.units import DocumentMeta, Segment
 log = logging.getLogger(__name__)
 
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
-MAX_TOKENS = 4000  # thinking counts toward it; an article answer is far shorter
 EST_OUTPUT_TOKENS = 600  # per segment, for the pre-call budget check
 CHARS_PER_TOKEN = 3.5  # estimate when count_tokens is unavailable
 POLL_SECONDS = 30.0
 _CUSTOM_ID_OK = re.compile(r"[A-Za-z0-9_-]{1,64}")
+UNKNOWN_SEGMENT = "unknown-custom-id:"  # segment_id prefix for a result we cannot place
+
+
+def make_client() -> anthropic.Anthropic:
+    """A client keyed from the first set variable in ``API_KEY_ENV_VARS``; with none set,
+    the SDK resolves credentials itself (auth token, profile). The key is never logged."""
+    for name in API_KEY_ENV_VARS:
+        key = os.environ.get(name)
+        if key:
+            log.info("using the API key from $%s", name)
+            return anthropic.Anthropic(api_key=key)
+    return anthropic.Anthropic()
 
 
 def custom_ids(segment_ids: Sequence[str]) -> dict[str, str]:
@@ -118,6 +136,8 @@ class _Collector:
     refused: list[str] = field(default_factory=list)
     failed: dict[str, str] = field(default_factory=dict)
     skipped: list[str] = field(default_factory=list)
+    truncated: dict[str, int] = field(default_factory=dict)
+    served_by: dict[str, str] = field(default_factory=dict)
 
     def spent_usd(self) -> float:
         return sum(
@@ -136,6 +156,8 @@ class _Collector:
             refused=self.refused,
             failed=self.failed,
             skipped=self.skipped,
+            truncated=self.truncated,
+            served_by=self.served_by,
         )
 
 
@@ -154,8 +176,12 @@ class ClaudeTagger:
         self.client = client
         self.few_shot = list(few_shot)
         self.spend_guard: Callable[[float], bool] | None = None
-        self.on_batch_submitted: Callable[[str], None] | None = None
+        # Called with the batch id and its segment ids (submission order) right after submit.
+        self.on_batch_submitted: Callable[[str, list[str]], None] | None = None
+        # Fetch this submitted batch instead of submitting; used once, then cleared.
         self.resume_batch_id: str | None = None
+        # Per-segment max_tokens overrides (the raised cap for a truncated answer's retry).
+        self.max_tokens_for: dict[str, int] = {}
         self.sleep: Callable[[float], None] = time.sleep
         self.poll_seconds = POLL_SECONDS
 
@@ -170,11 +196,13 @@ class ClaudeTagger:
             prompt_sha256=prompt_sha256(parts), definition_wording=parts.definition_wording
         )
 
-    def _params(self, parts: PromptParts, text: str, meta: DocumentMeta) -> dict[str, Any]:
+    def _params(
+        self, parts: PromptParts, text: str, meta: DocumentMeta, max_tokens: int
+    ) -> dict[str, Any]:
         """Request body shared by both paths. No thinking or sampling parameters."""
         return {
             "model": str(self.model),
-            "max_tokens": MAX_TOKENS,
+            "max_tokens": max_tokens,
             "system": [
                 {"type": "text", "text": parts.system, "cache_control": {"type": "ephemeral"}}
             ],
@@ -220,21 +248,47 @@ class ClaudeTagger:
         each model at its own rates), else the top-level usage."""
         refused = msg.stop_reason == "refusal"
         category = getattr(msg.stop_details, "category", None) if refused else None
-        default_model = msg.model if isinstance(msg.model, str) else str(self.model)
-        iterations = getattr(msg.usage, "iterations", None) or [msg.usage]
+        iterations = getattr(msg.usage, "iterations", None)
+        if iterations:
+            # An iteration without a model ran on the requested model.
+            pairs = [(getattr(it, "model", None) or str(self.model), it) for it in iterations]
+        else:  # top-level usage is the attempt that produced the message
+            model = msg.model if isinstance(msg.model, str) else str(self.model)
+            pairs = [(model, msg.usage)]
         return [
             CallRecord(
                 segment_id=sid,
-                model=str(getattr(it, "model", None) or default_model),
+                model=str(model),
                 usage=_usage(it),
                 path=path,
                 refused=refused,
                 refusal_category=category,
             )
-            for it in iterations
+            for model, it in pairs
         ]
 
-    def _handle(self, sid: str, msg: Any, path: CallPath, ids: set[str], out: _Collector) -> bool:
+    def _fallback(self, sid: str, msg: Any, path: CallPath, out: _Collector) -> None:
+        """Note a fallback-served answer: ``served_by`` plus a refusal event per decline.
+
+        Served-by comes from a ``fallback_message`` usage iteration; each ``fallback``
+        content block marks one decline (sticky-routed turns have none: one event, no
+        category)."""
+        iterations = getattr(msg.usage, "iterations", None) or []
+        served = [it for it in iterations if getattr(it, "type", None) == "fallback_message"]
+        if not served:
+            return
+        model = str(served[-1].model)
+        out.served_by[sid] = model
+        blocks = [b for b in msg.content if getattr(b, "type", None) == "fallback"]
+        categories = [getattr(getattr(b, "trigger", None), "category", None) for b in blocks]
+        for category in categories or [None]:
+            out.refusals.append(
+                RefusalEvent(segment_id=sid, path=path, category=category, served_by=model)
+            )
+
+    def _handle(
+        self, sid: str, msg: Any, path: CallPath, ids: set[str], out: _Collector, max_tokens: int
+    ) -> bool:
         """Store one response; True if it was a refusal (the caller decides what next)."""
         records = self._records(sid, msg, path)
         out.calls.extend(records)
@@ -249,6 +303,9 @@ class ClaudeTagger:
                 RefusalEvent(segment_id=sid, path=path, category=records[0].refusal_category)
             )
             return True
+        self._fallback(sid, msg, path, out)
+        if msg.stop_reason == "max_tokens":
+            out.truncated[sid] = max_tokens
         tags, error = parse_answer(msg, ids)
         if tags is None:
             out.failed[sid] = error or "unusable answer"
@@ -263,7 +320,7 @@ class ClaudeTagger:
             out.skipped.append(sid)
             return
         msg = self.client.beta.messages.create(**self._sync_params(params))
-        if self._handle(sid, msg, CallPath.SYNC, ids, out):
+        if self._handle(sid, msg, CallPath.SYNC, ids, out, params["max_tokens"]):
             out.refused.append(sid)
 
     def _submit(self, requests: dict[str, dict[str, Any]], cids: dict[str, str]) -> str:
@@ -275,7 +332,7 @@ class ClaudeTagger:
         )
         log.info("submitted batch %s with %d requests", batch.id, len(requests))
         if self.on_batch_submitted is not None:
-            self.on_batch_submitted(batch.id)
+            self.on_batch_submitted(batch.id, list(requests))
         return batch.id
 
     def _batch(self, requests: dict[str, dict[str, Any]], ids: set[str], out: _Collector) -> None:
@@ -289,6 +346,7 @@ class ClaudeTagger:
             batch_id = self._submit(requests, cids)
         else:
             log.info("fetching results of submitted batch %s", batch_id)
+            self.resume_batch_id = None
         while self.client.messages.batches.retrieve(batch_id).processing_status != "ended":
             self.sleep(self.poll_seconds)
         by_cid = {cid: sid for sid, cid in cids.items()}
@@ -297,12 +355,17 @@ class ClaudeTagger:
         for item in self.client.messages.batches.results(batch_id):
             sid = by_cid.get(item.custom_id)
             if sid is None:
+                # should not happen (a resume rebuilds the submitted set), but it was paid for
                 log.warning("batch %s: unknown custom_id %s", batch_id, item.custom_id)
+                if item.result.type == "succeeded":
+                    unknown = UNKNOWN_SEGMENT + item.custom_id
+                    out.calls.extend(self._records(unknown, item.result.message, CallPath.BATCH))
                 continue
             seen.add(sid)
+            limit = requests[sid]["max_tokens"]
             if item.result.type != "succeeded":
                 out.failed[sid] = f"batch result {item.result.type}"
-            elif self._handle(sid, item.result.message, CallPath.BATCH, ids, out):
+            elif self._handle(sid, item.result.message, CallPath.BATCH, ids, out, limit):
                 retry.append(sid)
         for sid in requests:
             if sid not in seen:
@@ -329,7 +392,8 @@ class ClaudeTagger:
             meta = documents.get(seg.document_id)
             if meta is None:
                 raise ValueError(f"no document metadata for {seg.document_id!r}")
-            requests[seg.id] = self._params(parts, texts[seg.id], meta)
+            limit = self.max_tokens_for.get(seg.id, MAX_TOKENS_BY_EFFORT[self.spec.effort])
+            requests[seg.id] = self._params(parts, texts[seg.id], meta, limit)
         out = _Collector(model=self.model)
         if self.spec.batch:
             self._batch(requests, ids, out)

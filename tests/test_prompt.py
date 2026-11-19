@@ -94,3 +94,12 @@ def test_prompt_is_stable_and_hash_covers_schema():
     assert a.system == b.system and prompt_sha256(a) == prompt_sha256(b)
     fewer = TargetSet(framework_id="toy", level_id="leaf", targets=targets().targets[:2])
     assert prompt_sha256(build_prompt(fewer, [])) != prompt_sha256(a)
+
+
+def test_hash_covers_user_message_template(monkeypatch):
+    from semval.tagging import prompt
+
+    parts = build_prompt(targets(), [])
+    before = prompt_sha256(parts)
+    monkeypatch.setattr(prompt, "USER_TEMPLATE", prompt.USER_TEMPLATE.replace("Genre", "Kind"))
+    assert prompt_sha256(parts) != before

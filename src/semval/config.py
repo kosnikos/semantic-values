@@ -36,6 +36,30 @@ class Effort(StrEnum):
     HIGH = "high"
 
 
+# Output cap per request. Thinking counts toward it, so it grows with effort; 16000 is the
+# SDK's non-streaming default. A truncated answer is retried once (on resume) at
+# MAX_TOKENS_RETRY_FACTOR x the cap, but never above MAX_TOKENS_CEILING (non-streaming
+# requests must stay under the SDK's 10-minute limit, about 21K tokens).
+MAX_TOKENS_BY_EFFORT: dict[Effort, int] = {
+    Effort.LOW: 8000,
+    Effort.MEDIUM: 12000,
+    Effort.HIGH: 16000,
+}
+MAX_TOKENS_RETRY_FACTOR = 1.5
+MAX_TOKENS_CEILING = 20000
+
+
+def retry_max_tokens(effort: Effort) -> int:
+    """The raised cap for the one retry of a truncated answer."""
+    base = MAX_TOKENS_BY_EFFORT[effort]
+    return min(int(base * MAX_TOKENS_RETRY_FACTOR), MAX_TOKENS_CEILING)
+
+
+# Environment variables holding an API key, first match wins. If none is set, the SDK's own
+# resolution (auth token, profile) applies.
+API_KEY_ENV_VARS: tuple[str, ...] = ("ANTHROPIC_API_KEY_SEMANTIC_VALUES", "ANTHROPIC_API_KEY")
+
+
 class Price(BaseModel):
     """USD per 1M tokens."""
 

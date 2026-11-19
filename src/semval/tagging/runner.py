@@ -18,7 +18,7 @@ from typing import Any, Protocol, runtime_checkable
 
 import yaml
 
-from semval.config import priced_model
+from semval.config import priced_model, retry_max_tokens
 from semval.fsutil import atomic_write_text
 from semval.sampling.sample import (
     DEFAULT_RAW_DIR,
@@ -35,7 +35,7 @@ from semval.tagging.base import (
     TaggerKind,
     TaggerSpec,
 )
-from semval.tagging.claude import ClaudeTagger
+from semval.tagging.claude import ClaudeTagger, make_client
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
 from semval.tagging.prompt import FewShotExample
 from semval.tagging.quotes import resolve_quotes
@@ -57,8 +57,13 @@ class BudgetAware(Protocol):
 
 @runtime_checkable
 class BatchResumable(Protocol):
-    on_batch_submitted: Callable[[str], None] | None
+    on_batch_submitted: Callable[[str, list[str]], None] | None
     resume_batch_id: str | None
+
+
+@runtime_checkable
+class MaxTokensAware(Protocol):
+    max_tokens_for: dict[str, int]
 
 
 @dataclass(frozen=True)
@@ -83,11 +88,7 @@ def make_run_id(
 def make_tagger(spec: TaggerSpec, client: Any = None, few_shot: Sequence[FewShotExample] = ()):
     if spec.kind != TaggerKind.CLAUDE:
         raise ValueError(f"build the {spec.kind} tagger yourself and pass it as tagger=")
-    if client is None:
-        import anthropic
-
-        client = anthropic.Anthropic()  # credentials from the environment or a profile
-    return ClaudeTagger(spec, client, few_shot)
+    return ClaudeTagger(spec, client if client is not None else make_client(), few_shot)
 
 
 def load_few_shot(path: Path) -> list[FewShotExample]:
@@ -233,6 +234,10 @@ class _Run:
         self.m.refused_segments += [s for s in res.refused if s not in self.m.refused_segments]
         self.m.refusals += res.refusals
         self.m.failures.update(res.failed)
+        for sid in [*res.tags_by_segment, *res.refused]:
+            self.m.truncated.pop(sid, None)
+        self.m.truncated.update(res.truncated)
+        self.m.served_by.update(res.served_by)
 
 
 def run_tagging(
@@ -277,40 +282,62 @@ def run_tagging(
     m = _open(run_dir, run_id, run_spec, sample_name, info.prompt_sha256, info.definition_wording)
     _save(run_dir, m)
 
-    docs = select_documents(
-        load_sample(sample_name, paths.samples_dir).documents, limit, limit_per_country
-    )
+    sample_docs = load_sample(sample_name, paths.samples_dir).documents
+    docs = select_documents(sample_docs, limit, limit_per_country)
+    # A submitted batch is fetched for exactly the segments it holds, whatever the limits.
+    pending = dict(m.pending_batch_segments) if m.pending_batch_id else {}
+    by_id = {d.id: d for d in sample_docs}
+    selected = {d.id for d in docs}
+    chosen = set(selected)
+    for doc_id in dict.fromkeys(pending.values()):
+        if doc_id not in by_id:
+            raise ValueError(f"run {run_id}: pending batch document {doc_id} left the sample")
+        if doc_id not in chosen:
+            docs.append(by_id[doc_id])
+            chosen.add(doc_id)
     texts = {d.id: read_text(paths.raw_dir, d) for d in docs}
     meta = {d.id: d.meta() for d in docs}
-    done = set(m.segments_done)
-    segs = {
-        s.id: s
-        for d in docs
-        for s in segment(d.id, texts[d.id], unit)
-        if s.level == unit and s.id not in done
+    segs = {s.id: s for d in docs for s in segment(d.id, texts[d.id], unit) if s.level == unit}
+    if missing := [sid for sid in pending if sid not in segs]:
+        raise ValueError(f"run {run_id}: pending batch segments not found: {missing[:3]}")
+
+    # A truncated answer gets one retry at the raised cap; after that it stays a failure.
+    retry_cap = retry_max_tokens(spec.effort) if spec.effort is not None else None
+    exhausted = {
+        sid for sid, cap in m.truncated.items() if retry_cap is not None and cap >= retry_cap
     }
+    if exhausted:
+        log.warning("%d segments truncated even at the raised cap; not retried", len(exhausted))
+    done = set(m.segments_done)
+    pending_segs = [segs[sid] for sid in pending]
+    skip = done | set(pending) | exhausted
+    rest = [s for s in segs.values() if s.document_id in selected and s.id not in skip]
     seg_text = {sid: texts[s.document_id][s.start : s.end] for sid, s in segs.items()}
 
     run = _Run(m, run_dir, ledger, texts)
     if isinstance(tagger, BudgetAware) and spec.model is not None:
         tagger.spend_guard = ledger.can_spend
+    if isinstance(tagger, MaxTokensAware) and retry_cap is not None:
+        tagger.max_tokens_for = {s.id: retry_cap for s in rest if s.id in m.truncated}
+    if pending and not isinstance(tagger, BatchResumable):
+        raise ValueError(f"run {run_id} has a pending batch but the tagger cannot fetch it")
     if isinstance(tagger, BatchResumable):
         tagger.resume_batch_id = m.pending_batch_id
 
-        def submitted(batch_id: str) -> None:
+        def submitted(batch_id: str, segment_ids: list[str]) -> None:
             m.pending_batch_id = batch_id
+            m.pending_batch_segments = {sid: segs[sid].document_id for sid in segment_ids}
             _save(run_dir, m)
 
         tagger.on_batch_submitted = submitted
 
-    todo = list(segs.values())
     if spec.batch:
-        chunks = [todo] if todo else []
+        chunks = [c for c in (pending_segs, rest) if c]
     elif spec.model is not None:  # paid calls: store each one as soon as it returns
-        chunks = [[s] for s in todo]
+        chunks = [[s] for s in rest]
     else:
         by_doc: dict[str, list[Segment]] = {}
-        for s in todo:
+        for s in rest:
             by_doc.setdefault(s.document_id, []).append(s)
         chunks = list(by_doc.values())
 
@@ -320,6 +347,7 @@ def run_tagging(
             within_cap = run.record(res)
             run.store(res, segs)
             m.pending_batch_id = None
+            m.pending_batch_segments = {}
             if not within_cap or res.skipped:
                 m.status = RunStatus.STOPPED_BUDGET
                 _save(run_dir, m)

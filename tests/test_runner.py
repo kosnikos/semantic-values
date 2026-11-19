@@ -288,3 +288,120 @@ def test_cli_few_shot_on_needs_a_file():
     assert args.few_shot == "off" and args.limit_per_country == 2
     with pytest.raises(SystemExit, match="few-shot-file"):
         main([*argv, "--few-shot", "on"])
+
+
+def truncated(kw):
+    msg = message([])
+    msg.stop_reason = "max_tokens"
+    return msg
+
+
+def test_truncated_answer_retried_once_at_raised_cap(tmp_path):
+    paths = setup(tmp_path)
+    s = spec(effort=Effort.LOW)
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    client = FakeClient([truncated])
+    m = run_tagging(s, "toy-sample", run_id="r1", limit=1, tagger=ClaudeTagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    sid = "src-gb:000000000001:a"
+    assert m.status == RunStatus.FAILED and m.truncated == {sid: 8000} and sid in m.failures
+    assert client.sync_calls[0]["max_tokens"] == 8000
+
+    client = FakeClient([truncated])  # the resume retries at 1.5x and is truncated again
+    m = run_tagging(s, "toy-sample", run_id="r1", limit=1, tagger=ClaudeTagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert client.sync_calls[0]["max_tokens"] == 12000 and m.truncated == {sid: 12000}
+
+    client = FakeClient()  # a third attempt is not made
+    m = run_tagging(s, "toy-sample", run_id="r1", limit=1, tagger=ClaudeTagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert not client.sync_calls and m.status == RunStatus.FAILED and sid in m.failures
+    assert len(ledger.path.read_text().splitlines()) == 2  # both truncated answers were paid
+
+
+def test_truncated_retry_success_clears_the_flag(tmp_path):
+    paths = setup(tmp_path)
+    s = spec(effort=Effort.HIGH)
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    run_tagging(s, "toy-sample", run_id="r1", limit=1,
+                tagger=ClaudeTagger(s, FakeClient([truncated])), ledger=ledger, paths=paths)  # fmt: skip
+    client = FakeClient([answer])
+    m = run_tagging(s, "toy-sample", run_id="r1", limit=1, tagger=ClaudeTagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert client.sync_calls[0]["max_tokens"] == 20000  # 1.5 x 16000, capped
+    assert m.status == RunStatus.DONE and not m.truncated and not m.failures
+
+
+def test_batch_resume_fetches_the_submitted_set_whatever_the_limit(tmp_path):
+    paths = setup(tmp_path)
+    s = spec(batch=True)
+    client = FakeClient(batch_result_for=lambda req: answer(req["params"]))
+    real_retrieve = client.messages.batches.retrieve
+    crashes = [RuntimeError("connection lost while polling")]
+
+    def flaky(batch_id):
+        if crashes:
+            raise crashes.pop()
+        return real_retrieve(batch_id)
+
+    client.messages.batches.retrieve = flaky
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    tagger = ClaudeTagger(s, client)
+    tagger.sleep = lambda x: None
+    with pytest.raises(RuntimeError):
+        run_tagging(s, "toy-sample", run_id="b1", tagger=tagger, ledger=ledger, paths=paths)
+    saved = RunManifest.model_validate_json((paths.runs_dir / "b1" / "manifest.json").read_text())
+    assert saved.status == RunStatus.FAILED and saved.pending_batch_id == "batch-1"
+    assert len(saved.pending_batch_segments) == 3
+    assert saved.pending_batch_segments["src-gr:000000000003:a"] == "src-gr:000000000003"
+
+    tagger = ClaudeTagger(s, client)
+    tagger.sleep = lambda x: None
+    m = run_tagging(s, "toy-sample", run_id="b1", limit=1, tagger=tagger, ledger=ledger,
+                    paths=paths)  # fmt: skip
+    assert len(client.batch_requests) == 1  # fetched, not resubmitted
+    assert m.status == RunStatus.DONE and len(m.segments_done) == 3
+    assert m.pending_batch_id is None and m.pending_batch_segments == {}
+    assert len(ledger.path.read_text().splitlines()) == 3  # every paid result recorded
+
+
+def test_fallback_served_segments_in_manifest(tmp_path):
+    from types import SimpleNamespace
+
+    paths = setup(tmp_path)
+    s = spec(model=ModelId.OPUS_5_5)
+    its = [
+        SimpleNamespace(type="message", model=None, input_tokens=900, output_tokens=0,
+                        cache_creation_input_tokens=0, cache_read_input_tokens=0),
+        SimpleNamespace(type="fallback_message", model="claude-opus-4-8", input_tokens=950,
+                        output_tokens=300, cache_creation_input_tokens=0, cache_read_input_tokens=0),
+    ]  # fmt: skip
+    served = message([], u=usage(950, 300, iterations=its), model="claude-opus-4-8")
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    m = run_tagging(s, "toy-sample", run_id="r1", limit=1,
+                    tagger=ClaudeTagger(s, FakeClient([served])), ledger=ledger, paths=paths)  # fmt: skip
+    sid = "src-gb:000000000001:a"
+    assert m.served_by == {sid: "claude-opus-4-8"}
+    assert [(r.segment_id, r.served_by) for r in m.refusals] == [(sid, "claude-opus-4-8")]
+    lines = [json.loads(x) for x in ledger.path.read_text().splitlines()]
+    assert [x["model"] for x in lines] == ["claude-opus-5-5", "claude-opus-4-8"]
+
+
+@pytest.mark.parametrize(
+    ("status", "code"),
+    [(RunStatus.DONE, 0), (RunStatus.FAILED, 1), (RunStatus.STOPPED_BUDGET, 3)],
+)
+def test_cli_exit_code_follows_status(monkeypatch, status, code):
+    from semval.cli import main
+    from semval.tagging import claude, runner
+
+    def fake_run(spec, sample, **kw):
+        assert kw["client"] == "client"
+        return RunManifest(run_id="r", spec=spec, input_sample=sample, prompt_sha256="x",
+                           status=status)  # fmt: skip
+
+    monkeypatch.setattr(claude, "make_client", lambda: "client")
+    monkeypatch.setattr(runner, "run_tagging", fake_run)
+    argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
+            "--level", "leaf", "--unit", "article", "--framework", "toy"]  # fmt: skip
+    assert main(argv) == code

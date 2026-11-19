@@ -144,11 +144,15 @@ def build_prompt(targets: TargetSet, few_shot: list[FewShotExample]) -> PromptPa
     )
 
 
+USER_TEMPLATE = "Language: {language}\nGenre: {genre}\n\n<text>\n{text}\n</text>"
+
+
 def user_message(text: str, meta: DocumentMeta) -> str:
-    return f"Language: {meta.language}\nGenre: {meta.genre}\n\n<text>\n{text}\n</text>"
+    return USER_TEMPLATE.format(language=meta.language, genre=meta.genre, text=text)
 
 
 def prompt_sha256(parts: PromptParts) -> str:
-    """Hash of the system prompt text plus the schema JSON (canonical key order)."""
-    blob = parts.system + "\n" + json.dumps(parts.schema, sort_keys=True, ensure_ascii=False)
+    """Hash of the system prompt, the user-message template and the schema JSON."""
+    schema = json.dumps(parts.schema, sort_keys=True, ensure_ascii=False)
+    blob = f"{parts.system}\n{USER_TEMPLATE}\n{schema}"
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()

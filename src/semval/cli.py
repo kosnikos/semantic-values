@@ -180,7 +180,8 @@ def _default_framework() -> str | None:
 
 
 def _tag(args: argparse.Namespace) -> int:
-    from semval.tagging.base import TaggerKind, TaggerSpec
+    from semval.tagging.base import RunStatus, TaggerKind, TaggerSpec
+    from semval.tagging.claude import make_client
     from semval.tagging.runner import load_few_shot, run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -208,6 +209,7 @@ def _tag(args: argparse.Namespace) -> int:
         run_id=args.run_id,
         limit=args.limit,
         limit_per_country=args.limit_per_country,
+        client=make_client(),
         few_shot=few_shot,
     )
     u = m.usage_totals
@@ -216,8 +218,12 @@ def _tag(args: argparse.Namespace) -> int:
         f"tokens: in={u.input_tokens} out={u.output_tokens} "
         f"cache_write={u.cache_creation_input_tokens} cache_read={u.cache_read_input_tokens}"
     )
-    print(f"cost: ${m.cost_usd:.4f}; refused: {len(m.refused_segments)}; failed: {len(m.failures)}")
-    return 0
+    print(
+        f"cost: ${m.cost_usd:.4f}; refused: {len(m.refused_segments)}; "
+        f"failed: {len(m.failures)}; served by a fallback model: {len(m.served_by)}"
+    )
+    exit_codes = {RunStatus.DONE: 0, RunStatus.FAILED: 1, RunStatus.STOPPED_BUDGET: 3}
+    return exit_codes.get(m.status, 1)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -248,7 +254,11 @@ def build_parser() -> argparse.ArgumentParser:
     from semval.config import Effort, ModelId
     from semval.units import UnitLevel
 
-    tag = sub.add_parser("tag", help="tag a sample with Claude (resumable; see data/runs/)")
+    tag = sub.add_parser(
+        "tag",
+        help="tag a sample with Claude (resumable; see data/runs/)",
+        description="Exit status: 0 done, 1 failed segments or error, 3 stopped at the budget cap.",
+    )
     tag.add_argument("--sample", required=True, help="name of data/samples/<name>.yaml")
     tag.add_argument("--model", type=ModelId, choices=list(ModelId), required=True)
     tag.add_argument("--effort", type=Effort, choices=list(Effort), required=True)

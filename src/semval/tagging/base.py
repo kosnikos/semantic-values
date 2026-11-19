@@ -106,6 +106,8 @@ class RefusalEvent(BaseModel):
     segment_id: str
     path: CallPath
     category: str | None = None
+    # The fallback model that answered after this decline; None if nothing did.
+    served_by: str | None = None
 
 
 class TagBatchResult(BaseModel):
@@ -122,6 +124,10 @@ class TagBatchResult(BaseModel):
     refused: list[str] = Field(default_factory=list)
     failed: dict[str, str] = Field(default_factory=dict)
     skipped: list[str] = Field(default_factory=list)
+    # Segments whose answer hit max_tokens, with the cap that request used.
+    truncated: dict[str, int] = Field(default_factory=dict)
+    # Segments answered by a fallback model instead of the requested one.
+    served_by: dict[str, str] = Field(default_factory=dict)
 
 
 class PromptInfo(BaseModel):
@@ -163,8 +169,15 @@ class RunManifest(BaseModel):
     refused_segments: list[str] = Field(default_factory=list)
     # Segments that got no usable answer (e.g. truncated output); a resume retries them.
     failures: dict[str, str] = Field(default_factory=dict)
-    # A submitted message batch whose results are not yet stored; a resume fetches it.
+    # Segments whose last answer hit max_tokens, with the cap used. A resume retries each
+    # once at the raised cap (config.retry_max_tokens), then gives up.
+    truncated: dict[str, int] = Field(default_factory=dict)
+    # Segments answered by a fallback model (server-side refusal fallback), and which.
+    served_by: dict[str, str] = Field(default_factory=dict)
+    # A submitted message batch whose results are not yet stored, and its segments
+    # (segment id -> document id, in submission order). A resume fetches exactly that set.
     pending_batch_id: str | None = None
+    pending_batch_segments: dict[str, str] = Field(default_factory=dict)
 
 
 @runtime_checkable
