@@ -163,3 +163,9 @@ def test_recommend_gate_then_cheapest_within_tolerance():
     assert rec.chosen == cheap.key
     assert rec.best_f1 == best.key
     assert cheaper_bad_stance.key in rec.dropped_by_gate
+
+
+def test_tolerance_edge_is_inclusive_despite_float_error():
+    a = result("a", 0.61, 0.61, None, 100.0)
+    b = result("b", 0.59, 0.59, None, 1.0)  # 0.61 - 0.59 = 0.020000000000000018
+    assert recommend([a, b]).chosen == b.key

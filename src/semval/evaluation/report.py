@@ -31,11 +31,11 @@ from semval.evaluation.metrics import (
 )
 from semval.review.labels import LabelRecord
 from semval.sampling.sample import SampleManifest
-from semval.tagging.base import RunManifest
+from semval.tagging.base import RunManifest, RunStatus
 from semval.tagging.label_examples import excluded_documents
 from semval.tagging.runfiles import RunPaths, load_run, load_run_tags, load_sample, read_text
 from semval.tags import Stance, ValueTag, merge, rollup_tags
-from semval.units import UnitLevel, document_id_of, segment
+from semval.units import Segment, UnitLevel, document_id_of, segment
 from semval.values import LEAF_LEVEL, Framework
 
 DEFAULT_OUT: Final = Path("docs/research/tagging-evaluation.md")
@@ -84,22 +84,36 @@ def config_key(m: RunManifest) -> ConfigKey:
 class _Run:
     manifest: RunManifest
     sample: SampleManifest
-    docs: set[str]  # documents with at least one finished segment
+    docs: set[str]  # every document of the sample: the denominator of every score
+    covered: int  # documents all of whose segments are finished
     merged: list[ValueTag]  # article-level tags at the tagging level
+
+    @property
+    def complete(self) -> bool:
+        return self.manifest.status == RunStatus.DONE and self.covered == len(self.docs)
+
+    @property
+    def partial(self) -> str:
+        """Why the run is not scored, e.g. ``partial 200/300 (stopped_budget)``."""
+        status = "" if self.manifest.status == RunStatus.DONE else f" ({self.manifest.status})"
+        return f"partial {self.covered}/{len(self.docs)}{status}"
 
 
 def _load(setup: EvalSetup, run_id: str) -> _Run:
     paths = setup.paths
     m = load_run(paths.runs_dir, run_id)
     sample = load_sample(m.input_sample, paths.samples_dir)
-    docs = {document_id_of(s) for s in m.segments_done}
     tags = load_run_tags(paths.runs_dir, run_id)
     unit = m.spec.unit or UnitLevel.PARAGRAPH
-    segments = []
+    done = set(m.segments_done)
+    segments: list[Segment] = []
+    covered = 0
     for d in sample.documents:
-        if d.id in docs:
-            segments += segment(d.id, read_text(paths.raw_dir, d), unit)
-    return _Run(m, sample, docs, merge(tags, segments, UnitLevel.ARTICLE))
+        segs = segment(d.id, read_text(paths.raw_dir, d), unit)
+        segments += segs
+        covered += all(x.id in done for x in segs if x.level == unit)
+    docs = {d.id for d in sample.documents}
+    return _Run(m, sample, docs, covered, merge(tags, segments, UnitLevel.ARTICLE))
 
 
 def _rollup_to(setup: EvalSetup, tag_level: str) -> dict[str, str] | None:
@@ -164,7 +178,8 @@ def _presence(run: _Run, setup: EvalSetup) -> _Presence:
             n_docs=len(gold),
             macro_f1=strict.macro_f1,
             macro_f1_mention=score(ANY_PRESENT).macro_f1,
-            per_label_f1={x: strict.per_label[x].f1 for x in strict.labels_used},
+            per_label_f1={x: s.f1 for x, s in strict.per_label.items()},
+            unsupported=[x for x, s in strict.per_label.items() if s.support == 0],
             leaf_macro_f1=leaf_f1,
         ),
         pred=_sets(tags, STRICT_PRESENT),
@@ -218,6 +233,7 @@ def build_results(run_ids: list[str], setup: EvalSetup) -> list[ConfigResult]:
             raise ValueError(
                 f"run {run_id!r} was tagged on {sample!r}, not one of {sorted(wanted)}"
             )
+        _rollup_to(setup, run.manifest.spec.level_id)  # refuse levels that cannot be scored
         group = groups.setdefault(config_key(run.manifest), _Group())
         if sample in group.runs:
             other = group.runs[sample].manifest.run_id
@@ -231,8 +247,10 @@ def build_results(run_ids: list[str], setup: EvalSetup) -> list[ConfigResult]:
 def _result(key: ConfigKey, g: _Group, setup: EvalSetup) -> ConfigResult:
     en_run, el_run = g.runs.get(setup.en_sample), g.runs.get(setup.el_sample)
     owner_run = g.runs.get(setup.owner_sample)
-    en = _presence(en_run, setup) if en_run else None
-    el = _presence(el_run, setup) if el_run else None
+    en_run_ok = en_run if en_run and en_run.complete else None
+    el_run_ok = el_run if el_run and el_run.complete else None
+    en = _presence(en_run_ok, setup) if en_run_ok else None
+    el = _presence(el_run_ok, setup) if el_run_ok else None
     en_parallel = None
     if en and el:
         wanted = {f"{EN_PREFIX}:{_item_id(d)}" for d in el.gold}
@@ -243,7 +261,7 @@ def _result(key: ConfigKey, g: _Group, setup: EvalSetup) -> ConfigResult:
                 en.pred, common, labels, ignore_zero_support=True
             ).macro_f1
     stance = owner_docs = cost = None
-    if owner_run:
+    if owner_run and owner_run.complete:
         stance, owner_docs = _stance(owner_run, setup)
         n_done = len(owner_run.docs)
         cost = owner_run.manifest.cost_usd / n_done * PER_1000 if n_done else None
@@ -255,6 +273,9 @@ def _result(key: ConfigKey, g: _Group, setup: EvalSetup) -> ConfigResult:
         en_parallel_f1=en_parallel,
         stance=stance,
         owner_docs=owner_docs,
+        en_partial=en_run.partial if en_run and not en_run.complete else None,
+        el_partial=el_run.partial if el_run and not el_run.complete else None,
+        owner_partial=owner_run.partial if owner_run and not owner_run.complete else None,
         owner_run_id=owner_run.manifest.run_id if owner_run else None,
         cost_per_1k=cost,
         latency=_latency(timed.manifest) if timed else None,
@@ -266,6 +287,19 @@ def _result(key: ConfigKey, g: _Group, setup: EvalSetup) -> ConfigResult:
 
 def _f(x: float | None) -> str:
     return EMPTY if x is None else f"{x:.3f}"
+
+
+def _cell(value: float | None, partial: str | None, fmt: Callable[[float], str] = str) -> str:
+    """A number, else why there is none: a partial run is flagged, never shown as a score."""
+    if value is not None:
+        return fmt(value)
+    return partial or EMPTY
+
+
+def _per_label(score: InputScore | None, label: str) -> str:
+    if score is None or label not in score.per_label_f1:
+        return EMPTY
+    return "no gold" if label in score.unsupported else _f(score.per_label_f1[label])
 
 
 def _signed(x: float | None) -> str:
@@ -307,18 +341,23 @@ def render_report(results: list[ConfigResult], scoring_level: str = SCORING_LEVE
         "",
     ]
     header = [
-        "Configuration", "Macro-F1 EN", "Macro-F1 EN +mention", "Macro-F1 EL proxy",
-        "Gap EN-EL", "Stance agreement", "Missed", "Spurious", "Unjudged",
+        "Configuration", "n EN", "Macro-F1 EN", "Macro-F1 EN +mention", "n EL",
+        "Macro-F1 EL proxy", "Macro-F1 EL +mention", "Gap EN-EL", "n owner",
+        "Stance agreement", "Missed", "Spurious", "Unjudged",
         "Cost / 1,000 articles (USD)", "Latency",
     ]  # fmt: skip
     rows = [
         [
             r.key.label,
-            _f(r.en.macro_f1 if r.en else None),
-            _f(r.en.macro_f1_mention if r.en else None),
-            _f(r.el.macro_f1 if r.el else None),
+            _cell(r.en and r.en.n_docs, r.en_partial),
+            _cell(r.en and r.en.macro_f1, r.en_partial, _f),
+            _cell(r.en and r.en.macro_f1_mention, r.en_partial, _f),
+            _cell(r.el and r.el.n_docs, r.el_partial),
+            _cell(r.el and r.el.macro_f1, r.el_partial, _f),
+            _cell(r.el and r.el.macro_f1_mention, r.el_partial, _f),
             _signed(r.gap),
-            _agreement(r.stance),
+            _cell(r.owner_docs, r.owner_partial),
+            r.owner_partial or _agreement(r.stance),
             _count(r.stance, "missed"),
             _count(r.stance, "spurious"),
             _count(r.stance, "unjudged"),
@@ -337,7 +376,9 @@ def render_report(results: list[ConfigResult], scoring_level: str = SCORING_LEVE
             "endorse, reject or contested; *mention* does not count (Touché labels say a value is "
             "behind the argument, not that it is merely named). *+mention* is the same with mention "
             "counted. Labels with no gold support in the set are left out of the average (declared), "
-            "and still appear in the per-value table."
+            "and appear in the per-value table marked `no gold`. `n` is the number of items "
+            "(owner: articles) behind each score; a run that is not done or does not cover "
+            "every document is shown as `partial n/N`, is not scored and is not ranked."
         ),
         (
             "- **Gap EN-EL**: English macro-F1 on the parallel items minus Greek-proxy macro-F1, "
@@ -357,6 +398,10 @@ def render_report(results: list[ConfigResult], scoring_level: str = SCORING_LEVE
         (
             "- **Latency**: (finished - started) / segments for synchronous runs; message-batch "
             "runs show `batch`. A resumed run includes the time it sat stopped."
+        ),
+        (
+            "- The lexicon baseline emits only *mention* (spec 5.3), so its strict macro-F1 is "
+            "always 0: the **+mention** column is its meaningful figure."
         ),
         f"- {EMPTY}: the configuration has no run on that input.",
         "",
@@ -394,7 +439,7 @@ def render_report(results: list[ConfigResult], scoring_level: str = SCORING_LEVE
         L += _table(
             ["Value", *(r.key.label for r in with_labels)],
             [
-                [v, *(_f(r.en.per_label_f1.get(v)) for r in with_labels)]  # type: ignore[union-attr]
+                [v, *(_per_label(r.en, v) for r in with_labels)]  # type: ignore[union-attr]
                 for v in values
             ],
         )
@@ -448,7 +493,7 @@ def render_report(results: list[ConfigResult], scoring_level: str = SCORING_LEVE
         L += [
             (
                 f"By the rule above the draft pick is **{rec.chosen.label}**: ranking score "
-                f"{_f(chosen.rank_score)} against the best {_f(rec.best_f1_score)}, cost per "
+                f"{_f(chosen.rank_score)} against {_f(rec.reference_f1)}, the best among the configurations the gate kept (the overall best is {_f(rec.best_f1_score)}), cost per "
                 f"1,000 articles {EMPTY if chosen.cost_per_1k is None else f'{chosen.cost_per_1k:.2f}'}, "
                 f"stance agreement {_agreement(chosen.stance)}."
             ),

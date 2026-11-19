@@ -67,13 +67,14 @@ def make_run(
     cost: float = 0.0,
     seconds: int = 10,
     few_shot_files: list[str] | None = None,
+    status: RunStatus = RunStatus.DONE,
 ) -> None:
     run_dir = paths.runs_dir / run_id
     run_dir.mkdir(parents=True)
     segs = [f"{d}:p0" for d in tags]
     m = RunManifest(
         run_id=run_id, spec=spec, input_sample=sample, prompt_sha256="0" * 64,
-        status=RunStatus.DONE, segments_done=segs, cost_usd=cost, started=T0,
+        status=status, segments_done=segs, cost_usd=cost, started=T0,
         finished=T0 + datetime.timedelta(seconds=seconds), few_shot_files=few_shot_files or [],
     )  # fmt: skip
     (run_dir / "manifest.json").write_text(m.model_dump_json(), encoding="utf-8")
@@ -239,3 +240,52 @@ def test_cli_evaluate(world, tmp_path, monkeypatch):
         lambda sample, level: {d.id: GOLD[d.id] for d in sample.documents}))  # fmt: skip
     assert main(args) == 0
     assert "sonnet" in out.read_text(encoding="utf-8")
+
+
+def test_stopped_run_and_run_missing_a_document_are_flagged_and_not_ranked(world):
+    setup, run_ids = world
+    en = [f"{EN_PREFIX}:i1", f"{EN_PREFIX}:i2"]
+    # same config as a-en/a-el but another effort: EN stopped at budget, EL complete
+    make_run(setup.paths, "s-en", EN_SAMPLE, {en[0]: [("alpha", Stance.ENDORSE)],
+             en[1]: [("beta", Stance.ENDORSE)]}, spec=claude(effort=Effort.HIGH),
+             status=RunStatus.STOPPED_BUDGET)  # fmt: skip
+    make_run(setup.paths, "s-el", EL_SAMPLE, {f"{EL_PREFIX}:i1": [("alpha", Stance.ENDORSE)]},
+             spec=claude(effort=Effort.HIGH))  # fmt: skip
+    # owner run that never reached the second article
+    make_run(setup.paths, "s-ow", OWNER_SAMPLE, {OWNER_DOCS[0]: [("alpha", Stance.ENDORSE)]},
+             spec=claude(effort=Effort.HIGH), cost=0.02)  # fmt: skip
+    results = build_results([*run_ids, "s-en", "s-el", "s-ow"], setup)
+    s = by_label(results, "high")
+    assert s.en is None and s.en_partial == "partial 2/2 (stopped_budget)"
+    assert s.owner_partial == "partial 1/2" and s.stance is None and s.cost_per_1k is None
+    assert s.rank_score is None
+    md = render_report(results, scoring_level="coarse")
+    assert "partial 2/2 (stopped_budget)" in md and "partial 1/2" in md
+    from semval.evaluation.metrics import recommend
+
+    rec = recommend(results)
+    assert rec.chosen is not None and "high" not in rec.chosen.label
+
+
+def test_zero_tag_documents_count_as_negatives_over_the_whole_sample(world):
+    setup, _ = world
+    en = [f"{EN_PREFIX}:i1", f"{EN_PREFIX}:i2"]
+    make_run(setup.paths, "z-en", EN_SAMPLE, {en[0]: [("alpha", Stance.ENDORSE)], en[1]: []},
+             spec=claude(effort=Effort.HIGH))  # fmt: skip
+    (z,) = build_results(["z-en"], setup)
+    # i2 has gold group_b and no tags: a miss (F1 0), not a dropped document
+    assert z.en.n_docs == 2 and z.en.macro_f1 == pytest.approx(0.5)
+
+
+def test_report_shows_n_el_mention_and_flags(world):
+    setup, run_ids = world
+    import dataclasses
+
+    only_a = dataclasses.replace(
+        setup, gold=lambda sample, level: {d.id: {"group_a"} for d in sample.documents}
+    )
+    md = render_report(build_results(run_ids, only_a), scoring_level="coarse")
+    assert "Macro-F1 EL +mention" in md and "n EN" in md and "n owner" in md
+    assert "meaningful figure" in md  # lexicon baseline note
+    assert "marked `no gold`" in md and "no gold |" in md
+    assert "the best among the configurations the gate kept" in md

@@ -17,6 +17,7 @@ Pair = tuple[str, str]  # (document id, value id)
 
 # Decision rule (spec 5.6). Builder's constants; the report states them.
 F1_TOLERANCE = 0.02  # "within 0.02 macro-F1 of the best"
+FLOAT_SLACK = 1e-9  # so that 0.61 - 0.59 counts as within 0.02
 STANCE_GATE_MARGIN = 0.10  # "clearly worse": more than this below the best agreement rate
 
 # Stances that count as "present" in the strict Touché reading (mention does not count).
@@ -221,6 +222,7 @@ class InputScore:
     macro_f1_mention: float  # mention counts as present too
     per_label_f1: dict[str, float] = field(default_factory=dict)
     leaf_macro_f1: float | None = None  # where the run was tagged at leaf
+    unsupported: list[str] = field(default_factory=list)  # labels with no gold in this input
 
 
 @dataclass(frozen=True)
@@ -232,6 +234,10 @@ class ConfigResult:
     stance: StanceScores | None = None
     owner_docs: int | None = None
     owner_run_id: str | None = None
+    # A run that is not done or misses documents is not scored: why, per input.
+    en_partial: str | None = None
+    el_partial: str | None = None
+    owner_partial: str | None = None
     cost_per_1k: float | None = None
     latency: str | None = None  # "batch", "1.23 s/segment", or None
 
@@ -243,7 +249,10 @@ class ConfigResult:
 
     @property
     def rank_score(self) -> float | None:
-        """Mean of the English and Greek-proxy macro-F1 (whichever exist)."""
+        """Mean of the English and Greek-proxy macro-F1 (whichever exist); None if either
+        run is partial, so an incomplete configuration is never ranked."""
+        if self.en_partial or self.el_partial:
+            return None
         vals = [s.macro_f1 for s in (self.en, self.el) if s is not None]
         return sum(vals) / len(vals) if vals else None
 
@@ -253,6 +262,7 @@ class Recommendation:
     chosen: ConfigKey | None
     best_f1: ConfigKey | None
     best_f1_score: float | None
+    reference_f1: float | None  # the best score among the kept configurations
     best_agreement: float | None
     dropped_by_gate: list[ConfigKey]
     within_tolerance: list[ConfigKey]
@@ -266,7 +276,7 @@ def recommend(results: list[ConfigResult]) -> Recommendation:
     cheapest (it is chosen only if nothing has a cost)."""
     cands = [r for r in results if r.key.kind != TaggerKind.LEXICON and r.rank_score is not None]
     if not cands:
-        return Recommendation(None, None, None, None, [], [])
+        return Recommendation(None, None, None, None, None, [], [])
     rates = [r.stance.agreement for r in cands if r.stance and r.stance.agreement is not None]
     best_rate = max(rates) if rates else None
     dropped = [
@@ -280,7 +290,7 @@ def recommend(results: list[ConfigResult]) -> Recommendation:
     kept = [r for r in cands if r.key not in dropped]
     best = max(kept, key=lambda r: r.rank_score or 0.0)
     best_score = best.rank_score or 0.0
-    near = [r for r in kept if best_score - (r.rank_score or 0.0) <= F1_TOLERANCE]
+    near = [r for r in kept if best_score - (r.rank_score or 0.0) <= F1_TOLERANCE + FLOAT_SLACK]
     priced = [r for r in near if r.cost_per_1k is not None]
     pool = priced or near
     chosen = min(pool, key=lambda r: (r.cost_per_1k or 0.0, -(r.rank_score or 0.0)))
@@ -289,6 +299,7 @@ def recommend(results: list[ConfigResult]) -> Recommendation:
         chosen=chosen.key,
         best_f1=overall.key,
         best_f1_score=overall.rank_score,
+        reference_f1=best_score,
         best_agreement=best_rate,
         dropped_by_gate=dropped,
         within_tolerance=[r.key for r in near],
