@@ -70,7 +70,7 @@ tests/test_cli.py
 **Interfaces:**
 - Produces: installable package `semval` (`pip install -e .[dev]`), `semval.__version__ = "0.0.1"`.
 
-- [ ] **Step 1:** `git init -b main` in `C:\Users\nikol\Dev\Personal\Semantic_Values`.
+- [ ] **Step 1:** `git init -b main` in the repository root (`Semantic_Values/`).
 - [ ] **Step 2: Write the failing test** `tests/test_smoke.py::test_version` asserting `semval.__version__ == "0.0.1"`.
 - [ ] **Step 3:** Run `pytest -q` → FAIL (module not found).
 - [ ] **Step 4:** Create `pyproject.toml` (setuptools, `src/` layout, deps `pydantic>=2`, `pyyaml>=6`; extra `dev = ["pytest>=8", "ruff>=0.6"]`, `[tool.ruff]` line-length 100), `src/semval/__init__.py`, `.gitignore` (must include `data/raw/`, `data/cache/`, `.env`, `.venv/`, `__pycache__/`), `LICENSE` (MIT, copyright holder name confirmed with the owner in Step 8 before pushing), `LICENSE-DATA.md` (CC BY 4.0), `README.md` (intent from spec §1, v0 countries, "raw text is never committed", link to spec).
@@ -165,6 +165,7 @@ Same method and checks as Task 4, for FR, NL, BE, LU, DE, AT, CH, IT, ES, PT. Ca
 **Interfaces:**
 - Produces: `Source.restriction_scope: Literal["none","ai_training_only","crawler_block_only","tdm_all","all_reuse","unknown"]` (required). Meaning: `tdm_all` = terms or a valid Art. 4(3) reservation forbid any automated analysis (covers dictionary methods too); `all_reuse` = any copying/reproduction forbidden without licence; `ai_training_only` = only AI training/development is forbidden; `crawler_block_only` = no clause in terms, only robots.txt blocks of AI crawlers; `none` = terms explicitly allow or impose nothing relevant.
 - Produces: `OPEN_SCOPES = {"none","ai_training_only","crawler_block_only","unknown"}`; `JURISDICTION_OPEN_SCOPES: dict[str, set[str]] = {"GB": {"tdm_all"}}` (UK CDPA s.29A: contract bans on non-commercial research TDM are unenforceable; `all_reuse` stays closed). `is_open(source) -> bool` = scope in `OPEN_SCOPES | JURISDICTION_OPEN_SCOPES.get(country, set())`. `coverage_matrix(..., open_only: bool = False)` — when True, also excludes sources where `is_open` is False. CLI renders two tables: "Usable (free access)" and "Usable and not opted out".
+- Amended during execution: `copyright_boilerplate` was added to the scopes and to `OPEN_SCOPES`; GB = `{"tdm_all", "all_reuse"}` per spec §3; jurisdiction overrides do not apply to the `api` access route (`OVERRIDE_EXCLUDED_ACCESS_METHODS`); `magazine` was added to `source_type`.
 
 - [ ] **Step 1: Failing tests:** `test_restriction_scope_required`, `test_open_only_excludes_tdm_all` (free FR source with `tdm_all` absent from `open_only=True` matrix, present in default), `test_gb_tdm_all_open_under_s29a` (free GB `tdm_all` source present with `open_only=True`; GB `all_reuse` absent), `test_render_has_two_tables`.
 - [ ] **Step 2:** Run → FAIL. **Step 3:** Implement. **Step 4:** Back-fill `restriction_scope` for every existing entry from its `notes` (no new web research; if the notes don't establish it → `unknown`). A licence requirement for any use beyond strictly personal/individual use (e.g. Le Figaro) is `all_reuse`. `pytest -q`, `ruff check .`, `python -m semval coverage` → PASS.

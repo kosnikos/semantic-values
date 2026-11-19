@@ -9,3 +9,7 @@ time series) is licensed under the
 This licence does not cover third-party source texts. Raw text is never committed to
 this repository; only references (source, URL/ID, date, country, language) and values
 derived from the text are published. Source texts remain under their owners' terms.
+
+Quoted excerpts of third-party terms, notices and robots.txt files in this repository
+remain the property of their owners and are not covered by this licence; they are quoted
+for analysis.

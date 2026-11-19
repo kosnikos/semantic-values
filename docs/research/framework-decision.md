@@ -212,8 +212,9 @@ natural frame for EVS/WVS, possibly via a post-hoc mapping from Schwartz scores 
    distinctions that matter in news (e.g. societal vs personal security, which predicted
    attitudes to immigration differently in [D2] p. 665). But agreement and accuracy fall
    as label sets grow (54 values: α = 0.49 [R19]; 19 values per sentence: F1 0.39 [R22]).
-   Since the 19 roll up to 10 and to 4 via `parent`, nothing is lost by tagging at 19 and
-   reporting coarser; the cost is tagging difficulty.
+   `parent` maps the 19 directly to the 4 groups, so nothing is lost by tagging at 19 and
+   reporting at 4; the cost is tagging difficulty. The 19 → 10 roll-up is not yet encoded
+   as data; it is planned as the first task of the next plan.
 2. **Benevolence: dependability is the weakest value.** The paper itself notes little
    prior evidence for it ([D2] p. 670). Watch its agreement in Task 4.
 3. **ES, PT and LB have no ValueEval'24 data** [R22]. Cross-language consistency for these
@@ -237,7 +238,9 @@ Reasons, in order of weight:
 3. Its values are motivational goals, so endorse/reject is well posed for every value; the
    examples in the registry make the difference from attained/constrained explicit (§3).
 4. It nests: 19 → 10 → 4, which serves blog readability and ESS validation without
-   re-tagging (§4, §5).
+   re-tagging (§4, §5). In the registry, `parent` currently maps the 19 directly to the 4
+   groups; the 19 → 10 roll-up is not yet encoded as data and is planned as the first task
+   of the next plan.
 
 **Runner-up: Moral Foundations Theory**, as a secondary lens or robustness check. It has the
 best dictionary resources, including translated MFDs for FR, DE, IT and ES [R11], and good

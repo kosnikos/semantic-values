@@ -32,6 +32,8 @@ country, language) and extracted values; raw text is cached locally and git-igno
 
 ```
 python -m venv .venv
+.venv\Scripts\activate          # Windows
+source .venv/bin/activate       # macOS / Linux
 pip install -e .[dev]
 pytest -q
 ruff check .
