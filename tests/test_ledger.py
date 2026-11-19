@@ -131,3 +131,62 @@ def test_ledger_repair_replaces_atomically(tmp_path, monkeypatch):
     ((src, dst),) = replaced
     assert dst == path and src != path and not src.exists()
     assert ledger.total() == pytest.approx(0.6)
+
+
+# --- cross-process safety -------------------------------------------------------------
+
+N_PROCS = 4
+N_EACH = 50
+
+
+def _hammer(path: str, n: int) -> None:
+    ledger = CostLedger(Path(path), cap=1e9)
+    for i in range(n):
+        ledger.record(f"run-{os.getpid()}-{i}", ONE_M, ModelId.HAIKU_5_5, batch=False)
+
+
+def test_ledger_concurrent_processes_do_not_interleave(tmp_path):
+    import multiprocessing as mp
+
+    path = tmp_path / "l.jsonl"
+    ctx = mp.get_context("spawn")
+    procs = [ctx.Process(target=_hammer, args=(str(path), N_EACH)) for _ in range(N_PROCS)]
+    for p in procs:
+        p.start()
+    for p in procs:
+        p.join(120)
+        assert p.exitcode == 0
+    lines = path.read_bytes().splitlines()
+    assert len(lines) == N_PROCS * N_EACH
+    assert all(__import__("json").loads(line)["cost_usd"] == pytest.approx(0.6) for line in lines)
+    assert CostLedger(path, cap=1e9).total() == pytest.approx(0.6 * N_PROCS * N_EACH)
+
+
+def _hold_lock(lock_path: str, held, release) -> None:
+    from semval.fsutil import exclusive_lock
+
+    with exclusive_lock(Path(lock_path)):
+        held.set()
+        release.wait(60)
+
+
+def test_ledger_lock_times_out_when_held_elsewhere(tmp_path):
+    import multiprocessing as mp
+
+    path = tmp_path / "l.jsonl"
+    ctx = mp.get_context("spawn")
+    held, release = ctx.Event(), ctx.Event()
+    p = ctx.Process(target=_hold_lock, args=(str(path) + ".lock", held, release))
+    p.start()
+    try:
+        assert held.wait(60)
+        ledger = CostLedger(path, cap=100.0, lock_timeout=0.5)
+        with pytest.raises(TimeoutError, match="lock"):
+            ledger.total()
+        with pytest.raises(TimeoutError, match="lock"):
+            ledger.record("r", ONE_M, ModelId.HAIKU_5_5, batch=False)
+        assert not path.exists()
+    finally:
+        release.set()
+        p.join(60)
+    assert CostLedger(path, cap=100.0, lock_timeout=5).total() == 0.0
