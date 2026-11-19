@@ -47,10 +47,11 @@ class SampleManifest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str
-    since: date
-    until: date
-    per_country: int
-    requests: int
+    # Collection parameters; None / 0 for samples that were not collected (derived, dataset-made).
+    since: date | None = None
+    until: date | None = None
+    per_country: int = 0
+    requests: int = 0
     stopped_early: str | None = None
     stats: dict[str, dict[str, int]]
     documents: list[Document]
@@ -92,6 +93,18 @@ def write_manifest(manifest: SampleManifest, samples_dir: Path) -> Path:
     out = samples_dir / f"{manifest.name}.yaml"
     out.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
     return out
+
+
+def derive_sample(base: SampleManifest, name: str, ids: list[str]) -> SampleManifest:
+    """A new sample of exactly the documents ``ids`` of ``base``, in that order.
+
+    Texts are shared (same document ids in the raw cache); ValueError names an unknown id.
+    """
+    by_id = {d.id: d for d in base.documents}
+    unknown = [i for i in ids if i not in by_id]
+    if unknown:
+        raise ValueError(f"not in sample {base.name!r}: {', '.join(unknown)}")
+    return base.model_copy(update={"name": name, "documents": [by_id[i] for i in ids], "stats": {}})
 
 
 def usable_sources(

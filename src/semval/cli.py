@@ -380,6 +380,35 @@ def _touche_build_proxy(args: argparse.Namespace) -> int:
     return 0
 
 
+def _touche_make_sample(args: argparse.Namespace) -> int:
+    from semval.datasets.touche23_samples import make_touche_sample
+    from semval.tagging.runfiles import load_sample
+
+    path = make_touche_sample(
+        args.name, split=args.split, n=args.n, seed=args.seed, proxy=args.proxy, data_dir=args.dir
+    )
+    sample = load_sample(args.name, path.parent)
+    print(f"{path}: {len(sample.documents)} documents")
+    return 0
+
+
+def _sample_derive(args: argparse.Namespace) -> int:
+    from semval.sampling.sample import derive_sample, write_manifest
+    from semval.tagging.runfiles import load_sample
+
+    ids = list(args.id)
+    if args.ids_file:
+        ids += [
+            x.strip() for x in args.ids_file.read_text(encoding="utf-8").splitlines() if x.strip()
+        ]
+    try:
+        manifest = derive_sample(load_sample(args.base, DEFAULT_SAMPLES_DIR), args.name, ids)
+    except ValueError as e:
+        raise SystemExit(str(e)) from e
+    print(f"{write_manifest(manifest, DEFAULT_SAMPLES_DIR)}: {len(manifest.documents)} documents")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="semval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -499,6 +528,23 @@ def build_parser() -> argparse.ArgumentParser:
     bp.add_argument("--split", choices=["train", "validation", "test"], default="test")
     bp.add_argument("--dir", type=Path, default=TOUCHE_DIR)
     bp.set_defaults(func=_touche_build_proxy)
+    ms = tou_sub.add_parser(
+        "make-sample", help="the split (or the Greek proxy) as a sample for `semval tag`"
+    )
+    ms.add_argument("--name", required=True)
+    ms.add_argument("--split", choices=["train", "validation", "test"], default="test")
+    ms.add_argument("--n", type=int, default=300)
+    ms.add_argument("--seed", type=int, default=1)
+    ms.add_argument("--proxy", action="store_true", help="exactly the Greek proxy items")
+    ms.add_argument("--dir", type=Path, default=TOUCHE_DIR)
+    ms.set_defaults(func=_touche_make_sample)
+
+    sd = sub.add_parser("sample-derive", help="a new sample of chosen documents of another")
+    sd.add_argument("--from", dest="base", required=True, help="name of the base sample")
+    sd.add_argument("--name", required=True)
+    sd.add_argument("--id", action="append", default=[], help="document id (repeatable)")
+    sd.add_argument("--ids-file", type=Path, help="file with one document id per line")
+    sd.set_defaults(func=_sample_derive)
     return parser
 
 
