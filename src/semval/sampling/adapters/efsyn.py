@@ -10,7 +10,7 @@ from datetime import date
 
 from bs4 import BeautifulSoup
 
-from semval.sampling.article import Genre, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED, Genre, NotSampled, ParsedArticle
 from semval.sampling.fetch import PoliteFetcher
 from semval.sampling.jsonld import find_typed
 from semval.sampling.listing import Item, paged_spread
@@ -25,9 +25,9 @@ EDITORIAL_SECTION = "Η άποψη της"  # "Η άποψη της ΕφΣυν":
 OPINION_SECTION = "Απόψεις"
 
 
-def genre_of(url: str, section: str) -> str:
+def genre_of(url: str, section: str) -> Genre | NotSampled:
     if not _ARTICLE.match(url):
-        return "other"
+        return NOT_SAMPLED
     if EDITORIAL_SECTION in section:
         return Genre.EDITORIAL
     return Genre.OPINION if OPINION_SECTION in section else Genre.COLUMNS

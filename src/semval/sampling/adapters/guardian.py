@@ -6,7 +6,7 @@ from datetime import date
 
 from bs4 import BeautifulSoup
 
-from semval.sampling.article import Genre, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED, Genre, NotSampled, ParsedArticle
 from semval.sampling.fetch import PoliteFetcher
 from semval.sampling.jsonld import find_typed
 from semval.sampling.listing import dated_spread
@@ -24,9 +24,9 @@ def day_url(day: date) -> str:
     return f"{BASE}/commentisfree/{day.year}/{day.strftime('%b').lower()}/{day.day:02d}/all"
 
 
-def genre_of(url: str) -> str:
+def genre_of(url: str) -> Genre | NotSampled:
     if not _ARTICLE.match(url) or url.endswith(_NOT_ARTICLES):
-        return "other"
+        return NOT_SAMPLED
     slug = url.rsplit("/", 1)[1]
     return Genre.EDITORIAL if slug.startswith(EDITORIAL_PREFIX) else Genre.OPINION
 

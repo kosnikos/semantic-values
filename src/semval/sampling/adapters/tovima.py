@@ -6,7 +6,7 @@ from datetime import date
 
 from bs4 import BeautifulSoup
 
-from semval.sampling.article import Genre, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED, Genre, NotSampled, ParsedArticle
 from semval.sampling.fetch import PoliteFetcher
 from semval.sampling.jsonld import find_typed
 from semval.sampling.listing import Item, paged_spread
@@ -20,9 +20,9 @@ _GENRES = {"opinions": Genre.OPINION, "stiles": Genre.COLUMNS}
 _DROP = ".whsk_parent__div, .google-preferred-source, script, style"
 
 
-def genre_of(url: str) -> str:
+def genre_of(url: str) -> Genre | NotSampled:
     m = _SECTION.match(url)
-    return _GENRES[m.group(1)] if m else "other"
+    return _GENRES[m.group(1)] if m else NOT_SAMPLED
 
 
 def page_items(page: BeautifulSoup) -> list[Item]:

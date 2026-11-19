@@ -33,6 +33,8 @@ class Document(BaseModel):
     genre: str
     url: str | None = None
     title: str | None = None
+    # Committed samples carry only a hash of the title; the title itself stays in data/raw.
+    title_sha256: str | None = None
     text_sha256: str
 
 

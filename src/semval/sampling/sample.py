@@ -5,6 +5,7 @@ committed sample file. Source-agnostic: everything source-specific is in the ada
 """
 
 import hashlib
+import json
 import logging
 import math
 from collections import Counter, defaultdict
@@ -62,6 +63,35 @@ def doc_id_for(source_id: str, url: str) -> str:
 def doc_text_path(raw_dir: Path, doc_id: str) -> Path:
     """Cached text of a document. ":" is not allowed in Windows file names, so it becomes "__"."""
     return Path(raw_dir) / f"{doc_id.replace(':', '__')}.txt"
+
+
+def doc_meta_path(raw_dir: Path, doc_id: str) -> Path:
+    """Cached metadata (the title) of a document, next to its text."""
+    return doc_text_path(raw_dir, doc_id).with_suffix(".meta.json")
+
+
+def to_reference(doc: Document, raw_dir: Path) -> Document:
+    """The committable form of ``doc``: the title moves to the raw cache, only its hash stays.
+
+    Spec section 5.5: only references (URL, date, source, title hash) are committed.
+    """
+    if doc.title is None:
+        return doc
+    meta = {"id": doc.id, "url": doc.url, "title": doc.title}
+    path = doc_meta_path(raw_dir, doc.id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+    title_hash = hashlib.sha256(doc.title.encode("utf-8")).hexdigest()
+    return doc.model_copy(update={"title": None, "title_sha256": title_hash})
+
+
+def write_manifest(manifest: SampleManifest, samples_dir: Path) -> Path:
+    """Write ``<samples_dir>/<name>.yaml``; documents carry no ``title`` key."""
+    data = manifest.model_dump(mode="json", exclude={"documents": {"__all__": {"title"}}})
+    samples_dir.mkdir(parents=True, exist_ok=True)
+    out = samples_dir / f"{manifest.name}.yaml"
+    out.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    return out
 
 
 def usable_sources(
@@ -133,7 +163,7 @@ def _try_url(
     data = art.text.encode("utf-8")
     path.write_bytes(data)
     stats[Skip.KEPT] += 1
-    return Document(
+    doc = Document(
         id=doc_id,
         source_id=src.id,
         country=src.country,
@@ -144,6 +174,7 @@ def _try_url(
         title=art.title,
         text_sha256=hashlib.sha256(data).hexdigest(),
     )
+    return to_reference(doc, raw_dir)
 
 
 def _take(
@@ -229,10 +260,5 @@ def collect_sample(
         stats={sid: {str(k): v for k, v in c.items()} for sid, c in stats.items()},
         documents=docs,
     )
-    samples_dir.mkdir(parents=True, exist_ok=True)
-    out = samples_dir / f"{name}.yaml"
-    out.write_text(
-        yaml.safe_dump(manifest.model_dump(mode="json"), sort_keys=False, allow_unicode=True),
-        encoding="utf-8",
-    )
+    write_manifest(manifest, samples_dir)
     return manifest

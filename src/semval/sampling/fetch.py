@@ -1,25 +1,26 @@
 """A polite HTTP fetcher: robots.txt, Crawl-delay, honest user-agent, on-disk cache.
 
 Source-agnostic. Rules (parent spec section 3, tagging spec section 5.5): obey robots.txt for
-our own user-agent, wait at least ``min_delay_s`` (or the host's Crawl-delay, if longer)
-between requests to a host, skip pages whose JSON-LD says ``isAccessibleForFree: false``,
-and never retry or work around a bot challenge: a challenged host is not requested again.
+our own user-agent, wait at least ``MIN_DELAY_FLOOR_S`` (or the host's Crawl-delay, if
+longer) between requests to a host, skip pages whose JSON-LD says
+``isAccessibleForFree: false``, and never retry or work around a bot challenge: a
+challenged host is not requested again. Redirects are followed by hand (at most
+``MAX_REDIRECTS``), and each target passes the same robots and delay rules.
 """
 
 import hashlib
 import json
 import logging
 import time
-import urllib.error
-import urllib.request
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 from typing import Protocol
-from urllib.parse import urlsplit
+from urllib.parse import urljoin, urlsplit
 
 from semval.sampling.jsonld import is_not_free
 from semval.sampling.robots import RobotsRules, parse_robots
+from semval.sampling.transport import REDIRECT_STATUSES, Response, Transport, urllib_transport
 
 __all__ = [
     "FetchOutcome",
@@ -34,7 +35,8 @@ log = logging.getLogger(__name__)
 
 USER_AGENT = "semval-research/0.1 (+https://github.com/kosnikos/semantic-values)"
 DEFAULT_CACHE_DIR = Path("data/raw/http")
-TIMEOUT_S = 30.0
+MIN_DELAY_FLOOR_S = 5.0
+MAX_REDIRECTS = 5
 
 # A bot challenge: one of these statuses plus one of these markers in the body.
 CHALLENGE_STATUSES = frozenset({403, 429, 503})
@@ -43,6 +45,9 @@ CHALLENGE_MARKERS = (
     "_incapsula_", "datadome", "px-captcha", "perimeterx", "verify you are human",
     "are you a robot", "access denied", "bot detection",
 )  # fmt: skip
+# robots.txt statuses that mean "assume everything is disallowed": forbidden, rate limited,
+# server error, no response, or a redirect chain that did not end.
+_ROBOTS_DISALLOW_ALL = frozenset({401, 403, 429}) | REDIRECT_STATUSES
 
 
 class FetchOutcome(StrEnum):
@@ -54,22 +59,10 @@ class FetchOutcome(StrEnum):
 
 
 @dataclass(frozen=True)
-class Response:
-    """What a transport returns. Status 0 means no HTTP response (network error)."""
-
-    status: int
-    body: str
-
-
-@dataclass(frozen=True)
 class FetchResult:
     outcome: FetchOutcome
     status: int | None
     html: str | None
-
-
-class Transport(Protocol):
-    def __call__(self, url: str, headers: dict[str, str]) -> Response: ...
 
 
 class Clock(Protocol):
@@ -89,27 +82,6 @@ class RequestBudgetExceeded(RuntimeError):
     """The fetcher's ``max_requests`` is used up."""
 
 
-def urllib_transport(url: str, headers: dict[str, str]) -> Response:
-    """GET with stdlib urllib. HTTP errors come back as a Response, not an exception."""
-    request = urllib.request.Request(url, headers=headers)
-    try:
-        with urllib.request.urlopen(request, timeout=TIMEOUT_S) as resp:
-            return Response(resp.status, _decode(resp.read(), resp.headers.get_content_charset()))
-    except urllib.error.HTTPError as err:
-        body = err.read().decode("utf-8", errors="replace") if err.fp else ""
-        return Response(err.code, body)
-    except (urllib.error.URLError, TimeoutError, OSError) as err:
-        log.warning("network error for %s: %s", url, err)
-        return Response(0, "")
-
-
-def _decode(raw: bytes, charset: str | None) -> str:
-    try:
-        return raw.decode(charset or "utf-8", errors="replace")
-    except LookupError:  # unknown charset name in the header
-        return raw.decode("utf-8", errors="replace")
-
-
 def looks_like_challenge(response: Response) -> bool:
     if response.status not in CHALLENGE_STATUSES:
         return False
@@ -122,19 +94,27 @@ def _host(url: str) -> str:
     return f"{parts.scheme}://{parts.netloc}"
 
 
+def _redirect_target(url: str, response: Response) -> str | None:
+    if response.status in REDIRECT_STATUSES and response.location:
+        return urljoin(url, response.location)
+    return None
+
+
 class PoliteFetcher:
     def __init__(
         self,
         user_agent: str = USER_AGENT,
-        min_delay_s: float = 5.0,
+        min_delay_s: float = MIN_DELAY_FLOOR_S,
         cache_dir: Path = DEFAULT_CACHE_DIR,
         *,
         transport: Transport = urllib_transport,
         clock: Clock | None = None,
         max_requests: int | None = None,
+        _allow_below_floor_for_tests: bool = False,
     ) -> None:
         self.user_agent = user_agent
-        self.min_delay_s = min_delay_s
+        floor = 0.0 if _allow_below_floor_for_tests else MIN_DELAY_FLOOR_S
+        self.min_delay_s = max(min_delay_s, floor)
         self.cache_dir = Path(cache_dir)
         self.transport = transport
         self.clock = clock or SystemClock()
@@ -152,24 +132,30 @@ class PoliteFetcher:
         cached = self._cache_read(url)
         if cached is not None:
             return self._classify_ok(url, 200, cached)
-        host = _host(url)
-        if host in self._challenged:
-            return FetchResult(FetchOutcome.CHALLENGE, None, None)
         if url in self._not_free:
             return FetchResult(FetchOutcome.NOT_FREE, 200, None)
-        robots = self._robots_for(host)
-        if robots is None:  # robots.txt itself was a challenge
-            return FetchResult(FetchOutcome.CHALLENGE, None, None)
-        if not robots.can_fetch(url):
-            log.info("robots.txt disallows %s", url)
-            return FetchResult(FetchOutcome.ROBOTS_DISALLOWED, None, None)
-        response = self._request(host, url)
-        if looks_like_challenge(response):
-            log.warning("bot challenge at %s (status %s); host skipped", url, response.status)
-            self._challenged.add(host)
-            return FetchResult(FetchOutcome.CHALLENGE, response.status, None)
+        current = url
+        for _ in range(MAX_REDIRECTS + 1):
+            blocked = self._precheck(current)
+            if blocked is not None:
+                return blocked
+            response = self._request(_host(current), current)
+            if looks_like_challenge(response):
+                log.warning(
+                    "bot challenge at %s (status %s); host skipped", current, response.status
+                )
+                self._challenged.add(_host(current))
+                return FetchResult(FetchOutcome.CHALLENGE, response.status, None)
+            target = _redirect_target(current, response)
+            if target is None:
+                break
+            log.info("redirect %s -> %s", current, target)
+            current = target
+        else:
+            log.info("more than %d redirects from %s", MAX_REDIRECTS, url)
+            return FetchResult(FetchOutcome.HTTP_ERROR, response.status, None)
         if response.status != 200:
-            log.info("HTTP %s for %s", response.status, url)
+            log.info("HTTP %s for %s", response.status, current)
             return FetchResult(FetchOutcome.HTTP_ERROR, response.status or None, None)
         result = self._classify_ok(url, 200, response.body)
         if result.outcome is FetchOutcome.OK:
@@ -177,6 +163,19 @@ class PoliteFetcher:
         return result
 
     # -- internals ----------------------------------------------------------------------
+
+    def _precheck(self, url: str) -> FetchResult | None:
+        """A result if ``url`` must not be requested (challenged host or robots.txt)."""
+        host = _host(url)
+        if host in self._challenged:
+            return FetchResult(FetchOutcome.CHALLENGE, None, None)
+        robots = self._robots_for(host)
+        if robots is None:  # robots.txt itself was a challenge
+            return FetchResult(FetchOutcome.CHALLENGE, None, None)
+        if not robots.can_fetch(url):
+            log.info("robots.txt disallows %s", url)
+            return FetchResult(FetchOutcome.ROBOTS_DISALLOWED, None, None)
+        return None
 
     def _classify_ok(self, url: str, status: int, body: str) -> FetchResult:
         if is_not_free(body):
@@ -197,20 +196,34 @@ class PoliteFetcher:
         self._next_ok[host] = self.clock.now() + delay
         return response
 
+    def _fetch_robots(self, host: str) -> Response:
+        """GET robots.txt, following at most MAX_REDIRECTS redirects (RFC 9309)."""
+        url = f"{host}/robots.txt"
+        response = self._request(host, url)
+        for _ in range(MAX_REDIRECTS):
+            target = _redirect_target(url, response)
+            if target is None or looks_like_challenge(response):
+                break
+            url = target
+            response = self._request(_host(url), url)
+        return response
+
     def _robots_for(self, host: str) -> RobotsRules | None:
         if host in self._robots:
             return self._robots[host]
-        response = self._request(host, f"{host}/robots.txt")
+        response = self._fetch_robots(host)
         if looks_like_challenge(response):
             log.warning("bot challenge on %s/robots.txt; host skipped", host)
             self._challenged.add(host)
             return None
-        if response.status == 200:
+        status = response.status
+        if status == 200:
             rules = parse_robots(response.body, self.user_agent)
-        elif response.status in (401, 403) or response.status >= 500 or response.status == 0:
-            rules = RobotsRules(disallow_all=True)  # forbidden or unreachable: full disallow
+        elif status in _ROBOTS_DISALLOW_ALL or status >= 500 or status == 0:
+            log.info("robots.txt for %s gave %s: assuming full disallow", host, status)
+            rules = RobotsRules(disallow_all=True)
         else:
-            rules = RobotsRules()  # 4xx such as 404: no rules
+            rules = RobotsRules()  # other 4xx, such as 404: no rules
         delay = max(self.min_delay_s, rules.crawl_delay or 0.0)
         self._delay[host] = delay
         self._next_ok[host] = self.clock.now() + delay

@@ -27,7 +27,7 @@ documents:
   date: '2026-11-17'
   genre: opinion
   url: https://www.tovima.gr/2026/11/17/opinions/polytexneio-2026-i-eleytheria-stin-psifiaki-epoxi/
-  title: 'Πολυτεχνείο 2026: Η ελευθερία στην ψηφιακή εποχή'
+  title_sha256: 1e66f4e4ff7a6ba9a87895493b309e83b4df416b5be73ce482e38f9b163fb33a
   text_sha256: 01b3631cdea35889eecff72750b1382b3886a71828681b3ed9f4f401ef317f4d
 - id: gr-tovima-website:048323b814a6
   source_id: gr-tovima-website
@@ -36,7 +36,7 @@ documents:
   date: '2026-06-19'
   genre: opinion
   url: https://www.tovima.gr/2026/06/19/opinions/ntermpi-4/
-  title: Ντέρμπι
+  title_sha256: 3a7efcf6d5eb946f7c224a30d680b73d5771610ba231963111cb5c93c7d2a517
   text_sha256: a3b3b626285e0c9fa7483f9b73550edc31a9008b79f6ab139e76357249ec38c4
 - id: gr-tovima-website:031597d117bf
   source_id: gr-tovima-website
@@ -45,7 +45,7 @@ documents:
   date: '2026-01-19'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/ypoteleis/
-  title: Υποτελείς
+  title_sha256: e09453d2b1396de46561b9cecabe73ed4f9737b4374cc086da0c9deeff1ad14d
   text_sha256: 14abfe3ad91fe4b62300e4cc15f9582a1024a85962274fb377380085354ca563
 - id: gr-tovima-website:010aac78ec96
   source_id: gr-tovima-website
@@ -54,7 +54,7 @@ documents:
   date: '2025-09-06'
   genre: opinion
   url: https://www.tovima.gr/2025/09/06/opinions/ta-kommatia-tou-pazl/
-  title: Τα κομμάτια του παζλ
+  title_sha256: 33df0ea3949a95626b6280158b326abde10d27e1793b69ca65a772bfec888f46
   text_sha256: 2fa9d6b6e91d47ed3aaaece18d1f2b186575780a282893cf3d3622e87da8e098
 - id: gr-tovima-website:18c2597211d0
   source_id: gr-tovima-website
@@ -63,7 +63,7 @@ documents:
   date: '2025-03-24'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/o-strouthokamilismos-kostizeicr/
-  title: Ο στρουθοκαμηλισμός κοστίζει
+  title_sha256: cc60cbaa2a1bb8b71dfad1238a20190f69ea9668af049dafbe6539f57ec05336
   text_sha256: 74c810cd64215c12d88a60f4c808a36ebc993c49c9a4debc74fd0575deb6421f
 - id: gr-tovima-website:0d1da17eb121
   source_id: gr-tovima-website
@@ -72,7 +72,7 @@ documents:
   date: '2024-10-29'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/androulakis-prothypourgos/
-  title: Θα γίνει ο Ανδρουλάκης πρωθυπουργός;
+  title_sha256: 857abe8fb2f1f9bc8ca599e85f6dd77fa416f7152afffbbbf82dd53da57ec560
   text_sha256: 065bb05d17a4308e456429bf84fac6f39751dc1e0ba4705d536f3e2c0838d2ad
 - id: gr-tovima-website:050bb963e0b3
   source_id: gr-tovima-website
@@ -81,7 +81,7 @@ documents:
   date: '2024-04-30'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/pros-enan-koivo-eortasmo-toy-pasxacr/
-  title: Πρoς έναν κoιvό εoρτασμό τoυ Πάσχα
+  title_sha256: 98960c0a78b3a16d11af8a01e5ea4fbfa8e51fac51b2d809c97bcea23007646f
   text_sha256: 718a2066983a1baff43a9c58f927132d669d37d8854efdd75c1f63e5fe80ad46
 - id: gr-tovima-website:188e36d50443
   source_id: gr-tovima-website
@@ -90,7 +90,7 @@ documents:
   date: '2026-11-17'
   genre: opinion
   url: https://www.tovima.gr/2026/11/17/opinions/omorfos-kosmos-ithikos-aggelika-plasmenos/
-  title: Ομορφος κόσμος, ηθικός, αγγελικά πλασμένος…
+  title_sha256: b0ba8ecd4eeba9a4762eb1cedcd26634cb21526f0332f45f4dd48329b158e582
   text_sha256: 484e346249a02001ce3557953000343465c579516ffaeda2a52656caec67cea1
 - id: gr-tovima-website:17ce9c348fcc
   source_id: gr-tovima-website
@@ -99,7 +99,7 @@ documents:
   date: '2026-06-18'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/i-megali-paraleipsicr/
-  title: Η μεγάλη παράλειψη
+  title_sha256: 3b1ae62033e1ae05973318e4de05e8a35112adbeb02b63ccc396536cd0483a69
   text_sha256: 0dfc60cd5eff10597906374dfaa1c803473e8c2c65ff750a8cb14d658175d28b
 - id: gr-tovima-website:0dac4d883280
   source_id: gr-tovima-website
@@ -108,7 +108,7 @@ documents:
   date: '2026-01-20'
   genre: opinion
   url: https://www.tovima.gr/2026/01/20/opinions/he-did-it-his-way/
-  title: He did it his way?
+  title_sha256: a8c203de557657cba7c032017b1466c9700e7e457e079c290cbe339f47ced9db
   text_sha256: b4fefadf3f3d19d4e7923cebcb19288950cf103c9cc9f5e66a9f0c24309fc88a
 - id: gr-tovima-website:078728cc6848
   source_id: gr-tovima-website
@@ -117,7 +117,7 @@ documents:
   date: '2025-09-05'
   genre: opinion
   url: https://www.tovima.gr/2025/09/05/opinions/ta-adieksoda-tis-ellinikis-diplomatias/
-  title: Τα αδιέξοδα της ελληνικής διπλωματίας
+  title_sha256: 307f0b0e76a6a4b37798e0c3477bdef6267e53a64bf2f72ebbf28a4880c41d20
   text_sha256: a058ff8c31fa93dc8132eee9a48e43a367d4d70fbab81afdf6ce89873eb3bb92
 - id: gr-tovima-website:1cc252548faa
   source_id: gr-tovima-website
@@ -126,7 +126,7 @@ documents:
   date: '2025-03-23'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/to-risko-tis-viaiis-apokathilosis-imamoglou/
-  title: Το ρίσκο της βίαιης αποκαθήλωσης Ιμάμογλου
+  title_sha256: f9b23264d5c0359636ea35fbafa64acfb967528906e8dbeed475f24b06de7f2c
   text_sha256: 062b2be72db324df4940131e8e391df4cd5ba7aeccace50249509fb62ebef0ac
 - id: gr-tovima-website:22fe08322d73
   source_id: gr-tovima-website
@@ -135,7 +135,7 @@ documents:
   date: '2024-10-29'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/oute-kolysiergia-oute-diekperaiosi/
-  title: Ούτε κωλυσιεργία ούτε διεκπεραίωση
+  title_sha256: 14f96c03d19edd58f98ca75e1c60b60ad583fa92dbbc79dd5a05fad8e51990ce
   text_sha256: ed76d1c4bfd5b9050be5dd36d9088a67b5cfd59843e909a6eae3099297d01285
 - id: gr-tovima-website:071d1cfeead0
   source_id: gr-tovima-website
@@ -144,7 +144,7 @@ documents:
   date: '2024-04-30'
   genre: opinion
   url: https://www.tovima.gr/print/opinions/to-orama-tou-eyropaikou-politistikou-kentrou-delfon/
-  title: Το όραμα του Ευρωπαϊκού Πολιτιστικού Κέντρου Δελφών
+  title_sha256: 59a3f01542846fe39da05eecdbe5539782a25d3e1fc1da6ad57f311a5859d4ed
   text_sha256: 5c09c1a9074bc13ed2824c549c8f3272a7a5daac56783bade7a63cbd62ed7f2b
 - id: gr-tanea-website:26394afe0c40
   source_id: gr-tanea-website
@@ -153,7 +153,7 @@ documents:
   date: '2026-11-18'
   genre: opinion
   url: https://www.tanea.gr/print/2026/11/18/opinions/kathodos-apo-ton-eksosti/
-  title: Κάθοδος από τον εξώστη
+  title_sha256: 4ddc029bf16de3ea00ce8f1334ff2656f64c678962bfc03475dcb4dc829161f9
   text_sha256: fc345c4e1ff12cf911974a2d834dfce250a175abb060935ae687d2727a1a8193
 - id: gr-tanea-website:0dc51e239e53
   source_id: gr-tanea-website
@@ -162,7 +162,7 @@ documents:
   date: '2026-02-07'
   genre: opinion
   url: https://www.tanea.gr/print/2026/02/07/opinions/epidiokei-20eti-symfonia-lng-stis-ipa/
-  title: Επιδιώκει 20ετή συμφωνία LNG στις ΗΠΑ
+  title_sha256: 9bb016bcf10753a894e45ce2d25553de33136c89ae5d3fa72cad223203221690
   text_sha256: 80e76e6d03463e4ee47ae5b15fdf5dbf82c7d7b887f4596beb2a1fc76421ed28
 - id: gr-tanea-website:05d15cbfe178
   source_id: gr-tanea-website
@@ -171,7 +171,7 @@ documents:
   date: '2025-09-24'
   genre: opinion
   url: https://www.tanea.gr/print/2025/09/24/opinions/zito-pou-kaikame/
-  title: Ζήτω που καήκαμε
+  title_sha256: 95b8ba619e853ae0240e48cf9882e4f88260d8ccbefdb4e2fb638ebd6538b465
   text_sha256: 922a99b5e84539fbfe7979636e0fa0d266bf8d0028b072fa0233f3fd123fb902
 - id: gr-tanea-website:0e57bb5f3ab8
   source_id: gr-tanea-website
@@ -180,7 +180,7 @@ documents:
   date: '2025-03-21'
   genre: opinion
   url: https://www.tanea.gr/print/2025/03/21/opinions/allazei-i-ergasiaki-crkoultoura-stin-kinacr/
-  title: Αλλάζει η εργασιακή {CR}κουλτούρα στην Κίνα{CR}
+  title_sha256: 5b0e3f0391e71e95c45ce5b092a08edbd4a893ca20ab016c4b1efe3ae0ca9988
   text_sha256: bd0773e64dd11b34933c117f15921ff5569dc8cfbfd21c8c8c9c347c3dec8dcb
 - id: gr-tanea-website:2bc4713cd41e
   source_id: gr-tanea-website
@@ -189,7 +189,7 @@ documents:
   date: '2024-11-01'
   genre: opinion
   url: https://www.tanea.gr/print/2024/11/01/opinions/anagnoseis-6/
-  title: Αναγνώσεις
+  title_sha256: 36fdcc8b9811c5f741a6503b81b72b4eb598a589d6598d454c867a56f167fbc8
   text_sha256: 6ef6c1458277dc6c2b10b63c77e3d8a590101ce61abdf7592c6aa5f59292ce20
 - id: gr-tanea-website:0cddc0e15f55
   source_id: gr-tanea-website
@@ -198,7 +198,7 @@ documents:
   date: '2024-06-03'
   genre: opinion
   url: https://www.tanea.gr/print/2024/06/03/opinions/pleiopsifia-2/
-  title: Πλειοψηφία
+  title_sha256: 6bcddbf1320e389cba3b9bf822af04d929ecb391e815d08cf269530efddb4b04
   text_sha256: a4bff10ea3dc42b1f5e0d2c5256acae854feae83ca2e7ca2ab3fdbbf92b32593
 - id: gr-tanea-website:0c647a2061b9
   source_id: gr-tanea-website
@@ -207,7 +207,7 @@ documents:
   date: '2024-01-12'
   genre: opinion
   url: https://www.tanea.gr/print/2024/01/12/opinions/anakoxi-toracr/
-  title: ΑΝΑΚΩΧΗ ΤΩΡΑ
+  title_sha256: 7479a30ff2223da05be5a4935fc6258705f4ccba88a2016fce8e344e2db24165
   text_sha256: 8e84b35d478787f1cc462d29329c822e00ce5b8588f84b85b7b741f7276228fc
 - id: gr-tanea-website:268135ea8a4f
   source_id: gr-tanea-website
@@ -216,7 +216,7 @@ documents:
   date: '2026-11-18'
   genre: opinion
   url: https://www.tanea.gr/print/2026/11/18/opinions/to-neo-eyropaiko-flert-tis-vretanias/
-  title: Το νέο ευρωπαϊκό φλερτ της Βρετανίας
+  title_sha256: ac95f912fbcfc2ad685b7432592df2464b6375f0de3ab69f02d5f54fe9fdaa1c
   text_sha256: 0b7f20e2d3a25cffe4e4a7134eaefd4387a29fa48d90d48617e647d7ddbe65a9
 - id: gr-tanea-website:389e1ceb3b28
   source_id: gr-tanea-website
@@ -225,7 +225,7 @@ documents:
   date: '2026-06-22'
   genre: opinion
   url: https://www.tanea.gr/print/2026/06/22/opinions/organotiki-proti/
-  title: Οργανόγραμμα
+  title_sha256: 231803942478e5b7cf6d1d8a42ad0ecbab4407587a3530cbedcad6ac78d6303e
   text_sha256: 0bd1fbc8aed2366b036803c6f36103619971cd4bc611edec439b5e49c58997eb
 - id: gr-tanea-website:2807c8d2d5f9
   source_id: gr-tanea-website
@@ -234,7 +234,7 @@ documents:
   date: '2026-02-09'
   genre: opinion
   url: https://www.tanea.gr/print/2026/02/09/opinions/t16onomat16/
-  title: Ονομα
+  title_sha256: f496f655fd27f8ee86c7d48b9c85297c1123b0e1d090322e268f8da65a0cbf0b
   text_sha256: 7eae58507d0b920ab5faa44067936dcd64aeb8b16065db30522c09f72ee294c2
 - id: gr-tanea-website:08134a95b2a2
   source_id: gr-tanea-website
@@ -243,7 +243,7 @@ documents:
   date: '2025-09-23'
   genre: opinion
   url: https://www.tanea.gr/print/2025/09/23/opinions/synthikologisi-2/
-  title: Συνθηκολόγηση
+  title_sha256: 51a45b873dbd969ebe19d9027b5c1e088fb84267f030914e4527d64e6e400818
   text_sha256: d060e7a9ae96916d43bfd77dd103b616f69bba2f9aeff8a395744f0d59c4cd5c
 - id: gr-tanea-website:11d37adfcdb1
   source_id: gr-tanea-website
@@ -252,7 +252,7 @@ documents:
   date: '2025-03-21'
   genre: opinion
   url: https://www.tanea.gr/print/2025/03/21/opinions/tarzan/
-  title: Ταρζάν
+  title_sha256: 0fac3256a1679c5fe3b8d1b2f2cff12a59856da02094a88698959f0e85356c93
   text_sha256: 678ee91ba1b811e865fd395b9f2d16289d1bc6fdfcbe7be46acdf01ac376ea42
 - id: gr-tanea-website:16efa8ab228b
   source_id: gr-tanea-website
@@ -261,7 +261,7 @@ documents:
   date: '2024-06-01'
   genre: opinion
   url: https://www.tanea.gr/2024/06/01/opinions/peninta-xronia-apo-crto-praksikopima-stin-kypro-online/
-  title: Πενήντα χρόνια από το πραξικόπημα στην Κύπρο
+  title_sha256: 216c3ff8e6ace2ae5b2555f5dfaaa69e07763119f93f616f00cd3ba442dc9cbc
   text_sha256: 1b9fc8194baad1c7ca21cdde0ef4f299dd629ad2e458fb033644b3e0f31f9eb2
 - id: gr-efsyn-website:01cf8f3a9912
   source_id: gr-efsyn-website
@@ -270,7 +270,7 @@ documents:
   date: '2026-11-17'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1511759/na-apofygoyme-to-nomothetiko-praxikopima-sto-elliniko-panepistimio/
-  title: Να αποφύγουμε το νομοθετικό πραξικόπημα στο Ελληνικό Πανεπιστήμιο
+  title_sha256: f9adb232d25f8d23a2bea10590b55d75bfb2ea38bfa5af1ca3fe591c8b3eec48
   text_sha256: 02319492a4b1c961cbdfcf2993e8cce26ce5b37fbbbffa11a286c5c5bf95bcdd
 - id: gr-efsyn-website:31561cba44db
   source_id: gr-efsyn-website
@@ -279,7 +279,7 @@ documents:
   date: '2026-10-15'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1489040/kai-oi-anexartitoi-voyleytes-ehoyn-psyhi/
-  title: Και οι ανεξάρτητοι βουλευτές έχουν ψυχή…
+  title_sha256: bb0c16a18e8b9f066990359ea52b9d15ecf2cd55c72d98e5672e78d72c8ff42c
   text_sha256: db46bd467a03e7cf9f3d85b8f24cf5c6592328351b804face64629f4ab2dbdf4
 - id: gr-efsyn-website:0740eb953933
   source_id: gr-efsyn-website
@@ -288,7 +288,7 @@ documents:
   date: '2026-09-08'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1462750/o-adonis-oi-mizeroi-oi-arhaiotites-kai-oi-ahreiotites/
-  title: Ο Αδωνις, οι «μίζεροι», οι αρχαιότητες και οι αχρειότητες
+  title_sha256: aae0c479b704f302ee66c0e748e59111f8097371fce7490697fb20af5e63e419
   text_sha256: 2a2fdc3e9fe7ba19a654c1d78c3a99ed9ececc7200b7a83aa260214ad66dd330
 - id: gr-efsyn-website:04dabef1096f
   source_id: gr-efsyn-website
@@ -297,7 +297,7 @@ documents:
   date: '2026-07-30'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1438510/to-koyvari-toy-kypriakoy/
-  title: Το κουβάρι του Κυπριακού
+  title_sha256: 0ca6c4069016087e13d37c64da6aeb8da5790474628c9fc4bb62410e4d2772c3
   text_sha256: ddd9a25a1a325622ec9c5d930732bcefeb312c56ef20a50901c82642b8436840
 - id: gr-efsyn-website:004265a2c7ce
   source_id: gr-efsyn-website
@@ -306,7 +306,7 @@ documents:
   date: '2026-06-26'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1414121/o-lenin-gia-ton-panislamismo/
-  title: Ο Λένιν για τον πανισλαμισμό
+  title_sha256: b28b2cb9b638d9bd13503c3c25eb1ef52558cac4fdba8ea00aac51aa7835f739
   text_sha256: ea0b55980eb6fb392e774b81624f3e8eb4e8524da0219abb3f8889cc9944b459
 - id: gr-efsyn-website:001179d0baa7
   source_id: gr-efsyn-website
@@ -315,7 +315,7 @@ documents:
   date: '2026-05-29'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1394613/otan-to-sholeio-hanetai-i-aorati-poreia-pros-tin-egkataleipsi/
-  title: 'Οταν το σχολείο «χάνεται»: Η αόρατη πορεία προς την εγκατάλειψη'
+  title_sha256: 4a4e952d87ad2549cd2ef4601c4851a7d317ec11128970cd11feed0548e45730
   text_sha256: b0295cb41896e5f587f95a402fdb72c3aa29e334a958baa7498df033c58fc034
 - id: gr-efsyn-website:3c5ca44096c9
   source_id: gr-efsyn-website
@@ -324,7 +324,7 @@ documents:
   date: '2026-04-21'
   genre: opinion
   url: https://www.efsyn.gr/stiles/apopseis/509004_i-apohi-toys-dynamonei-i-symmetohi-toys-anatrepei/
-  title: Η αποχή τούς δυναμώνει, η συμμετοχή τούς ανατρέπει
+  title_sha256: ed0a0d3a3091a527a3d77ffd12daaf455f597e0ef574bc7bdff71a171a8885eb
   text_sha256: 5d9033aaf487b007017764ba8e6875d11196b7abbe537dfe497cbcf49f14bc52
 - id: gr-efsyn-website:0d2845df3550
   source_id: gr-efsyn-website
@@ -333,7 +333,7 @@ documents:
   date: '2026-03-11'
   genre: opinion
   url: https://www.efsyn.gr/stiles/apopseis/503759_giati-den-paraggelnoyme-antipolemiko-kinima/
-  title: Γιατί δεν «παραγγέλνουμε» αντιπολεμικό κίνημα
+  title_sha256: 2880f473bf6ef2b6363a8b955c190b439c0cf68887c1b8722127b9d4b5ff3c12
   text_sha256: 0330a497a80fcf0c9b6d407689bd188303d5bcd6e822051ca812cc41c9bcc741
 - id: gr-efsyn-website:07571a813487
   source_id: gr-efsyn-website
@@ -342,7 +342,7 @@ documents:
   date: '2026-11-18'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1512877/elovia-prosopa/
-  title: Ελόβια πρόσωπα
+  title_sha256: 00891d091dbf8ce11560e3bc179fbe5e6dcf9c9735e1360e8824420a298d6ed8
   text_sha256: a690fc6365147c04ac6c81b89ad31ff983121c7e98e9db478a537d7637d7ad2e
 - id: gr-efsyn-website:39677497cdb8
   source_id: gr-efsyn-website
@@ -351,7 +351,7 @@ documents:
   date: '2026-10-15'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1489030/to-pano-heri/
-  title: Το πάνω χέρι!
+  title_sha256: 033ec754df04f29e5ee727363f1983bab7a6bea86037968e0d7f04e8a9212fbd
   text_sha256: 2db8f489dfca48cef33be1392d15f14e28859751e144cda8a4933dc81f556245
 - id: gr-efsyn-website:122b87a29e27
   source_id: gr-efsyn-website
@@ -360,7 +360,7 @@ documents:
   date: '2026-09-07'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1462379/oikonomiki-politiki-rekor-apokliseon-flyaria-sygklisis/
-  title: 'Οικονομική πολιτική: Ρεκόρ αποκλίσεων, φλυαρία σύγκλισης'
+  title_sha256: 80e1560560264b780dd50a2fedccde29d478c97c5863bd7a2c4d5f428a5dc410
   text_sha256: d7025219efa4532690e6d4542bb633d2455198437230f2a61d75774906f05499
 - id: gr-efsyn-website:10ede94612ce
   source_id: gr-efsyn-website
@@ -369,7 +369,7 @@ documents:
   date: '2026-07-29'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1437865/therines-politikes-ekptoseis/
-  title: Θερινές πολιτικές εκπτώσεις
+  title_sha256: cf2016bf417ea8bfe26ee6a053065a38d036f1f6d70ee67d0c94a15cab03f5c6
   text_sha256: a894254cb929660d00bf1e4f940d3aab1a8508f3de845146b15d10a7933420e2
 - id: gr-efsyn-website:09c5f23f4d80
   source_id: gr-efsyn-website
@@ -378,7 +378,7 @@ documents:
   date: '2026-06-24'
   genre: opinion
   url: https://www.efsyn.gr/stiles/1412807/ap-ta-psila-sta-hamila/
-  title: Απ&#8217; τα ψηλά στα χαμηλά
+  title_sha256: 9a8c34d9dfb530c4fcf2b4694364e9e8507d95a63498dc3f9c5a1b699ba952ac
   text_sha256: 798b2e298467f43df99a66ed3c67dbcc423e5825de400114e6008cbf30c49e02
 - id: gb-guardian-website:2b7cd1ebb742
   source_id: gb-guardian-website
@@ -387,8 +387,7 @@ documents:
   date: '2026-11-19'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/nov/19/uk-growth-plan-datacentres-ai-bubble-big-tech
-  title: 'Ram through datacentres no one wants and hope the AI bubble never bursts:
-    that’s the UK’s growth plan'
+  title_sha256: b99be4c8b607fb5b29cf17c75a3debaaed7be475f720a41d4d4332f6e9e45c1b
   text_sha256: edd70ecab3a33bbe4f03365e7e767472c1cc33a7649277397c681fbf4b0350b2
 - id: gb-guardian-website:1ff915718204
   source_id: gb-guardian-website
@@ -397,8 +396,7 @@ documents:
   date: '2026-07-25'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/jul/26/pauline-hanson-media-trump-ntwnfb
-  title: Like Trump, Pauline Hanson plays the media and attacks the media simultaneously.
-    Who’s using who?
+  title_sha256: 171f2d72285e390886cecb6f311088c27eb7cc632633d393542562af430dd229
   text_sha256: 574417758dc3cc8833c807aa39405a0f30aa23acb5d2da31331399be0ddc0624
 - id: gb-guardian-website:2a1bcd72b8f5
   source_id: gb-guardian-website
@@ -407,8 +405,7 @@ documents:
   date: '2026-03-30'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/mar/30/kent-meningitis-britain-post-covid-britain-young-people
-  title: Kent’s meningitis outbreak taught me that post-Covid Britain is not as divided
-    as many feared
+  title_sha256: 3d48f10a29a0aa63617daa2162e09adb459f531b04292cb382604922bf8d6a5c
   text_sha256: e534765d022fa8e06003674220e672a28d001d9c9d15e15abb950cc4f0596b01
 - id: gb-guardian-website:024bf307818b
   source_id: gb-guardian-website
@@ -417,7 +414,7 @@ documents:
   date: '2025-12-03'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2025/dec/03/can-you-be-on-six-figure-income-still-be-considered-poor
-  title: Can you be on a six-figure income and still be considered poor?
+  title_sha256: 6139018208866aa1c13e0c38c78fdd91a1fd1426ab00f910dcc38a38391127eb
   text_sha256: 34c635321f104989db4771d6e1aab6696b76a18c6ce0591e228260fa232b8248
 - id: gb-guardian-website:03eca23baeac
   source_id: gb-guardian-website
@@ -426,8 +423,7 @@ documents:
   date: '2025-08-08'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2025/aug/08/working-from-home-is-already-happening-so-why-are-people-in-victoria-so-mad
-  title: Working from home is already happening. So why are people in Victoria so
-    mad?
+  title_sha256: f4f2b53a52689ce49fa36b0a127dc57afb1791be784fef2e80b7d07bce066f5b
   text_sha256: 2ef842e159571bde92f6cde06dd4ae1be5ee5b01f71e54e631979d043667a9d2
 - id: gb-guardian-website:1017fa140643
   source_id: gb-guardian-website
@@ -436,8 +432,7 @@ documents:
   date: '2025-04-13'
   genre: editorial
   url: https://www.theguardian.com/commentisfree/2025/apr/13/the-guardian-view-on-neighbourhood-police-bobbies-on-the-beat-cant-do-everything
-  title: 'The Guardian view on neighbourhood police: bobbies on the beat can’t do
-    everything'
+  title_sha256: 1de5762c601c42688f23c82a6f0c744d027f92ae2658ea53770bf8fd66e82f03
   text_sha256: df1c0ca99223c1c5509ba42cbc2387297f5ddd49949ad950bbae8ad8bd5623ef
 - id: gb-guardian-website:1d29c8669836
   source_id: gb-guardian-website
@@ -446,8 +441,7 @@ documents:
   date: '2024-12-17'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2024/dec/17/germany-election-olaf-scholz-democracy-europe
-  title: Germany is in a sorry state – and all our leaders can do is yell at each
-    other
+  title_sha256: 6aa8c69e738fa5b4eee4accc83fd393459007b95b283599b0558206c80f29150
   text_sha256: 1ca09837b7b239dd0cd8012abd6d7a3809e5fd636061bbdfb7130d940dd124e9
 - id: gb-guardian-website:024161f59335
   source_id: gb-guardian-website
@@ -456,8 +450,7 @@ documents:
   date: '2024-04-27'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2024/apr/27/celebrity-politician-rape-czech-women-dominik-feri
-  title: A celebrity politician has been jailed for rape. Will Czech women be listened
-    to now?
+  title_sha256: 155811c8f91b4f90c722df8e60dae86b04a7ea12d1fc74b2817de541bd2a020e
   text_sha256: c94c7eefb423198b79c70e33f3955684032bd14f59cb49c03296338649a28195
 - id: gb-guardian-website:1de5d1b0ec8c
   source_id: gb-guardian-website
@@ -466,8 +459,7 @@ documents:
   date: '2024-01-01'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2024/jan/01/channel-tunnel-uk-european-30th-anniversary
-  title: The Channel tunnel should have made the UK truly European, but didn’t. We
-    must get back on track
+  title_sha256: c6a17c7dcc7b92842b81ac5ef63a3a452ab83a8f9cee66e50086b74ea487a46b
   text_sha256: ff10a05146339f73d6115296c0f463254b868c483b0bd0383a51c3aa1d79810a
 - id: gb-guardian-website:4c9a622b7080
   source_id: gb-guardian-website
@@ -476,8 +468,7 @@ documents:
   date: '2026-11-19'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/nov/19/andy-burnham-risks-over-selling-his-big-brussels-summit-what-happens-if-he-under-delivers
-  title: Andy Burnham risks over-selling his big Brussels summit. What happens if
-    he under-delivers?
+  title_sha256: f70258110d917c1886c88b42a51506bbb1b632e61fa93965cdef3a924950cdd5
   text_sha256: 316b97ddde40f5995e65497c5ac2f2c7cbb5d40f88efbe916c4b46bba89ffe5f
 - id: gb-guardian-website:537a1193e110
   source_id: gb-guardian-website
@@ -486,7 +477,7 @@ documents:
   date: '2026-07-25'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/jul/25/staff-turnover-trump-second-term
-  title: Staff turnover is rampant under Trump 2.0 – with insidious results
+  title_sha256: 74c776353a9bb19063264d30426cfb47ee13171a2b82af9789a514a96b6440f0
   text_sha256: a6956b0d6b7c9b96f761240c7d1cdb3c01596131e9362f28fac9b97216cef663
 - id: gb-guardian-website:3c4fadaed4e6
   source_id: gb-guardian-website
@@ -495,8 +486,7 @@ documents:
   date: '2026-03-30'
   genre: opinion
   url: https://www.theguardian.com/commentisfree/2026/mar/30/donald-trump-leader-of-the-free-world-president-safeguards
-  title: Never mind leading the free world, if Donald Trump were your ageing father,
-    when would you take away his car keys?
+  title_sha256: c6e806e0147e81c0f722d39ae19c27cd91010c374e36d936487c3d37e098470e
   text_sha256: b7be4480bc4e22e840659292c8322f75f97eedcf852dfaed4677566d54a19724
 - id: gb-guardian-website:231cf2bce85e
   source_id: gb-guardian-website
@@ -505,8 +495,7 @@ documents:
   date: '2025-12-03'
   genre: editorial
   url: https://www.theguardian.com/commentisfree/2025/dec/03/the-guardian-view-on-us-russia-talks-on-ukraine-a-warning-to-europe-to-move-faster-on-security-cooperation
-  title: 'The Guardian view on US-Russia talks on Ukraine: a warning to Europe to
-    move faster on security cooperation'
+  title_sha256: d92f66db7399144e1d018255abd60051376b0c53b4b06289645e2b350d7644a9
   text_sha256: 26d5c03ca13439c22475d6b4f4b6e78cc6bc771fa011ca737e08039c8f655248
 - id: gb-guardian-website:17d99e26addf
   source_id: gb-guardian-website
@@ -515,8 +504,7 @@ documents:
   date: '2025-08-08'
   genre: editorial
   url: https://www.theguardian.com/commentisfree/2025/aug/08/the-guardian-view-on-israels-gaza-takeover-plan-a-destructive-act-that-must-be-stopped
-  title: 'The Guardian view on Israel’s Gaza takeover plan: a destructive act that
-    must be stopped'
+  title_sha256: b3a64e3cf5e7299a31400209b570ea10ecbae2ece3d1640872c6ccef05932bf4
   text_sha256: 057e53240a09c15aad42f7d2619f3f3f1c8a95839a07de339e3c4d1550629053
 - id: gb-evening-standard:e73db8c582f6
   source_id: gb-evening-standard
@@ -525,7 +513,7 @@ documents:
   date: '2026-02-02'
   genre: opinion
   url: https://www.standard.co.uk/comment/jeffrey-epstein-devil-ghislaine-maxwell-b1269250.html
-  title: Was Jeffrey Epstein the Devil himself? Maybe, one of his imps
+  title_sha256: a8d75e1cbec0d511cdb321d12ffe7b46d0c3ec4ba199906a3d0519e0ccb1e0c7
   text_sha256: 719c975790558c6270cc2d027431f2ed02e8d07bbd6e7a892af6e5b70000f065
 - id: gb-evening-standard:2b180a6364c0
   source_id: gb-evening-standard
@@ -534,7 +522,7 @@ documents:
   date: '2025-11-21'
   genre: opinion
   url: https://www.standard.co.uk/comment/tube-etiquette-children-seat-why-stand-underground-b1259177.html
-  title: Why do parents let their children sit on the Tube while adults stand?
+  title_sha256: e7b7ae4738624ab6bb62be65695a72e81991167ec4782d944a03c1ca39f5b1c6
   text_sha256: 2f517d0deae9e7ae1f398a669b0462bbfd17f22ce6a8b852394727330eb31fd6
 - id: gb-evening-standard:2020adba9691
   source_id: gb-evening-standard
@@ -543,7 +531,7 @@ documents:
   date: '2025-10-16'
   genre: opinion
   url: https://www.standard.co.uk/comment/gen-z-work-ethic-from-home-outfits-b1213753.html
-  title: 'Gen lay-Z: Why my generation doesn''t care about work'
+  title_sha256: e389fd9a7d1bcedb542bde0ae08dde6a468103c079b47040c12a983bf6a9a46d
   text_sha256: c9e18ad5b525dd5ec1cf418074580c1513d691f9d8f5b9ddde38c9e078eb60d2
 - id: gb-evening-standard:63c14452418c
   source_id: gb-evening-standard
@@ -552,7 +540,7 @@ documents:
   date: '2025-08-04'
   genre: opinion
   url: https://www.standard.co.uk/comment/national-gallery-curate-citizens-assembly-b1241445.html
-  title: Citizens’ Assemblies are no way to run the National Gallery
+  title_sha256: 66f99e65ff658e850be56f38117c55e64f6ae20496e2aa9b17d8a92f3e011548
   text_sha256: 77a8d2a0409166ecf067b7c56270f76f8a8ec62321489d222c7efdf3f805d852
 - id: gb-evening-standard:e04d03739a77
   source_id: gb-evening-standard
@@ -561,8 +549,7 @@ documents:
   date: '2025-05-23'
   genre: opinion
   url: https://www.standard.co.uk/comment/dogs-vs-babies-falling-birthrates-b1229436.html
-  title: Is a dog a replacement for a child? You'd have to be mad to think so — but
-    that isn't stopping some
+  title_sha256: aec533e3ff4487c6d6107b8a7861ef0a7e34ef79b6135f4f444b301d251d3846
   text_sha256: 16baf0ae43f5a7eb1d961d26c6bc583de8a071b084809476ac97aa138856776c
 - id: gb-evening-standard:146b34a30f2a
   source_id: gb-evening-standard
@@ -571,8 +558,7 @@ documents:
   date: '2025-04-17'
   genre: opinion
   url: https://www.standard.co.uk/comment/surname-marriage-man-woman-husband-b1222865.html
-  title: Name-blending and double-barrelling — post-marriage surnames are getting
-    badly out of control
+  title_sha256: 3daa813360f8006b2663f4ba8890fc838d5f00843135d3a9f4661491a5a33332
   text_sha256: fd120aa00e1cf8956a0e2a65a067d6dfcb9da8d7e8a4ed6c00ee92aa02b71418
 - id: gb-evening-standard:2b13160067c7
   source_id: gb-evening-standard
@@ -581,8 +567,7 @@ documents:
   date: '2025-03-12'
   genre: opinion
   url: https://www.standard.co.uk/comment/will-russia-accept-ukraine-ceasefire-putin-negotiation-history-b1216183.html
-  title: All eyes on Vladimir Putin for the Ukrainian ceasefire — and this is what
-    he's seeking
+  title_sha256: ae6b4d2eb09b85ae200e471048a3b5d09eb6fcec09493ee217ed96025b8e8d4d
   text_sha256: 4795c4c2bfacd0c2f86689a17c9c7ddf5cf57b5817f3f1014584a4bc1aa635e8
 - id: gb-evening-standard:29fa2a709974
   source_id: gb-evening-standard
@@ -591,8 +576,7 @@ documents:
   date: '2025-02-03'
   genre: opinion
   url: https://www.standard.co.uk/comment/grammys-2025-kanye-west-bianca-censori-naked-dress-boring-b1208720.html
-  title: 'Grammys 2025: Bianca Censori''s naked dress was truly outrageous — but not
-    for the reasons you think'
+  title_sha256: 2daa4a3fe1be5f79b776047945fd6832fdf8c03d281b33ff48e3ce382ab34f31
   text_sha256: 94013914b92d02c538d33435d9cc106b3c49427b141ff0da9ce0a18ddc7be8ab
 - id: gb-evening-standard:0c6891e17d51
   source_id: gb-evening-standard
@@ -601,8 +585,7 @@ documents:
   date: '2024-10-17'
   genre: opinion
   url: https://www.standard.co.uk/comment/nigel-farage-donald-trump-us-presidential-election-win-b1188425.html
-  title: 'Nigel Farage: Donald Trump will win the election — and he wants a deal with
-    Britain'
+  title_sha256: ebf9c695fe0801a8d648d1a3de7199fbe016381519a498b9c5c5d389e905c197
   text_sha256: 2355e24ee3e4625f20e25ecb85d8ea32607410e8175d1cb625913f03cc1b44e9
 - id: gb-evening-standard:7004f2cddfb3
   source_id: gb-evening-standard
@@ -611,7 +594,7 @@ documents:
   date: '2024-09-11'
   genre: opinion
   url: https://www.standard.co.uk/comment/princess-of-wales-video-cancer-kate-middleton-b1181449.html
-  title: The Princess of Wales's video actually fits in a long royal tradition
+  title_sha256: 672b6feddca4d3ea41985d58cba2224ca78d7f2416174aeb1fa0ad254364e75d
   text_sha256: 882297e87ec741dde477951dadce40fc0ddbf6734cfb6ab7cb59224a2a33de3b
 - id: gb-evening-standard:56df64ed2f46
   source_id: gb-evening-standard
@@ -620,8 +603,7 @@ documents:
   date: '2024-08-06'
   genre: opinion
   url: https://www.standard.co.uk/comment/olympics-paris-2024-simone-biles-imane-khelif-adam-peaty-andy-murray-b1174979.html
-  title: 'Olympics 2024: Who would sacrifice it all just for a swimming race? I am
-    awe-struck by these athletes'
+  title_sha256: c574e919977558e3fd2b4fa26931ff7b86ad0ae8ffd1eb07848cc1bcde9e95c6
   text_sha256: c36af047f1b0a0cda33181eccc18529637f4540730fb400a556a1aff1176d5f1
 - id: gb-evening-standard:23834f262189
   source_id: gb-evening-standard
@@ -630,8 +612,7 @@ documents:
   date: '2024-07-01'
   genre: opinion
   url: https://www.standard.co.uk/comment/paddington-cube-london-development-dylan-jones-b1167878.html
-  title: This beautiful building could well gentrify Paddington — and the area needs
-    it
+  title_sha256: 0e5c40d462ea704ec6f5649aab721b2641cfaef1907e2d76814ee48cfcb293d8
   text_sha256: 0d3b9d0a0f70168d3945f12f9a535fe06265e502f9ef13f97865c2f9f13170dc
 - id: gb-evening-standard:93f0edfadb26
   source_id: gb-evening-standard
@@ -640,8 +621,7 @@ documents:
   date: '2024-04-19'
   genre: opinion
   url: https://www.standard.co.uk/comment/london-marathon-2024-running-training-b1151832.html
-  title: 'London Marathon 2024: I knew training for the marathon would change me,
-    but not like this'
+  title_sha256: 1d95e4da61dedcc1996dfc8367e5db4ce908ac6854f007dfcfadf283702b934b
   text_sha256: d8827734a824b8fd45d2006d40ab152d9264b6c998c6d5a9506dbf38c5c78ea7
 - id: gb-conversation-uk:06f6143c7831
   source_id: gb-conversation-uk
@@ -650,8 +630,7 @@ documents:
   date: '2026-11-13'
   genre: opinion
   url: https://theconversation.com/cathy-come-home-at-60-many-of-the-housing-issues-the-film-exposed-still-exist-today-293865
-  title: 'Cathy Come Home at 60: many of the housing issues the film exposed still
-    exist today'
+  title_sha256: a8c85580b3ccdc7ee94192f463557228fc33951395874feb21f8a45bf8722644
   text_sha256: 181633407f42095d89c6f7f23ec3ca6ad4937e218666afb79ace46fef3225413
 - id: gb-conversation-uk:032455bceab2
   source_id: gb-conversation-uk
@@ -660,8 +639,7 @@ documents:
   date: '2026-09-22'
   genre: opinion
   url: https://theconversation.com/grand-theft-auto-players-are-voting-debating-protesting-and-making-political-decisions-292562
-  title: 'Grand Theft Auto: players are voting, debating, protesting and making political
-    decisions'
+  title_sha256: 5efd7e3ef7fcb0096ae715e0e9971d70373c99eee3a41761ec98876079fd42b2
   text_sha256: c07acc8ef349e065ba2bff7f12db7ffb390657489eb5acfd5b9f4ed2b6c700a7
 - id: gb-conversation-uk:02cf096fcab3
   source_id: gb-conversation-uk
@@ -670,8 +648,7 @@ documents:
   date: '2026-08-19'
   genre: opinion
   url: https://theconversation.com/zero-hours-contracts-are-about-to-change-in-the-uk-how-managers-respond-will-be-crucial-290025
-  title: Zero‑hours contracts are about to change in the UK ‑ how managers respond
-    will be crucial
+  title_sha256: 1949e453332d7f9eb136d8e998c185f76af1c77e101b3fea3456acadad825af9
   text_sha256: a80e020c24893d27915aaa545dd81dba1b81c648828b1413c4cf473db699101e
 - id: gb-conversation-uk:0780c02aca39
   source_id: gb-conversation-uk
@@ -680,8 +657,7 @@ documents:
   date: '2026-07-07'
   genre: opinion
   url: https://theconversation.com/fordingbridge-rape-sentences-increased-how-does-unduly-lenient-sentence-review-work-286856
-  title: 'Fordingbridge rape sentences increased: how does unduly lenient sentence
-    review work?'
+  title_sha256: ffba2c22fd27d2fb889a9752c4e0030d3a31fcd857d712b062e8d4bea6100798
   text_sha256: f98a66c87acb7d7f29fc0433339737ff1dc38864ae7781fe252a2a3a9bf1bf77
 - id: gb-conversation-uk:093caacf096d
   source_id: gb-conversation-uk
@@ -690,7 +666,7 @@ documents:
   date: '2026-05-13'
   genre: opinion
   url: https://theconversation.com/kings-speech-much-needed-water-industry-reforms-do-not-go-far-enough-282866
-  title: 'King’s speech: much‑needed water industry reforms do not go far enough'
+  title_sha256: 055c148d236fef6aa738aef6503f82e6b999cdbbad5d80c4af5c760050b50a02
   text_sha256: 39ff97b78bdad23e52e1f38dbcc8935f0dfbbc49dddd08b9173c8df84c91e2bd
 - id: gb-conversation-uk:0ba007f100eb
   source_id: gb-conversation-uk
@@ -699,8 +675,7 @@ documents:
   date: '2026-03-20'
   genre: opinion
   url: https://theconversation.com/nigel-farage-attacks-yougov-over-low-polling-figures-but-reforms-support-is-dropping-across-the-board-278693
-  title: Nigel Farage attacks YouGov over low polling figures – but Reform’s support
-    is dropping across the board
+  title_sha256: 945d9c5b9661fd5b8eabfd0486405c489b82ac06a67aaeea99739119c05eadd5
   text_sha256: 35842acf9271014ec767334213e7eed885a244f82e836ddf0a971b90e7921166
 - id: gb-conversation-uk:216666e64f69
   source_id: gb-conversation-uk
@@ -709,7 +684,7 @@ documents:
   date: '2026-02-09'
   genre: opinion
   url: https://theconversation.com/how-much-longer-can-keir-starmer-survive-275488
-  title: How much longer can Keir Starmer survive?
+  title_sha256: 07206aaa03f745b335a7a4a06185f7be6fd83d0f5e883d320391bf0f3d24047d
   text_sha256: b585908be632ed782e1b2353a52909a14f85da7d36a3a9dee2f5f8c705fd03c8
 - id: gb-conversation-uk:01730e7206fd
   source_id: gb-conversation-uk
@@ -718,8 +693,7 @@ documents:
   date: '2025-12-12'
   genre: opinion
   url: https://theconversation.com/what-looks-like-overdiagnosis-is-really-a-system-struggling-to-provide-continuous-care-271667
-  title: What looks like ‘overdiagnosis’ is really a system struggling to provide
-    continuous care
+  title_sha256: 8b09ec4abf7b8d7cecc70bd082b4a4497bb2926a0e012feced4bfa9e9a8062cd
   text_sha256: f136c0ac8d239e7154d7e622e1973e54d32c774739d48991650da1e4f8e2919b
 - id: gb-conversation-uk:12890cec9e2d
   source_id: gb-conversation-uk
@@ -728,7 +702,7 @@ documents:
   date: '2026-11-09'
   genre: opinion
   url: https://theconversation.com/the-surprising-origins-of-denmarks-reputation-for-open-mindedness-281583
-  title: The surprising origins of Denmark’s reputation for open‑mindedness
+  title_sha256: ba21f2aeaf086131ebe4764c8600de86f6d905792f6c7a0827adb08f6e12f3e2
   text_sha256: 0f83ebec07c12dbf6f9a8035679b117d0271c29b77dd4f8dece821788fb11c67
 - id: gb-conversation-uk:05760c441530
   source_id: gb-conversation-uk
@@ -737,7 +711,7 @@ documents:
   date: '2026-10-01'
   genre: opinion
   url: https://theconversation.com/the-uks-pension-triple-lock-has-done-its-job-and-needs-to-be-retired-293269
-  title: The UK’s pension triple lock has done its job and needs to be retired
+  title_sha256: 83939765ec1095304f89d8a99adcc8babcf943912070fbd7d58f6f5ca99d2762
   text_sha256: c0514698861cee9db86affd210b08ea6376bdd5f194463839cfdbc55af71c33f
 - id: gb-conversation-uk:06d86e505c94
   source_id: gb-conversation-uk
@@ -746,8 +720,7 @@ documents:
   date: '2026-08-27'
   genre: opinion
   url: https://theconversation.com/andy-burnham-the-social-chameleon-why-a-leader-with-different-personas-can-still-be-authentic-290486
-  title: Andy Burnham the social chameleon? Why a leader with different personas can
-    still be authentic
+  title_sha256: b46778f22b7261759d86bdfb9f39145b8e97e8f19b2d0fe99c37341070bf8eac
   text_sha256: db9918ff519972ca0a5030e0f45e661d789d59e373b57f99a2ca0796ecf8fd49
 - id: gb-conversation-uk:0d3c11c46562
   source_id: gb-conversation-uk
@@ -756,7 +729,7 @@ documents:
   date: '2026-06-24'
   genre: opinion
   url: https://theconversation.com/the-cost-of-living-is-soaring-why-not-try-moving-in-together-284353
-  title: The cost of living is soaring – why not try moving in together?
+  title_sha256: ee8522428738f76fa819c24815620e71346cd27b106c2dc00158a7e2a9fb06c4
   text_sha256: b1115576545ed5af41f38e71077b48ab7156d61956c4b3cab957918b555280d5
 - id: gb-conversation-uk:0b52313a8730
   source_id: gb-conversation-uk
@@ -765,6 +738,5 @@ documents:
   date: '2026-05-13'
   genre: opinion
   url: https://theconversation.com/state-opening-of-parliament-2026-experts-on-plans-for-cost-of-living-eu-ties-tourist-tax-and-more-282895
-  title: 'State opening of parliament 2026: experts on plans for cost of living, EU
-    ties, tourist tax and more'
+  title_sha256: c867542b93e4a300e4aa8b5267b15fe7c9c84405e46897f106b38c552d2e3d75
   text_sha256: 23d5432445975f3d79dbb134735715e0a23242d801d4c2a0267011f506a2cac4

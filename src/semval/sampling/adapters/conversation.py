@@ -6,7 +6,7 @@ from datetime import date
 
 from bs4 import BeautifulSoup
 
-from semval.sampling.article import Genre, OutOfScope, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED, Genre, OutOfScope, ParsedArticle
 from semval.sampling.fetch import PoliteFetcher
 from semval.sampling.listing import Item, paged_spread
 from semval.sampling.parsing import iso_date, meta, paragraphs, soup, text_of
@@ -64,6 +64,6 @@ class Conversation:
         return ParsedArticle(
             title=text_of(page, "h1") or "",
             date=iso_date(stamp.get("datetime") if stamp else None),
-            genre=Genre.OPINION if _ARTICLE.match(url) else "other",
+            genre=Genre.OPINION if _ARTICLE.match(url) else NOT_SAMPLED,
             text=paragraphs(page.select_one('[itemprop="articleBody"]'), "p", drop="figure"),
         )

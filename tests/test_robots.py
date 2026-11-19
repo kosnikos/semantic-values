@@ -42,5 +42,11 @@ def test_our_group_replaces_star_group() -> None:
     assert rules.can_fetch("https://a.test/discussion/x")  # the * group does not apply
 
 
+def test_leading_bom_is_ignored() -> None:
+    rules = parse_robots("﻿User-agent: *\nDisallow: /private/\n", UA)
+    assert not rules.can_fetch("https://a.test/private/x")
+    assert rules.can_fetch("https://a.test/public/x")
+
+
 def test_empty_disallow_allows_all() -> None:
     assert parse_robots("User-agent: *\nDisallow:\n", UA).can_fetch("https://a.test/x")

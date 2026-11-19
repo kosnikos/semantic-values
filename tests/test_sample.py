@@ -1,6 +1,7 @@
 """collect_sample with a fake adapter and a fake transport (no network)."""
 
 import hashlib
+import json
 from collections.abc import Iterable
 from datetime import date
 from pathlib import Path
@@ -10,8 +11,9 @@ import yaml
 
 from conftest import make_source
 from semval.sampling.adapters.base import Genre, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED
 from semval.sampling.fetch import FetchOutcome, PoliteFetcher, Response
-from semval.sampling.sample import collect_sample, doc_id_for, doc_text_path
+from semval.sampling.sample import collect_sample, doc_id_for, doc_meta_path, doc_text_path
 from semval.units import Document
 
 SINCE, UNTIL = date(2024, 1, 1), date(2026, 11, 19)
@@ -36,7 +38,7 @@ class FakeAdapter:
     def parse(self, url: str, html: str) -> ParsedArticle:
         path = url.rsplit("/", 1)[1]
         day = date(2020, 1, 1) if path == "old" else date(2025, 3, 4)
-        genre = "news" if path == "news" else Genre.OPINION
+        genre = NOT_SAMPLED if path == "news" else Genre.OPINION
         return ParsedArticle(title=f"Title {path}", date=day, genre=genre, text=BODY + path)
 
 
@@ -128,6 +130,14 @@ def test_sample_yaml_has_no_text(tmp_path: Path) -> None:
         assert doc.text_sha256 == hashlib.sha256(text.encode("utf-8")).hexdigest()
     assert [d.language for d in docs if d.country == "GR"] == ["el"] * 3
 
+    # Titles are not committed (spec 5.5): only a hash; the title stays in the raw cache.
+    assert "Title a" not in raw
+    assert all("title" not in d for d in data["documents"])
+    for doc in docs:
+        meta = json.loads(doc_meta_path(kw["raw_dir"], doc.id).read_text(encoding="utf-8"))
+        assert meta["title"].startswith("Title a")
+        assert doc.title_sha256 == hashlib.sha256(meta["title"].encode("utf-8")).hexdigest()
+
     stats = manifest.stats["gr-a"]
     assert stats[FetchOutcome.NOT_FREE] == 1
     assert stats["out_of_range"] == 1
@@ -192,3 +202,15 @@ def test_gives_up_after_attempt_cap(tmp_path: Path) -> None:
     )
     assert manifest.documents == []
     assert manifest.stats["gr-a"] == {"not_free": 6}
+
+
+def test_committed_samples_have_no_titles() -> None:
+    """Every committed sample file holds Document references without titles."""
+    samples = Path(__file__).resolve().parents[1] / "data" / "samples"
+    files = sorted(samples.glob("*.yaml"))
+    assert files
+    for path in files:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        for d in data["documents"]:
+            assert "title" not in d, (path.name, d["id"])
+            assert Document(**d).title_sha256, (path.name, d["id"])

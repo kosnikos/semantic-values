@@ -5,12 +5,14 @@ from pathlib import Path
 import pytest
 
 from semval.sampling.fetch import (
+    MIN_DELAY_FLOOR_S,
     FetchOutcome,
     PoliteFetcher,
     RequestBudgetExceeded,
     Response,
     is_not_free,
 )
+from semval.sampling.jsonld import json_ld_blocks
 
 UA = "semval-research/0.1 (+https://example.org/semval)"
 FREE_PAGE = (
@@ -22,6 +24,9 @@ PAID_PAGE = (
     '<html><head><script type="application/ld+json">'
     '{"@graph": [{"@type": "WebPage"}, {"@type": "NewsArticle", "isAccessibleForFree": false}]}'
     "</script></head><body><p>Full text that is still behind a paywall.</p></body></html>"
+)
+CONTROL_CHAR_PAGE = (
+    '<script type="application/ld+json">{"headline": "a\tb", "isAccessibleForFree": false}</script>'
 )
 CHALLENGE_PAGE = "<html><title>Just a moment...</title><div id='cf-chl-widget'></div></html>"
 
@@ -223,8 +228,112 @@ def test_request_budget(tmp_path: Path) -> None:
         (PAID_PAGE, True),
         ('<script type="application/ld+json">[{"isAccessibleForFree": "False"}]</script>', True),
         ('<script type="application/ld+json">{not json</script>', False),
+        # A raw tab inside a string: invalid for strict json.loads.
+        (CONTROL_CHAR_PAGE, True),
+        # Unquoted and single-quoted type attributes.
+        ('<script type=application/ld+json>{"isAccessibleForFree": false}</script>', True),
+        ("<script type='application/ld+json'>{\"isAccessibleForFree\": false}</script>", True),
+        # Broken JSON: the regex backstop still catches the flag.
+        ('<script type="application/ld+json">{"isAccessibleForFree": false, oops</script>', True),
+        ('<script type="application/ld+json">{"isAccessibleForFree":"False",}</script>', True),
         ("<p>No JSON-LD at all.</p>", False),
     ],
 )
 def test_is_not_free(page: str, expected: bool) -> None:
     assert is_not_free(page) is expected
+
+
+@pytest.mark.parametrize("status", [401, 403, 429, 500, 503, 0])
+def test_unusable_robots_txt_means_disallow_all(tmp_path: Path, status: int) -> None:
+    fetcher, transport = make(
+        {
+            "https://a.test/robots.txt": Response(status, "slow down"),
+            "https://a.test/x": Response(200, FREE_PAGE),
+        },
+        tmp_path,
+    )
+    assert fetcher.get("https://a.test/x").outcome is FetchOutcome.ROBOTS_DISALLOWED
+    assert transport.calls == ["https://a.test/robots.txt"]
+
+
+def test_missing_robots_txt_allows_all(tmp_path: Path) -> None:
+    fetcher, _ = make({"https://a.test/x": Response(200, FREE_PAGE)}, tmp_path)
+    assert fetcher.get("https://a.test/x").outcome is FetchOutcome.OK
+
+
+def test_redirect_target_obeys_its_own_robots_and_delay(tmp_path: Path) -> None:
+    clock = FakeClock()
+    fetcher, transport = make(
+        {
+            "https://a.test/robots.txt": robots("User-agent: *\nDisallow:\n"),
+            "https://a.test/moved": Response(301, "", "https://b.test/private/page"),
+            "https://a.test/local": Response(302, "", "/new-home"),
+            "https://a.test/new-home": Response(200, FREE_PAGE),
+            "https://b.test/robots.txt": robots("User-agent: *\nDisallow: /private/\n"),
+            "https://b.test/private/page": Response(200, FREE_PAGE),
+        },
+        tmp_path,
+        clock=clock,
+    )
+    assert fetcher.get("https://a.test/moved").outcome is FetchOutcome.ROBOTS_DISALLOWED
+    assert "https://b.test/private/page" not in transport.calls
+    assert "https://b.test/robots.txt" in transport.calls
+
+    result = fetcher.get("https://a.test/local")
+    assert result.outcome is FetchOutcome.OK
+    assert result.html == FREE_PAGE
+    times = dict(zip(transport.calls, transport.request_times, strict=True))
+    assert times["https://a.test/new-home"] - times["https://a.test/local"] >= 5
+    # Cached under the URL asked for.
+    assert fetcher.get("https://a.test/local").html == FREE_PAGE
+    assert transport.calls.count("https://a.test/new-home") == 1
+
+
+def test_redirects_are_capped(tmp_path: Path) -> None:
+    pages = {"https://a.test/robots.txt": robots("User-agent: *\nDisallow:\n")}
+    for i in range(10):
+        pages[f"https://a.test/{i}"] = Response(302, "", f"/{i + 1}")
+    fetcher, transport = make(pages, tmp_path)
+    result = fetcher.get("https://a.test/0")
+    assert result.outcome is FetchOutcome.HTTP_ERROR
+    assert result.status == 302
+    assert transport.calls[1:] == [f"https://a.test/{i}" for i in range(6)]  # 1 + 5 redirects
+
+
+def test_robots_txt_redirect_is_followed(tmp_path: Path) -> None:
+    fetcher, transport = make(
+        {
+            "https://a.test/robots.txt": Response(301, "", "https://www.a.test/robots.txt"),
+            "https://www.a.test/robots.txt": robots("User-agent: *\nDisallow: /\n"),
+            "https://a.test/x": Response(200, FREE_PAGE),
+        },
+        tmp_path,
+    )
+    assert fetcher.get("https://a.test/x").outcome is FetchOutcome.ROBOTS_DISALLOWED
+    assert "https://a.test/x" not in transport.calls
+
+
+def test_min_delay_floor_holds(tmp_path: Path) -> None:
+    clock = FakeClock()
+    fetcher, transport = make(
+        {
+            "https://a.test/robots.txt": robots("User-agent: *\nDisallow:\n"),
+            "https://a.test/1": Response(200, FREE_PAGE),
+            "https://a.test/2": Response(200, FREE_PAGE),
+        },
+        tmp_path,
+        clock=clock,
+        min_delay_s=0.1,
+    )
+    assert fetcher.min_delay_s == MIN_DELAY_FLOOR_S
+    fetcher.get("https://a.test/1")
+    fetcher.get("https://a.test/2")
+    gaps = [b - a for a, b in zip(transport.request_times, transport.request_times[1:])]
+    assert min(gaps) >= MIN_DELAY_FLOOR_S
+    below = PoliteFetcher(UA, min_delay_s=0.1, _allow_below_floor_for_tests=True)
+    assert below.min_delay_s == 0.1
+
+
+def test_json_ld_tolerates_raw_control_characters() -> None:
+    assert "\t" in CONTROL_CHAR_PAGE  # a real tab character, not an escape
+    assert json_ld_blocks(CONTROL_CHAR_PAGE) == [{"headline": "a\tb", "isAccessibleForFree": False}]

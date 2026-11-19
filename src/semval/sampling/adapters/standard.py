@@ -6,7 +6,7 @@ from datetime import date
 
 from bs4 import BeautifulSoup
 
-from semval.sampling.article import Genre, ParsedArticle
+from semval.sampling.article import NOT_SAMPLED, Genre, NotSampled, ParsedArticle
 from semval.sampling.fetch import PoliteFetcher
 from semval.sampling.jsonld import find_typed
 from semval.sampling.listing import dated_spread
@@ -44,7 +44,7 @@ class Standard:
         art = find_typed(html, {"NewsArticle", "OpinionNewsArticle", "Article"}) or {}
         title = text_of(page, "h1") or clean(str(art.get("headline") or ""))
         if not _ARTICLE.match(url.removeprefix(BASE)):
-            genre: str = "other"
+            genre: Genre | NotSampled = NOT_SAMPLED
         else:
             genre = Genre.EDITORIAL if title.startswith(EDITORIAL_PREFIX) else Genre.OPINION
         return ParsedArticle(

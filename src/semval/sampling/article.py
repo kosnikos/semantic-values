@@ -3,10 +3,11 @@
 from dataclasses import dataclass
 from datetime import date
 from enum import StrEnum
+from typing import Final, Literal
 
 
 class Genre(StrEnum):
-    """Genres kept in an opinion sample. Any other genre string means "skip"."""
+    """Genres kept in an opinion sample."""
 
     OPINION = "opinion"
     LETTERS = "letters"
@@ -14,11 +15,16 @@ class Genre(StrEnum):
     EDITORIAL = "editorial"
 
 
+NotSampled = Literal["other"]
+# The genre an adapter gives a page outside the sampled genres (news, sport, cartoons...).
+NOT_SAMPLED: Final[NotSampled] = "other"
+
+
 @dataclass(frozen=True)
 class ParsedArticle:
     title: str
     date: date | None
-    genre: str  # a Genre value to keep the article; anything else is skipped
+    genre: Genre | NotSampled  # NOT_SAMPLED pages are skipped
     text: str
 
 

@@ -570,7 +570,7 @@
   country: GB
   source_type: magazine
   url: https://www.opendemocracy.net/
-  access: free
+  access: partial_paywall
   year_start: 2004
   year_start_basis: observed
   year_end: null
@@ -585,21 +585,31 @@
   per_text_publish_allowed: "yes"
   text_quality: born_digital
   volume_estimate: unknown
-  verified_on: 2026-11-18
+  verified_on: 2026-11-19
   evidence_urls:
     - https://www.opendemocracy.net/
     - https://www.opendemocracy.net/robots.txt
     - https://www.opendemocracy.net/en/clarity-is-more-important-than-money/
     - https://www.opendemocracy.net/en/article-2186jsp/
+    - https://www.opendemocracy.net/tag/uk/page/20/
+    - https://www.opendemocracy.net/is-it-time-to-break-up-the-uk/
+    - https://www.opendemocracy.net/membership/
   notes: >-
-    Sampled article pages (2017 and 2004) carry "Creative Commons Attribution-NonCommercial
-    4.0 International licence" linking creativecommons.org/licenses/by-nc/4.0, so non-
-    commercial reuse is explicitly allowed (scope none). robots.txt only disallows
-    /.ghost/analytics/api/; no AI-crawler blocks. The 2004-10-26 article (/en/article-2186jsp/)
-    is the oldest seen; year_start 2004 from that (the site may go back further). Free, no
-    paywall seen. London-based but international, left-leaning; only part of it is about the
-    UK (filter by section). Did not find a separate terms page (/en/terms-and-conditions/
-    returned 404).
+    2026-11-19: the site now runs on Ghost (migrated around April 2026; URLs moved from /en/
+    to the root) and posts are "Members-only": every card on /tag/uk/page/20/ (Feb 2022
+    archive) is labelled Members-only, and a current article (/is-it-time-to-break-up-the-uk/,
+    2026-11-13) serves a truncated body with Ghost gh-post-upgrade-cta blocks to anonymous
+    readers. /membership/ sells paid tiers (from £5/month) that include "Free access to all
+    articles from our 25 year archive". Whether a free sign-up unlocks posts was not checked;
+    logging in is out of scope for the crawler, so access is partial_paywall (not usable).
+    Earlier notes (2026-11-18): sampled article pages (2017 and 2004) carry "Creative Commons
+    Attribution-NonCommercial 4.0 International licence" linking
+    creativecommons.org/licenses/by-nc/4.0, so non-commercial reuse is explicitly allowed
+    (scope none). robots.txt only disallows /ghost/, /email/, /r/ and similar; no AI-crawler
+    blocks. The 2004-10-26 article (/en/article-2186jsp/) is the oldest seen; year_start 2004
+    from that (the site may go back further). London-based but international, left-leaning;
+    only part of it is about the UK (filter by section). Did not find a separate terms page
+    (/en/terms-and-conditions/ returned 404).
 
 - id: gb-prospect
   name: Prospect magazine (prospectmagazine.co.uk)

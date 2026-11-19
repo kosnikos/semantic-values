@@ -60,6 +60,7 @@ def parse_robots(text: str, user_agent: str) -> RobotsRules:
     rules: list[Rule] = []
     delays: list[float] = []
     in_rules = False
+    text = text.removeprefix("﻿")  # a UTF-8 BOM would hide the first User-agent line
     for raw in text.splitlines():
         line = raw.split("#", 1)[0].strip()
         if ":" not in line:

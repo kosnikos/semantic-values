@@ -14,7 +14,7 @@ from semval.sampling.adapters import (
     tanea,
     tovima,
 )
-from semval.sampling.article import Genre, OutOfScope
+from semval.sampling.article import NOT_SAMPLED, Genre, OutOfScope
 from semval.sampling.parsing import soup
 from semval.sources import USABLE_ACCESS, is_open, load_sources
 
@@ -46,7 +46,7 @@ def test_tovima_parse() -> None:
         "Τρίτη και τελευταία παράγραφος.",
     ]
     assert tovima.genre_of("https://www.tovima.gr/print/stiles/x/y/") == Genre.COLUMNS
-    assert tovima.genre_of("https://www.tovima.gr/2025/03/04/politics/x/") == "other"
+    assert tovima.genre_of("https://www.tovima.gr/2025/03/04/politics/x/") == NOT_SAMPLED
 
 
 def test_tovima_listing() -> None:
