@@ -5,11 +5,14 @@
 const STANCES = ["endorse", "reject", "mention"];
 const STANCE_LABEL = { endorse: "+ endorse", reject: "− reject", mention: "~ mention", contested: "± contested" };
 const VERDICT = { CORRECT: "correct", NOT_PRESENT: "not_present", WRONG_CALL: "wrong_call", ADDED: "added" };
+// Mirrors of the server's StrEnums (Verdict, RowKind, ReviewMode).
+const KIND = { MODEL: "model", OWNER: "owner" };
+const MODE = { REVIEW: "review", BLIND: "blind" };
 const NOTE_DELAY_MS = 600;
 const RETRY_MS = 3000;
 
 const state = {
-  mode: "review",
+  mode: MODE.REVIEW,
   documents: [],
   index: 0,
   multiRun: false,
@@ -54,7 +57,9 @@ async function getJSON(url) {
 function setStatus(kind, message) {
   const s = $("save-status");
   s.dataset.state = kind;
-  s.textContent = { saved: "Saved ✓", saving: "Saving…", failed: "Not saved – retrying", refused: "Not saved" }[kind];
+  const short = message && message.length > 60 ? `${message.slice(0, 57)}…` : message;
+  s.textContent = { saved: "Saved ✓", saving: "Saving…", failed: "Not saved – retrying",
+    refused: `Not saved: ${short || "refused"}` }[kind];
   s.title = message || (kind === "failed" ? "Click to retry now" : "Every action saves at once");
 }
 
@@ -73,7 +78,7 @@ async function pump() {
   if (state.saving || state.failed) return;
   const job = state.queue[0];
   if (!job) {
-    if (state.refused) setStatus("refused", `The server refused the last change: ${state.refused}`);
+    if (state.refused) setStatus("refused", state.refused);
     else setStatus("saved");
     return;
   }
@@ -91,11 +96,11 @@ async function pump() {
       state.queue.shift();
       if (job.onDone) job.onDone(data);
     } else if (r.status >= 400 && r.status < 500) {
-      state.queue.shift();          // refused: saving it again will not help
+      state.queue.shift();          // a 4xx is final: saving it again will not help
       state.refused = data.error || `HTTP ${r.status}`;
       reloadDoc();                  // show what is really stored
     } else {
-      retry = true;
+      retry = true;                 // 5xx: the server may recover
     }
   } catch (_) {
     retry = true;                   // server stopped or network error: keep the job
@@ -133,7 +138,7 @@ function presentStance(verdict, modelStance, corrected) {
 // Show a new answer for a value on every model row of it (blind mode can have several).
 function applyAnswer(valueId, present) {
   for (const row of state.doc.rows) {
-    if (row.value_id !== valueId || row.kind !== "model") continue;
+    if (row.value_id !== valueId || row.kind !== KIND.MODEL) continue;
     row.verdict_stance = present;
     if (present === null) row.verdict = VERDICT.NOT_PRESENT;
     else row.verdict = present === row.stance ? VERDICT.CORRECT : VERDICT.WRONG_CALL;
@@ -146,10 +151,10 @@ function sendVerdict(row, verdict, corrected = null) {
     document_id: docId,
     value_id: row.value_id,
     verdict,
-    model_stance: row.kind === "model" ? row.stance : null,
+    model_stance: row.kind === KIND.MODEL ? row.stance : null,
     corrected_stance: corrected,
   };
-  if (row.kind === "model") {
+  if (row.kind === KIND.MODEL) {
     applyAnswer(row.value_id, presentStance(verdict, row.stance, corrected));
     renderRows();
   }
@@ -200,7 +205,7 @@ function flushNote() {
 function renderHeader(items) {
   const settings = $("run-settings");
   settings.replaceChildren();
-  if (items.mode === "blind") {
+  if (items.mode === MODE.BLIND) {
     settings.append(el("span", { class: "blind-badge", title: "Tags from every run, without saying which run proposed them", text: "Blind pass" }));
     return;
   }
@@ -252,7 +257,7 @@ function renderArticle(doc) {
 }
 
 function evidenceText(row) {
-  if (row.kind === "owner") return el("div", { class: "evidence", text: "your tag (not proposed here)" });
+  if (row.kind === KIND.OWNER) return el("div", { class: "evidence", text: "your tag (not proposed here)" });
   if (!row.spans) return el("div", { class: "evidence none", text: "no quote found" });
   const n = row.spans;
   let text = n === 1 ? "1 quote" : `${n} quotes`;
@@ -262,7 +267,7 @@ function evidenceText(row) {
 }
 
 function outcome(row) {
-  if (row.kind === "owner") return el("span", { class: "outcome added", text: `added: ${row.verdict_stance}` });
+  if (row.kind === KIND.OWNER) return el("span", { class: "outcome added", text: `added: ${row.verdict_stance}` });
   switch (row.verdict) {
     case VERDICT.CORRECT: return el("span", { class: "outcome correct", text: "correct" });
     case VERDICT.NOT_PRESENT: return el("span", { class: "outcome absent", text: "not present" });
@@ -273,7 +278,7 @@ function outcome(row) {
 
 function verdictButtons(row) {
   const stop = (fn) => (ev) => { ev.stopPropagation(); select(row.row_id, { scroll: false, cycle: false }); fn(); };
-  if (row.kind === "owner") {
+  if (row.kind === KIND.OWNER) {
     return [
       el("button", { type: "button", class: "v v-text wrong", title: "Change the stance", "aria-expanded": state.picker === row.row_id ? "true" : "false",
         onclick: stop(() => togglePicker(row.row_id)) }, "⟲ stance"),
@@ -294,8 +299,8 @@ function verdictButtons(row) {
 }
 
 function picker(row) {
-  const current = row.kind === "owner" ? row.verdict_stance : row.stance;
-  const question = row.kind === "owner" ? "Change the stance to:" : `The model said ${row.stance}. The text actually:`;
+  const current = row.kind === KIND.OWNER ? row.verdict_stance : row.stance;
+  const question = row.kind === KIND.OWNER ? "Change the stance to:" : `The model said ${row.stance}. The text actually:`;
   const choices = STANCES.map((s) => el("button", {
     type: "button", class: "stance-pick", "data-stance": s,
     disabled: s === current, "aria-pressed": row.verdict_stance === s && row.verdict !== VERDICT.CORRECT ? "true" : "false",
@@ -307,7 +312,7 @@ function picker(row) {
 
 function pickStance(row, stance) {
   closePicker();
-  if (row.kind === "owner") sendVerdict(row, VERDICT.ADDED, stance);
+  if (row.kind === KIND.OWNER) sendVerdict(row, VERDICT.ADDED, stance);
   else sendVerdict(row, VERDICT.WRONG_CALL, stance);
 }
 
@@ -315,7 +320,7 @@ function renderRows() {
   const doc = state.doc;
   const list = $("rows");
   list.replaceChildren(...doc.rows.map((row) => {
-    const stanceBadge = row.kind === "model"
+    const stanceBadge = row.kind === KIND.MODEL
       ? el("span", { class: `stance ${row.stance}`, title: "the model's stance", text: STANCE_LABEL[row.stance] || row.stance })
       : el("span", { class: `stance ${row.verdict_stance}`, title: "your stance", text: STANCE_LABEL[row.verdict_stance] });
     const runs = row.source_runs && state.multiRun ? el("div", { class: "runs", text: `from ${row.source_runs.join(", ")}` }) : null;
@@ -340,7 +345,7 @@ function renderRows() {
 }
 
 function updateProgress() {
-  const model = state.doc.rows.filter((r) => r.kind === "model");
+  const model = state.doc.rows.filter((r) => r.kind === KIND.MODEL);
   const judged = model.filter((r) => r.verdict).length;
   $("progress").textContent = model.length ? `${judged} / ${model.length} judged` : "";
 }
@@ -356,7 +361,7 @@ function renderAdd() {
       el("span", { class: "chip", "aria-hidden": "true" }),
       el("span", { class: "row-text" }, el("span", { class: "vname", text: v.name }), el("span", { class: "vdef", text: v.definition }))))));
   const hint = state.doc.addable.length === 0 ? "Every value is already tagged here."
-    : items.length === 0 ? "No value matches." : state.mode === "blind" ? "Values judged earlier are not listed." : "";
+    : items.length === 0 ? "No value matches." : state.mode === MODE.BLIND ? "Values judged earlier are not listed." : "";
   $("add-hint").textContent = hint;
 }
 
@@ -498,12 +503,12 @@ function onKey(ev) {
   } else if (key === "a") { ev.preventDefault(); openAdd(); }
   else if (row && state.picker === row.row_id && "erm".includes(key) && key.length === 1) {
     const stance = { e: "endorse", r: "reject", m: "mention" }[key];
-    const current = row.kind === "owner" ? row.verdict_stance : row.stance;
+    const current = row.kind === KIND.OWNER ? row.verdict_stance : row.stance;
     if (stance !== current) pickStance(row, stance);
-  } else if (row && row.kind === "model" && key === "1") { closePicker(); sendVerdict(row, VERDICT.CORRECT); }
-  else if (row && row.kind === "model" && key === "2") { closePicker(); sendVerdict(row, VERDICT.NOT_PRESENT); }
+  } else if (row && row.kind === KIND.MODEL && key === "1") { closePicker(); sendVerdict(row, VERDICT.CORRECT); }
+  else if (row && row.kind === KIND.MODEL && key === "2") { closePicker(); sendVerdict(row, VERDICT.NOT_PRESENT); }
   else if (row && key === "3") togglePicker(row.row_id);
-  else if (row && row.kind === "owner" && key === "2") sendVerdict(row, VERDICT.NOT_PRESENT);
+  else if (row && row.kind === KIND.OWNER && key === "2") sendVerdict(row, VERDICT.NOT_PRESENT);
   else return;
   ev.preventDefault();
 }
@@ -575,10 +580,10 @@ async function init() {
   }
   state.mode = items.mode;
   state.documents = items.documents;
-  state.multiRun = items.mode !== "blind" && items.settings.runs.length > 1;
+  state.multiRun = items.mode !== MODE.BLIND && items.settings.runs.length > 1;
   renderHeader(items);
   if (!state.documents.length) {
-    $("title").textContent = items.mode === "blind" ? "Nothing left to judge" : "No articles in these runs";
+    $("title").textContent = items.mode === MODE.BLIND ? "Nothing left to judge" : "No articles in these runs";
     $("position").textContent = "Article 0 / 0";
     $("prev").disabled = $("next").disabled = true;
     return;

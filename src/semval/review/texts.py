@@ -45,9 +45,17 @@ class DocInfo(BaseModel):
 
 @runtime_checkable
 class TextProvider(Protocol):
-    def text(self, document_id: str) -> str:
-        """The document text that tag offsets index into; raises TextUnavailable."""
-        ...
+    """Texts and header details of the documents under review. Neither method writes.
+
+    ``text(document_id)`` returns the exact text that tag offsets index into, or raises
+    ``TextUnavailable`` (the page shows the error; the table still works).
+
+    ``info(document_id)`` returns the header details as a ``DocInfo``: fill what the source
+    knows (title, country, source_id, genre, language, date, url) and leave the rest
+    ``None``. It may raise ``TextUnavailable``; the header is then empty.
+    """
+
+    def text(self, document_id: str) -> str: ...
 
     def info(self, document_id: str) -> DocInfo: ...
 

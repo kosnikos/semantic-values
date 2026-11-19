@@ -18,7 +18,7 @@ from typing import Generic, TypeVar
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from semval.checks import slug_id
-from semval.tags import Stance
+from semval.tags import EvidenceSpan, Stance
 
 log = logging.getLogger(__name__)
 
@@ -43,7 +43,9 @@ class LabelRecord(BaseModel):
 
     ``model_stance`` is the stance the verdict was given on; ``None`` for ADDED, and for a
     NOT_PRESENT that withdraws a value the owner added. ``source_runs`` are the runs that
-    proposed that stance (empty for ADDED).
+    proposed that stance (empty for ADDED). ``model_evidence`` is the union of the proposing
+    tags' spans for (document, value), as offsets into the document text; ``owner_evidence``
+    is for spans the owner marks (not used by the page yet). Never any text.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -57,6 +59,8 @@ class LabelRecord(BaseModel):
     corrected_stance: Stance | None = None
     note: str = ""
     source_runs: list[str] = Field(default_factory=list)
+    model_evidence: list[EvidenceSpan] = Field(default_factory=list)
+    owner_evidence: list[EvidenceSpan] = Field(default_factory=list)
     updated: datetime.datetime = Field(default_factory=_now)
 
     @field_validator("labeller")

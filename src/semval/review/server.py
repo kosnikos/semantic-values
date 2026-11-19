@@ -30,6 +30,7 @@ STATIC = {
     "/static/review.css": ("review.css", "text/css; charset=utf-8"),
 }
 MAX_BODY = 64 * 1024
+DRAIN_LIMIT = 4 * 1024 * 1024  # larger bodies are not even read: the connection closes
 DOC_PREFIX = "/api/doc/"
 
 
@@ -79,11 +80,24 @@ class _Handler(BaseHTTPRequestHandler):
         try:
             length = int(self.headers.get("Content-Length") or 0)
         except ValueError:
-            length = -1
-        body = self.rfile.read(length) if 0 < length <= MAX_BODY else None
-        if body is None:
+            length = 0
+        raw: bytes | None = None
+        if 0 < length <= MAX_BODY:
+            raw = self.rfile.read(length)
+        elif length > MAX_BODY:
+            self._drain(length)
+        self._guarded(lambda: self._post(raw, length))
+
+    def _drain(self, length: int) -> None:
+        """Read and drop an oversized body (up to DRAIN_LIMIT) so a 413 reaches the client."""
+        if length > DRAIN_LIMIT:
             self.close_connection = True
-        self._guarded(lambda: self._post(body))
+            return
+        while length > 0:
+            chunk = self.rfile.read(min(length, 64 * 1024))
+            if not chunk:
+                break
+            length -= len(chunk)
 
     def _guarded(self, handle: Callable[[], None]) -> None:
         if not self._host_ok():
@@ -111,7 +125,7 @@ class _Handler(BaseHTTPRequestHandler):
         else:
             self._error(HTTPStatus.NOT_FOUND, "not found")
 
-    def _post(self, raw: bytes | None) -> None:
+    def _post(self, raw: bytes | None, length: int) -> None:
         session = self.server.session
         actions = {"/api/verdict": session.save_verdict, "/api/note": session.save_note}
         action = actions.get(urllib.parse.urlsplit(self.path).path)
@@ -122,8 +136,11 @@ class _Handler(BaseHTTPRequestHandler):
         if content_type != "application/json":
             self._error(HTTPStatus.UNSUPPORTED_MEDIA_TYPE, "send application/json")
             return
+        if length > MAX_BODY:
+            self._error(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, f"body over {MAX_BODY} bytes")
+            return
         if raw is None:
-            self._error(HTTPStatus.BAD_REQUEST, "missing or oversized body")
+            self._error(HTTPStatus.BAD_REQUEST, "missing body")
             return
         try:
             body = json.loads(raw)

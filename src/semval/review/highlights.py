@@ -14,9 +14,37 @@ PALETTE_SIZE = 12
 NO_LIMIT = 2**62  # "clip" spans to an unknown text length
 
 
+# Palette slots that look alike side by side (orange/brown, gold/olive, teal/sky,
+# red/magenta): once one is used in an article, the other is avoided while others are free.
+LOOKALIKES: dict[int, int] = {1: 9, 9: 1, 2: 10, 10: 2, 4: 5, 5: 4, 0: 8, 8: 0}
+
+
 def value_color(value_id: str) -> int:
-    """A stable palette index for a value id, the same in every article and session."""
+    """A value's preferred palette slot: a stable hash, the same in every article."""
     return zlib.crc32(value_id.encode("utf-8")) % PALETTE_SIZE
+
+
+def assign_colors(value_ids: Sequence[str]) -> dict[str, int]:
+    """Palette slots for one article's values, in table order.
+
+    Each value takes its preferred slot if that is free, else the next free slot after it,
+    skipping look-alikes of used slots while other slots are free. After all
+    ``PALETTE_SIZE`` slots are used, a new round starts (colours repeat).
+    """
+    out: dict[str, int] = {}
+    used: set[int] = set()
+    for vid in dict.fromkeys(value_ids):
+        if len(used) == PALETTE_SIZE:
+            used = set()
+        avoid = used | {LOOKALIKES[c] for c in used if c in LOOKALIKES}
+        pref = value_color(vid)
+        ring = [(pref + i) % PALETTE_SIZE for i in range(PALETTE_SIZE)]
+        slot = next((c for c in ring if c not in avoid), None)
+        if slot is None:
+            slot = next(c for c in ring if c not in used)
+        used.add(slot)
+        out[vid] = slot
+    return out
 
 
 def merged_spans(spans: Sequence[EvidenceSpan], length: int) -> list[tuple[int, int]]:

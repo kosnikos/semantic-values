@@ -1,4 +1,5 @@
 import json
+import random
 import re
 import threading
 import urllib.error
@@ -10,13 +11,20 @@ from pathlib import Path
 
 import pytest
 
-from review_fixture import DOC1, DOC2, RUN_A, RUN_B, TEXTS, TITLES, build
+from review_fixture import DOC1, DOC2, RUN_A, RUN_B, TEXTS, TITLES, build, span
 from semval.cli import main
-from semval.review.highlights import PALETTE_SIZE, text_pieces, value_color
+from semval.review.highlights import (
+    LOOKALIKES,
+    PALETTE_SIZE,
+    assign_colors,
+    text_pieces,
+    value_color,
+)
 from semval.review.labels import LabelStore, Verdict
 from semval.review.server import STATIC_DIR, make_server
-from semval.review.session import ReviewSession, open_session
+from semval.review.session import NOTE_MAX_CHARS, ReviewSession, open_session
 from semval.tags import Stance
+from semval.values import FRAMEWORK_DIR, load_framework
 
 
 @contextmanager
@@ -112,6 +120,10 @@ def test_server_serves_items_and_saves(tmp_path: Path) -> None:
              "corrected_stance": "endorse"},  # not a target
             {"document_id": "src-gb:missing", "value_id": "alpha", "verdict": "added",
              "corrected_stance": "endorse"},
+            {"document_id": DOC1, "value_id": "beta", "verdict": "not_present"},  # proposed:
+            # a verdict on it names the stance it judges
+            {"document_id": DOC1, "value_id": "beta", "verdict": "added",
+             "corrected_stance": "mention"},  # proposed: judge it, do not add it
         ]  # fmt: skip
         for body in bad:
             assert post(base + "/api/verdict", body)[0] == 400, body
@@ -129,6 +141,10 @@ def test_server_serves_items_and_saves(tmp_path: Path) -> None:
     }
     assert got[DOC1, "alpha"].source_runs == [RUN_A]
     assert got[DOC1, "alpha"].model_stance == Stance.ENDORSE
+    # evidence as offsets: the union over every run that proposed alpha here
+    assert got[DOC1, "alpha"].model_evidence == [span(DOC1, "Alpha must be defended")]
+    assert got[DOC1, "alpha"].owner_evidence == []
+    assert got[DOC2, "alpha"].model_evidence == []
     assert got[DOC2, "alpha"].verdict == Verdict.ADDED and got[DOC2, "alpha"].source_runs == []
     assert len(got) == 2
 
@@ -224,3 +240,51 @@ def test_overlapping_quotes_keep_one_lane_each() -> None:
             lanes.setdefault(row, set()).add(lane)
     assert lanes == {0: {0}, 1: {1}, 2: {0}}  # 2 reuses lane 0 once 0 has ended
     assert value_color("alpha") == value_color("alpha")
+
+
+def leaf_ids() -> list[str]:
+    fw = load_framework(FRAMEWORK_DIR / "schwartz19.yaml", local_dir=None)
+    return fw.target_set("leaf").ids()
+
+
+def test_article_colours_do_not_collide_on_schwartz19() -> None:
+    ids = leaf_ids()
+    hashed = [value_color(v) for v in ids]
+    assert max(hashed.count(c) for c in hashed) >= 3  # the hash alone collides
+    rng = random.Random(1)
+    orders = [ids, *(rng.sample(ids, len(ids)) for _ in range(200))]
+    for order in orders:
+        colors = assign_colors(order)
+        assert colors[order[0]] == value_color(order[0])  # the hash stays the first choice
+        first12 = [colors[v] for v in order[:12]]
+        assert len(set(first12)) == 12  # up to a full palette: all different
+        used8 = {colors[v] for v in order[:8]}
+        assert not [c for c in used8 if LOOKALIKES.get(c) in used8]  # no look-alike pairs
+        counts = [list(colors.values()).count(c) for c in range(PALETTE_SIZE)]
+        assert max(counts) <= 2  # 19 values: one wrap-around at most
+    magentas = [v for v in ids if value_color(v) == 8]
+    assert len(magentas) == 4 and len(set(assign_colors(magentas).values())) == 4
+
+
+def test_doc_rows_get_article_colours(tmp_path: Path) -> None:
+    session = open_session([RUN_A], paths=build(tmp_path), labels_dir=tmp_path / "labels")
+    doc = session.doc_payload(DOC1)
+    ids = [r["value_id"] for r in doc["rows"]] + [a["value_id"] for a in doc["addable"]]
+    colors = assign_colors(ids)
+    assert [r["color"] for r in doc["rows"]] == [colors[r["value_id"]] for r in doc["rows"]]
+    assert all("color" in a for a in doc["addable"])
+
+
+def test_note_limits_and_oversized_body(tmp_path: Path) -> None:
+    html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+    assert f'maxlength="{NOTE_MAX_CHARS}"' in html
+    # the worst case JSON escape (6 bytes a character) still fits the body limit
+    assert len(json.dumps({"document_id": DOC1, "note": "" * NOTE_MAX_CHARS})) < 64 * 1024
+    session = open_session([RUN_A], paths=build(tmp_path), labels_dir=tmp_path / "labels")
+    with running(session) as base:
+        too_long = {"document_id": DOC1, "note": "x" * (NOTE_MAX_CHARS + 1)}
+        assert post(base + "/api/note", too_long)[0] == 400
+        huge = {"document_id": DOC1, "note": "x" * (70 * 1024)}
+        status, body = post(base + "/api/note", huge)
+        assert status == 413 and "error" in body
+        assert get(base + "/api/items")[0] == 200  # still serving

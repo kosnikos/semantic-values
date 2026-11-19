@@ -10,7 +10,7 @@ from semval.review.labels import LabelRecord, LabelStore, NoteStore, Verdict
 from semval.review.pool import pool_unjudged
 from semval.review.session import open_session
 from semval.tagging.runfiles import load_run
-from semval.tags import Stance
+from semval.tags import EvidenceSpan, Stance
 
 NOW = datetime.datetime(2026, 11, 19, 12, 0, tzinfo=datetime.UTC)
 
@@ -141,3 +141,14 @@ def test_note_store_last_write_wins(tmp_path: Path) -> None:
     store.set("owner", DOC2, "other")
     assert store.get("owner", DOC1) == "second"
     assert store.get("owner", "missing") == ""
+
+
+def test_label_evidence_is_offsets_only(tmp_path: Path) -> None:
+    store = LabelStore(tmp_path / "labels.jsonl")
+    assert rec().model_evidence == [] and rec().owner_evidence == []
+    spans = [EvidenceSpan(start=0, end=22), EvidenceSpan(start=24, end=41)]
+    store.upsert(rec(model_evidence=spans, owner_evidence=spans[:1]))
+    (got,) = store.all()
+    assert got.model_evidence == spans and got.owner_evidence == spans[:1]
+    line = json.loads((tmp_path / "labels.jsonl").read_text(encoding="utf-8"))
+    assert line["model_evidence"] == [{"start": 0, "end": 22}, {"start": 24, "end": 41}]

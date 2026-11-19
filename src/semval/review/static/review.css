@@ -231,6 +231,9 @@ kbd {
 .save-status {
   flex: none;
   min-width: 8.5em;
+  max-width: 24em;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 5px 10px;
   border: 1px solid transparent;
   border-radius: 8px;

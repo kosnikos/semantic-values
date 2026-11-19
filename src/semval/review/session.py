@@ -11,17 +11,13 @@ from the one label of its (document, value), so sibling rows always agree.
 
 from collections.abc import Sequence
 from dataclasses import dataclass, field
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from semval.review.highlights import (
-    NO_LIMIT,
-    merged_spans,
-    text_pieces,
-    value_color,
-)
+from semval.review.highlights import NO_LIMIT, assign_colors, merged_spans, text_pieces
 from semval.review.labels import (
     DEFAULT_LABELS_DIR,
     LabelRecord,
@@ -42,9 +38,21 @@ from semval.review.pool import (
 from semval.review.texts import DocInfo, RawDocsProvider, TextProvider, TextUnavailable
 from semval.tagging.base import RunManifest
 from semval.tagging.runfiles import DEFAULT_PATHS, RunPaths, load_run, load_run_tags
-from semval.tags import Stance
+from semval.tags import EvidenceSpan, Stance
 from semval.targets import TargetSet
 from semval.values import load_framework
+
+NOTE_MAX_CHARS = 8000  # keeps any note's JSON well under the server's body limit
+
+
+class ReviewMode(StrEnum):
+    REVIEW = "review"
+    BLIND = "blind"
+
+
+class RowKind(StrEnum):
+    MODEL = "model"  # a proposed (value, stance)
+    OWNER = "owner"  # a value the owner marked present that no shown model row covers
 
 
 class SessionError(ValueError):
@@ -69,7 +77,7 @@ class NoteIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     document_id: str
-    note: str = Field(max_length=20_000)
+    note: str = Field(max_length=NOTE_MAX_CHARS)
 
 
 @dataclass
@@ -90,6 +98,11 @@ class ReviewSession:
         if self.targets.level_id != self.level_id:
             raise ValueError(f"targets are for {self.targets.level_id}, runs for {self.level_id}")
         self._pairs = {(p.document_id, p.value_id, p.stance): p for p in self.proposals}
+        # every proposed (document, value), with the union of its evidence over the stances
+        spans: dict[tuple[str, str], set[EvidenceSpan]] = {}
+        for p in self.proposals:
+            spans.setdefault((p.document_id, p.value_id), set()).update(p.evidence)
+        self._evidence = {k: sorted(v, key=lambda e: (e.start, e.end)) for k, v in spans.items()}
         self._target = {t.id: t for t in self.targets.targets}
         self._rank = {t.id: i for i, t in enumerate(self.targets.targets)}
         run_docs = run_documents(self.runs)
@@ -124,8 +137,14 @@ class ReviewSession:
             "value_id": value_id,
             "name": t.name if t else value_id,
             "definition": t.definition if t else "",
-            "color": value_color(value_id),
         }
+
+    @staticmethod
+    def _paint(rows: list[dict], addable: list[dict]) -> None:
+        """Per-article colours: table order first, then the add list."""
+        colors = assign_colors([x["value_id"] for x in [*rows, *addable]])
+        for x in [*rows, *addable]:
+            x["color"] = colors[x["value_id"]]
 
     def _model_rows(self, doc_id: str) -> list[Proposal]:
         def order(p: Proposal) -> tuple:
@@ -151,7 +170,7 @@ class ReviewSession:
             else:
                 verdict = Verdict.CORRECT if present == p.stance else Verdict.WRONG_CALL
             row = {
-                "row_id": f"m|{p.value_id}|{p.stance}", "kind": "model", **self._value(p.value_id),
+                "row_id": f"m|{p.value_id}|{p.stance}", "kind": RowKind.MODEL, **self._value(p.value_id),
                 "stance": p.stance, "spans": len(merged_spans(p.evidence, NO_LIMIT)),
                 "evidence_unresolved": p.evidence_unresolved,
                 "verdict": verdict, "verdict_stance": present,
@@ -170,7 +189,7 @@ class ReviewSession:
         ]
         for rec in sorted(owner, key=lambda r: self._rank.get(r.value_id, len(self._rank))):
             rows.append({
-                "row_id": f"o|{rec.value_id}", "kind": "owner", **self._value(rec.value_id),
+                "row_id": f"o|{rec.value_id}", "kind": RowKind.OWNER, **self._value(rec.value_id),
                 "stance": None, "spans": 0, "evidence_unresolved": False,
                 "verdict": Verdict.ADDED, "verdict_stance": rec.present_stance(),
             })  # fmt: skip
@@ -186,14 +205,16 @@ class ReviewSession:
     def _table(self, doc_id: str) -> dict[str, Any]:
         labels = self._labels_by_doc().get(doc_id, {})
         rows, _ = self._rows(doc_id, labels)
-        return {"document_id": doc_id, "rows": rows, "addable": self._addable(rows, labels)}
+        addable = self._addable(rows, labels)
+        self._paint(rows, addable)
+        return {"document_id": doc_id, "rows": rows, "addable": addable}
 
     def items_payload(self) -> dict[str, Any]:
         by_doc = self._labels_by_doc()
         documents, items = [], []
         for doc_id in self.documents:
             rows, _ = self._rows(doc_id, by_doc.get(doc_id, {}))
-            model = [r for r in rows if r["kind"] == "model"]
+            model = [r for r in rows if r["kind"] == RowKind.MODEL]
             documents.append({
                 "document_id": doc_id, "rows": len(model),
                 "judged": sum(r["verdict"] is not None for r in model),
@@ -204,7 +225,7 @@ class ReviewSession:
                 for r in model
             ]  # fmt: skip
         out: dict[str, Any] = {
-            "mode": "blind" if self.blind else "review",
+            "mode": ReviewMode.BLIND if self.blind else ReviewMode.REVIEW,
             "labeller": self.labeller,
             "documents": documents,
             "items": items,
@@ -235,6 +256,8 @@ class ReviewSession:
             raise NotFound(doc_id)
         labels = self._labels_by_doc().get(doc_id, {})
         rows, evidence = self._rows(doc_id, labels)
+        addable = self._addable(rows, labels)
+        self._paint(rows, addable)
         text_error, pieces = None, []
         try:
             text = self.provider.text(doc_id)
@@ -253,7 +276,7 @@ class ReviewSession:
             "pieces": pieces,
             "text_error": text_error,
             "rows": rows,
-            "addable": self._addable(rows, labels),
+            "addable": addable,
             "note": self.notes.get(self.labeller, doc_id),
         }
 
@@ -266,6 +289,12 @@ class ReviewSession:
             raise SessionError(f"unknown document {v.document_id!r}")
         if v.value_id not in self._target:
             raise SessionError(f"{v.value_id!r} is not a target of level {self.level_id}")
+        key = (v.document_id, v.value_id)
+        proposed = key in self._evidence
+        if v.verdict == Verdict.ADDED and proposed:
+            raise SessionError(f"{v.value_id} was proposed here: judge its row, do not add it")
+        if v.verdict != Verdict.ADDED and proposed and v.model_stance is None:
+            raise SessionError(f"a verdict on proposed {v.value_id} needs its model_stance")
         runs: list[str] = []
         if v.model_stance is not None:
             p = self._pairs.get((v.document_id, v.value_id, v.model_stance))
@@ -277,6 +306,8 @@ class ReviewSession:
             labeller=self.labeller, document_id=v.document_id, value_id=v.value_id,
             level_id=self.level_id, model_stance=v.model_stance, verdict=v.verdict,
             corrected_stance=v.corrected_stance, note=old.note if old else "", source_runs=runs,
+            model_evidence=self._evidence.get(key, []),
+            owner_evidence=old.owner_evidence if old else [],
         )  # fmt: skip
         self.labels.upsert(rec)
         return {**self._table(v.document_id), "saved": rec.updated.isoformat()}
