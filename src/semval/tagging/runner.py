@@ -14,8 +14,6 @@ from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
-import yaml
-
 from semval.config import priced_model, retry_max_tokens
 from semval.fsutil import atomic_write_text
 from semval.tagging.base import (
@@ -28,6 +26,7 @@ from semval.tagging.base import (
     TaggerSpec,
 )
 from semval.tagging.claude import ClaudeTagger, make_client
+from semval.tagging.fewshot import fewshot_at_level
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
 from semval.tagging.prompt import FewShotExample
 from semval.tagging.quotes import resolve_quotes
@@ -78,15 +77,6 @@ def make_tagger(spec: TaggerSpec, client: Any = None, few_shot: Sequence[FewShot
     if spec.kind != TaggerKind.CLAUDE:
         raise ValueError(f"build the {spec.kind} tagger yourself and pass it as tagger=")
     return ClaudeTagger(spec, client if client is not None else make_client(), few_shot)
-
-
-def load_few_shot(path: Path) -> list[FewShotExample]:
-    """A YAML list of examples, or a mapping with an ``examples`` list."""
-    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
-    items = data.get("examples") if isinstance(data, dict) else data
-    if not isinstance(items, list) or not items:
-        raise ValueError(f"{path}: expected a non-empty list of few-shot examples")
-    return [FewShotExample.model_validate(x) for x in items]
 
 
 def select_documents(
@@ -241,12 +231,15 @@ def run_tagging(
     if unit is None:
         raise ValueError("no unit: the spec leaves it open, so pass unit=")
     run_spec = spec.model_copy(update={"unit": unit})
-    tagger = tagger or make_tagger(spec, client, few_shot)
+    fw_dir = Path(paths.framework_dir)
+    framework = load_framework(fw_dir / f"{spec.framework_id}.yaml", local_dir=fw_dir / "local")
+    # few-shot examples are written at leaf level; the prompt shows them at the run's level
+    tagger = tagger or make_tagger(
+        spec, client, fewshot_at_level(few_shot, framework, spec.level_id)
+    )
     if tagger.spec.model_copy(update={"unit": unit}) != run_spec:
         raise ValueError("the tagger's spec does not match the run spec")
 
-    fw_dir = Path(paths.framework_dir)
-    framework = load_framework(fw_dir / f"{spec.framework_id}.yaml", local_dir=fw_dir / "local")
     targets = framework.target_set(spec.level_id)
     info = tagger.prompt_info(targets)
     ledger = ledger or CostLedger(Path(paths.runs_dir) / "ledger.jsonl")

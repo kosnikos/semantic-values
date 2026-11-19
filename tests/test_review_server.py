@@ -214,8 +214,9 @@ def test_palette_matches_css() -> None:
     assert "background-color" not in re.search(r"\.hl\s*\{[^}]*\}", css).group(0)
 
 
-def test_cli_review_flags() -> None:
-    with pytest.raises(SystemExit, match="Task 10|not available"):
+def test_cli_review_flags(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("semval.datasets.touche23.DEFAULT_DIR", tmp_path)
+    with pytest.raises(SystemExit, match="no candidates yet"):
         main(["review", "--source", "touche23-fewshot"])
     with pytest.raises(SystemExit, match="--run"):
         main(["review"])

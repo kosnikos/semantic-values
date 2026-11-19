@@ -278,7 +278,7 @@ def test_lexicon_runs_through_runner(tmp_path):
     assert all(t.stance.value == "mention" and t.evidence for t in tags)
 
 
-def test_cli_few_shot_on_needs_a_file():
+def test_cli_few_shot_on_needs_a_readable_file(tmp_path):
     from semval.cli import build_parser, main
 
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
@@ -286,8 +286,9 @@ def test_cli_few_shot_on_needs_a_file():
     args = build_parser().parse_args([*argv, "--batch", "--limit-per-country", "2"])
     assert args.model == ModelId.HAIKU_5_5 and args.unit == UnitLevel.ARTICLE and args.batch
     assert args.few_shot == "off" and args.limit_per_country == 2
-    with pytest.raises(SystemExit, match="few-shot-file"):
-        main([*argv, "--few-shot", "on"])
+    assert args.few_shot_file == Path("data/fewshot/touche23.yaml")
+    with pytest.raises(SystemExit, match="cannot load few-shot"):
+        main([*argv, "--few-shot", "on", "--few-shot-file", str(tmp_path / "missing.yaml")])
 
 
 def truncated(kw):

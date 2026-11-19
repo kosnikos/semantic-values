@@ -211,13 +211,13 @@ class TranslationFailed(Exception):
     """The model's answer for one item was unusable (refused, truncated, malformed)."""
 
 
-def _billed(msg: Any) -> list[tuple[str, Usage]]:
+def billed(msg: Any, default_model: ModelId = PROXY_MODEL) -> list[tuple[str, Usage]]:
     """(model name, usage) per billed attempt, as the tagger counts them."""
     iterations = getattr(msg.usage, "iterations", None)
     pairs = (
-        [(getattr(it, "model", None) or str(PROXY_MODEL), it) for it in iterations]
+        [(getattr(it, "model", None) or str(default_model), it) for it in iterations]
         if iterations
-        else [(msg.model if isinstance(msg.model, str) else str(PROXY_MODEL), msg.usage)]
+        else [(msg.model if isinstance(msg.model, str) else str(default_model), msg.usage)]
     )
     return [
         (
@@ -263,7 +263,7 @@ class ClaudeTranslator:
         if not self.ledger.can_spend(self._estimate(params)):
             raise BudgetExceeded("the next translation would pass the budget cap")
         msg = self.client.beta.messages.create(**params)
-        for model, usage in _billed(msg):  # may raise BudgetExceeded after writing the line
+        for model, usage in billed(msg):  # may raise BudgetExceeded after writing the line
             self.ledger.record(self.run_id, usage, priced_model(model), False)
         if msg.stop_reason != "end_turn":
             raise TranslationFailed(f"stop_reason {msg.stop_reason}")

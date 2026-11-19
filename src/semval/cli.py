@@ -5,7 +5,9 @@ import logging
 import typing
 from datetime import date
 from pathlib import Path
+from typing import Any
 
+from semval.review.labels import DEFAULT_LABELS_DIR
 from semval.sources import (
     EXCLUDED_SOURCE_TYPES,
     JURISDICTION_OPEN_SCOPES,
@@ -19,6 +21,7 @@ from semval.sources import (
     coverage_matrix,
     load_sources,
 )
+from semval.tagging.fewshot import DEFAULT_FEWSHOT_PATH
 
 DEFAULT_SOURCES = Path("data/sources/sources.yaml")
 DEFAULT_OUT = Path("docs/research/coverage.md")
@@ -182,14 +185,16 @@ def _default_framework() -> str | None:
 def _tag(args: argparse.Namespace) -> int:
     from semval.tagging.base import RunStatus, TaggerKind, TaggerSpec
     from semval.tagging.claude import make_client
-    from semval.tagging.runner import load_few_shot, run_tagging
+    from semval.tagging.fewshot import load_fewshot
+    from semval.tagging.runner import run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     few_shot = []
     if args.few_shot == "on":
-        if args.few_shot_file is None:
-            raise SystemExit("--few-shot on needs --few-shot-file PATH (no default file yet)")
-        few_shot = load_few_shot(args.few_shot_file)
+        try:
+            few_shot = load_fewshot(args.few_shot_file)
+        except (OSError, ValueError) as e:
+            raise SystemExit(f"cannot load few-shot examples: {e}") from None
     framework = args.framework or _default_framework()
     if framework is None:
         raise SystemExit("several framework files exist: pass --framework ID")
@@ -227,25 +232,88 @@ def _tag(args: argparse.Namespace) -> int:
 
 
 def _review(args: argparse.Namespace) -> int:
-    from semval.review.server import serve
     from semval.review.session import open_session
     from semval.review.texts import ReviewSource
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     if args.source == ReviewSource.TOUCHE23_FEWSHOT:
-        raise SystemExit(
-            "--source touche23-fewshot is not available yet: it needs the Touché23 loader"
-        )
+        return _serve(_fewshot_session(args), args)
     if not args.run:
         raise SystemExit("give at least one --run RUN_ID (repeat it to pool several runs)")
     try:
         session = open_session(args.run, blind=args.blind, labeller=args.labeller)
     except ValueError as e:
         raise SystemExit(str(e)) from None
+    return _serve(session, args)
+
+
+def _serve(session: Any, args: argparse.Namespace) -> int:
+    from semval.review.server import serve
+
     try:
         serve(session, args.port, open_browser=args.open)
     except OSError as e:
         raise SystemExit(f"cannot serve on 127.0.0.1:{args.port}: {e}") from None
+    return 0
+
+
+def _fewshot_session(args: argparse.Namespace) -> Any:
+    from semval.datasets.touche23 import DEFAULT_DIR, load_split
+    from semval.review.fewshot_session import open_candidate_session
+    from semval.tagging.fewshot_candidates import SELECTION_SPLITS, load_candidates
+
+    candidates = load_candidates(DEFAULT_DIR)
+    if not candidates:
+        raise SystemExit("no candidates yet: run `semval fewshot candidates` first")
+    items = [i for s in SELECTION_SPLITS for i in load_split(s, DEFAULT_DIR)]
+    return open_candidate_session(candidates, items, labeller=args.labeller)
+
+
+def _fewshot_candidates(args: argparse.Namespace) -> int:
+    from semval.review.fewshot_session import FRAMEWORK_ID
+    from semval.tagging.claude import make_client
+    from semval.tagging.fewshot_candidates import (
+        FewShotDrafter,
+        draft_candidates,
+        load_candidates,
+        select_candidates,
+    )
+    from semval.tagging.ledger import BudgetExceeded, CostLedger
+    from semval.values import FRAMEWORK_DIR, LEAF_LEVEL, load_framework
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    ledger = CostLedger()
+    ledger.total()  # fail closed on a damaged ledger before spending anything
+    before = ledger.total()
+    fw = load_framework(FRAMEWORK_DIR / f"{FRAMEWORK_ID}.yaml")
+    drafter = FewShotDrafter(make_client(), ledger, fw.target_set(LEAF_LEVEL))
+    items = select_candidates(args.n, args.seed, args.dir)
+    try:
+        path = draft_candidates(drafter, items, args.dir)
+    except BudgetExceeded as e:
+        print(f"stopped at the budget cap: {e}")
+        return 3
+    n = len(load_candidates(args.dir))
+    print(f"{path}: {n} candidates; cost ${ledger.total() - before:.4f}")
+    return 0
+
+
+def _fewshot_finalize(args: argparse.Namespace) -> int:
+    from semval.datasets.touche23 import load_split
+    from semval.review.labels import LabelStore, label_paths
+    from semval.tagging.fewshot import finalize, stance_counts, write_fewshot
+    from semval.tagging.fewshot_candidates import SELECTION_SPLITS, load_candidates
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    candidates = load_candidates(args.dir)
+    items = {i.id: i for s in SELECTION_SPLITS for i in load_split(s, args.dir)}
+    store = LabelStore(label_paths(args.labels_dir, args.labeller)[0])
+    examples = finalize(candidates, items, store.all(), args.labeller)
+    if not examples:
+        raise SystemExit("no judged candidates: review them first (--source touche23-fewshot)")
+    write_fewshot(args.out, examples)
+    print(f"{args.out}: {len(examples)} examples of {len(candidates)} candidates")
+    print(f"tags by stance: {stance_counts(examples)}")
     return 0
 
 
@@ -320,7 +388,9 @@ def build_parser() -> argparse.ArgumentParser:
     tag.add_argument("--unit", type=UnitLevel, choices=list(UnitLevel), required=True)
     tag.add_argument("--framework", help="framework id (default: the only framework file)")
     tag.add_argument("--few-shot", choices=["on", "off"], default="off")
-    tag.add_argument("--few-shot-file", type=Path, help="YAML few-shot examples")
+    tag.add_argument(
+        "--few-shot-file", type=Path, default=DEFAULT_FEWSHOT_PATH, help="YAML few-shot examples"
+    )
     tag.add_argument("--batch", action="store_true", help="use Message Batches (50%% cost)")
     tag.add_argument("--limit-per-country", type=int, help="documents per country")
     tag.add_argument("--limit", type=int, help="documents in all")
@@ -346,6 +416,24 @@ def build_parser() -> argparse.ArgumentParser:
     rev.add_argument("--open", action="store_true", help="open the page in the browser")
     rev.set_defaults(func=_review)
     from semval.datasets.touche23 import DEFAULT_DIR as TOUCHE_DIR
+
+    fsh = sub.add_parser("fewshot", help="Touché23 few-shot examples: draft, then finalize")
+    fsh_sub = fsh.add_subparsers(dest="fewshot_command", required=True)
+    cd = fsh_sub.add_parser(
+        "candidates",
+        help="select items and draft stances with Claude (costs money; resumable)",
+        description="Exit status: 0 done, 3 stopped at the budget cap.",
+    )
+    cd.add_argument("--n", type=int, default=20)
+    cd.add_argument("--seed", type=int, default=1)
+    cd.add_argument("--dir", type=Path, default=TOUCHE_DIR)
+    cd.set_defaults(func=_fewshot_candidates)
+    fz = fsh_sub.add_parser("finalize", help="write the owner-confirmed examples to YAML")
+    fz.add_argument("--labeller", default="owner")
+    fz.add_argument("--dir", type=Path, default=TOUCHE_DIR)
+    fz.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
+    fz.add_argument("--out", type=Path, default=DEFAULT_FEWSHOT_PATH)
+    fz.set_defaults(func=_fewshot_finalize)
 
     tou = sub.add_parser("touche23", help="Touché23-ValueEval data and the Greek proxy")
     tou_sub = tou.add_subparsers(dest="touche_command", required=True)
