@@ -1,0 +1,233 @@
+import os
+from pathlib import Path
+
+import pytest
+
+from semval.config import PRICES, FallbackModelId, ModelId, priced_model
+from semval.tagging.base import Usage
+from semval.tagging.ledger import BudgetExceeded, CostLedger, LedgerCorrupt
+
+ONE_M = Usage(input_tokens=1_000_000, output_tokens=1_000_000)
+
+
+def test_prices_cover_all_models():
+    assert set(PRICES) == set(ModelId) | set(FallbackModelId)
+    for p in PRICES.values():
+        assert p.input > 0 and p.output > 0 and p.cache_read > 0 and p.cache_write > 0
+
+
+def test_ledger_refuses_over_cap(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=5.0)
+    assert ledger.can_spend(5.0) and not ledger.can_spend(5.01)
+    with pytest.raises(BudgetExceeded):
+        ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False)  # 12 USD
+    # the money was spent, so the line is still written
+    assert ledger.total() == pytest.approx(12.0)
+    assert not ledger.can_spend(0.01)
+
+
+def test_ledger_batch_halves_cost(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    full = ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False)
+    half = ledger.record("r2", ONE_M, ModelId.SONNET_5_5, batch=True)
+    assert half == pytest.approx(full / 2)
+    est = ledger.estimate(ModelId.SONNET_5_5, 1_000_000, 1_000_000, batch=True)
+    assert est == pytest.approx(half)
+
+
+def test_ledger_cache_tokens_priced(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    u = Usage(cache_creation_input_tokens=1_000_000, cache_read_input_tokens=1_000_000)
+    assert ledger.record("r", u, ModelId.HAIKU_5_5, batch=False) == pytest.approx(0.135)
+
+
+def test_ledger_persists_across_instances(tmp_path):
+    path = tmp_path / "sub" / "l.jsonl"
+    CostLedger(path, cap=100.0).record("r1", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    again = CostLedger(path, cap=100.0)
+    assert again.total() == pytest.approx(0.6)
+    again.record("r2", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    assert CostLedger(path, cap=100.0).total() == pytest.approx(1.2)
+    assert len(path.read_text().splitlines()) == 2
+
+
+def test_ledger_exact_cap_is_allowed(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=12.0)
+    assert ledger.can_spend(12.0)
+    ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False)  # exactly 12 USD
+    assert ledger.total() == pytest.approx(12.0)
+    assert not ledger.can_spend(0.01)
+
+
+def _truncated(tmp_path):
+    path = tmp_path / "l.jsonl"
+    ledger = CostLedger(path, cap=100.0)
+    ledger.record("r1", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    with path.open("a", encoding="utf-8") as f:
+        f.write('{"run_id": "r2", "cost_u')
+    return path, ledger
+
+
+def test_ledger_corrupt_line_fails_closed(tmp_path):
+    _, ledger = _truncated(tmp_path)
+    with pytest.raises(LedgerCorrupt, match="line 2"):
+        ledger.total()
+    with pytest.raises(LedgerCorrupt):
+        ledger.can_spend(1.0)
+
+
+def test_ledger_repair_moves_truncated_final_line(tmp_path):
+    path, ledger = _truncated(tmp_path)
+    assert ledger.repair() is True
+    assert ledger.total() == pytest.approx(0.6)
+    assert path.with_name("l.jsonl.corrupt").read_text().startswith('{"run_id": "r2"')
+    assert ledger.repair() is False
+    ledger.record("r3", ONE_M, ModelId.HAIKU_5_5, batch=False)
+    assert ledger.total() == pytest.approx(1.2)
+
+
+def test_ledger_repair_refuses_mid_file_damage(tmp_path):
+    path = tmp_path / "l.jsonl"
+    good = '{"cost_usd": 1.0}'
+    path.write_text(f"{good}\nnot json\n{good}\n", encoding="utf-8")
+    with pytest.raises(LedgerCorrupt, match="line 2"):
+        CostLedger(path, cap=100.0).repair()
+    assert not path.with_name("l.jsonl.corrupt").exists()
+
+
+@pytest.mark.parametrize("bad", ["NaN", "Infinity", "-Infinity", "-0.5"])
+def test_ledger_rejects_non_finite_or_negative_lines(tmp_path, bad):
+    path = tmp_path / "l.jsonl"
+    path.write_text('{"cost_usd": 1.0}\n{"cost_usd": ' + bad + "}\n", encoding="utf-8")
+    with pytest.raises(LedgerCorrupt, match="line 2"):
+        CostLedger(path, cap=100.0).total()
+
+
+def test_ledger_record_rejects_negative_cost(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    with pytest.raises(ValueError, match="cost"):
+        ledger.record("r", Usage(input_tokens=-5), ModelId.HAIKU_5_5, batch=False)
+    assert not ledger.path.exists()
+
+
+def test_ledger_prices_fallback_models(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    cost = ledger.record("r", ONE_M, FallbackModelId.OPUS_4_8, batch=False)
+    assert cost == pytest.approx(30.0)
+    assert priced_model("claude-opus-4-8") is FallbackModelId.OPUS_4_8
+    assert priced_model("claude-haiku-5-5") is ModelId.HAIKU_5_5
+    # an unknown model is priced as the dearest one rather than not at all
+    assert PRICES[priced_model("claude-unknown-9")] == max(PRICES.values(), key=lambda p: p.output)
+
+
+def test_ledger_repair_replaces_atomically(tmp_path, monkeypatch):
+    path, ledger = _truncated(tmp_path)
+    replaced = []
+    real = os.replace
+    monkeypatch.setattr(
+        os, "replace", lambda a, b: (replaced.append((Path(a), Path(b))), real(a, b))
+    )
+    assert ledger.repair() is True
+    ((src, dst),) = replaced
+    assert dst == path and src != path and not src.exists()
+    assert ledger.total() == pytest.approx(0.6)
+
+
+# --- cross-process safety -------------------------------------------------------------
+
+N_PROCS = 4
+N_EACH = 50
+
+
+def _hammer(path: str, n: int) -> None:
+    ledger = CostLedger(Path(path), cap=1e9)
+    for i in range(n):
+        ledger.record(f"run-{os.getpid()}-{i}", ONE_M, ModelId.HAIKU_5_5, batch=False)
+
+
+def test_ledger_concurrent_processes_do_not_interleave(tmp_path):
+    import multiprocessing as mp
+
+    path = tmp_path / "l.jsonl"
+    ctx = mp.get_context("spawn")
+    procs = [ctx.Process(target=_hammer, args=(str(path), N_EACH)) for _ in range(N_PROCS)]
+    for p in procs:
+        p.start()
+    for p in procs:
+        p.join(120)
+        assert p.exitcode == 0
+    lines = path.read_bytes().splitlines()
+    assert len(lines) == N_PROCS * N_EACH
+    assert all(__import__("json").loads(line)["cost_usd"] == pytest.approx(0.6) for line in lines)
+    assert CostLedger(path, cap=1e9).total() == pytest.approx(0.6 * N_PROCS * N_EACH)
+
+
+def _hold_lock(lock_path: str, held, release) -> None:
+    from semval.fsutil import exclusive_lock
+
+    with exclusive_lock(Path(lock_path)):
+        held.set()
+        release.wait(60)
+
+
+def test_ledger_lock_times_out_when_held_elsewhere(tmp_path):
+    import multiprocessing as mp
+
+    path = tmp_path / "l.jsonl"
+    ctx = mp.get_context("spawn")
+    held, release = ctx.Event(), ctx.Event()
+    p = ctx.Process(target=_hold_lock, args=(str(path) + ".lock", held, release))
+    p.start()
+    try:
+        assert held.wait(60)
+        ledger = CostLedger(path, cap=100.0, lock_timeout=0.5)
+        with pytest.raises(TimeoutError, match="lock"):
+            ledger.total()
+        with pytest.raises(TimeoutError, match="lock"):
+            ledger.record("r", ONE_M, ModelId.HAIKU_5_5, batch=False)
+        assert not path.exists()
+    finally:
+        release.set()
+        p.join(60)
+    assert CostLedger(path, cap=100.0, lock_timeout=5).total() == 0.0
+
+
+def test_ledger_skips_a_call_key_already_recorded(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    u = Usage(input_tokens=1000)
+    first = ledger.record("r1", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0")
+    assert first > 0
+    assert ledger.record("r1", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0") == 0.0
+    ledger.record("r2", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0")  # other run
+    ledger.record("r1", u, ModelId.SONNET_5_5, batch=False)  # no key: always written
+    ledger.record("r1", u, ModelId.SONNET_5_5, batch=False)
+    assert len(ledger.path.read_text().splitlines()) == 4
+
+
+def test_ledger_duplicate_key_still_checks_the_cap(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=5.0)
+    with pytest.raises(BudgetExceeded):
+        ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False, call_key="k")
+    with pytest.raises(BudgetExceeded):
+        ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False, call_key="k")
+    assert len(ledger.path.read_text().splitlines()) == 1
+
+
+def test_ledger_loads_old_rows_without_a_call_key(tmp_path):
+    path = tmp_path / "l.jsonl"
+    path.write_text(
+        '{"timestamp": "2026-11-20T00:00:00+00:00", "run_id": "r1", "model": "m", '
+        '"batch": true, "usage": {}, "cost_usd": 1.5}\n'
+    )
+    ledger = CostLedger(path, cap=100.0)
+    assert ledger.total() == pytest.approx(1.5)
+    ledger.record("r1", Usage(input_tokens=1000), ModelId.SONNET_5_5, batch=True, call_key="k")
+    assert len(path.read_text().splitlines()) == 2
+
+
+def test_ledger_record_all_writes_every_pair_before_raising(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=5.0)
+    pairs = [(ModelId.SONNET_5_5, ONE_M), (ModelId.SONNET_5_5, Usage(input_tokens=10))]
+    with pytest.raises(BudgetExceeded):
+        ledger.record_all("r1", pairs, batch=False)  # the first pair passes the cap
+    assert len(ledger.path.read_text().splitlines()) == 2  # the second was still counted

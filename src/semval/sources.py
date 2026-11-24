@@ -3,6 +3,7 @@
 Source-agnostic: every archive is described by data (YAML), not code.
 """
 
+import re
 from datetime import date
 from pathlib import Path
 from typing import Literal
@@ -10,7 +11,27 @@ from typing import Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
-USABLE_ACCESS = {"free", "free_registration"}
+AccessLevel = Literal["free", "free_registration", "partial_paywall", "paywall", "restricted"]
+
+# "restricted" (reading-room or on-site only) is deliberately not usable.
+USABLE_ACCESS: frozenset[AccessLevel] = frozenset({"free", "free_registration"})
+
+# How a year bound was established: verified = a page states it; window = our own
+# cut-off; observed = oldest page seen / ongoing; unknown = notes say unverified.
+YearBasis = Literal["verified", "window", "observed", "unknown"]
+
+SOURCE_ID_PATTERN = re.compile(r"^[a-z][a-z0-9-]*$")
+
+# ISO 639-1 two-letter language codes.
+ISO_639_1 = frozenset(
+    "aa ab ae af ak am an ar as av ay az ba be bg bh bi bm bn bo br bs ca ce ch co cr cs cu cv "  # noqa: SIM905
+    "cy da de dv dz ee el en eo es et eu fa ff fi fj fo fr fy ga gd gl gn gu gv ha he hi ho hr "
+    "ht hu hy hz ia id ie ig ii ik io is it iu ja jv ka kg ki kj kk kl km kn ko kr ks ku kv kw "
+    "ky la lb lg li ln lo lt lu lv mg mh mi mk ml mn mr ms mt my na nb nd ne ng nl nn no nr nv "
+    "ny oc oj om or os pa pi pl ps pt qu rm rn ro ru rw sa sc sd se sg si sk sl sm sn so sq sr "
+    "ss st su sv sw ta te tg th ti tk tl tn to tr ts tt tw ty ug uk ur uz ve vi vo wa wo xh yi "
+    "yo za zh zu".split()
+)
 
 PERIODS: list[tuple[str, int, int | None]] = [
     ("1940-1969", 1940, 1969),
@@ -74,9 +95,11 @@ class Source(BaseModel):
     country: str
     source_type: SourceType
     url: HttpUrl
-    access: Literal["free", "free_registration", "partial_paywall", "paywall"]
+    access: AccessLevel
     year_start: int
+    year_start_basis: YearBasis
     year_end: int | None
+    year_end_basis: YearBasis
     languages: list[str]
     genres: list[Literal["opinion", "letters", "columns", "news", "forum", "books", "other"]]
     access_method: AccessMethod
@@ -90,6 +113,21 @@ class Source(BaseModel):
     verified_on: date
     evidence_urls: list[HttpUrl] = Field(min_length=1)
     notes: str = ""
+
+    @field_validator("id")
+    @classmethod
+    def _id_slug(cls, v: str) -> str:
+        if not SOURCE_ID_PATTERN.match(v):
+            raise ValueError(f"id must match {SOURCE_ID_PATTERN.pattern}: {v!r}")
+        return v
+
+    @field_validator("languages")
+    @classmethod
+    def _languages(cls, v: list[str]) -> list[str]:
+        bad = [code for code in v if code not in ISO_639_1]
+        if bad:
+            raise ValueError(f"not ISO 639-1 language codes: {bad}")
+        return v
 
     @field_validator("country")
     @classmethod

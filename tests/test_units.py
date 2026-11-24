@@ -1,0 +1,77 @@
+import pytest
+
+from semval.units import Segment, UnitLevel, document_id_of, segment
+
+TEXT = "Πρώτη πρόταση. Δεύτερη!  Third one?\n\nΝέα παράγραφος εδώ. Τέλος"
+
+
+def test_rank_order():
+    assert [lv.rank for lv in UnitLevel] == [0, 1, 2]
+
+
+def test_offsets_reconstruct_and_trimmed():
+    segs = segment("d1", TEXT, UnitLevel.SENTENCE)
+    for s in segs:
+        piece = TEXT[s.start : s.end]
+        assert piece == piece.strip() and piece
+    sents = [TEXT[s.start : s.end] for s in segs if s.level is UnitLevel.SENTENCE]
+    assert sents == [
+        "Πρώτη πρόταση.",
+        "Δεύτερη!",
+        "Third one?",
+        "Νέα παράγραφος εδώ.",
+        "Τέλος",
+    ]
+
+
+def test_ids_and_parents():
+    segs = {s.id: s for s in segment("d1", TEXT, UnitLevel.SENTENCE)}
+    assert segs["d1:a"].parent_id is None
+    assert segs["d1:p0"].parent_id == "d1:a"
+    assert segs["d1:p1:s1"].parent_id == "d1:p1"
+    assert segs["d1:p0:s2"].level is UnitLevel.SENTENCE
+    assert segs["d1:p1:s1"].document_id == "d1"
+
+
+def test_levels_returned():
+    assert {s.level for s in segment("d", TEXT, UnitLevel.ARTICLE)} == {UnitLevel.ARTICLE}
+    levels = {s.level for s in segment("d", TEXT, UnitLevel.PARAGRAPH)}
+    assert levels == {UnitLevel.ARTICLE, UnitLevel.PARAGRAPH}
+
+
+def test_article_span_and_empty_text():
+    (art,) = segment("d", "  hi  ", UnitLevel.ARTICLE)
+    assert "  hi  "[art.start : art.end] == "hi"
+    assert segment("d", "   ", UnitLevel.SENTENCE) == []
+
+
+def test_no_split_on_lowercase_or_decimal():
+    text = "Costs 3.5 euro, e.g. cheap. Done"
+    sents = [
+        text[s.start : s.end]
+        for s in segment("d", text, UnitLevel.SENTENCE)
+        if s.level is UnitLevel.SENTENCE
+    ]
+    assert sents == ["Costs 3.5 euro, e.g. cheap.", "Done"]
+
+
+def test_segment_offsets_validated():
+    with pytest.raises(ValueError):
+        Segment(id="x", document_id="d", level=UnitLevel.ARTICLE, parent_id=None, start=5, end=2)
+
+
+def test_crlf_offsets_reconstruct():
+    text = "One. Two.\r\n\r\nThree here.\r\nStill three. Four"
+    segs = segment("d", text, UnitLevel.SENTENCE)
+    paras = [text[s.start : s.end] for s in segs if s.level is UnitLevel.PARAGRAPH]
+    sents = [text[s.start : s.end] for s in segs if s.level is UnitLevel.SENTENCE]
+    assert paras == ["One. Two.", "Three here.\r\nStill three. Four"]
+    assert sents == ["One.", "Two.", "Three here.", "Still three.", "Four"]
+
+
+def test_document_id_of_segment_ids() -> None:
+    doc = "gr-tovima-website:0daddc3a3140"
+    segs = segment(doc, "One. Two.\n\nThree.", UnitLevel.SENTENCE)
+    assert {document_id_of(s.id) for s in segs} == {doc}
+    with pytest.raises(ValueError, match="segment id"):
+        document_id_of("no-level-suffix")

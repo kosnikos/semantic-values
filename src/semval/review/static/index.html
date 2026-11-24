@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Value review</title>
+  <link rel="stylesheet" href="/static/review.css">
+  <script src="/static/review.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-meta">
+      <ul id="doc-meta" class="facts" aria-label="Article details"></ul>
+      <div id="run-settings" class="settings"></div>
+    </div>
+    <nav class="nav" aria-label="Articles">
+      <button id="prev" class="nav-btn" type="button" title="Previous article (←)" aria-label="Previous article">◀</button>
+      <span id="position" class="position">Article – / –</span>
+      <button id="next" class="nav-btn" type="button" title="Next article (→)" aria-label="Next article">▶</button>
+    </nav>
+    <button id="save-status" class="save-status" type="button" data-state="saved" aria-live="polite" title="Every action saves at once">Saved ✓</button>
+    <button id="theme" class="icon-btn" type="button" title="Theme: follows the system" aria-label="Switch theme">◐</button>
+  </header>
+
+  <main class="layout">
+    <article class="article-pane" aria-labelledby="title">
+      <h1 id="title" class="title">Loading…</h1>
+      <p id="byline" class="byline"></p>
+      <p id="text-error" class="text-error" role="alert" hidden></p>
+      <div id="article" class="article"></div>
+    </article>
+
+    <aside class="tags-pane" aria-label="Value tags">
+      <div class="tags-head">
+        <h2>Values</h2>
+        <span id="progress" class="progress"></span>
+      </div>
+      <ol id="rows" class="rows"></ol>
+      <p id="no-rows" class="empty" hidden>No values were proposed for this article.</p>
+
+      <div class="add">
+        <button id="add-btn" class="add-btn" type="button" aria-expanded="false" aria-controls="add-panel">+ add missed value</button>
+        <div id="add-panel" class="add-panel" hidden>
+          <input id="add-filter" class="add-filter" type="search" placeholder="Filter values…" aria-label="Filter values" autocomplete="off">
+          <ul id="add-list" class="add-list"></ul>
+          <div id="add-stance" class="add-stance" hidden>
+            <p class="add-stance-q">Stance for <strong id="add-name"></strong>?</p>
+            <div class="stance-choices" role="group" aria-label="Stance">
+              <button type="button" class="stance-pick" data-stance="endorse">+ endorse</button>
+              <button type="button" class="stance-pick" data-stance="reject">− reject</button>
+              <button type="button" class="stance-pick" data-stance="mention">~ mention</button>
+            </div>
+          </div>
+          <p id="add-hint" class="hint"></p>
+        </div>
+      </div>
+
+      <label class="notes">
+        <span>Notes on this article</span>
+        <textarea id="note" rows="4" maxlength="8000" placeholder="Anything worth remembering about this article…"></textarea>
+      </label>
+      <p class="keys">Keys: <kbd>←</kbd> <kbd>→</kbd> article · <kbd>j</kbd> <kbd>k</kbd> row · <kbd>1</kbd> ✓ <kbd>2</kbd> ✗ <kbd>3</kbd> ⟲ · <kbd>e</kbd> <kbd>r</kbd> <kbd>m</kbd> stance · <kbd>a</kbd> add · <kbd>Esc</kbd> close</p>
+    </aside>
+  </main>
+</body>
+</html>

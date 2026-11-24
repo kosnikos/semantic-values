@@ -12,6 +12,13 @@
 #     see the memo for the three items that need a caveat (iprspot, iplylfr, ipmodst).
 #     The ESS itself scores these items at the 10-value level only.
 #   - Examples are written for this project; none is copied from a dataset.
+#   - `official`: where the source's own definition is, for the tagger's prompt. Leaves:
+#     Schwartz et al. (2012) Table 2, p. 669. basic10 targets: the same paper's Table 1,
+#     column 2, p. 664 (adapted there from Schwartz, 1994). Both are APA-copyrighted
+#     tables, so the verbatim texts are `local_only`: they live in the git-ignored
+#     data/framework/local/schwartz19.official.yaml, and this file keeps only citation and
+#     page. Without that file the tagger falls back to `definition`. See the memo,
+#     section "Official definitions".
 #
 # Structure: higher-order groups are values with parent: null and no examples.
 # The 19 tag-able values are the leaves (Framework.leaves()).
@@ -62,6 +69,8 @@ values:
     definition: >-
       Freedom to form your own ideas and develop your own abilities: independent thinking,
       curiosity, creativity.
+    official: {citation: &table2 "Schwartz et al. (2012), JPSP 103(4), Table 2",
+               page: &page669 "p. 669", local_only: true}
     parent: openness_to_change
     opposes: [tradition, conformity_rules, conformity_interpersonal, security_personal,
               security_societal]
@@ -77,6 +86,7 @@ values:
     name: "Self-direction: action"
     definition: >-
       Freedom to decide for yourself what you do and how you live your life.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: openness_to_change
     opposes: [conformity_rules, tradition, conformity_interpersonal, security_personal,
               security_societal]
@@ -92,6 +102,7 @@ values:
     name: Stimulation
     definition: >-
       Excitement, novelty and change in life; seeking challenge and new experiences.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: openness_to_change
     opposes: [security_personal, security_societal, tradition, conformity_rules,
               conformity_interpersonal]
@@ -108,6 +119,7 @@ values:
     definition: >-
       Pleasure and enjoyment for oneself. A border value between openness to change and
       self-enhancement, grouped here with openness to change.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: openness_to_change
     survey_items: ["ESS:ipgdtim", "ESS:impfun"]
     examples_endorse:
@@ -123,6 +135,7 @@ values:
     definition: >-
       Success according to social standards: being seen by others as capable and
       successful.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_enhancement
     opposes: [universalism_concern, universalism_nature, universalism_tolerance,
               benevolence_caring, benevolence_dependability]
@@ -139,6 +152,7 @@ values:
     definition: >-
       Power through control over other people: being in charge and having others do
       what you say.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_enhancement
     opposes: [universalism_concern, universalism_nature, universalism_tolerance,
               benevolence_caring, benevolence_dependability]
@@ -155,6 +169,7 @@ values:
     definition: >-
       Power through control of money, property and other material and social resources;
       wealth.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_enhancement
     opposes: [universalism_concern, universalism_nature, universalism_tolerance,
               benevolence_caring, benevolence_dependability]
@@ -172,6 +187,7 @@ values:
       Protecting your public image and standing, and avoiding humiliation. A border value
       between power and security; grouped here with conservation, following the source's
       finding that it sits with security.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     examples_endorse:
       - "A country that lets itself be humiliated abroad will not be respected by anyone."
@@ -185,6 +201,7 @@ values:
     name: "Security: personal"
     definition: >-
       Safety in your immediate surroundings: for yourself, your family and your home.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     opposes: [self_direction_thought, self_direction_action, stimulation]
     survey_items: ["ESS:impsafe"]
@@ -200,6 +217,7 @@ values:
     definition: >-
       Safety and stability in the wider society: public order, a strong state and
       protection from threats.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     opposes: [self_direction_thought, self_direction_action, stimulation]
     survey_items: ["ESS:ipstrgv"]
@@ -214,6 +232,7 @@ values:
     name: Tradition
     definition: >-
       Maintaining and preserving cultural, family or religious traditions and customs.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     opposes: [self_direction_thought, self_direction_action, stimulation]
     survey_items: ["ESS:imptrad"]
@@ -228,6 +247,7 @@ values:
     name: "Conformity: rules"
     definition: >-
       Compliance with rules, laws and formal obligations.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     opposes: [self_direction_action, self_direction_thought, stimulation]
     survey_items: ["ESS:ipfrule", "ESS:ipbhprp"]
@@ -242,6 +262,7 @@ values:
     name: "Conformity: interpersonal"
     definition: >-
       Avoiding upsetting or harming other people: politeness, tact and not giving offence.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     opposes: [self_direction_thought, self_direction_action, stimulation]
     examples_endorse:
@@ -258,6 +279,7 @@ values:
       seeking attention. A border value between conservation and self-transcendence;
       grouped here with conservation, following the source's finding that it sits with
       conformity.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: conservation
     survey_items: ["ESS:ipmodst"]
     examples_endorse:
@@ -272,6 +294,7 @@ values:
     name: "Benevolence: caring"
     definition: >-
       Devotion to the welfare of the people close to you: family, friends and community.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_transcendence
     opposes: [achievement, power_dominance, power_resources]
     survey_items: ["ESS:iphlppl", "ESS:iplylfr"]
@@ -286,6 +309,7 @@ values:
     name: "Benevolence: dependability"
     definition: >-
       Being a reliable and trustworthy member of your group: loyalty and keeping your word.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_transcendence
     opposes: [achievement, power_dominance, power_resources]
     survey_items: ["ESS:iplylfr"]
@@ -300,6 +324,7 @@ values:
     name: "Universalism: concern"
     definition: >-
       Commitment to equality, justice and protection for all people, including strangers.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_transcendence
     opposes: [achievement, power_dominance, power_resources]
     survey_items: ["ESS:ipeqopt"]
@@ -314,6 +339,7 @@ values:
     name: "Universalism: nature"
     definition: >-
       Preserving the natural environment.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_transcendence
     opposes: [achievement, power_dominance, power_resources]
     survey_items: ["ESS:impenv"]
@@ -328,6 +354,7 @@ values:
     name: "Universalism: tolerance"
     definition: >-
       Accepting and trying to understand people who are different from you.
+    official: {citation: *table2, page: *page669, local_only: true}
     parent: self_transcendence
     opposes: [achievement, power_dominance, power_resources]
     survey_items: ["ESS:ipudrst"]
@@ -337,3 +364,193 @@ values:
     examples_reject:
       - "Tolerance has become a word for accepting things we should not accept."
       - "Newcomers must adapt to us, not the other way round."
+
+# ---- Levels and roll-ups ----------------------------------------------------------
+# The leaves are the level `leaf` (built in). Each level below maps every leaf to one of
+# its targets. Sub-values roll up to the basic value named in their id; the border values
+# follow Schwartz et al. (2012, p. 675): face -> security, humility -> conformity.
+# `basic10_validation` differs only in humility -> tradition, matching how the ESS scores
+# its item `ipmodst` (see docs/research/framework-decision.md, §4 "Validation roll-up").
+# Definitions and examples of the 10 are written for this project; `official` points at
+# the source's own definition (Table 1 of Schwartz et al., 2012), kept local like the leaves'.
+
+levels:
+  - id: basic10
+    targets:
+      - id: self_direction
+        name: Self-direction
+        definition: >-
+          Freedom to think for yourself and to choose your own goals and way of life.
+        official:
+          citation: &table1 >-
+            Schwartz et al. (2012), JPSP 103(4), Table 1, column 2; adapted there from
+            Schwartz (1994), Journal of Social Issues 50, p. 22
+          page: &page664 "p. 664"
+          local_only: true
+        examples_endorse:
+          - "Citizens should be trusted to make up their own minds, not told what to think."
+        examples_reject:
+          - "Too much freedom to choose has left people without any shared direction."
+
+      - id: stimulation
+        name: Stimulation
+        definition: >-
+          Seeking excitement, new experiences and challenges in life.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "A city needs new venues, new festivals and a bit of risk to stay alive."
+        examples_reject:
+          - "The thirst for constant novelty leaves people restless and never satisfied."
+
+      - id: hedonism
+        name: Hedonism
+        definition: >-
+          Enjoying life and seeking pleasure for yourself.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "There is nothing wrong with spending your savings on a good meal and a long holiday."
+        examples_reject:
+          - "A culture built around pleasure has nothing to offer when hard times come."
+
+      - id: achievement
+        name: Achievement
+        definition: >-
+          Being successful, and being seen by others as capable by the standards of your
+          society.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "Pupils who work hard and come top deserve to be praised in public."
+        examples_reject:
+          - "Chasing grades and promotions has made our schools and offices anxious places."
+
+      - id: power
+        name: Power
+        definition: >-
+          Having status and wealth, and control over other people and resources.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "A country needs strong leaders and the wealth to make others take it seriously."
+        examples_reject:
+          - "Too much money and influence now sits in the hands of a few."
+
+      - id: security
+        name: Security
+        definition: >-
+          Safety and stability for yourself, your family and the wider society.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "People have a right to feel safe in their streets and sure the state will protect them."
+        examples_reject:
+          - "Each new security law trades away a little more of our freedom."
+
+      - id: conformity
+        name: Conformity
+        definition: >-
+          Following rules and social expectations, and holding back from behaviour that
+          would upset or harm others.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "Laws and good manners exist for a reason, and everyone should respect them."
+        examples_reject:
+          - "Doing what you are told is how ordinary people end up going along with injustice."
+
+      - id: tradition
+        name: Tradition
+        definition: >-
+          Respecting and keeping the customs, beliefs and religious practices handed down
+          by your culture or family.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "Our festivals and religious holidays connect us with the generations before us."
+        examples_reject:
+          - "Customs should not be kept just because our grandparents kept them."
+
+      - id: benevolence
+        name: Benevolence
+        definition: >-
+          Caring for the well-being of the people close to you, and being someone they can
+          rely on.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "Families and neighbours who look after each other are what keep this town going."
+        examples_reject:
+          - "Loyalty to your own circle too often becomes an excuse for favouritism."
+
+      - id: universalism
+        name: Universalism
+        definition: >-
+          Concern for the welfare of all people and of nature: equality, justice, tolerance
+          and care for the environment.
+        official: {citation: *table1, page: *page664, local_only: true}
+        examples_endorse:
+          - "Every person deserves equal rights, and the planet deserves protection too."
+        examples_reject:
+          - "We cannot take responsibility for every injustice and every species on Earth."
+    map:
+      self_direction_thought: self_direction
+      self_direction_action: self_direction
+      stimulation: stimulation
+      hedonism: hedonism
+      achievement: achievement
+      power_dominance: power
+      power_resources: power
+      face: security
+      security_personal: security
+      security_societal: security
+      tradition: tradition
+      conformity_rules: conformity
+      conformity_interpersonal: conformity
+      humility: conformity
+      benevolence_caring: benevolence
+      benevolence_dependability: benevolence
+      universalism_concern: universalism
+      universalism_nature: universalism
+      universalism_tolerance: universalism
+
+  # Validation only: same targets as basic10; humility -> tradition, as the ESS scores it.
+  - id: basic10_validation
+    targets_from: basic10
+    map:
+      self_direction_thought: self_direction
+      self_direction_action: self_direction
+      stimulation: stimulation
+      hedonism: hedonism
+      achievement: achievement
+      power_dominance: power
+      power_resources: power
+      face: security
+      security_personal: security
+      security_societal: security
+      tradition: tradition
+      conformity_rules: conformity
+      conformity_interpersonal: conformity
+      humility: tradition
+      benevolence_caring: benevolence
+      benevolence_dependability: benevolence
+      universalism_concern: universalism
+      universalism_nature: universalism
+      universalism_tolerance: universalism
+
+  # The 4 higher-order groups, using their own definitions above; map = each leaf's parent.
+  - id: group4
+    value_targets: [openness_to_change, self_enhancement, conservation, self_transcendence]
+    map:
+      self_direction_thought: openness_to_change
+      self_direction_action: openness_to_change
+      stimulation: openness_to_change
+      hedonism: openness_to_change
+      achievement: self_enhancement
+      power_dominance: self_enhancement
+      power_resources: self_enhancement
+      face: conservation
+      security_personal: conservation
+      security_societal: conservation
+      tradition: conservation
+      conformity_rules: conservation
+      conformity_interpersonal: conservation
+      humility: conservation
+      benevolence_caring: self_transcendence
+      benevolence_dependability: self_transcendence
+      universalism_concern: self_transcendence
+      universalism_nature: self_transcendence
+      universalism_tolerance: self_transcendence

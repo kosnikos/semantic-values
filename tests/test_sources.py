@@ -8,10 +8,12 @@ from pydantic import ValidationError
 from conftest import make_source
 from semval.sources import (
     EXCLUDED_SOURCE_TYPES,
+    ISO_639_1,
     JURISDICTION_OPEN_SCOPES,
     OPEN_SCOPES,
     OVERRIDE_EXCLUDED_ACCESS_METHODS,
     PERIODS,
+    USABLE_ACCESS,
     V0_COUNTRIES,
     RestrictionScope,
     Source,
@@ -190,3 +192,37 @@ def test_non_list_yaml_rejected(tmp_path):
 def test_registry_loads():
     sources = load_sources(REGISTRY)
     assert sources
+
+
+def test_restricted_access_not_usable():
+    assert "restricted" not in USABLE_ACCESS
+    assert Source(**make_source(access="restricted")).access == "restricted"
+
+
+def test_year_basis_required():
+    for field in ("year_start_basis", "year_end_basis"):
+        entry = make_source()
+        del entry[field]
+        with pytest.raises(ValidationError):
+            Source(**entry)
+    with pytest.raises(ValidationError):
+        Source(**make_source(year_start_basis="guess"))
+
+
+def test_source_id_slug_enforced():
+    with pytest.raises(ValidationError):
+        Source(**make_source(id="Bad ID"))
+    assert Source(**make_source(id="gr-ok-1")).id == "gr-ok-1"
+
+
+def test_language_must_be_iso639_1():
+    with pytest.raises(ValidationError):
+        Source(**make_source(languages=["gre"]))
+    assert Source(**make_source(languages=["el"])).languages == ["el"]
+    assert {"el", "lb", "rm"} <= ISO_639_1
+
+
+def test_restricted_counts_in_neither_table():
+    s = Source(**make_source(access="restricted"))
+    assert coverage_matrix([s], ["GR"], 2026)["GR"]["1970-1989"] == []
+    assert coverage_matrix([s], ["GR"], 2026, open_only=True)["GR"]["1970-1989"] == []

@@ -19,7 +19,7 @@ Cells show the number of usable (free or free-registration) sources per period. 
 | GR | 1 | 1 | 3 | 7 |
 | ES | 1 | 1 | 2 | 7 |
 | PT | 1 | 1 | 3 | 2 |
-| GB | 0 | 0 | 5 | 12 |
+| GB | 0 | 0 | 4 | 11 |
 
 ## Usable and not opted out
 
@@ -38,7 +38,7 @@ As above, minus sources whose restriction scope excludes them. Open scopes (sett
 | GR | 1 | 1 | 3 | 7 |
 | ES | 1 | 1 | 2 | 7 |
 | PT | 0 | 0 | 2 | 2 |
-| GB | 0 | 0 | 4 | 11 |
+| GB | 0 | 0 | 3 | 10 |
 
 ## Open questions
 

@@ -1,0 +1,19 @@
+# Seed word list for the lexicon baseline, level basic10 of schwartz19.
+# Provenance: written by the semantic-values project itself (about 12 English stems per
+# target), NOT taken from the Personal Values Dictionary (Ponizovskiy et al. 2020,
+# https://osf.io/vt8nf): no redistribution licence for the dictionary files could be
+# confirmed, so none of its words are copied. Licence of this file: same as the repo data.
+# Matching: case-insensitive, word-initial stem followed by any word characters.
+framework_id: schwartz19
+level_id: basic10
+targets:
+  self_direction: [freedom, independen, autonom, creativ, curious, curiosity, choose, choice, own mind, self-determin, original, liberty]
+  stimulation: [excit, adventur, thrill, daring, novel, challeng, risk, exploring, spontane, bold, variety, venture]
+  hedonism: [pleasure, enjoy, indulg, leisure, delight, fun, comfort, luxur, gratif, sensual, treat yourself, savour]
+  achievement: [success, achiev, ambiti, accomplish, compet, skill, talent, perform, excel, aspir, triumph, merit]
+  power: [power, wealth, authorit, dominan, control, status, prestige, rich, command, influen, rule over, elite]
+  security: [secur, safe, protect, stabil, order, defen, danger, threat, crime, police, harmony, health]
+  conformity: [obey, obedien, complian, rules, polite, discipline, respect for, law-abiding, duty, restrain, self-control, proper]
+  tradition: [tradition, custom, heritage, ritual, faith, relig, ancestor, devout, humble, modest, sacred, church]
+  benevolence: [help, kind, caring, loyal, friend, famil, forgiv, honest, support, compassion, generos, trust]
+  universalism: [equal, justice, peace, toleran, environment, nature, humanity, fair, diversity, human rights, global, solidarity]

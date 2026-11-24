@@ -7,3 +7,11 @@ __pycache__/
 data/raw/
 data/cache/
 .superpowers/
+data/framework/local/
+data/fewshot/local/
+
+# Owner labels (notes may quote article text) and run outputs (tag evidence quotes): not committed until decided
+data/labels/
+data/runs/
+
+data/external/

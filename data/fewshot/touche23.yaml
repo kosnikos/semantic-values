@@ -1,0 +1,364 @@
+attribution:
+  dataset: Touché23-ValueEval
+  citation: 'Kiesel, Alshomary, Mirzakhmedova, Heinrich, Handke, Wachsmuth, Stein (2023). SemEval-2023
+    Task 4: ValueEval: Identification of Human Values behind Arguments.'
+  licence: CC BY 4.0
+  url: https://zenodo.org/record/7879430
+  changes: Arguments rendered as conclusion, stance and premise; the value stances and quotes below are
+    not part of the dataset.
+  stances: Stances drafted by Claude Opus 5.5 and confirmed by the project owner.
+examples:
+- id: E07088
+  text: "Conclusion: We should not have any immigration from non-European or non first-world countries\
+    \ \nStance: in favor of\nPremise: We need single and selective migration rules. It is very challenging\
+    \ for Europe to protect its border without harming refugees or financial migrants fleeing their countries,\
+    \ and it cannot be efficient without unified and powerful border security (Frontex). "
+  language: en
+  tags:
+  - value_id: security_societal
+    stance: endorse
+    quotes:
+    - it cannot be efficient without unified and powerful border security (Frontex)
+    - It is very challenging for Europe to protect its border
+    confidence: 0.85
+  - value_id: universalism_concern
+    stance: endorse
+    quotes:
+    - without harming refugees or financial migrants fleeing their countries
+    confidence: 0.45
+  - value_id: self_direction_action
+    stance: reject
+    quotes:
+    - We should not have any immigration from non-European or non first-world countries
+    - We need single and selective migration rules.
+    confidence: 0.35
+  source: Touché23-ValueEval (CC BY 4.0), argument E07088
+- id: A19452
+  text: 'Conclusion: We should legalize organ trade
+
+    Stance: against
+
+    Premise: we shouldn''t legalize organ trade because is horror for familiys'
+  language: en
+  tags:
+  - value_id: benevolence_caring
+    stance: endorse
+    quotes:
+    - is horror for familiys
+    confidence: 0.7
+  - value_id: conformity_rules
+    stance: endorse
+    quotes:
+    - we shouldn't legalize organ trade
+    confidence: 0.4
+  source: Touché23-ValueEval (CC BY 4.0), argument A19452
+- id: A25009
+  text: 'Conclusion: We should subsidize vocational education
+
+    Stance: against
+
+    Premise: we don''t need to subsidize vocational education because the cost is already lower than traditional
+    college.'
+  language: en
+  tags:
+  - value_id: security_personal
+    stance: mention
+    quotes:
+    - the cost is already lower than traditional college
+    confidence: 0.3
+  source: Touché23-ValueEval (CC BY 4.0), argument A25009
+- id: A13010
+  text: 'Conclusion: We should ban missionary work
+
+    Stance: in favor of
+
+    Premise: missionary work puts people in intrusive positions against those who have inhabited the same
+    land and have had the same customs for centuries.'
+  language: en
+  tags:
+  - value_id: tradition
+    stance: endorse
+    quotes:
+    - those who have inhabited the same land and have had the same customs for centuries
+    confidence: 0.85
+  - value_id: conformity_interpersonal
+    stance: endorse
+    quotes:
+    - missionary work puts people in intrusive positions
+    confidence: 0.6
+  - value_id: universalism_tolerance
+    stance: endorse
+    quotes:
+    - missionary work puts people in intrusive positions against those who have inhabited the same land
+      and have had the same customs for centuries.
+    confidence: 0.5
+  source: Touché23-ValueEval (CC BY 4.0), argument A13010
+- id: E07025
+  text: 'Conclusion: There should be a stronger EU on the world scene
+
+    Stance: in favor of
+
+    Premise: Too many times so-called leaders around the world like Trump and Boris Johnson have made
+    a mockery of Europe and Europeans with zero response from EU leaders. These things affect people''s
+    pride and give out a sense of weakness.'
+  language: en
+  tags:
+  - value_id: face
+    stance: endorse
+    quotes:
+    - have made a mockery of Europe and Europeans with zero response from EU leaders
+    - These things affect people's pride and give out a sense of weakness.
+    confidence: 0.9
+  source: Touché23-ValueEval (CC BY 4.0), argument E07025
+- id: A27401
+  text: 'Conclusion: We should abandon television
+
+    Stance: against
+
+    Premise: no, television is a form of entertainment for people'
+  language: en
+  tags:
+  - value_id: hedonism
+    stance: endorse
+    quotes:
+    - television is a form of entertainment for people
+    confidence: 0.8
+  - value_id: stimulation
+    stance: endorse
+    quotes:
+    - television is a form of entertainment for people
+    confidence: 0.5
+  source: Touché23-ValueEval (CC BY 4.0), argument A27401
+- id: A27102
+  text: 'Conclusion: We should ban cosmetic surgery
+
+    Stance: in favor of
+
+    Premise: we should ban it because it gives people a unrealistic view on how a natural body or face
+    should look.'
+  language: en
+  tags:
+  - value_id: humility
+    stance: endorse
+    quotes:
+    - we should ban it because it gives people a unrealistic view on how a natural body or face should
+      look.
+    confidence: 0.45
+  - value_id: universalism_nature
+    stance: endorse
+    quotes:
+    - how a natural body or face should look
+    confidence: 0.4
+  source: Touché23-ValueEval (CC BY 4.0), argument A27102
+- id: A15002
+  text: 'Conclusion: We should ban fast food
+
+    Stance: in favor of
+
+    Premise: fast food is the cause of the ever increasing chronic conditions and obesity in our nation.'
+  language: en
+  tags:
+  - value_id: power_dominance
+    stance: endorse
+    quotes:
+    - We should ban fast food
+    confidence: 0.4
+  source: Touché23-ValueEval (CC BY 4.0), argument A15002
+- id: A12448
+  text: 'Conclusion: The use of public defenders should be mandatory
+
+    Stance: against
+
+    Premise: Public defenders cost the state too much money.'
+  language: en
+  tags:
+  - value_id: power_resources
+    stance: endorse
+    quotes:
+    - Public defenders cost the state too much money.
+    confidence: 0.6
+  source: Touché23-ValueEval (CC BY 4.0), argument A12448
+- id: A24144
+  text: 'Conclusion: Homeopathy brings more harm than good
+
+    Stance: in favor of
+
+    Premise: homeopathy is scientifically implausible and produces nothing more than a placebo effect
+    in patients'
+  language: en
+  tags:
+  - value_id: achievement
+    stance: endorse
+    quotes:
+    - homeopathy is scientifically implausible and produces nothing more than a placebo effect in patients
+    confidence: 0.35
+  source: Touché23-ValueEval (CC BY 4.0), argument A24144
+- id: A18116
+  text: 'Conclusion: Surrogacy should be banned
+
+    Stance: against
+
+    Premise: women that are capable of giving birth can help those women who are not'
+  language: en
+  tags:
+  - value_id: benevolence_caring
+    stance: endorse
+    quotes:
+    - women that are capable of giving birth can help those women who are not
+    confidence: 0.8
+  source: Touché23-ValueEval (CC BY 4.0), argument A18116
+- id: A25413
+  text: 'Conclusion: We should subsidize space exploration
+
+    Stance: against
+
+    Premise: space exploration need only be done by the private sector.'
+  language: en
+  tags: []
+  source: Touché23-ValueEval (CC BY 4.0), argument A25413
+- id: A23045
+  text: 'Conclusion: We should ban telemarketing
+
+    Stance: in favor of
+
+    Premise: telemarketing should be banned because it is just plain annoying.  if someone really wants
+    a product they will go buy it and not wait for someone to call them about it.'
+  language: en
+  tags:
+  - value_id: conformity_interpersonal
+    stance: endorse
+    quotes:
+    - telemarketing should be banned because it is just plain annoying.
+    confidence: 0.75
+  source: Touché23-ValueEval (CC BY 4.0), argument A23045
+- id: A29231
+  text: 'Conclusion: Payday loans should be banned
+
+    Stance: in favor of
+
+    Premise: this type of loans is not allowed by state law or because the lenders decided not to do business
+    on the interest rate and the allowable installments in those states.'
+  language: en
+  tags:
+  - value_id: conformity_rules
+    stance: endorse
+    quotes:
+    - this type of loans is not allowed by state law
+    confidence: 0.6
+  source: Touché23-ValueEval (CC BY 4.0), argument A29231
+- id: A12461
+  text: 'Conclusion: We should limit executive compensation
+
+    Stance: against
+
+    Premise: people should receive benefits for achieving higher goals and executives should also receive
+    those compensations.'
+  language: en
+  tags:
+  - value_id: face
+    stance: endorse
+    quotes:
+    - people should receive benefits for achieving higher goals and executives should also receive those
+      compensations.
+    confidence: 0.3
+  source: Touché23-ValueEval (CC BY 4.0), argument A12461
+- id: A28240
+  text: 'Conclusion: We should abandon television
+
+    Stance: against
+
+    Premise: good television is an art form that can enrich our lives.'
+  language: en
+  tags:
+  - value_id: hedonism
+    stance: endorse
+    quotes:
+    - good television is an art form that can enrich our lives.
+    confidence: 0.7
+  source: Touché23-ValueEval (CC BY 4.0), argument A28240
+- id: A25369
+  text: 'Conclusion: We should ban cosmetic surgery for minors
+
+    Stance: in favor of
+
+    Premise: minors are still growing and developing. cosmetic surgery at such a young age is pointless
+    as features are still naturally changing.'
+  language: en
+  tags:
+  - value_id: humility
+    stance: endorse
+    quotes:
+    - cosmetic surgery at such a young age is pointless as features are still naturally changing.
+    confidence: 0.35
+  source: Touché23-ValueEval (CC BY 4.0), argument A25369
+- id: E05056
+  text: "Conclusion: The EU should synchronize national elections \nStance: in favor of\nPremise: Synchronizing\
+    \ national elections would allow European citizens to engage in major pan-European campaigns."
+  language: en
+  tags:
+  - value_id: power_dominance
+    stance: endorse
+    quotes:
+    - The EU should synchronize national elections
+    confidence: 0.4
+  source: Touché23-ValueEval (CC BY 4.0), argument E05056
+- id: E01114
+  text: 'Conclusion: We should preserve bees and polling insects
+
+    Stance: in favor of
+
+    Premise: The economic value of polling insects, often bees, is estimated by researchers to be EUR
+    153 trillion. 9.5% of the total value of world food production. '
+  language: en
+  tags:
+  - value_id: power_resources
+    stance: endorse
+    quotes:
+    - The economic value of polling insects, often bees, is estimated by researchers to be EUR 153 trillion.
+    - 9.5% of the total value of world food production.
+    confidence: 0.6
+  source: Touché23-ValueEval (CC BY 4.0), argument E01114
+- id: A25088
+  text: 'Conclusion: Homeopathy brings more harm than good
+
+    Stance: in favor of
+
+    Premise: homeopathy has no scientific evidence of efficacy and is equivalent to simply taking no medical
+    action at all.'
+  language: en
+  tags:
+  - value_id: security_personal
+    stance: endorse
+    quotes:
+    - Homeopathy brings more harm than good
+    - homeopathy has no scientific evidence of efficacy and is equivalent to simply taking no medical
+      action at all.
+    confidence: 0.75
+  source: Touché23-ValueEval (CC BY 4.0), argument A25088
+- id: A17006
+  text: 'Conclusion: We should stop the development of autonomous cars
+
+    Stance: in favor of
+
+    Premise: it is just another way for lazy people to do as little as possible.'
+  language: en
+  tags:
+  - value_id: benevolence_dependability
+    stance: endorse
+    quotes:
+    - it is just another way for lazy people to do as little as possible.
+    confidence: 0.5
+  - value_id: stimulation
+    stance: reject
+    quotes:
+    - We should stop the development of autonomous cars
+    confidence: 0.4
+  source: Touché23-ValueEval (CC BY 4.0), argument A17006
+- id: E04089
+  text: "Conclusion: We do not need immigration from non-European or non-first-world countries \nStance:\
+    \ against\nPremise: Just arguing to keep migrants out is very shortsighted and unhistorical. By keeping\
+    \ migrants out, migration pressure will not abate. So what do you suggest for next year, 10 years\
+    \ from now?  "
+  language: en
+  tags: []
+  source: Touché23-ValueEval (CC BY 4.0), argument E04089

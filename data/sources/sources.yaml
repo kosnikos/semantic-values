@@ -14,7 +14,9 @@
   url: https://open-platform.theguardian.com/
   access: free_registration
   year_start: 1999
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: api
@@ -63,7 +65,9 @@
   url: https://www.theguardian.com/
   access: free
   year_start: 1999
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -95,7 +99,9 @@
   url: https://www.bbc.co.uk/news
   access: free
   year_start: 1997
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: scrape
@@ -134,7 +140,9 @@
   url: https://www.independent.co.uk/archive
   access: partial_paywall
   year_start: 1995
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -170,7 +178,9 @@
   url: https://www.reddit.com/r/unitedkingdom/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -207,7 +217,9 @@
   url: https://www.reddit.com/r/AskUK/
   access: free_registration
   year_start: 2011
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -234,7 +246,9 @@
   url: https://www.mumsnet.com/talk
   access: free
   year_start: 2000
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: scrape
@@ -265,9 +279,11 @@
   country: GB
   source_type: web_archive
   url: https://www.webarchive.org.uk/
-  access: partial_paywall
+  access: restricted
   year_start: 2004
+  year_start_basis: verified
   year_end: 2022
+  year_end_basis: verified
   languages: [en]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -283,7 +299,7 @@
     - https://www.bl.uk/ukwebarchive
     - https://www.bl.uk/stories/blogs/posts/the-uk-web-archive-continuing-our-work-behind-the-scenes
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value:
+    access is restricted (reading-room or on-site only):
     there is no fee, but "most of the archived websites can only be viewed within a Legal
     Deposit Library reading room"; a subset is viewable from anywhere. After the 2023
     cyber-attack the platform is restored but "Only websites archived before December 2022
@@ -298,7 +314,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news, opinion]
   access_method: bulk
@@ -330,7 +348,9 @@
   url: https://www.gdeltproject.org/data.html
   access: free
   year_start: 2015
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: bulk
@@ -361,7 +381,9 @@
   url: https://www.britishnewspaperarchive.co.uk/
   access: paywall
   year_start: 1720
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: unknown
   languages: [en]
   genres: [news, letters, opinion]
   access_method: manual
@@ -391,7 +413,9 @@
   url: https://www.dailymail.co.uk/debate/index.html
   access: partial_paywall
   year_start: 1994
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -431,7 +455,9 @@
   url: https://inews.co.uk/opinion
   access: partial_paywall
   year_start: 2016
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -471,7 +497,9 @@
   url: https://www.standard.co.uk/comment
   access: free
   year_start: 1998
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -507,7 +535,9 @@
   url: https://theconversation.com/uk
   access: free
   year_start: 2013
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -540,9 +570,11 @@
   country: GB
   source_type: magazine
   url: https://www.opendemocracy.net/
-  access: free
+  access: partial_paywall
   year_start: 2004
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -553,21 +585,31 @@
   per_text_publish_allowed: "yes"
   text_quality: born_digital
   volume_estimate: unknown
-  verified_on: 2026-11-18
+  verified_on: 2026-11-19
   evidence_urls:
     - https://www.opendemocracy.net/
     - https://www.opendemocracy.net/robots.txt
     - https://www.opendemocracy.net/en/clarity-is-more-important-than-money/
     - https://www.opendemocracy.net/en/article-2186jsp/
+    - https://www.opendemocracy.net/tag/uk/page/20/
+    - https://www.opendemocracy.net/is-it-time-to-break-up-the-uk/
+    - https://www.opendemocracy.net/membership/
   notes: >-
-    Sampled article pages (2017 and 2004) carry "Creative Commons Attribution-NonCommercial
-    4.0 International licence" linking creativecommons.org/licenses/by-nc/4.0, so non-
-    commercial reuse is explicitly allowed (scope none). robots.txt only disallows
-    /.ghost/analytics/api/; no AI-crawler blocks. The 2004-10-26 article (/en/article-2186jsp/)
-    is the oldest seen; year_start 2004 from that (the site may go back further). Free, no
-    paywall seen. London-based but international, left-leaning; only part of it is about the
-    UK (filter by section). Did not find a separate terms page (/en/terms-and-conditions/
-    returned 404).
+    2026-11-19: the site now runs on Ghost (migrated around April 2026; URLs moved from /en/
+    to the root) and posts are "Members-only": every card on /tag/uk/page/20/ (Feb 2022
+    archive) is labelled Members-only, and a current article (/is-it-time-to-break-up-the-uk/,
+    2026-11-13) serves a truncated body with Ghost gh-post-upgrade-cta blocks to anonymous
+    readers. /membership/ sells paid tiers (from £5/month) that include "Free access to all
+    articles from our 25 year archive". Whether a free sign-up unlocks posts was not checked;
+    logging in is out of scope for the crawler, so access is partial_paywall (not usable).
+    Earlier notes (2026-11-18): sampled article pages (2017 and 2004) carry "Creative Commons
+    Attribution-NonCommercial 4.0 International licence" linking
+    creativecommons.org/licenses/by-nc/4.0, so non-commercial reuse is explicitly allowed
+    (scope none). robots.txt only disallows /ghost/, /email/, /r/ and similar; no AI-crawler
+    blocks. The 2004-10-26 article (/en/article-2186jsp/) is the oldest seen; year_start 2004
+    from that (the site may go back further). London-based but international, left-leaning;
+    only part of it is about the UK (filter by section). Did not find a separate terms page
+    (/en/terms-and-conditions/ returned 404).
 
 - id: gb-prospect
   name: Prospect magazine (prospectmagazine.co.uk)
@@ -576,7 +618,9 @@
   url: https://www.prospectmagazine.co.uk/
   access: partial_paywall
   year_start: 1995
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -613,7 +657,9 @@
   url: https://unherd.com/
   access: partial_paywall
   year_start: 2018
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns]
   access_method: scrape
@@ -647,7 +693,9 @@
   url: https://www.hellomagazine.com/
   access: partial_paywall
   year_start: 2001
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other, news]
   access_method: scrape
@@ -683,7 +731,9 @@
   url: https://www.goodhousekeeping.com/uk/
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other]
   access_method: scrape
@@ -717,7 +767,9 @@
   url: https://www.womanandhome.com/
   access: free
   year_start: 2005
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other]
   access_method: scrape
@@ -754,7 +806,9 @@
   url: https://www.mirror.co.uk/opinion/
   access: partial_paywall
   year_start: 2013
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -800,7 +854,9 @@
   url: https://www.manchestereveningnews.co.uk/news/greater-manchester-news/
   access: free
   year_start: 2019
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [news]
   access_method: scrape
@@ -841,7 +897,9 @@
   url: https://www.ok.co.uk/
   access: free
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [other, news]
   access_method: scrape
@@ -881,7 +939,9 @@
   url: http://efimeris.nlg.gr/ns/main.html
   access: free
   year_start: 1883
+  year_start_basis: observed
   year_end: 1983
+  year_end_basis: observed
   languages: [el]
   genres: [news]
   access_method: manual
@@ -926,7 +986,9 @@
   url: https://archive.kathimerini.gr/
   access: paywall
   year_start: 1919
+  year_start_basis: verified
   year_end: 2010
+  year_end_basis: verified
   languages: [el]
   genres: [news, opinion, letters]
   access_method: manual
@@ -957,7 +1019,9 @@
   url: https://www.kathimerini.gr/opinion/
   access: partial_paywall
   year_start: 2001
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -993,7 +1057,9 @@
   url: https://www.tovima.gr/category/opinions/
   access: free
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1030,7 +1096,9 @@
   url: https://www.tanea.gr/category/opinions/
   access: free
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1062,7 +1130,9 @@
   url: https://www.efsyn.gr/stiles/
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1093,7 +1163,9 @@
   url: https://www.rizospastis.gr/
   access: free
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -1122,7 +1194,9 @@
   url: https://www.insomnia.gr/forums/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [forum]
   access_method: scrape
@@ -1154,7 +1228,9 @@
   url: https://www.reddit.com/r/greece/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [el, en]
   genres: [forum]
   access_method: api
@@ -1183,7 +1259,9 @@
   url: https://webarchive.nlg.gr/
   access: free
   year_start: 1996
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -1215,7 +1293,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news, opinion]
   access_method: bulk
@@ -1240,6 +1320,7 @@
     Same dataset as gb-common-crawl-news. kathimerini.gr and insomnia.gr block CCBot in
     robots.txt, so they are likely absent from recent crawls; tovima.gr, tanea.gr and
     efsyn.gr do not block it. Greek coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 - id: gr-gdelt-url-index
   name: GDELT GKG 2.1 as URL index (.gr sources)
@@ -1248,7 +1329,9 @@
   url: https://www.gdeltproject.org/data.html
   access: free
   year_start: 2015
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [el]
   genres: [news]
   access_method: bulk
@@ -1268,6 +1351,7 @@
     URLs + metadata only (see gb-gdelt-url-index). GDELT machine-translates 65 languages;
     whether Greek is among them was not verified. Text behind URLs is under each
     publisher's terms.
+    year_start 2015: see gb-gdelt-url-index (GKG 2.1 from February 2015).
 
 # ---------------------------------------------------------------- FR
 
@@ -1278,7 +1362,9 @@
   url: https://gallica.bnf.fr/
   access: free
   year_start: 1940
+  year_start_basis: window
   year_end: 1953
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, other]
   access_method: api
@@ -1322,7 +1408,9 @@
   url: https://www.retronews.fr/
   access: paywall
   year_start: 1631
+  year_start_basis: verified
   year_end: 1954
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, other]
   access_method: manual
@@ -1357,7 +1445,9 @@
   url: https://www.lemonde.fr/idees/
   access: partial_paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1397,7 +1487,9 @@
   url: https://www.lefigaro.fr/vox
   access: partial_paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1434,7 +1526,9 @@
   url: https://www.agoravox.fr/
   access: free
   year_start: 2005
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, forum]
   access_method: scrape
@@ -1471,7 +1565,9 @@
   url: https://www.reddit.com/r/france/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [forum]
   access_method: api
@@ -1497,9 +1593,11 @@
   country: FR
   source_type: web_archive
   url: https://www.bnf.fr/fr/archives-de-linternet
-  access: partial_paywall
+  access: restricted
   year_start: 2000
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -1514,8 +1612,7 @@
   evidence_urls:
     - https://www.bnf.fr/fr/archives-de-linternet
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value (as
-    in gb-uk-web-archive): consultation needs a "pass recherche" in the BnF "salles
+    access is restricted (reading-room only): consultation needs a "pass recherche" in the BnF "salles
     Recherche" or in regional legal-deposit libraries; there is no remote access. The page
     says French web content is, "depuis le début des années 2000, mieux couverts dans les
     collections de la BnF que dans les collections d'Internet Archive"; year_start 2000 is
@@ -1529,7 +1626,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion]
   access_method: bulk
@@ -1554,6 +1653,7 @@
     20minutes.fr all disallow CCBot, so the main national titles are likely absent from
     recent crawls; agoravox.fr does not block CCBot. French coverage must be measured from
     the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # FR wider sweep (Task 5e): open titles with a free part. See sources.md "Wider sweep".
 
@@ -1564,7 +1664,9 @@
   url: https://theconversation.com/fr
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns]
   access_method: scrape
@@ -1598,7 +1700,9 @@
   url: https://www.slate.fr/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1635,7 +1739,9 @@
   url: https://blogs.mediapart.fr/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion]
   access_method: scrape
@@ -1673,7 +1779,9 @@
   url: https://www.humanite.fr/
   access: partial_paywall
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1709,7 +1817,9 @@
   url: https://www.valeursactuelles.com/
   access: partial_paywall
   year_start: 2003
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1743,7 +1853,9 @@
   url: https://www.belgicapress.be/
   access: free_registration
   year_start: 1814
+  year_start_basis: verified
   year_end: 1982
+  year_end_basis: verified
   languages: [fr, nl, de]
   genres: [news, opinion, other]
   access_method: manual
@@ -1786,7 +1898,9 @@
   url: https://www.lalibre.be/debats/
   access: partial_paywall
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1825,7 +1939,9 @@
   url: https://forum.politics.be/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: scrape
@@ -1856,7 +1972,9 @@
   url: https://www.reddit.com/r/belgium/
   access: free_registration
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -1888,7 +2006,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl, fr]
   genres: [news, opinion]
   access_method: bulk
@@ -1909,6 +2029,7 @@
     Same dataset as gb-common-crawl-news. standaard.be and lalibre.be disallow CCBot;
     lesoir.be and hln.be returned 403 even for robots.txt, so their status is unknown.
     Belgian coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- BE wider sweep (Task 5e batch ii)
 
@@ -1919,7 +2040,9 @@
   url: https://www.lavenir.net/opinions/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -1958,7 +2081,9 @@
   url: https://www.rtbf.be/dossier/opinions
   access: free
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [opinion, news]
   access_method: scrape
@@ -1998,7 +2123,9 @@
   url: https://www.rtl.be/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news]
   access_method: scrape
@@ -2032,7 +2159,9 @@
   url: https://www.mo.be/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -2072,7 +2201,9 @@
   url: https://www.dewereldmorgen.be/
   access: free
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news, other]
   access_method: scrape
@@ -2109,7 +2240,9 @@
   url: https://eluxemburgensia.lu/
   access: free
   year_start: 1848
+  year_start_basis: verified
   year_end: 2014
+  year_end_basis: verified
   languages: [de, fr, lb]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -2159,7 +2292,9 @@
   url: https://www.rtl.lu/news/meenung
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [lb]
   genres: [letters, opinion, news, forum]
   access_method: scrape
@@ -2199,7 +2334,9 @@
   url: https://www.tageblatt.lu/
   access: partial_paywall
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de, fr]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -2235,7 +2372,9 @@
   url: https://www.lessentiel.lu/fr
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, forum]
   access_method: scrape
@@ -2269,7 +2408,9 @@
   url: https://www.reddit.com/r/Luxembourg/
   access: free_registration
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [en]
   genres: [forum]
   access_method: api
@@ -2295,9 +2436,11 @@
   country: LU
   source_type: web_archive
   url: https://www.webarchive.lu/
-  access: partial_paywall
+  access: restricted
   year_start: 2016
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [lb, fr, de, en]
   genres: [news, opinion, other]
   access_method: manual
@@ -2313,7 +2456,7 @@
     - https://www.webarchive.lu/
     - https://www.webarchive.lu/luxembourg-news-media/
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value:
+    access is restricted (reading-room or on-site only):
     "Browsing the actual archive is only possible from within the National library of
     Luxembourg." Scope: all .lu sites plus sites published or hosted in Luxembourg; 2 domain
     crawls per year, with the Internet Archive as partner ("working with the Internet
@@ -2328,7 +2471,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [lb, fr, de]
   genres: [news, opinion]
   access_method: bulk
@@ -2351,6 +2496,7 @@
     Same dataset as gb-common-crawl-news. wort.lu and tageblatt.lu disallow CCBot;
     lessentiel.lu disallows CCBot on story paths; rtl.lu does not block it. Luxembourg
     coverage must be measured from the index and is likely small.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- NL
 
@@ -2359,9 +2505,11 @@
   country: NL
   source_type: national_library
   url: https://www.delpher.nl/
-  access: partial_paywall
+  access: restricted
   year_start: 1618
+  year_start_basis: verified
   year_end: 1995
+  year_end_basis: verified
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -2381,8 +2529,7 @@
     - https://www.kb.nl/en/ai-statement
     - https://www.delpher.nl/robots.txt
   notes: >-
-    access is partial_paywall (not a fee, but only part is open, and the schema has no
-    "restricted" value). What exists: KB says the collection holds "edities van alle
+    access is restricted (only part is openly available). What exists: KB says the collection holds "edities van alle
     jaargangen van de belangrijkste landelijke Nederlandse kranten, zoals De Telegraaf, De
     Volkskrant en Het Parool", 1618-1995, as OCR scans. What is free: KB says only that the
     files are "voor een deel vrij toegankelijk" (EN page: "Some of the files can be freely
@@ -2406,9 +2553,11 @@
   country: NL
   source_type: national_library
   url: https://www.kb.nl/onderzoeken-vinden/datasets/delpher-kranten
-  access: partial_paywall
+  access: restricted
   year_start: 1618
+  year_start_basis: verified
   year_end: 1995
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion, letters, other]
   access_method: api
@@ -2425,8 +2574,7 @@
     - https://www.kb.nl/onderzoeken-vinden/voor-onderzoekers/dataservices-apis-en-downloads
     - https://www.kb.nl/en/ai-statement
   notes: >-
-    access is partial_paywall (no fee, but only part is open, and the schema has no
-    "restricted" value). Free part: the open archive with "de teksten (OCR, ALTO, XML) van
+    access is restricted (only part is openly available). Free part: the open archive with "de teksten (OCR, ALTO, XML) van
     alle kranten uit de periode 1618 t/m 1879" ("mogen onbeperkt worden hergebruikt"), which
     is outside the v0 window. Everything later is by agreement: "Er zijn 2 API's beschikbaar:
     een metadata-harvest-API op basis van OAI-PMH en een zoek-API op basis van SRU.
@@ -2448,7 +2596,9 @@
   url: https://www.nrc.nl/opinie/
   access: paywall
   year_start: 2005
+  year_start_basis: window
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, letters, columns, news]
   access_method: scrape
@@ -2487,7 +2637,9 @@
   url: https://www.geenstijl.nl/
   access: free
   year_start: 2003
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, forum]
   access_method: scrape
@@ -2521,7 +2673,9 @@
   url: https://forum.fok.nl/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: scrape
@@ -2557,7 +2711,9 @@
   url: https://www.reddit.com/r/thenetherlands/
   access: free_registration
   year_start: 2014
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [forum]
   access_method: api
@@ -2585,9 +2741,11 @@
   country: NL
   source_type: web_archive
   url: https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
-  access: partial_paywall
+  access: restricted
   year_start: 2007
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion, forum, other]
   access_method: manual
@@ -2602,7 +2760,7 @@
   evidence_urls:
     - https://www.kb.nl/en/onderzoeken-vinden/bijzondere-collecties/webcollectie
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value.
+    access is restricted (reading-room or on-site only).
     "Contents: selection of Dutch websites collected by the KB from 2007 onwards"; "Access:
     can be inspected by KB members in the KB reading room"; sites are "collected and stored
     once or twice per year". Selective, not a .nl domain crawl. Not a practical source for us.
@@ -2614,7 +2772,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, opinion]
   access_method: bulk
@@ -2635,6 +2795,7 @@
     Same dataset as gb-common-crawl-news. nrc.nl disallows CCBot; forum.fok.nl does not.
     volkskrant.nl and nu.nl returned 403 even for robots.txt, so their status is unknown.
     Dutch coverage must be measured from the index.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- NL wider sweep (Task 5e batch ii)
 
@@ -2645,7 +2806,9 @@
   url: https://www.nhnieuws.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news]
   access_method: scrape
@@ -2682,7 +2845,9 @@
   url: https://www.omroepbrabant.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news]
   access_method: scrape
@@ -2713,7 +2878,9 @@
   url: https://www.metronieuws.nl/
   access: free
   year_start: 2020
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [news, other]
   access_method: scrape
@@ -2747,7 +2914,9 @@
   url: https://decorrespondent.nl/
   access: free
   year_start: 2023
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -2781,7 +2950,9 @@
   url: https://tpo.nl/
   access: partial_paywall
   year_start: 2023
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news]
   access_method: scrape
@@ -2816,7 +2987,9 @@
   url: https://www.wyniasweek.nl/
   access: free
   year_start: 2019
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns]
   access_method: scrape
@@ -2851,7 +3024,9 @@
   url: https://www.dagelijksestandaard.nl/
   access: free
   year_start: 2024
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, news]
   access_method: scrape
@@ -2883,7 +3058,9 @@
   url: https://www.viva.nl/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [columns, other]
   access_method: scrape
@@ -2919,7 +3096,9 @@
   url: https://www.opzij.nl/
   access: free
   year_start: 2017
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [nl]
   genres: [opinion, columns, other]
   access_method: scrape
@@ -2954,7 +3133,9 @@
   url: https://www.deutsche-digitale-bibliothek.de/newspaper
   access: free
   year_start: 1609
+  year_start_basis: verified
   year_end: 1994
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: api
@@ -2993,7 +3174,9 @@
   url: https://zefys.staatsbibliothek-berlin.de/ddr-presse/
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: 1994
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters]
   access_method: manual
@@ -3028,7 +3211,9 @@
   url: https://www.spiegel.de/spiegel/print/
   access: free
   year_start: 1947
+  year_start_basis: observed
   year_end: 2009
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3079,7 +3264,9 @@
   url: https://www.spiegel.de/
   access: partial_paywall
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3111,7 +3298,9 @@
   url: https://www.zeit.de/
   access: partial_paywall
   year_start: 1946
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -3152,7 +3341,9 @@
   url: https://taz.de/
   access: free
   year_start: 1991
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3194,7 +3385,9 @@
   url: https://www.dwds.de/d/korpora
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -3232,7 +3425,9 @@
   url: https://www.ids-mannheim.de/digspra/pb-s1/projekte/korpora/
   access: free
   year_start: 1994
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3265,9 +3460,11 @@
   country: DE
   source_type: web_archive
   url: https://www.dnb.de/EN/webarchiv.html
-  access: partial_paywall
+  access: restricted
   year_start: 2012
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, other]
   access_method: manual
@@ -3282,7 +3479,7 @@
   evidence_urls:
     - https://www.dnb.de/EN/webarchiv.html?nn=1035778
   notes: >-
-    access is set to partial_paywall only because the schema has no "restricted" value.
+    access is restricted (reading-room or on-site only).
     The archive is selective (subjects, institutions, events such as federal elections),
     not a .de domain crawl, and social media is collected only in individual cases. Because
     of copyright, the sites are "usually only accessible in the reading rooms in Leipzig
@@ -3296,7 +3493,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: bulk
@@ -3319,6 +3518,7 @@
     named bots and disallows the rest, and CCBot is not listed. taz.de does not name CCBot
     but reserves TDM in robots.txt comments. German publishers widely state § 44b UrhG
     reservations, so CC-NEWS is a URL-discovery layer only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- DE wider sweep (Task 5e batch iii)
 
@@ -3329,7 +3529,9 @@
   url: https://www.berliner-zeitung.de/
   access: partial_paywall
   year_start: 2010
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns, letters]
   access_method: scrape
@@ -3370,7 +3572,9 @@
   url: https://www.nd-aktuell.de/
   access: free
   year_start: 2002
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3409,7 +3613,9 @@
   url: https://www.jungewelt.de/
   access: partial_paywall
   year_start: 2008
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters]
   access_method: scrape
@@ -3454,7 +3660,9 @@
   url: https://www.handelsblatt.com/meinung/
   access: partial_paywall
   year_start: 2011
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3499,7 +3707,9 @@
   url: https://jungefreiheit.de/
   access: partial_paywall
   year_start: 1997
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: scrape
@@ -3541,7 +3751,9 @@
   url: https://www.brigitte.de/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [columns, other]
   access_method: scrape
@@ -3578,7 +3790,9 @@
   url: https://www.gala.de/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, other]
   access_method: scrape
@@ -3614,7 +3828,9 @@
   url: https://www.eltern.de/
   access: free
   year_start: 2025
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [columns, other]
   access_method: scrape
@@ -3651,7 +3867,9 @@
   url: https://anno.onb.ac.at/
   access: free
   year_start: 1505
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3696,7 +3914,9 @@
   url: https://www.arbeiterzeitung.at/
   access: free_registration
   year_start: 1945
+  year_start_basis: verified
   year_end: 1989
+  year_end_basis: verified
   languages: [de]
   genres: [news, opinion, letters]
   access_method: manual
@@ -3725,7 +3945,9 @@
   url: https://www.derstandard.at/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3765,7 +3987,9 @@
   url: https://www.diepresse.com/meinung
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3799,7 +4023,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion]
   access_method: bulk
@@ -3822,6 +4048,7 @@
     allows CCBot only on /a/; krone.at's robots.txt comment prohibits TDM under Art. 4 DSM
     and § 42h (6) UrhG and "the development of any ... large language models (LLMs)".
     URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- CH
 
@@ -3832,7 +4059,9 @@
   url: https://www.e-newspaperarchives.ch/
   access: free
   year_start: 1692
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de, fr, it, rm]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3867,7 +4096,9 @@
   url: https://www.letempsarchives.ch/
   access: free
   year_start: 1798
+  year_start_basis: verified
   year_end: 1998
+  year_end_basis: verified
   languages: [fr]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -3903,7 +4134,9 @@
   url: https://www.letemps.ch/opinions
   access: partial_paywall
   year_start: 1998
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [fr]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3935,7 +4168,9 @@
   url: https://www.nzz.ch/meinung
   access: paywall
   year_start: 1993
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [de]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -3969,7 +4204,9 @@
   url: https://www.liri.uzh.ch/en/services/swissdox.html
   access: partial_paywall
   year_start: 1990
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: unknown
   languages: [de, fr]
   genres: [news, opinion, columns]
   access_method: api
@@ -4009,7 +4246,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [de, fr, it]
   genres: [news, opinion]
   access_method: bulk
@@ -4030,6 +4269,7 @@
   notes: >-
     Same dataset as gb-common-crawl-news. nzz.ch, letemps.ch and tagesanzeiger.ch all
     disallow CCBot (NZZ except promoted content). URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- IT
 
@@ -4040,7 +4280,9 @@
   url: http://www.archiviolastampa.it/
   access: free
   year_start: 1867
+  year_start_basis: observed
   year_end: 2005
+  year_end_basis: verified
   languages: [it]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -4079,7 +4321,9 @@
   url: https://archivio.unita.news/
   access: free
   year_start: 1946
+  year_start_basis: observed
   year_end: 2014
+  year_end_basis: verified
   languages: [it]
   genres: [news, opinion, letters]
   access_method: manual
@@ -4115,7 +4359,9 @@
   url: https://ricerca.repubblica.it/ricerca/repubblica
   access: partial_paywall
   year_start: 1984
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4158,7 +4404,9 @@
   url: https://archivio.corriere.it/Archivio/interface/landing.html
   access: paywall
   year_start: 1876
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4196,7 +4444,9 @@
   url: https://www.internetculturale.it/it/913/emeroteca-digitale-italiana
   access: free
   year_start: 1848
+  year_start_basis: observed
   year_end: 1951
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion, other]
   access_method: manual
@@ -4233,7 +4483,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [it]
   genres: [news, opinion]
   access_method: bulk
@@ -4255,6 +4507,7 @@
     Same dataset as gb-common-crawl-news. corriere.it, repubblica.it and lastampa.it all
     disallow CCBot, so the three largest Italian dailies should be missing or thin.
     URL discovery only.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # ---------------------------------------------------------------- ES
 
@@ -4263,9 +4516,11 @@
   country: ES
   source_type: national_library
   url: https://hemerotecadigital.bne.es/hd/es/inicio
-  access: partial_paywall
+  access: restricted
   year_start: 1999
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion, letters, other]
   access_method: manual
@@ -4293,8 +4548,7 @@
     vigentes estos fondos solo pueden consultarse desde las propias instalaciones de la
     BNE. En el caso de la prensa actual, desde 2021 también es posible hacerlo desde los
     centros de conservación de las Comunidades Autónomas." The 2014 deposit deal with
-    AEDE/AMI brings "alrededor de 200 títulos de prensa diaria". Recorded as
-    partial_paywall: post-1940 material is on-site only (year_start 1999 marks the
+    AEDE/AMI brings "alrededor de 200 títulos de prensa diaria". Recorded as restricted: post-1940 material is on-site only (year_start 1999 marks the
     current-press collection; the purchased runs go back further). The site returned a
     bot-check 403 to curl and WebFetch; robots.txt is "User-agent: * / Disallow: /" with
     only Googlebot and bingbot allowed. Search snippets (not verified: bnelab.bne.es also
@@ -4309,7 +4563,9 @@
   url: https://prensahistorica.mcu.es/es/inicio/inicio.do
   access: free
   year_start: 1730
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion, other]
   access_method: api
@@ -4349,7 +4605,9 @@
   url: https://www.abc.es/archivo/periodicos/
   access: partial_paywall
   year_start: 1891
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4398,7 +4656,9 @@
   url: https://www.lavanguardia.com/hemeroteca
   access: partial_paywall
   year_start: 1881
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca]
   genres: [news, opinion, letters, columns]
   access_method: manual
@@ -4446,7 +4706,9 @@
   url: https://elpais.com/hemeroteca/
   access: paywall
   year_start: 1976
+  year_start_basis: unknown
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4494,7 +4756,9 @@
   url: https://www.eldiario.es/opinion/
   access: partial_paywall
   year_start: 2012
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4530,7 +4794,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [es, ca, gl, eu]
   genres: [news, opinion]
   access_method: bulk
@@ -4553,6 +4819,7 @@
     (a .com) all disallow CCBot. Spanish publishers also state art. 67.3 RDL 24/2021 TDM
     reservations in their terms, so CC-NEWS is a URL-discovery layer only. Note that big
     Spanish titles sit on .com, so a .es filter misses them.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
 
 # --- ES wider sweep (Task 5e batch iii)
 
@@ -4563,7 +4830,9 @@
   url: https://www.larazon.es/opinion/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4601,7 +4870,9 @@
   url: https://www.rtve.es/noticias/
   access: free
   year_start: 2021
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news]
   access_method: scrape
@@ -4638,7 +4909,9 @@
   url: https://www.hola.com/
   access: free
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, other]
   access_method: scrape
@@ -4670,7 +4943,9 @@
   url: https://ctxt.es/
   access: free
   year_start: 2015
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [opinion, columns, news]
   access_method: scrape
@@ -4708,7 +4983,9 @@
   url: https://www.elsaltodiario.com/
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4743,7 +5020,9 @@
   url: https://www.lamarea.com/
   access: free
   year_start: 2013
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [es]
   genres: [news, opinion, columns]
   access_method: scrape
@@ -4780,7 +5059,9 @@
   url: https://arquivo.pt/
   access: free
   year_start: 2000
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns, other]
   access_method: api
@@ -4832,7 +5113,9 @@
   url: https://www.publico.pt/opiniao
   access: partial_paywall
   year_start: 2009
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4875,7 +5158,9 @@
   url: https://www.dn.pt/opiniao
   access: partial_paywall
   year_start: 2026
+  year_start_basis: observed
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion, letters, columns]
   access_method: scrape
@@ -4911,7 +5196,9 @@
   url: https://www.linguateca.pt/cetempublico/
   access: free_registration
   year_start: 1991
+  year_start_basis: unknown
   year_end: 1998
+  year_end_basis: unknown
   languages: [pt]
   genres: [news, opinion]
   access_method: bulk
@@ -4948,7 +5235,9 @@
   url: https://casacomum.org/arquivos?set=e_529
   access: free
   year_start: 1921
+  year_start_basis: verified
   year_end: 1990
+  year_end_basis: verified
   languages: [pt]
   genres: [news, opinion, other]
   access_method: manual
@@ -4986,7 +5275,9 @@
   url: https://data.commoncrawl.org/crawl-data/CC-NEWS/index.html
   access: free
   year_start: 2016
+  year_start_basis: verified
   year_end: null
+  year_end_basis: observed
   languages: [pt]
   genres: [news, opinion]
   access_method: bulk
@@ -5008,3 +5299,5 @@
     Same dataset as gb-common-crawl-news. publico.pt and expresso.pt disallow CCBot; dn.pt
     does not. For PT, pt-arquivo-pt is a better bulk route (national, with an API and
     research-use terms), so CC-NEWS adds little.
+    year_start 2016: see gb-common-crawl-news (CC-NEWS dataset, daily WARC files since 2016).
+
