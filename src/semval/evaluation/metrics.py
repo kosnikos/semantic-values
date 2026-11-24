@@ -7,6 +7,7 @@ the language gap, and the decision rule of the tagging-method spec section 5.6.
 from collections import defaultdict
 from collections.abc import Collection, Iterable, Mapping
 from dataclasses import dataclass, field
+from pathlib import PurePosixPath
 
 from semval.review.labels import DEFAULT_LABELLER, LabelRecord
 from semval.tags import Stance, ValueTag, rollup_tags
@@ -205,13 +206,27 @@ class ConfigKey:
     level_id: str
     few_shot: bool
     baseline: bool = False  # a comparison (the lexicon), never recommended
+    prompt_id: str = "v1"
+    few_shot_files: tuple[str, ...] = ()  # the example files the run used, as recorded
+    # The example set most common in the report; set by the report, not part of identity.
+    common_few_shot_files: tuple[str, ...] | None = field(default=None, compare=False)
 
     @property
     def label(self) -> str:
         if self.baseline:
             return f"{self.kind} ({self.level_id})"
         shots = "few-shot" if self.few_shot else "zero-shot"
-        return f"{self.model} {self.effort} ({self.level_id}, {shots})"
+        label = f"{self.model} {self.effort} ({self.level_id}, {shots})"
+        if self.prompt_id != "v1":
+            label += f" prompt {self.prompt_id}"
+        if (
+            self.few_shot
+            and self.common_few_shot_files is not None
+            and self.few_shot_files != self.common_few_shot_files
+        ):
+            names = "+".join(PurePosixPath(f.replace("\\", "/")).stem for f in self.few_shot_files)
+            label += f" examples {names or 'none'}"
+        return label
 
 
 @dataclass(frozen=True)
