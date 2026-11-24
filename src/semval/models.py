@@ -79,7 +79,7 @@ class ModelRegistry:
 def load_registry(path: Path = MODELS_PATH) -> ModelRegistry:
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(raw, dict):
-        raise ValueError(f"{path}: expected a mapping with batch_factor and models")
+        raise ValueError(f"{path}: expected a mapping with batch_factor and models")  # noqa: TRY004 - callers catch ValueError
     models = []
     for n, row in enumerate(raw.get("models") or [], 1):
         label = row.get("id", f"row {n}") if isinstance(row, dict) else f"row {n}"
