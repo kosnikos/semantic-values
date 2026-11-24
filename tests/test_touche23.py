@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from fake_anthropic import FakeClient, message
-from semval.config import Effort, ModelId
+from semval.config import SONNET_5_5, Effort
 from semval.datasets import touche23 as t
 from semval.review.texts import TextProvider, TextUnavailable
 from semval.tagging.ledger import BudgetExceeded, CostLedger
@@ -113,7 +113,7 @@ def test_claude_translator_records_and_guards(tmp_path: Path) -> None:
     client = FakeClient(sync_responses=[_answer()])
     assert t.ClaudeTranslator(client, ledger)("c", "p") == ("γ", "π")
     req = client.sync_calls[0]
-    assert req["model"] == str(ModelId.SONNET_5_5)
+    assert req["model"] == SONNET_5_5
     assert req["output_config"]["effort"] == str(Effort.LOW)
     assert req["output_config"]["format"]["type"] == "json_schema"
     assert req["system"][0]["cache_control"] == {"type": "ephemeral"}

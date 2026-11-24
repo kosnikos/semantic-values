@@ -1,5 +1,8 @@
+from pathlib import Path
+
 import pytest
 
+from semval.config import Effort
 from semval.evaluation.metrics import (
     ConfigKey,
     ConfigResult,
@@ -142,7 +145,8 @@ def test_stance_agreement_end_to_end_with_excluded_docs():
 
 
 def result(label, en, el, agree, cost, kind=TaggerKind.CLAUDE):
-    key = ConfigKey(kind=kind, model=label, effort="low", level_id="leaf", few_shot=False)
+    key = ConfigKey(kind=kind, model=label, effort="low", level_id="leaf", few_shot=False,
+                    baseline=kind == TaggerKind.LEXICON)  # fmt: skip
     return ConfigResult(
         key=key,
         en=InputScore(run_id="r", n_docs=300, macro_f1=en, macro_f1_mention=en) if en is not None else None,
@@ -169,3 +173,69 @@ def test_tolerance_edge_is_inclusive_despite_float_error():
     a = result("a", 0.61, 0.61, None, 100.0)
     b = result("b", 0.59, 0.59, None, 1.0)  # 0.61 - 0.59 = 0.020000000000000018
     assert recommend([a, b]).chosen == b.key
+
+
+# -- configuration grouping: prompt and example sets -----------------------------------------
+
+
+def _manifest(run_id, files, prompt_id="v1"):
+    from semval.tagging.base import RunManifest, RunStatus, TaggerSpec
+
+    spec = TaggerSpec(kind="claude", model="claude-sonnet-5-5", effort=Effort.HIGH,
+                      framework_id="toy", level_id="leaf", unit="paragraph", few_shot=True,
+                      prompt_id=prompt_id)  # fmt: skip
+    return RunManifest(run_id=run_id, spec=spec, input_sample="s", prompt_sha256="0" * 64, status=RunStatus.DONE,
+                       few_shot_files=files)  # fmt: skip
+
+
+def _labels(manifests):
+    from semval.evaluation.report import config_key, mark_common_examples
+
+    keys = mark_common_examples([config_key(m) for m in manifests])
+    return keys, [k.label for k in dict.fromkeys(keys)]
+
+
+def test_runs_differing_only_in_fewshot_files_are_two_configs():
+    a = _manifest("a", ["data/fewshot/touche23.yaml"])
+    b = _manifest("b", ["data/fewshot/touche23.yaml"])
+    windows_path = "data/fewshot/touche23.yaml".replace("/", chr(92))  # as recorded on Windows
+    c = _manifest("c", [windows_path, "data/fewshot/local/articles.yaml"])
+    keys, labels = _labels([a, b, c])
+    assert len(set(keys)) == 2
+    assert keys[0] == keys[1] != keys[2]
+    assert labels[0] == "claude-sonnet-5-5 high (leaf, few-shot)"  # the common set stays plain
+    assert labels[1].endswith(" examples touche23+articles")
+
+
+def test_runs_differing_only_in_prompt_are_two_configs():
+    keys, labels = _labels([_manifest("a", []), _manifest("b", [], prompt_id="v2")])
+    assert len(set(keys)) == 2
+    assert labels[0] == "claude-sonnet-5-5 high (leaf, few-shot)"
+    assert labels[1] == "claude-sonnet-5-5 high (leaf, few-shot) prompt v2"
+
+
+def test_common_example_set_tie_goes_to_first_in_sorted_order():
+    _keys, labels = _labels([_manifest("a", ["b.yaml"]), _manifest("b", ["a.yaml"])])
+    assert labels == ["claude-sonnet-5-5 high (leaf, few-shot) examples b",
+                      "claude-sonnet-5-5 high (leaf, few-shot)"]  # fmt: skip
+
+
+def test_existing_configs_group_as_before():
+    import re
+
+    from semval.evaluation.report import config_key, mark_common_examples
+    from semval.tagging.runfiles import load_run
+
+    runs = Path("data/runs")
+    ids = sorted(p.name for p in runs.glob("grid-*") if (p / "manifest.json").exists())
+    table = Path("docs/research/tagging-evaluation.md")
+    if not ids or not table.exists():
+        pytest.skip("the real grid runs are not here")
+    keys = mark_common_examples([config_key(load_run(runs, i)) for i in ids])
+    labels = {k.label for k in keys}
+    expected = {
+        re.match(r"\| (.+?) \| \d+ \|", line).group(1)
+        for line in table.read_text(encoding="utf-8").splitlines()[8:21]
+    }
+    assert len(labels) == 13
+    assert labels == expected

@@ -1,0 +1,26 @@
+id: v1
+notes: The original tagging prompt (stance per value, verbatim quotes, confidence).
+instructions: |-
+  You tag newspaper opinion texts with human values.
+
+  For each value listed below that the text engages with, report the author's stance:
+  - endorse: the author promotes or defends the value. This includes lamenting that it is threatened or neglected.
+  - reject: the author opposes or dismisses the value.
+  - mention: the value is discussed without a clear authorial stance.
+
+  The stance is the author's own. A view the author only reports or quotes is a mention, unless the author takes it up.
+
+  Tag only values the text actually engages with. A text may engage with none; then return an empty "tags" list.
+
+  For each tag give 1 to {max_quotes} quotes that show the stance. Every quote must be copied verbatim from the text: an exact substring, in the text's own language, not translated, not shortened with ellipses. Keep quotes short (a clause or a sentence).
+
+  Give each tag a confidence between 0 and 1.
+
+  The value definitions are in English; the texts may be in any language.
+user_template: |-
+  Language: {language}
+  Genre: {genre}
+
+  <text>
+  {text}
+  </text>

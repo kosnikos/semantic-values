@@ -14,22 +14,22 @@ from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
-from semval.config import priced_model, retry_max_tokens
+from semval.config import retry_max_tokens
 from semval.fsutil import atomic_write_text
+from semval.models import registry
 from semval.tagging.base import (
     CallPath,
     RunManifest,
     RunStatus,
     TagBatchResult,
     Tagger,
-    TaggerKind,
     TaggerSpec,
 )
-from semval.tagging.claude import ClaudeTagger, make_client
 from semval.tagging.fewshot import fewshot_at_level
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
 from semval.tagging.prompt import FewShotExample
 from semval.tagging.quotes import resolve_quotes
+from semval.tagging.registry import TaggerContext, build_tagger
 from semval.tagging.runfiles import (  # noqa: F401 (re-exported)
     DEFAULT_PATHS,
     DEFAULT_RUNS_DIR,
@@ -71,12 +71,6 @@ def make_run_id(
         f"{ts}-{spec.kind}-{spec.model or 'none'}-{spec.effort or 'none'}-"
         f"{spec.level_id}-{unit or 'none'}-fs{int(spec.few_shot)}"
     )
-
-
-def make_tagger(spec: TaggerSpec, client: Any = None, few_shot: Sequence[FewShotExample] = ()):
-    if spec.kind != TaggerKind.CLAUDE:
-        raise ValueError(f"build the {spec.kind} tagger yourself and pass it as tagger=")
-    return ClaudeTagger(spec, client if client is not None else make_client(), few_shot)
 
 
 def select_documents(
@@ -194,7 +188,7 @@ class _Run:
                 key = f"{c.batch_id}/{c.segment_id}/{n}"
                 if key in counted:
                     continue
-            model, batch = priced_model(c.model), c.path == CallPath.BATCH
+            model, batch = registry().priced(c.model), c.path == CallPath.BATCH
             cost = cost_of(c.usage, model, batch)
             try:
                 self.ledger.record(self.m.run_id, c.usage, model, batch, call_key=key)
@@ -237,6 +231,7 @@ def run_tagging(
     client: Any = None,
     few_shot: Sequence[FewShotExample] = (),
     few_shot_files: Sequence[str] = (),
+    setup_name: str | None = None,
     ledger: CostLedger | None = None,
     paths: RunPaths = DEFAULT_PATHS,
 ) -> RunManifest:
@@ -254,8 +249,8 @@ def run_tagging(
     fw_dir = Path(paths.framework_dir)
     framework = load_framework(fw_dir / f"{spec.framework_id}.yaml", local_dir=fw_dir / "local")
     # few-shot examples are written at leaf level; the prompt shows them at the run's level
-    tagger = tagger or make_tagger(
-        spec, client, fewshot_at_level(few_shot, framework, spec.level_id)
+    tagger = tagger or build_tagger(
+        spec, TaggerContext(client, fewshot_at_level(few_shot, framework, spec.level_id))
     )
     if tagger.spec.model_copy(update={"unit": unit}) != run_spec:
         raise ValueError("the tagger's spec does not match the run spec")
@@ -271,6 +266,8 @@ def run_tagging(
     m = _open(run_dir, run_id, run_spec, sample_name, info.prompt_sha256, info.definition_wording)
     if few_shot_files and not m.few_shot_files:
         m.few_shot_files = list(few_shot_files)
+    if setup_name and not m.setup_name:
+        m.setup_name = setup_name
     _save(run_dir, m)
 
     sample_docs = load_sample(sample_name, paths.samples_dir).documents

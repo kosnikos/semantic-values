@@ -27,10 +27,9 @@ from anthropic.types.messages.batch_create_params import Request
 from semval.config import (
     API_KEY_ENV_VARS,
     MAX_TOKENS_BY_EFFORT,
-    SERVER_FALLBACK_MODELS,
     ModelId,
-    priced_model,
 )
+from semval.models import registry
 from semval.tagging.base import (
     CallPath,
     CallRecord,
@@ -47,10 +46,13 @@ from semval.tagging.prompt import (
     MAX_QUOTES,
     FewShotExample,
     PromptParts,
+    PromptTemplate,
     build_prompt,
+    load_prompt,
     prompt_sha256,
     user_message,
 )
+from semval.tagging.registry import TaggerContext, register_tagger
 from semval.targets import TargetSet
 from semval.units import DocumentMeta, Segment
 
@@ -141,7 +143,8 @@ class _Collector:
 
     def spent_usd(self) -> float:
         return sum(
-            cost_of(c.usage, priced_model(c.model), c.path == CallPath.BATCH) for c in self.calls
+            cost_of(c.usage, registry().priced(c.model), c.path == CallPath.BATCH)
+            for c in self.calls
         )
 
     def result(self) -> TagBatchResult:
@@ -175,6 +178,7 @@ class ClaudeTagger:
         self.model: ModelId = spec.model
         self.client = client
         self.few_shot = list(few_shot)
+        self.template: PromptTemplate = load_prompt(spec.prompt_id)
         self.spend_guard: Callable[[float], bool] | None = None
         # Called with the batch id and its segment ids (submission order) right after submit.
         self.on_batch_submitted: Callable[[str, list[str]], None] | None = None
@@ -188,12 +192,13 @@ class ClaudeTagger:
     # -- prompt ---------------------------------------------------------------------------
 
     def _prompt(self, targets: TargetSet) -> PromptParts:
-        return build_prompt(targets, self.few_shot)
+        return build_prompt(targets, self.few_shot, self.template)
 
     def prompt_info(self, targets: TargetSet) -> PromptInfo:
         parts = self._prompt(targets)
         return PromptInfo(
-            prompt_sha256=prompt_sha256(parts), definition_wording=parts.definition_wording
+            prompt_sha256=prompt_sha256(parts, self.template),
+            definition_wording=parts.definition_wording,
         )
 
     def _params(
@@ -206,7 +211,7 @@ class ClaudeTagger:
             "system": [
                 {"type": "text", "text": parts.system, "cache_control": {"type": "ephemeral"}}
             ],
-            "messages": [{"role": "user", "content": user_message(text, meta)}],
+            "messages": [{"role": "user", "content": user_message(text, meta, self.template)}],
             "output_config": {
                 "effort": str(self.spec.effort),
                 "format": {"type": "json_schema", "schema": parts.schema},
@@ -214,7 +219,7 @@ class ClaudeTagger:
         }
 
     def _sync_params(self, params: dict[str, Any]) -> dict[str, Any]:
-        if self.model in SERVER_FALLBACK_MODELS:
+        if registry().get(self.model).server_fallbacks:
             return {**params, "betas": [FALLBACK_BETA], "fallbacks": "default"}
         return params
 
@@ -404,3 +409,15 @@ class ClaudeTagger:
             for sid, params in requests.items():
                 self._sync(sid, params, ids, out)
         return out.result()
+
+
+def _build(spec: TaggerSpec, ctx: TaggerContext) -> ClaudeTagger:
+    return ClaudeTagger(spec, ctx.client if ctx.client is not None else make_client(), ctx.few_shot)
+
+
+register_tagger(
+    TaggerKind.CLAUDE.value,
+    _build,
+    needs=frozenset({"model", "effort", "unit"}),
+    allows=frozenset({"few_shot", "batch"}),
+)

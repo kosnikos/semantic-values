@@ -1,0 +1,5 @@
+# The word-list baseline: never a recommended configuration, only a comparison.
+description: "Baseline: Basic-10 word-list matcher (English only), no model calls."
+kind: lexicon
+level: basic10
+framework: schwartz19

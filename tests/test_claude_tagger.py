@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from fake_anthropic import FakeClient, message, usage
-from semval.config import Effort, ModelId
+from semval.config import HAIKU_5_5, OPUS_5_5, SONNET_5_5, Effort
 from semval.tagging.base import CallPath, Tagger, TaggerKind, TaggerSpec
 from semval.tagging.claude import ClaudeTagger
 from semval.tagging.quotes import resolve_quotes
@@ -30,7 +30,7 @@ TEXTS = {"d1:a": TEXT1, "d2:a": TEXT2}
 ALPHA = {"value_id": "alpha", "stance": "endorse", "quotes": ["defend alpha"], "confidence": 0.9}
 
 
-def spec(model=ModelId.SONNET_5_5, effort=Effort.MEDIUM, batch=False) -> TaggerSpec:
+def spec(model=SONNET_5_5, effort=Effort.MEDIUM, batch=False) -> TaggerSpec:
     return TaggerSpec(
         kind=TaggerKind.CLAUDE, model=model, effort=effort, framework_id="toy",
         level_id="leaf", unit=UnitLevel.ARTICLE, batch=batch,
@@ -43,7 +43,7 @@ def run(tagger, segs=SEGS):
 
 def test_claude_spec_requires_model_effort_unit():
     for missing in ("model", "effort", "unit"):
-        kw = {"kind": TaggerKind.CLAUDE, "model": ModelId.HAIKU_5_5, "effort": Effort.LOW,
+        kw = {"kind": TaggerKind.CLAUDE, "model": HAIKU_5_5, "effort": Effort.LOW,
               "framework_id": "toy", "level_id": "leaf", "unit": UnitLevel.ARTICLE}  # fmt: skip
         kw[missing] = None
         with pytest.raises(ValidationError, match=missing):
@@ -80,9 +80,9 @@ def test_request_has_effort_cache_and_no_thinking_params():
 
 def test_fallbacks_only_on_sync_sonnet_opus():
     for model, expect in [
-        (ModelId.HAIKU_5_5, False),
-        (ModelId.SONNET_5_5, True),
-        (ModelId.OPUS_5_5, True),
+        (HAIKU_5_5, False),
+        (SONNET_5_5, True),
+        (OPUS_5_5, True),
     ]:
         client = FakeClient([message([])])
         run(ClaudeTagger(spec(model=model), client), SEGS[:1])
@@ -95,7 +95,7 @@ def test_fallbacks_only_on_sync_sonnet_opus():
                 "betas", []
             )
     client = FakeClient()
-    run(ClaudeTagger(spec(model=ModelId.OPUS_5_5, batch=True), client))
+    run(ClaudeTagger(spec(model=OPUS_5_5, batch=True), client))
     (reqs,) = client.batch_requests
     for r in reqs:
         assert "fallbacks" not in r["params"] and "betas" not in r["params"]
@@ -176,7 +176,7 @@ def test_refusal_recorded_and_retried_once():
 
 def test_sync_refusal_is_final():
     client = FakeClient([message(stop="refusal", category="bio")])
-    res = run(ClaudeTagger(spec(model=ModelId.HAIKU_5_5), client), SEGS[:1])
+    res = run(ClaudeTagger(spec(model=HAIKU_5_5), client), SEGS[:1])
     assert res.refused == ["d1:a"] and len(client.sync_calls) == 1
     assert res.calls[0].refused and res.calls[0].refusal_category == "bio"
 
@@ -189,7 +189,7 @@ def test_fallback_iterations_are_costed_per_model():
                         output_tokens=300, cache_creation_input_tokens=0, cache_read_input_tokens=0),
     ]  # fmt: skip
     msg = message([ALPHA], u=usage(950, 300, iterations=its), model="claude-opus-4-8")
-    res = run(ClaudeTagger(spec(model=ModelId.OPUS_5_5), FakeClient([msg])), SEGS[:1])
+    res = run(ClaudeTagger(spec(model=OPUS_5_5), FakeClient([msg])), SEGS[:1])
     assert [(c.model, c.usage.input_tokens) for c in res.calls] == [
         ("claude-opus-5-5", 900),
         ("claude-opus-4-8", 950),
@@ -321,7 +321,7 @@ def test_fallback_served_answer_is_attributed():
         from_=SimpleNamespace(model="claude-opus-5-5"), to=SimpleNamespace(model="claude-opus-4-8"),
     )  # fmt: skip
     msg.content.insert(0, block)
-    res = run(ClaudeTagger(spec(model=ModelId.OPUS_5_5), FakeClient([msg])), SEGS[:1])
+    res = run(ClaudeTagger(spec(model=OPUS_5_5), FakeClient([msg])), SEGS[:1])
     # the declined attempt has no model: it ran on, and is priced at, the requested model
     assert [c.model for c in res.calls] == ["claude-opus-5-5", "claude-opus-4-8"]
     assert res.served_by == {"d1:a": "claude-opus-4-8"}
@@ -332,7 +332,7 @@ def test_fallback_served_answer_is_attributed():
 
     # a sticky-routed turn: no fallback block, still one event without a category
     msg = message([ALPHA], u=usage(950, 300, iterations=its[1:]), model="claude-opus-4-8")
-    res = run(ClaudeTagger(spec(model=ModelId.OPUS_5_5), FakeClient([msg])), SEGS[:1])
+    res = run(ClaudeTagger(spec(model=OPUS_5_5), FakeClient([msg])), SEGS[:1])
     assert [(e.category, e.served_by) for e in res.refusals] == [(None, "claude-opus-4-8")]
 
 

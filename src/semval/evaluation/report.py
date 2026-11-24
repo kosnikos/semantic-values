@@ -5,11 +5,12 @@ them into ids and stances, and hands those to the pure functions in ``metrics``.
 
 Per run: paragraph tags are merged to articles first, then rolled up to the scoring level.
 A leaf-level run is also scored at leaf. Runs are grouped into configurations by spec (kind,
-model, effort, level, few-shot) and told apart by their ``input_sample``.
+model, effort, level, few-shot, prompt, example files) and told apart by their ``input_sample``.
 """
 
+from collections import Counter
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Final
 
@@ -70,11 +71,25 @@ def config_key(m: RunManifest) -> ConfigKey:
     s = m.spec
     return ConfigKey(
         kind=s.kind,
-        model=s.model.value if s.model else None,
+        model=s.model,
         effort=s.effort.value if s.effort else None,
         level_id=s.level_id,
         few_shot=s.few_shot,
+        baseline=s.is_baseline,
+        prompt_id=s.prompt_id,
+        few_shot_files=tuple(f.replace("\\", "/") for f in m.few_shot_files),
     )
+
+
+def mark_common_examples(keys: list[ConfigKey]) -> list[ConfigKey]:
+    """Tell each key the most common few-shot file set among the few-shot, non-baseline
+    configurations (ties go to the first in sorted order), so labels name only the odd ones."""
+    sets = Counter(k.few_shot_files for k in keys if k.few_shot and not k.baseline)
+    if not sets:
+        return keys
+    top = max(sets.values())
+    common = min(s for s, n in sets.items() if n == top)
+    return [replace(k, common_few_shot_files=common) for k in keys]
 
 
 # -- one run ---------------------------------------------------------------------------
@@ -241,7 +256,8 @@ def build_results(run_ids: list[str], setup: EvalSetup) -> list[ConfigResult]:
                 f"two runs of {config_key(run.manifest).label} on {sample!r}: {other!r}, {run_id!r}"
             )
         group.runs[sample] = run
-    return [_result(key, g, setup) for key, g in groups.items()]
+    keys = mark_common_examples(list(groups))
+    return [_result(key, g, setup) for key, g in zip(keys, groups.values(), strict=True)]
 
 
 def _result(key: ConfigKey, g: _Group, setup: EvalSetup) -> ConfigResult:

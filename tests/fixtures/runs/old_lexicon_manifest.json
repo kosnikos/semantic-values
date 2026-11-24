@@ -1,0 +1,35 @@
+{
+  "run_id": "old-lex",
+  "spec": {
+    "kind": "lexicon",
+    "model": null,
+    "effort": null,
+    "framework_id": "toy",
+    "level_id": "leaf",
+    "unit": "sentence",
+    "few_shot": false,
+    "batch": false
+  },
+  "input_sample": "toy-sample",
+  "prompt_sha256": "9d1c5cd8225ed36f72968412576e45a368c3fac1f7b84428e175962d0ff4fca8",
+  "status": "stopped_budget",
+  "segments_done": [],
+  "usage_totals": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0
+  },
+  "cost_usd": 0.0,
+  "definition_wording": {},
+  "few_shot_files": [],
+  "started": "2026-11-19T18:07:42.455018Z",
+  "finished": null,
+  "refusals": [],
+  "refused_segments": [],
+  "failures": {},
+  "truncated": {},
+  "served_by": {},
+  "pending_batch_id": null,
+  "pending_batch_segments": {}
+}
