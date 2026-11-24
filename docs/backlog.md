@@ -84,6 +84,19 @@ From the final review of the tagging branch (2026-11-24). Small code and docs fi
 - Cost per 1,000 articles uses whole-run spend; latency mixes units; the "paragraph" caption is hard-coded; the framework comes from the first run; `SCORING_LEVEL` is a default constant; per-value names are English only; leaf/basic10 F1 paths are thinly tested; no partial-document test; `_load` segments every document. Deferred: the published table is correct for the current runs. [report.py](../src/semval/evaluation/report.py)
 - The two `basic10` configurations show 0 spurious tags because a leaf-level owner verdict cannot prove absence at 10 values. Deferred: stated in the report's cost notes. [evaluation](research/tagging-evaluation.md)
 
+### Pluggable taggers
+
+From the final review of `feat/pluggable-taggers` (2026-11-24). Deferred: none changes a result or spends money.
+
+- `semval tag --dry-run` could go further: build the tagger with a client stub that raises if called, load the few-shot files, and print the segment count times the ledger estimate. It is the natural tool for the ask-before-spend rule; today it checks neither kind-specific option errors nor unreadable example files. [cli.py](../src/semval/cli.py)
+- `build_parser()` reads `data/models.yaml` for every command, so a broken file gives a traceback even in `--help` and the review commands. Validate `--model` in `_resolve_setup` instead. [cli.py](../src/semval/cli.py)
+- A lexicon run without `--unit` ends with the Python-API message ("pass unit="). Have the CLI say "pass --unit", or set `unit:` in `lexicon.yaml` (check resume compatibility with the old runs first). [runner.py](../src/semval/tagging/runner.py)
+- A new tagger kind needs its module added to `_BUILTIN_MODULES` as well; discover modules in a `semval.tagging.kinds` package with `pkgutil` if the second edit starts to matter. [registry.py](../src/semval/tagging/registry.py)
+- Tests: `test_new_row_needs_no_code_change` does not exercise `ModelId` validation of the new row; `test_prompt_files` should hard-code 3 instead of `{MAX_QUOTES}`; the grid test should use `load_prompt(m.spec.prompt_id)`, has a fw/assert ordering quirk and a silent `continue` on missing few-shot files. [tests](../tests)
+- Test hygiene: `test_tagger_registry` reads files without an encoding; data-backed tests use cwd-relative paths; the unneeded `scratch_registry` fixture in `test_is_baseline_from_registry`; the `test_metrics` real-data test hard-codes the report slice `[8:21]`; `# fmt: skip` on hand-aligned calls. [tests](../tests)
+- Registry docs: a comment on registering a kind before a module-level spec, and the `build_tagger` re-check docstring. [registry.py](../src/semval/tagging/registry.py)
+- Importing a manifest validates its `TaggerSpec`, which lazily imports the `anthropic` SDK; if a built-in kind module fails to import, no manifest validates. Deferred: costs speed only, and the environment is pinned. [registry.py](../src/semval/tagging/registry.py)
+
 ### Datasets and few-shot scripts
 
 - Touché23: the download is untested (no HTTP check); the Greek proxy append is not atomic; `total()` is read twice; eager import; redundant leaf check; a `type: ignore`; the proxy ignores `split`; `derive` allows duplicate ids; stats reset; a bare id in `touche_gold`. Deferred: one-off scripts, already run. [touche23.py](../src/semval/datasets/touche23.py)

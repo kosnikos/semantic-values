@@ -2,12 +2,12 @@
 
 Every piece of the tagging pipeline that you might want to swap lives in a file or one module. Nothing needs editing in several places. Two rules apply to all of it.
 
-- **Ask before any paid run.** Always look first with `semval tag --sample SAMPLE --tagger NAME --dry-run`. It builds the tagger, prints what would be sent and the cost estimate, and spends nothing. Only run without `--dry-run` after the owner has said yes to that spend.
+- **Ask before any paid run.** Always look first with `semval tag --sample SAMPLE --tagger NAME --dry-run`. It prints the resolved setup, the spec and the few-shot files (and any local example file it skipped because it is missing), and spends nothing. It builds no tagger and no client, so it shows no cost estimate and does not catch every error a real run would; check the spec and the file list yourself. Only run without `--dry-run` after the owner has said yes to that spend.
 - **Old runs must keep working.** Every run records which model, prompt and example files it used, and `semval evaluate` groups runs by those. So never delete or rewrite something an old run names; add a new thing next to it.
 
 ## A model
 
-Add one row to `data/models.yaml`: the id, the provider (`anthropic`), the four prices per million tokens (input, output, cache write, cache read), `requestable: true`, and `server_fallbacks`. Check the prices against the provider's list first. To retire a model, set `requestable: false`. Never delete the row: old run manifests name it, and they would stop loading. The model then appears in `--model` and is accepted in setups.
+Add one row to `data/models.yaml`: the id, the provider (`anthropic`), the four prices per million tokens (input, output, cache write, cache read), `requestable: true`, and `server_fallbacks`. The file also holds `batch_factor`, the fraction of every price that a batch run is charged (above 0, at most 1). The cost cap trusts this file, so it is checked on load: prices must be numbers (input and output above 0, cache prices not negative) and `batch_factor` must be valid, or loading stops with an error naming the row. Check the prices against the provider's list first. To retire a model, set `requestable: false`. Never delete the row: old run manifests name it, and they would stop loading. The model then appears in `--model` and is accepted in setups; a retired model is refused in both.
 
 ## A prompt
 
@@ -15,7 +15,7 @@ Copy `data/prompts/v1.yaml` to a new file whose name is the new id, say `data/pr
 
 ## An example set
 
-Few-shot examples are a YAML file in the same shape as `data/fewshot/touche23.yaml`: an `attribution` block and a list of `examples`, each with text, language and tags (value, stance, verbatim quotes, confidence). Your own articles go under `data/fewshot/local/`, which is git-ignored. Pass files with `--few-shot-file PATH` (repeat for several, in order), or list them in a setup under `few_shot_files`. The run records the files actually used. In the report, a configuration whose files differ from the most common set gets ` examples NAME+NAME` in its label (ties for "most common" go to the first set in sorted order).
+Few-shot examples are a YAML file in the same shape as `data/fewshot/touche23.yaml`: an `attribution` block and a list of `examples`, each with text, language and tags (value, stance, verbatim quotes, confidence). Your own articles go under `data/fewshot/local/`, which is git-ignored. Pass files with `--few-shot-file PATH` (repeat for several, in order), or list them in a setup under `few_shot_files`. A file listed in a setup that does not exist is an error naming the file and the setup, except under `data/fewshot/local/`: those are skipped with a warning (and `--dry-run` says so), and if all are skipped the run is zero-shot. The run records the files actually used. In the report, a configuration whose files differ from the most common set gets ` examples NAME+NAME` in its label (ties for "most common" go to the first set in sorted order).
 
 ## A setup
 
@@ -23,4 +23,4 @@ A setup is a saved choice of everything above: a file `data/taggers/NAME.yaml` w
 
 ## A new tagger kind
 
-A kind is a way of producing tags (a model, a word list, something else). Write one module that defines a class with `prompt_info(targets)` and `tag(segments, texts, targets, documents)`, and ends by calling `register_tagger("mykind", factory, needs=..., allows=..., baseline=...)`. `needs` and `allows` name the spec fields the kind requires or accepts (for example `options`, `unit`); `baseline=True` marks a comparison that is never recommended. Then add the module's name to `_BUILTIN_MODULES` in `src/semval/tagging/registry.py` so it loads. The template is the `EchoTagger` and `test_fake_kind_runs_end_to_end` in `tests/test_tagger_registry.py`: copy it, change the tagging rule, and the test shows the kind running end to end with no paid call. Then add a setup file for it (above). The CLI and the runner need no changes.
+A kind is a way of producing tags (a model, a word list, something else). Write one module that defines a class with a `spec` attribute (the `TaggerSpec` it was built from), `prompt_info(targets)` and `tag(segments, texts, targets, documents)`, and ends by calling `register_tagger("mykind", factory, needs=..., allows=..., baseline=...)`. `needs` and `allows` name the spec fields the kind requires or accepts (for example `options`, `unit`); `baseline=True` marks a comparison that is never recommended. Then add the module's name to `_BUILTIN_MODULES` in `src/semval/tagging/registry.py` so it loads. The template is the `EchoTagger` and `test_fake_kind_runs_end_to_end` in `tests/test_tagger_registry.py`: copy it, change the tagging rule, and the test shows the kind running end to end with no paid call. Then add a setup file for it (above). The CLI and the runner need no changes.
