@@ -1,0 +1,15 @@
+# The default setup for `semval tag`. Chosen 2026-11-24: Sonnet 5.5 at high effort on leaf
+# values, per paragraph, with the Touche23 and the owner's few-shot examples, batched.
+description: "Decision 2026-11-24: claude-sonnet-5-5, effort high, leaf level, paragraph units, few-shot, batch."
+kind: claude
+model: claude-sonnet-5-5
+effort: high
+level: leaf
+unit: paragraph
+framework: schwartz19
+prompt: v1
+batch: true
+few_shot_files:
+  - data/fewshot/touche23.yaml
+  # git-ignored, the owner's own examples; skipped with a warning when absent
+  - data/fewshot/local/articles.yaml

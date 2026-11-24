@@ -169,6 +169,8 @@ class RunManifest(BaseModel):
     definition_wording: dict[str, int] = Field(default_factory=dict)
     # Few-shot files the prompt's examples came from, in order (empty: none, or an old run).
     few_shot_files: list[str] = Field(default_factory=list)
+    # The saved setup (data/taggers/NAME.yaml) the run started from; None for older runs.
+    setup_name: str | None = None
 
     @field_validator("definition_wording")
     @classmethod

@@ -24,7 +24,6 @@ from semval.sources import (
 )
 from semval.tagging.fewshot import DEFAULT_FEWSHOT_PATH
 from semval.tagging.label_examples import DEFAULT_LOCAL_PATH as DEFAULT_LOCAL_FEWSHOT_PATH
-from semval.tagging.lexicon import DEFAULT_LEXICON_PATH
 from semval.tagging.runfiles import DEFAULT_RUNS_DIR
 
 DEFAULT_SOURCES = Path("data/sources/sources.yaml")
@@ -178,79 +177,71 @@ def _sample(args: argparse.Namespace) -> int:
     return 0
 
 
-def _default_framework() -> str | None:
-    """The framework id when exactly one framework file exists, else None."""
-    from semval.values import FRAMEWORK_DIR
+def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any]:
+    """The saved setup with the command-line overrides applied, and its spec."""
+    from semval.tagging.setups import (
+        apply_overrides,
+        load_setup,
+        parse_options,
+        skip_missing_few_shot,
+        to_spec,
+    )
 
-    files = sorted(FRAMEWORK_DIR.glob("*.yaml"))
-    return files[0].stem if len(files) == 1 else None
+    if args.no_few_shot and args.few_shot_file:
+        raise SystemExit("--no-few-shot contradicts --few-shot-file")
+    try:
+        setup = load_setup(args.tagger)
+        files = [] if args.no_few_shot else args.few_shot_file
+        if files is None:  # the setup's own list: a missing local file is skipped
+            setup = skip_missing_few_shot(setup)
+        setup = apply_overrides(
+            setup,
+            model=args.model,
+            effort=args.effort,
+            level=args.level,
+            unit=args.unit,
+            framework=args.framework,
+            prompt=args.prompt,
+            few_shot_files=files,
+            batch=args.batch,
+            options=parse_options(args.option) or None,
+        )
+        return setup, to_spec(setup)
+    except ValueError as e:
+        raise SystemExit(f"error: {e}") from None
 
 
 def _tag(args: argparse.Namespace) -> int:
-    from semval.tagging.base import TaggerKind, TaggerSpec
-    from semval.tagging.claude import make_client
     from semval.tagging.fewshot import load_fewshot_files
     from semval.tagging.runner import run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    if args.kind == TaggerKind.LEXICON:
-        return _tag_lexicon(args)
-    if missing := [f"--{n}" for n in ("model", "effort", "level") if getattr(args, n) is None]:
-        raise SystemExit(f"--kind claude needs {', '.join(missing)}")
-    few_shot = []
-    files = args.few_shot_file or [DEFAULT_FEWSHOT_PATH]
-    if args.few_shot == "on":
-        try:
-            few_shot = load_fewshot_files(files)
-        except (OSError, ValueError) as e:
-            raise SystemExit(f"cannot load few-shot examples: {e}") from None
-    framework = args.framework or _default_framework()
-    if framework is None:
-        raise SystemExit("several framework files exist: pass --framework ID")
-    spec = TaggerSpec(
-        kind=TaggerKind.CLAUDE,
-        model=args.model,
-        effort=args.effort,
-        framework_id=framework,
-        level_id=args.level,
-        unit=args.unit,
-        few_shot=args.few_shot == "on",
-        batch=args.batch,
-    )
-    m = run_tagging(
-        spec,
-        args.sample,
-        run_id=args.run_id,
-        limit=args.limit,
-        limit_per_country=args.limit_per_country,
-        client=make_client(),
-        few_shot=few_shot,
-        few_shot_files=[str(f) for f in files] if few_shot else (),
-    )
-    return _report_run(m)
-
-
-def _tag_lexicon(args: argparse.Namespace) -> int:
-    from semval.tagging.lexicon import LexiconTagger
-    from semval.tagging.runner import run_tagging
-
-    given = [
-        f"--{n.replace('_', '-')}"
-        for n in ("model", "effort", "framework")
-        if getattr(args, n) is not None
-    ] + (["--few-shot"] if args.few_shot == "on" else [])
-    if given:
-        raise SystemExit(f"--kind lexicon does not take {', '.join(given)}")
+    setup, spec = _resolve_setup(args)
+    files = [f.as_posix() for f in setup.few_shot_files]
+    if args.dry_run:
+        print(f"setup: {args.tagger}")
+        if setup.description:
+            print(f"description: {setup.description}")
+        print(f"spec: {spec.model_dump_json()}")
+        print(f"few-shot files: {', '.join(files) or 'none (zero-shot)'}")
+        return 0
     try:
-        tagger = LexiconTagger(args.lexicon_file)
-    except (OSError, ValueError, KeyError) as e:
-        raise SystemExit(f"cannot load lexicon file: {e}") from None
-    if args.level is not None and args.level != tagger.level_id:
-        raise SystemExit(f"--level {args.level} differs from the lexicon's level {tagger.level_id}")
-    m = run_tagging(
-        tagger.spec, args.sample, run_id=args.run_id, limit=args.limit,
-        limit_per_country=args.limit_per_country, unit=args.unit, tagger=tagger,
-    )  # fmt: skip
+        few_shot = load_fewshot_files(setup.few_shot_files)
+    except (OSError, ValueError) as e:
+        raise SystemExit(f"cannot load few-shot examples: {e}") from None
+    try:
+        m = run_tagging(
+            spec,
+            args.sample,
+            run_id=args.run_id,
+            limit=args.limit,
+            limit_per_country=args.limit_per_country,
+            few_shot=few_shot,
+            few_shot_files=files,
+            setup_name=args.tagger,
+        )
+    except (OSError, ValueError) as e:
+        raise SystemExit(f"error: {e}") from None
     return _report_run(m)
 
 
@@ -514,37 +505,49 @@ def build_parser() -> argparse.ArgumentParser:
 
     tag = sub.add_parser(
         "tag",
-        help="tag a sample with Claude (resumable; see data/runs/)",
-        description="Exit status: 0 done, 1 failed segments or error, 3 stopped at the budget cap.",
+        help="tag a sample with a saved setup (resumable; see data/runs/)",
+        description="Start from a saved setup (data/taggers/NAME.yaml) and override single "
+        "fields with the flags. Exit status: 0 done, 1 failed segments or error, "
+        "3 stopped at the budget cap.",
     )
     tag.add_argument("--sample", required=True, help="name of data/samples/<name>.yaml")
-    from semval.tagging.base import TaggerKind
-
-    tag.add_argument("--kind", type=TaggerKind, choices=list(TaggerKind), default=TaggerKind.CLAUDE)
     tag.add_argument(
-        "--model", type=str, choices=registry().requestable(), help="required for claude"
+        "--tagger", default="sonnet-high", help="saved setup name (default: %(default)s)"
     )
-    tag.add_argument("--effort", type=Effort, choices=list(Effort), help="required for claude")
-    tag.add_argument("--level", help="framework level id, e.g. leaf (required for claude)")
-    tag.add_argument(
-        "--lexicon-file",
-        type=Path,
-        default=DEFAULT_LEXICON_PATH,
-        help=f"word list for --kind lexicon (default: {DEFAULT_LEXICON_PATH})",
-    )
-    tag.add_argument("--unit", type=UnitLevel, choices=list(UnitLevel), required=True)
-    tag.add_argument("--framework", help="framework id (default: the only framework file)")
-    tag.add_argument("--few-shot", choices=["on", "off"], default="off")
+    tag.add_argument("--model", type=str, choices=registry().requestable())
+    tag.add_argument("--effort", type=Effort, choices=list(Effort))
+    tag.add_argument("--level", help="framework level id, e.g. leaf")
+    tag.add_argument("--unit", type=UnitLevel, choices=list(UnitLevel))
+    tag.add_argument("--framework", help="framework id")
+    tag.add_argument("--prompt", help="prompt id, a file in data/prompts")
     tag.add_argument(
         "--few-shot-file",
         type=Path,
         action="append",
-        help=f"YAML few-shot examples; repeat to concatenate in order (default: {DEFAULT_FEWSHOT_PATH})",
+        help="YAML few-shot examples; repeat to concatenate in order (replaces the setup's list)",
     )
-    tag.add_argument("--batch", action="store_true", help="use Message Batches (50%% cost)")
+    tag.add_argument(
+        "--no-few-shot", action="store_true", help="zero-shot, whatever the setup says"
+    )
+    tag.add_argument(
+        "--batch",
+        action=argparse.BooleanOptionalAction,
+        help="use Message Batches (50%% cost)",
+    )
+    tag.add_argument(
+        "--option",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="kind-specific setting, e.g. lexicon_file=PATH; repeatable; true/false, "
+        "integers and decimals are read as such",
+    )
     tag.add_argument("--limit-per-country", type=int, help="documents per country")
     tag.add_argument("--limit", type=int, help="documents in all")
     tag.add_argument("--run-id", help="resume this run, or name a new one")
+    tag.add_argument(
+        "--dry-run", action="store_true", help="print the resolved setup and spec; run nothing"
+    )
     tag.set_defaults(func=_tag)
 
     from semval.review.texts import ReviewSource

@@ -279,17 +279,16 @@ def test_lexicon_runs_through_runner(tmp_path):
     assert all(t.stance.value == "mention" and t.evidence for t in tags)
 
 
-def test_cli_few_shot_on_needs_a_readable_file(tmp_path):
+def test_cli_few_shot_file_needs_to_be_readable(tmp_path):
     from semval.cli import build_parser, main
 
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
             "--level", "leaf", "--unit", "article"]  # fmt: skip
     args = build_parser().parse_args([*argv, "--batch", "--limit-per-country", "2"])
     assert args.model == HAIKU_5_5 and args.unit == UnitLevel.ARTICLE and args.batch
-    assert args.few_shot == "off" and args.limit_per_country == 2
-    assert args.few_shot_file is None  # _tag falls back to data/fewshot/touche23.yaml
+    assert args.tagger == "sonnet-high" and args.few_shot_file is None
     with pytest.raises(SystemExit, match="cannot load few-shot"):
-        main([*argv, "--few-shot", "on", "--few-shot-file", str(tmp_path / "missing.yaml")])
+        main([*argv, "--few-shot-file", str(tmp_path / "missing.yaml")])
 
 
 def truncated(kw):
@@ -398,14 +397,14 @@ def test_cli_exit_code_follows_status(monkeypatch, status, code):
     from semval.tagging import claude, runner
 
     def fake_run(spec, sample, **kw):
-        assert kw["client"] == "client"
+        assert kw["setup_name"] == "sonnet-high" and not kw["few_shot"]
         return RunManifest(run_id="r", spec=spec, input_sample=sample, prompt_sha256="x",
                            status=status)  # fmt: skip
 
-    monkeypatch.setattr(claude, "make_client", lambda: "client")
+    monkeypatch.setattr(claude, "make_client", lambda: pytest.fail("the runner makes the client"))
     monkeypatch.setattr(runner, "run_tagging", fake_run)
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
-            "--level", "leaf", "--unit", "article", "--framework", "toy"]  # fmt: skip
+            "--level", "leaf", "--unit", "article", "--framework", "toy", "--no-few-shot"]  # fmt: skip
     assert main(argv) == code
 
 
@@ -418,7 +417,7 @@ def _lex_file(tmp_path: Path, level: str = "leaf") -> Path:
     return lex
 
 
-def _cli_lexicon(monkeypatch, tmp_path, *extra) -> tuple[int, RunPaths]:
+def _cli_lexicon(monkeypatch, tmp_path, *extra, file_level="leaf") -> tuple[int, RunPaths]:
     import functools
 
     from semval.cli import main
@@ -426,8 +425,9 @@ def _cli_lexicon(monkeypatch, tmp_path, *extra) -> tuple[int, RunPaths]:
 
     paths = setup(tmp_path)
     monkeypatch.setattr(runner, "run_tagging", functools.partial(runner.run_tagging, paths=paths))
-    argv = ["tag", "--kind", "lexicon", "--sample", "toy-sample", "--unit", "paragraph",
-            "--lexicon-file", str(_lex_file(tmp_path)), "--run-id", "lx", *extra]  # fmt: skip
+    argv = ["tag", "--tagger", "lexicon", "--sample", "toy-sample", "--unit", "paragraph",
+            "--framework", "toy", "--level", "leaf", "--option",
+            f"lexicon_file={_lex_file(tmp_path, file_level)}", "--run-id", "lx", *extra]  # fmt: skip
     return main(argv), paths
 
 
@@ -443,23 +443,16 @@ def test_cli_lexicon_run(monkeypatch, tmp_path):
     assert all(t.segment_id.startswith("src-gb") for t in tags)  # none on the Greek text
 
 
-def test_cli_claude_needs_model_effort_level(capsys):
-    from semval.cli import main
-
-    with pytest.raises(SystemExit, match="--model"):
-        main(["tag", "--sample", "x", "--unit", "article"])
-
-
 @pytest.mark.parametrize("extra", [["--model", "claude-haiku-5-5"], ["--effort", "low"],
-                                   ["--few-shot", "on"]])  # fmt: skip
+                                   ["--few-shot-file", "x.yaml"]])  # fmt: skip
 def test_cli_lexicon_rejects_claude_options(monkeypatch, tmp_path, extra):
     with pytest.raises(SystemExit, match="lexicon"):
         _cli_lexicon(monkeypatch, tmp_path, *extra)
 
 
 def test_cli_lexicon_level_must_match_file(monkeypatch, tmp_path):
-    with pytest.raises(SystemExit, match="level"):
-        _cli_lexicon(monkeypatch, tmp_path, "--level", "other")
+    with pytest.raises(SystemExit, match="toy/other"):
+        _cli_lexicon(monkeypatch, tmp_path, file_level="other")
 
 
 def _ledger_rows(ledger: CostLedger) -> list[dict]:

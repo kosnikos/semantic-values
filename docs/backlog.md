@@ -64,7 +64,7 @@ From the final review of the tagging branch (2026-11-24). Small code and docs fi
 - Over-tagging of `benevolence_dependability`: the model marks it present more often than the owner does. Deferred to the calibration follow-up. [evaluation](research/tagging-evaluation.md)
 - `_combine` trusts single-run groups; the sampler's seed handling is redundant. Deferred: entry points guard it. [tags.py](../src/semval/tags.py)
 - Old run manifests and some report wording predate later fields. Deferred: old runs still load. [runner.py](../src/semval/tagging/runner.py)
-- The lexicon tagger silently ignores `--few-shot-file` and `--batch`; its word stems overmatch; its Greek test is indirect. Deferred: the lexicon is a reference point only. [lexicon.py](../src/semval/tagging/lexicon.py)
+- The lexicon tagger's word stems overmatch; its Greek test is indirect. Deferred: the lexicon is a reference point only. [lexicon.py](../src/semval/tagging/lexicon.py)
 
 ### Review page and labels
 
