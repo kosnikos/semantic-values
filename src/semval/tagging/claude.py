@@ -367,6 +367,9 @@ class ClaudeTagger:
                 out.failed[sid] = f"batch result {item.result.type}"
             elif self._handle(sid, item.result.message, CallPath.BATCH, ids, out, limit):
                 retry.append(sid)
+        for c in out.calls:  # this call's batch-path records all came from this batch
+            if c.path == CallPath.BATCH:
+                c.batch_id = batch_id
         for sid in requests:
             if sid not in seen:
                 out.failed[sid] = "missing from batch results"

@@ -98,6 +98,9 @@ class CallRecord(BaseModel):
     path: CallPath
     refused: bool = False
     refusal_category: str | None = None
+    # The message batch this result came from (batch path only). A resume fetches a
+    # submitted batch's results again, so the runner keys these records to charge each once.
+    batch_id: str | None = None
 
 
 class RefusalEvent(BaseModel):
@@ -180,6 +183,9 @@ class RunManifest(BaseModel):
     # (segment id -> document id, in submission order). A resume fetches exactly that set.
     pending_batch_id: str | None = None
     pending_batch_segments: dict[str, str] = Field(default_factory=dict)
+    # Ledger call keys of the pending batch already added to cost_usd and usage_totals, so
+    # a resume that fetches the batch again neither re-records nor re-counts them.
+    pending_batch_recorded: list[str] = Field(default_factory=list)
 
 
 @runtime_checkable

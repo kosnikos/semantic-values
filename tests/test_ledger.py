@@ -190,3 +190,44 @@ def test_ledger_lock_times_out_when_held_elsewhere(tmp_path):
         release.set()
         p.join(60)
     assert CostLedger(path, cap=100.0, lock_timeout=5).total() == 0.0
+
+
+def test_ledger_skips_a_call_key_already_recorded(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=100.0)
+    u = Usage(input_tokens=1000)
+    first = ledger.record("r1", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0")
+    assert first > 0
+    assert ledger.record("r1", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0") == 0.0
+    ledger.record("r2", u, ModelId.SONNET_5_5, batch=True, call_key="b/s/0")  # other run
+    ledger.record("r1", u, ModelId.SONNET_5_5, batch=False)  # no key: always written
+    ledger.record("r1", u, ModelId.SONNET_5_5, batch=False)
+    assert len(ledger.path.read_text().splitlines()) == 4
+
+
+def test_ledger_duplicate_key_still_checks_the_cap(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=5.0)
+    with pytest.raises(BudgetExceeded):
+        ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False, call_key="k")
+    with pytest.raises(BudgetExceeded):
+        ledger.record("r1", ONE_M, ModelId.SONNET_5_5, batch=False, call_key="k")
+    assert len(ledger.path.read_text().splitlines()) == 1
+
+
+def test_ledger_loads_old_rows_without_a_call_key(tmp_path):
+    path = tmp_path / "l.jsonl"
+    path.write_text(
+        '{"timestamp": "2026-11-20T00:00:00+00:00", "run_id": "r1", "model": "m", '
+        '"batch": true, "usage": {}, "cost_usd": 1.5}\n'
+    )
+    ledger = CostLedger(path, cap=100.0)
+    assert ledger.total() == pytest.approx(1.5)
+    ledger.record("r1", Usage(input_tokens=1000), ModelId.SONNET_5_5, batch=True, call_key="k")
+    assert len(path.read_text().splitlines()) == 2
+
+
+def test_ledger_record_all_writes_every_pair_before_raising(tmp_path):
+    ledger = CostLedger(tmp_path / "l.jsonl", cap=5.0)
+    pairs = [(ModelId.SONNET_5_5, ONE_M), (ModelId.SONNET_5_5, Usage(input_tokens=10))]
+    with pytest.raises(BudgetExceeded):
+        ledger.record_all("r1", pairs, batch=False)  # the first pair passes the cap
+    assert len(ledger.path.read_text().splitlines()) == 2  # the second was still counted

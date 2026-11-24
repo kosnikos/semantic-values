@@ -10,6 +10,7 @@ from conftest import toy_values, write_framework
 from fake_anthropic import FakeClient, message, usage
 from semval.config import Effort, ModelId
 from semval.sampling.sample import SampleManifest, doc_text_path, write_manifest
+from semval.tagging import runner
 from semval.tagging.base import RunManifest, RunStatus, TaggerKind, TaggerSpec
 from semval.tagging.claude import ClaudeTagger
 from semval.tagging.ledger import CostLedger
@@ -459,3 +460,96 @@ def test_cli_lexicon_rejects_claude_options(monkeypatch, tmp_path, extra):
 def test_cli_lexicon_level_must_match_file(monkeypatch, tmp_path):
     with pytest.raises(SystemExit, match="level"):
         _cli_lexicon(monkeypatch, tmp_path, "--level", "other")
+
+
+def _ledger_rows(ledger: CostLedger) -> list[dict]:
+    return [json.loads(x) for x in ledger.path.read_text().splitlines() if x.strip()]
+
+
+class _FailingLedger(CostLedger):
+    """Raises (as a lock timeout would) on the ``fail_at``-th record, after that many
+    earlier rows were written; later instances behave normally."""
+
+    def __init__(self, path, fail_at: int):
+        super().__init__(path, cap=10.0)
+        self.fail_at, self.calls = fail_at, 0
+
+    def record(self, *a, **kw):
+        self.calls += 1
+        if self.calls == self.fail_at:
+            raise TimeoutError("ledger lock held elsewhere")
+        return super().record(*a, **kw)
+
+
+def _batch_tagger(s, client) -> ClaudeTagger:
+    tagger = ClaudeTagger(s, client)
+    tagger.sleep = lambda x: None
+    return tagger
+
+
+def test_batch_resume_after_a_record_failure_records_each_call_once(tmp_path):
+    paths = setup(tmp_path)
+    s = spec(batch=True)
+    client = FakeClient(batch_result_for=lambda req: answer(req["params"]))
+    failing = _FailingLedger(tmp_path / "ledger.jsonl", fail_at=2)
+    with pytest.raises(TimeoutError):
+        run_tagging(s, "toy-sample", run_id="b1", tagger=_batch_tagger(s, client),
+                    ledger=failing, paths=paths)  # fmt: skip
+    assert len(_ledger_rows(failing)) == 1  # one row written before the failure
+
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    m = run_tagging(s, "toy-sample", run_id="b1", tagger=_batch_tagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert len(client.batch_requests) == 1  # fetched again, not resubmitted
+    assert m.status == RunStatus.DONE and len(m.segments_done) == 3
+    rows = _ledger_rows(ledger)
+    assert len(rows) == 3  # each paid result once
+    assert len({r["call_key"] for r in rows}) == 3
+    assert m.cost_usd == pytest.approx(ledger.total())
+    assert len(tags_of(paths.runs_dir / "b1")) == 2
+
+
+def test_batch_resume_after_a_crash_before_the_manifest_save(tmp_path, monkeypatch):
+    paths = setup(tmp_path)
+    s = spec(batch=True)
+    client = FakeClient(batch_result_for=lambda req: answer(req["params"]))
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    real_append = runner._append_tags
+
+    def append_then_die(run_dir, tags):
+        real_append(run_dir, tags)
+        raise KeyboardInterrupt  # a kill: no except block saves the manifest
+
+    monkeypatch.setattr(runner, "_append_tags", append_then_die)
+    with pytest.raises(KeyboardInterrupt):
+        run_tagging(s, "toy-sample", run_id="b1", tagger=_batch_tagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert len(_ledger_rows(ledger)) == 3
+    saved = RunManifest.model_validate_json((paths.runs_dir / "b1" / "manifest.json").read_text())
+    assert saved.pending_batch_id == "batch-1" and saved.cost_usd == 0
+
+    monkeypatch.setattr(runner, "_append_tags", real_append)
+    m = run_tagging(s, "toy-sample", run_id="b1", tagger=_batch_tagger(s, client),
+                    ledger=ledger, paths=paths)  # fmt: skip
+    assert m.status == RunStatus.DONE and len(m.segments_done) == 3
+    assert len(_ledger_rows(ledger)) == 3  # nothing recorded twice
+    assert m.cost_usd == pytest.approx(ledger.total())  # the manifest still counts them once
+    assert m.pending_batch_recorded == []
+    assert len(tags_of(paths.runs_dir / "b1")) == 2
+
+
+def test_sync_retries_of_refused_batch_items_have_no_call_key(tmp_path):
+    paths = setup(tmp_path)
+
+    def batch_result(req):
+        if "Alpha must" in req["params"]["messages"][0]["content"]:
+            return message(stop="refusal")
+        return answer(req["params"])
+
+    client = FakeClient([answer], batch_result_for=batch_result)
+    s = spec(batch=True)
+    ledger = CostLedger(tmp_path / "ledger.jsonl", cap=10.0)
+    run_tagging(s, "toy-sample", run_id="b1", tagger=_batch_tagger(s, client), ledger=ledger,
+                paths=paths)  # fmt: skip
+    rows = _ledger_rows(ledger)
+    assert all(("call_key" in r) == r["batch"] for r in rows)

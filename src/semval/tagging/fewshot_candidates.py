@@ -144,8 +144,8 @@ class FewShotDrafter:
         if not self.ledger.can_spend(self._estimate(params)):
             raise BudgetExceeded("the next draft would pass the budget cap")
         msg = self.client.beta.messages.create(**params)
-        for model, usage in billed(msg, DRAFT_MODEL):  # may raise BudgetExceeded after writing
-            self.ledger.record(self.run_id, usage, priced_model(model), False)
+        pairs = [(priced_model(m), u) for m, u in billed(msg, DRAFT_MODEL)]
+        self.ledger.record_all(self.run_id, pairs, False)  # all recorded, then may raise
         if msg.stop_reason != "end_turn":
             raise DraftFailed(f"stop_reason {msg.stop_reason}")
         text = next((b.text for b in msg.content if b.type == "text"), None)

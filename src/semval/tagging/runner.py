@@ -175,18 +175,37 @@ class _Run:
         self.m, self.run_dir, self.ledger, self.texts = m, run_dir, ledger, docs_text
 
     def record(self, res: TagBatchResult) -> bool:
-        """Charge every call to the ledger; False if the cap was passed."""
+        """Charge every call to the ledger; False if the cap was passed.
+
+        A batch result can be reported twice: a failure or crash after some of its calls
+        were recorded leaves the batch pending, and the resume fetches it again. Each
+        batch call therefore carries a key (batch, segment, attempt). The ledger writes a
+        key once, and ``pending_batch_recorded`` says which keys the manifest has counted,
+        so a call already counted is skipped and one only in the ledger is counted here.
+        """
         ok = True
+        counted = set(self.m.pending_batch_recorded)
+        attempts: dict[str, int] = {}
         for c in res.calls:
+            key = None
+            if c.batch_id is not None:
+                n = attempts.get(c.segment_id, 0)
+                attempts[c.segment_id] = n + 1
+                key = f"{c.batch_id}/{c.segment_id}/{n}"
+                if key in counted:
+                    continue
             model, batch = priced_model(c.model), c.path == CallPath.BATCH
             cost = cost_of(c.usage, model, batch)
             try:
-                self.ledger.record(self.m.run_id, c.usage, model, batch)
+                self.ledger.record(self.m.run_id, c.usage, model, batch, call_key=key)
             except BudgetExceeded as e:
                 log.warning("%s", e)
                 ok = False
             self.m.usage_totals = self.m.usage_totals + c.usage
             self.m.cost_usd += cost
+            if key is not None:
+                self.m.pending_batch_recorded.append(key)
+                counted.add(key)
         return ok
 
     def store(self, res: TagBatchResult, segs: dict[str, Segment]) -> None:
@@ -320,6 +339,7 @@ def run_tagging(
             run.store(res, segs)
             m.pending_batch_id = None
             m.pending_batch_segments = {}
+            m.pending_batch_recorded = []  # saved with the tags: the batch is finished
             if not within_cap or res.skipped:
                 m.status = RunStatus.STOPPED_BUDGET
                 _save(run_dir, m)
