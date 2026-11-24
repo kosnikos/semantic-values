@@ -11,7 +11,13 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from semval.datasets.touche23 import ToucheItem, ToucheTextProvider
-from semval.review.labels import DEFAULT_LABELS_DIR, LabelStore, NoteStore, label_paths
+from semval.review.labels import (
+    DEFAULT_LABELLER,
+    DEFAULT_LABELS_DIR,
+    LabelStore,
+    NoteStore,
+    label_paths,
+)
 from semval.review.pool import Proposal
 from semval.review.session import ReviewSession
 from semval.tagging.base import RunManifest, RunStatus, TaggerKind, TaggerSpec
@@ -42,7 +48,7 @@ def open_candidate_session(
     candidates: Sequence[Candidate],
     items: Sequence[ToucheItem],
     *,
-    labeller: str = "owner",
+    labeller: str = DEFAULT_LABELLER,
     labels_dir: Path = DEFAULT_LABELS_DIR,
     paths: RunPaths = DEFAULT_PATHS,
     framework_id: str = FRAMEWORK_ID,

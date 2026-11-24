@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from semval.tagging.base import PromptInfo, RawTag, TagBatchResult, TaggerKind, TaggerSpec
+from semval.tags import Stance
 from semval.targets import TargetSet
 from semval.units import DocumentMeta, Segment
 
@@ -65,5 +66,5 @@ class LexiconTagger:
                     continue
                 quotes = list(dict.fromkeys(m.group(0) for m in pat.finditer(texts[seg.id])))
                 if quotes:
-                    out[seg.id].append(RawTag(value_id=tid, stance="mention", quotes=quotes))
+                    out[seg.id].append(RawTag(value_id=tid, stance=Stance.MENTION, quotes=quotes))
         return TagBatchResult(tags_by_segment=out)

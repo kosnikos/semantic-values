@@ -130,7 +130,7 @@ def finalize(
 def stance_counts(examples: Iterable[FewShotExample]) -> dict[str, int]:
     """Tags per stance over the examples (endorse, reject, mention)."""
     c = Counter(t.stance for e in examples for t in e.tags)
-    return {s: c.get(s, 0) for s in ("endorse", "reject", "mention")}
+    return {s: c.get(s, 0) for s in Stance if s != Stance.CONTESTED}
 
 
 # -- level adapter ------------------------------------------------------------------------

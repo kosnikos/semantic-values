@@ -23,6 +23,7 @@ from semval.tags import EvidenceSpan, Stance
 log = logging.getLogger(__name__)
 
 DEFAULT_LABELS_DIR = Path("data/labels")
+DEFAULT_LABELLER = "owner"  # who judges when no --labeller is given
 LABELS_FILE = "labels.jsonl"
 NOTES_FILE = "notes.jsonl"
 

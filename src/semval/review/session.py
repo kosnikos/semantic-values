@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from semval.review.highlights import NO_LIMIT, assign_colors, merged_spans, text_pieces
 from semval.review.labels import (
+    DEFAULT_LABELLER,
     DEFAULT_LABELS_DIR,
     LabelRecord,
     LabelStore,
@@ -88,7 +89,7 @@ class ReviewSession:
     provider: TextProvider
     labels: LabelStore
     notes: NoteStore
-    labeller: str = "owner"
+    labeller: str = DEFAULT_LABELLER
     blind: bool = False
     level_id: str = field(init=False)
     documents: list[str] = field(init=False)
@@ -324,7 +325,7 @@ def open_session(
     run_ids: Sequence[str],
     *,
     blind: bool = False,
-    labeller: str = "owner",
+    labeller: str = DEFAULT_LABELLER,
     paths: RunPaths = DEFAULT_PATHS,
     labels_dir: Path = DEFAULT_LABELS_DIR,
     provider: TextProvider | None = None,

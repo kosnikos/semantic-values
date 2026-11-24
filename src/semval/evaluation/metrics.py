@@ -8,7 +8,7 @@ from collections import defaultdict
 from collections.abc import Collection, Iterable, Mapping
 from dataclasses import dataclass, field
 
-from semval.review.labels import LabelRecord
+from semval.review.labels import DEFAULT_LABELLER, LabelRecord
 from semval.tagging.base import TaggerKind
 from semval.tags import Stance, ValueTag, rollup_tags
 from semval.units import document_id_of
@@ -121,7 +121,7 @@ def stance_scores(pred: Mapping[Pair, Stance], owner: Mapping[Pair, Stance | Non
 
 
 def _owner_tag(doc: str, value: str, stance: Stance) -> ValueTag:
-    return ValueTag(segment_id=doc, value_id=value, stance=stance, run_id="owner")
+    return ValueTag(segment_id=doc, value_id=value, stance=stance, run_id=DEFAULT_LABELLER)
 
 
 def owner_judgements(

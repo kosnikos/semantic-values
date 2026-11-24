@@ -7,7 +7,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from semval.review.labels import DEFAULT_LABELS_DIR
+from semval.review.labels import DEFAULT_LABELLER, DEFAULT_LABELS_DIR
 from semval.sampling.sample import DEFAULT_RAW_DIR, DEFAULT_SAMPLES_DIR
 from semval.sources import (
     EXCLUDED_SOURCE_TYPES,
@@ -556,7 +556,9 @@ def build_parser() -> argparse.ArgumentParser:
     rev.add_argument(
         "--blind", action="store_true", help="only unjudged tags, without saying which run"
     )
-    rev.add_argument("--labeller", default="owner", help="who is judging (default: owner)")
+    rev.add_argument(
+        "--labeller", default=DEFAULT_LABELLER, help=f"who is judging (default: {DEFAULT_LABELLER})"
+    )
     rev.add_argument("--port", type=int, default=8765, help="0 picks a free port")
     rev.add_argument(
         "--source", type=ReviewSource, choices=list(ReviewSource), default=ReviewSource.RUNS
@@ -577,7 +579,7 @@ def build_parser() -> argparse.ArgumentParser:
     cd.add_argument("--dir", type=Path, default=TOUCHE_DIR)
     cd.set_defaults(func=_fewshot_candidates)
     fz = fsh_sub.add_parser("finalize", help="write the owner-confirmed examples to YAML")
-    fz.add_argument("--labeller", default="owner")
+    fz.add_argument("--labeller", default=DEFAULT_LABELLER)
     fz.add_argument("--dir", type=Path, default=TOUCHE_DIR)
     fz.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
     fz.add_argument("--out", type=Path, default=DEFAULT_FEWSHOT_PATH)
@@ -588,7 +590,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="local in-domain examples from paragraphs the owner confirmed (never committed)",
     )
     fl.add_argument("--run", required=True, help="paragraph-unit run id")
-    fl.add_argument("--labeller", default="owner")
+    fl.add_argument("--labeller", default=DEFAULT_LABELLER)
     fl.add_argument("--n", type=int, default=6)
     fl.add_argument("--out", type=Path, default=DEFAULT_LOCAL_FEWSHOT_PATH)
     fl.add_argument("--labels-dir", type=Path, default=DEFAULT_LABELS_DIR)
@@ -648,7 +650,7 @@ def build_parser() -> argparse.ArgumentParser:
         "run's input_sample.",
     )
     ev.add_argument("--run", action="append", required=True, help="run id; repeat for all runs")
-    ev.add_argument("--labeller", default="owner", help="whose labels are the stance gold")
+    ev.add_argument("--labeller", default=DEFAULT_LABELLER, help="whose labels are the stance gold")
     ev.add_argument("--out", type=Path, default=DEFAULT_EVAL_OUT)
     ev.add_argument("--scoring-level", default=SCORING_LEVEL)
     ev.add_argument("--en-sample", default=DEFAULT_EN_SAMPLE)
