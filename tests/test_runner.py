@@ -404,7 +404,7 @@ def test_cli_exit_code_follows_status(monkeypatch, status, code):
     monkeypatch.setattr(claude, "make_client", lambda: pytest.fail("the runner makes the client"))
     monkeypatch.setattr(runner, "run_tagging", fake_run)
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
-            "--level", "leaf", "--unit", "article", "--framework", "toy", "--no-few-shot"]  # fmt: skip
+            "--level", "leaf", "--unit", "article", "--no-few-shot"]  # fmt: skip
     assert main(argv) == code
 
 
@@ -424,6 +424,7 @@ def _cli_lexicon(monkeypatch, tmp_path, *extra, file_level="leaf") -> tuple[int,
     from semval.tagging import runner
 
     paths = setup(tmp_path)
+    monkeypatch.setattr("semval.values.FRAMEWORK_DIR", paths.framework_dir)
     monkeypatch.setattr(runner, "run_tagging", functools.partial(runner.run_tagging, paths=paths))
     argv = ["tag", "--tagger", "lexicon", "--sample", "toy-sample", "--unit", "paragraph",
             "--framework", "toy", "--level", "leaf", "--option",

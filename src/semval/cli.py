@@ -208,7 +208,7 @@ def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any]:
         )
         return setup, to_spec(setup)
     except ValueError as e:
-        raise SystemExit(f"error: {e}") from None
+        raise SystemExit(f"error: tagger {args.tagger}: {e}") from None
 
 
 def _tag(args: argparse.Namespace) -> int:

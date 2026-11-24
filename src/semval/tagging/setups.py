@@ -17,7 +17,8 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from semval.config import Effort
 from semval.models import ModelId
 from semval.tagging.base import TaggerSpec
-from semval.tagging.registry import check_spec
+from semval.tagging.prompt import load_prompt
+from semval.tagging.registry import check_spec, registered_kinds
 from semval.units import UnitLevel
 
 log = logging.getLogger(__name__)
@@ -52,9 +53,14 @@ def load_setup(name: str, dir: Path = SETUPS_DIR) -> TaggerSetup:
     if not path.is_file():
         raise ValueError(f"unknown tagger setup {name!r}; known: {', '.join(known_setups(dir))}")
     try:
-        return TaggerSetup.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
+        setup = TaggerSetup.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
     except (ValidationError, yaml.YAMLError) as e:
         raise ValueError(f"invalid tagger setup file {path}: {e}") from None
+    if setup.kind not in registered_kinds():
+        raise ValueError(
+            f"{path}: unknown tagger kind {setup.kind!r}; known: {', '.join(registered_kinds())}"
+        )
+    return setup
 
 
 def apply_overrides(setup: TaggerSetup, **overrides: Any) -> TaggerSetup:
@@ -80,7 +86,35 @@ def skip_missing_few_shot(setup: TaggerSetup) -> TaggerSetup:
 
 def to_spec(setup: TaggerSetup) -> TaggerSpec:
     """The spec for ``setup``; ``ValueError`` if its kind does not accept the fields set."""
-    spec = TaggerSpec(
+    _check_ids(setup)
+    try:
+        spec = _spec(setup)
+    except ValidationError as e:
+        raise ValueError("; ".join(str(x["msg"]).removeprefix("Value error, ") for x in e.errors()))
+    check_spec(spec)
+    return spec
+
+
+def _check_ids(setup: TaggerSetup) -> None:
+    """``ValueError`` naming the known ids if the framework, level or prompt does not exist."""
+    from semval import values
+
+    fw_dir = Path(values.FRAMEWORK_DIR)
+    path = fw_dir / f"{setup.framework}.yaml"
+    if not path.is_file():
+        known = sorted(p.stem for p in fw_dir.glob("*.yaml"))
+        raise ValueError(f"unknown framework {setup.framework!r}; known: {', '.join(known)}")
+    level_ids = values.load_framework(path, local_dir=fw_dir / "local").level_ids()
+    if setup.level not in level_ids:
+        raise ValueError(
+            f"unknown level {setup.level!r} in framework {setup.framework}; "
+            f"known: {', '.join(level_ids)}"
+        )
+    load_prompt(setup.prompt)  # an unknown id lists the known ones
+
+
+def _spec(setup: TaggerSetup) -> TaggerSpec:
+    return TaggerSpec(
         kind=setup.kind,
         model=setup.model,
         effort=setup.effort,
@@ -92,8 +126,6 @@ def to_spec(setup: TaggerSetup) -> TaggerSpec:
         prompt_id=setup.prompt,
         options=dict(setup.options),
     )
-    check_spec(spec)
-    return spec
 
 
 def parse_options(items: Iterable[str]) -> dict[str, str | int | float | bool]:

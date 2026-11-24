@@ -2,7 +2,6 @@ import logging
 from pathlib import Path
 
 import pytest
-import yaml
 
 from semval.cli import main
 from semval.config import Effort
@@ -69,7 +68,9 @@ def test_override_not_valid_for_kind(capsys: pytest.CaptureFixture[str]) -> None
     with pytest.raises(SystemExit) as e:
         main(["tag", "--sample", "x", "--tagger", "lexicon", "--model", "claude-opus-5-5"])
     assert e.value.code not in (0, None)
-    assert "does not take model" in str(e.value)
+    msg = str(e.value)
+    assert "tagger lexicon" in msg and "does not take model" in msg
+    assert "validation error" not in msg and "pydantic" not in msg
 
 
 def test_no_few_shot_with_few_shot_file_is_an_error() -> None:
@@ -123,4 +124,30 @@ def test_cli_dry_run_lexicon_option(
     assert main([*argv, "--unit", "paragraph", "--dry-run"]) == 0
     out = capsys.readouterr().out
     assert "other.yaml" in out and "zero-shot" in out
-    assert yaml.safe_load("a: 1")  # yaml import used for the typo test above
+
+
+@pytest.mark.parametrize(
+    ("flag", "value", "known"),
+    [
+        ("--level", "nope", "known: leaf"),
+        ("--framework", "nope", "known: schwartz19"),
+        ("--prompt", "nope", "known: v1"),
+    ],
+)
+def test_unknown_level_framework_prompt_name_the_known_ids(
+    monkeypatch: pytest.MonkeyPatch, flag: str, value: str, known: str
+) -> None:
+    monkeypatch.chdir(ROOT)
+    with pytest.raises(SystemExit) as e:
+        main(["tag", "--sample", "x", "--dry-run", flag, value])
+    assert e.value.code not in (0, None)
+    assert "nope" in str(e.value) and known in str(e.value)
+
+
+def test_unknown_kind_in_setup_file_names_the_file(tmp_path: Path) -> None:
+    text = (SETUPS_DIR / "lexicon.yaml").read_text(encoding="utf-8")
+    (tmp_path / "odd.yaml").write_text(
+        text.replace("kind: lexicon", "kind: magic"), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match=r"odd\.yaml.*magic.*known: claude, lexicon"):
+        load_setup("odd", tmp_path)
