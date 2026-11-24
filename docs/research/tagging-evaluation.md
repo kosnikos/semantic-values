@@ -88,9 +88,9 @@ Dropped by the stance gate: claude-haiku-5-5 low (leaf, few-shot), claude-haiku-
 
 ## Cost notes
 
-- Two runs were resumed after an interruption and their paragraphs were billed or recorded twice in the cost ledger: `claude-opus-5-5 medium (leaf, few-shot)` (501 ledger rows for 270 paragraphs) and `claude-sonnet-5-5 medium (basic10, few-shot)` (524 rows). Scaled to a single pass their cost per 1,000 articles is about **$39** (not 72.52) and about **$16** (not 31.26). The ranking and the decision do not change.
+- Two runs were resumed after an interruption, and part of their results was **recorded twice, not billed twice**: `claude-opus-5-5 medium (leaf, few-shot)` (501 ledger rows for 270 paragraphs) and `claude-sonnet-5-5 medium (basic10, few-shot)` (524 rows). The duplicate rows have identical usage, because the resume fetched the same batch's results again and recorded them a second time (fixed since: each batch call is now recorded once). Their manifests overstate cost in the same way. Scaled to a single pass, their cost per 1,000 articles is about **$39** (not 72.52) and about **$16** (not 31.26). The ranking and the decision do not change.
 - The two `basic10` configurations have 12–16 tags the owner has not judged (a leaf-level label cannot always be read at the 10 values), and their *Spurious* count is 0 for the same reason. Neither is within 0.02 of the best, so no further review pass was run.
-- Total API spend for this evaluation: $16.31 of the $50 cap.
+- Total API spend for this evaluation: about **$15.33** of the $50 cap. The ledger records $16.31; the difference (about $0.98) is the duplicate rows above.
 
 ## Decision
 
