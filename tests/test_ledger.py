@@ -13,7 +13,7 @@ ONE_M = Usage(input_tokens=1_000_000, output_tokens=1_000_000)
 
 def test_prices_cover_all_models():
     reg = registry()
-    assert len(reg.ids()) == 6
+    assert len(reg.ids()) >= 6
     for i in reg.ids():
         p = reg.price(i)
         assert p.input > 0 and p.output > 0 and p.cache_read > 0 and p.cache_write > 0

@@ -1,12 +1,13 @@
 """The model registry: ids, providers and prices live in data/models.yaml, not in code."""
 
+import math
 from enum import StrEnum
 from functools import cache
 from pathlib import Path
 from typing import Annotated
 
 import yaml
-from pydantic import AfterValidator, BaseModel, ConfigDict, ValidationError
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, ValidationError
 
 MODELS_PATH = Path(__file__).resolve().parents[2] / "data" / "models.yaml"
 
@@ -16,14 +17,16 @@ class Provider(StrEnum):
 
 
 class Price(BaseModel):
-    """USD per 1M tokens."""
+    """USD per 1M tokens. The budget cap trusts these, so a bad value is refused at load:
+    numbers only (no strings), finite, input and output above 0 (a free price would make
+    spend count as 0), cache prices not negative."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
 
-    input: float
-    output: float
-    cache_write: float
-    cache_read: float
+    input: float = Field(gt=0, allow_inf_nan=False)
+    output: float = Field(gt=0, allow_inf_nan=False)
+    cache_write: float = Field(ge=0, allow_inf_nan=False)
+    cache_read: float = Field(ge=0, allow_inf_nan=False)
 
 
 class ModelInfo(BaseModel):
@@ -74,7 +77,9 @@ class ModelRegistry:
 
 
 def load_registry(path: Path = MODELS_PATH) -> ModelRegistry:
-    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict):
+        raise ValueError(f"{path}: expected a mapping with batch_factor and models")
     models = []
     for n, row in enumerate(raw.get("models") or [], 1):
         label = row.get("id", f"row {n}") if isinstance(row, dict) else f"row {n}"
@@ -84,7 +89,17 @@ def load_registry(path: Path = MODELS_PATH) -> ModelRegistry:
             raise ValueError(f"model {label!r} in {path}: {e}") from e
     if "batch_factor" not in raw:
         raise ValueError(f"{path}: batch_factor missing")
-    return ModelRegistry(models, float(raw["batch_factor"]))
+    factor = raw["batch_factor"]
+    if (
+        isinstance(factor, bool)
+        or not isinstance(factor, int | float)
+        or not math.isfinite(factor)
+        or not 0 < factor <= 1
+    ):
+        raise ValueError(
+            f"{path}: batch_factor must be a number above 0 and at most 1, got {factor!r}"
+        )
+    return ModelRegistry(models, float(factor))
 
 
 @cache

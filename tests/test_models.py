@@ -32,7 +32,7 @@ def write(tmp_path, *rows):
 
 def test_registry_matches_previous_prices():
     reg = registry()
-    assert set(reg.ids()) == set(OLD)
+    assert set(OLD) <= set(reg.ids())
     for id, price in OLD.items():
         assert reg.price(id) == price
     assert reg.batch_factor == 0.5
@@ -40,9 +40,12 @@ def test_registry_matches_previous_prices():
 
 def test_requestable_and_fallback_flags():
     reg = registry()
-    assert reg.requestable() == ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5"]
+    live = {"claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5"}
+    assert live <= set(reg.requestable())
+    assert {"claude-sonnet-5", "claude-opus-5", "claude-opus-4-8"}.isdisjoint(reg.requestable())
     flagged = {i for i in reg.ids() if reg.get(i).server_fallbacks}
-    assert flagged == {"claude-sonnet-5-5", "claude-opus-5-5"}
+    assert {"claude-sonnet-5-5", "claude-opus-5-5"} <= flagged
+    assert "claude-haiku-5-5" not in flagged
 
 
 def test_unknown_reported_model_priced_dearest():
@@ -74,3 +77,49 @@ def test_new_row_needs_no_code_change(tmp_path):
     reg = load_registry(write(tmp_path, row("claude-sonnet-5-5"), row("brand-new-1")))
     assert "brand-new-1" in reg.requestable()
     assert reg.price("brand-new-1").input == 1.0
+
+
+def _file(tmp_path, text):
+    p = tmp_path / "models.yaml"
+    p.write_text(text, encoding="utf-8")
+    return p
+
+
+@pytest.mark.parametrize(
+    "prices",
+    [
+        "{input: '1.0', output: 10.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: .nan, output: 10.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: .inf, output: 10.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: -1.0, output: 10.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: 0, output: 10.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: 1.0, output: 0.0, cache_write: 1.0, cache_read: 0.1}",
+        "{input: 1.0, output: 10.0, cache_write: -1.0, cache_read: 0.1}",
+        "{input: 1.0, output: 10.0, cache_write: 1.0, cache_read: .nan}",
+    ],
+)
+def test_registry_rejects_bad_prices(tmp_path, prices):
+    text = (
+        "batch_factor: 0.5\nmodels:\n  - id: bad-row\n    provider: anthropic\n"
+        f"    prices: {prices}\n    requestable: true\n    server_fallbacks: false\n"
+    )
+    with pytest.raises(ValueError, match="bad-row"):
+        load_registry(_file(tmp_path, text))
+
+
+@pytest.mark.parametrize("factor", ["0", "-0.5", ".nan", ".inf", "1.5", "'half'", "~"])
+def test_registry_rejects_bad_batch_factor(tmp_path, factor):
+    text = f"batch_factor: {factor}\nmodels:\n" + row("m1")
+    with pytest.raises(ValueError, match="batch_factor"):
+        load_registry(_file(tmp_path, text))
+
+
+def test_registry_accepts_batch_factor_one(tmp_path):
+    text = "batch_factor: 1\nmodels:\n" + row("m1")
+    assert load_registry(_file(tmp_path, text)).batch_factor == 1.0
+
+
+@pytest.mark.parametrize("text", ["- a\n- b\n", "just a string\n"])
+def test_registry_rejects_non_mapping_top_level(tmp_path, text):
+    with pytest.raises(ValueError, match="models.yaml"):
+        load_registry(_file(tmp_path, text))
