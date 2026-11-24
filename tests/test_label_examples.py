@@ -8,7 +8,7 @@ import yaml
 
 from conftest import toy_values, write_framework
 from semval.cli import build_parser, main
-from semval.config import Effort, ModelId
+from semval.config import SONNET_5_5, Effort
 from semval.review.labels import LabelRecord, LabelStore, Verdict, label_paths
 from semval.sampling.sample import SampleManifest, doc_text_path, write_manifest
 from semval.tagging.base import RawTag, RunManifest, RunStatus, TaggerKind, TaggerSpec
@@ -90,7 +90,7 @@ class Env:
 
     def build(self) -> "Env":
         spec = TaggerSpec(
-            kind=TaggerKind.CLAUDE, model=ModelId.SONNET_5_5, effort=Effort.MEDIUM,
+            kind=TaggerKind.CLAUDE, model=SONNET_5_5, effort=Effort.MEDIUM,
             framework_id="toy", level_id="leaf", unit=UnitLevel.PARAGRAPH,
         )  # fmt: skip
         m = RunManifest(run_id=RUN, spec=spec, input_sample="toy-sample",

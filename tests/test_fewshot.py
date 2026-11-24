@@ -6,7 +6,7 @@ import pytest
 import yaml
 
 from fake_anthropic import FakeClient, message
-from semval.config import Effort, ModelId
+from semval.config import OPUS_5_5, Effort
 from semval.datasets import touche23 as t
 from semval.review.labels import LabelRecord, LabelStore, Verdict, label_paths
 from semval.review.session import RowKind
@@ -115,7 +115,7 @@ def test_drafter_request_billing_and_quote_check(tmp_path: Path, caplog) -> None
     ]
     assert "made up quote" in caplog.text
     req = client.sync_calls[0]
-    assert req["model"] == str(ModelId.OPUS_5_5)
+    assert req["model"] == OPUS_5_5
     assert req["output_config"]["effort"] == str(Effort.MEDIUM)
     assert req["output_config"]["format"]["type"] == "json_schema"
     assert req["system"][0]["cache_control"] == {"type": "ephemeral"}

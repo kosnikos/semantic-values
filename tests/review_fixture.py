@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 
 from conftest import toy_values, write_framework
-from semval.config import Effort, ModelId
+from semval.config import HAIKU_5_5, SONNET_5_5, Effort
 from semval.sampling.sample import SampleManifest, doc_meta_path, doc_text_path, write_manifest
 from semval.tagging.base import RunManifest, RunStatus, TaggerKind, TaggerSpec
 from semval.tagging.runfiles import MANIFEST, TAGS, RunPaths
@@ -28,7 +28,7 @@ def span(doc_id: str, quote: str) -> EvidenceSpan:
     return EvidenceSpan(start=start, end=start + len(quote))
 
 
-def _write_run(paths: RunPaths, run_id: str, model: ModelId, effort: Effort, tags: list[ValueTag],
+def _write_run(paths: RunPaths, run_id: str, model: str, effort: Effort, tags: list[ValueTag],
                level_id: str = "leaf") -> None:  # fmt: skip
     spec = TaggerSpec(
         kind=TaggerKind.CLAUDE, model=model, effort=effort, framework_id="toy",
@@ -86,11 +86,11 @@ def build(tmp_path: Path) -> RunPaths:
         ),
         paths.samples_dir,
     )  # fmt: skip
-    _write_run(paths, RUN_A, ModelId.HAIKU_5_5, Effort.LOW, [
+    _write_run(paths, RUN_A, HAIKU_5_5, Effort.LOW, [
         tag(DOC1, "alpha", Stance.ENDORSE, RUN_A, "Alpha must be defended"),
         tag(DOC1, "beta", Stance.REJECT, RUN_A, "Beta is overrated"),
     ])  # fmt: skip
-    _write_run(paths, RUN_B, ModelId.SONNET_5_5, Effort.MEDIUM, [
+    _write_run(paths, RUN_B, SONNET_5_5, Effort.MEDIUM, [
         tag(DOC1, "alpha", Stance.REJECT, RUN_B, "Alpha must be defended"),
         tag(DOC2, "beta", Stance.MENTION, RUN_B),
     ])  # fmt: skip

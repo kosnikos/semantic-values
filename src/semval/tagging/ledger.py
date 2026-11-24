@@ -7,8 +7,9 @@ import os
 from collections.abc import Iterable
 from pathlib import Path
 
-from semval.config import BATCH_FACTOR, BUDGET_USD, PRICES, ModelId, PricedModel
+from semval.config import BUDGET_USD
 from semval.fsutil import atomic_write_text, exclusive_lock
+from semval.models import registry
 from semval.tagging.base import Usage
 
 
@@ -43,15 +44,16 @@ def _parse(line: str, number: int) -> float:
     return _parse_row(line, number)[0]
 
 
-def cost_of(usage: Usage, model: PricedModel, batch: bool) -> float:
-    p = PRICES[model]
+def cost_of(usage: Usage, model: str, batch: bool) -> float:
+    reg = registry()
+    p = reg.price(reg.priced(model))  # unknown name: dearest price
     usd = (
         usage.input_tokens * p.input
         + usage.output_tokens * p.output
         + usage.cache_creation_input_tokens * p.cache_write
         + usage.cache_read_input_tokens * p.cache_read
     ) / 1_000_000
-    return usd * BATCH_FACTOR if batch else usd
+    return usd * reg.batch_factor if batch else usd
 
 
 class CostLedger:
@@ -77,7 +79,7 @@ class CostLedger:
     def _lock(self):
         return exclusive_lock(self.path.with_name(self.path.name + ".lock"), self.lock_timeout)
 
-    def estimate(self, model: ModelId, in_tokens: int, out_tokens: int, batch: bool) -> float:
+    def estimate(self, model: str, in_tokens: int, out_tokens: int, batch: bool) -> float:
         return cost_of(Usage(input_tokens=in_tokens, output_tokens=out_tokens), model, batch)
 
     def _lines(self) -> list[str]:
@@ -135,7 +137,7 @@ class CostLedger:
         self,
         run_id: str,
         usage: Usage,
-        model: PricedModel,
+        model: str,
         batch: bool,
         call_key: str | None = None,
     ) -> float:
@@ -180,9 +182,7 @@ class CostLedger:
             raise BudgetExceeded(f"total ${total:.2f} exceeds cap ${self.cap:.2f}")
         return cost
 
-    def record_all(
-        self, run_id: str, pairs: Iterable[tuple[PricedModel, Usage]], batch: bool
-    ) -> float:
+    def record_all(self, run_id: str, pairs: Iterable[tuple[str, Usage]], batch: bool) -> float:
         """Record every (model, usage) pair of one message, then raise ``BudgetExceeded``
         if any record passed the cap: stopping at the first would leave later billed
         attempts (fallback iterations) uncounted."""

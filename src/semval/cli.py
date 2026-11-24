@@ -509,7 +509,8 @@ def build_parser() -> argparse.ArgumentParser:
     smp.add_argument("--max-requests", type=int, default=600, help="stop after this many")
     smp.set_defaults(func=_sample)
 
-    from semval.config import Effort, ModelId
+    from semval.config import Effort
+    from semval.models import registry
     from semval.units import UnitLevel
 
     tag = sub.add_parser(
@@ -521,7 +522,9 @@ def build_parser() -> argparse.ArgumentParser:
     from semval.tagging.base import TaggerKind
 
     tag.add_argument("--kind", type=TaggerKind, choices=list(TaggerKind), default=TaggerKind.CLAUDE)
-    tag.add_argument("--model", type=ModelId, choices=list(ModelId), help="required for claude")
+    tag.add_argument(
+        "--model", type=str, choices=registry().requestable(), help="required for claude"
+    )
     tag.add_argument("--effort", type=Effort, choices=list(Effort), help="required for claude")
     tag.add_argument("--level", help="framework level id, e.g. leaf (required for claude)")
     tag.add_argument(

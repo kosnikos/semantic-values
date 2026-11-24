@@ -7,7 +7,7 @@ import yaml
 
 from conftest import toy_values, write_framework
 from semval.cli import main
-from semval.config import Effort, ModelId
+from semval.config import SONNET_5_5, Effort
 from semval.datasets.touche23_samples import EL_PREFIX, EN_PREFIX
 from semval.evaluation.report import EvalSetup, build_results, render_report, write_report
 from semval.review.labels import LabelRecord, Verdict
@@ -88,7 +88,7 @@ def make_run(
 
 def claude(**kw) -> TaggerSpec:
     base = {
-        "kind": TaggerKind.CLAUDE, "model": ModelId.SONNET_5_5, "effort": Effort.LOW,
+        "kind": TaggerKind.CLAUDE, "model": SONNET_5_5, "effort": Effort.LOW,
         "framework_id": "toy", "level_id": "leaf", "unit": "paragraph",
     }  # fmt: skip
     base.update(kw)

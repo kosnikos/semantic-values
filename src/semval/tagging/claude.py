@@ -27,10 +27,9 @@ from anthropic.types.messages.batch_create_params import Request
 from semval.config import (
     API_KEY_ENV_VARS,
     MAX_TOKENS_BY_EFFORT,
-    SERVER_FALLBACK_MODELS,
     ModelId,
-    priced_model,
 )
+from semval.models import registry
 from semval.tagging.base import (
     CallPath,
     CallRecord,
@@ -141,7 +140,8 @@ class _Collector:
 
     def spent_usd(self) -> float:
         return sum(
-            cost_of(c.usage, priced_model(c.model), c.path == CallPath.BATCH) for c in self.calls
+            cost_of(c.usage, registry().priced(c.model), c.path == CallPath.BATCH)
+            for c in self.calls
         )
 
     def result(self) -> TagBatchResult:
@@ -214,7 +214,7 @@ class ClaudeTagger:
         }
 
     def _sync_params(self, params: dict[str, Any]) -> dict[str, Any]:
-        if self.model in SERVER_FALLBACK_MODELS:
+        if registry().get(self.model).server_fallbacks:
             return {**params, "betas": [FALLBACK_BETA], "fallbacks": "default"}
         return params
 

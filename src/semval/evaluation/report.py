@@ -70,7 +70,7 @@ def config_key(m: RunManifest) -> ConfigKey:
     s = m.spec
     return ConfigKey(
         kind=s.kind,
-        model=s.model.value if s.model else None,
+        model=s.model,
         effort=s.effort.value if s.effort else None,
         level_id=s.level_id,
         few_shot=s.few_shot,

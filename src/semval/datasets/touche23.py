@@ -25,12 +25,11 @@ from pydantic import BaseModel, ConfigDict
 
 from semval.config import (
     MAX_TOKENS_BY_EFFORT,
-    SERVER_FALLBACK_MODELS,
+    SONNET_5_5,
     Effort,
-    ModelId,
-    priced_model,
 )
 from semval.fsutil import atomic_write_text
+from semval.models import registry
 from semval.review.texts import DocInfo, TextUnavailable
 from semval.tagging.base import Usage
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
@@ -43,7 +42,7 @@ ZENODO_BASE = "https://zenodo.org/record/7879430/files/"
 DEFAULT_DIR = Path("data/external/touche23")
 PROXY_FILE = "proxy_el.jsonl"
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
-PROXY_MODEL = ModelId.SONNET_5_5
+PROXY_MODEL = SONNET_5_5
 PROXY_EFFORT = Effort.LOW
 PROXY_RUN_ID = "touche23-proxy-el"
 EST_OUTPUT_TOKENS = 1000  # for the pre-call budget check
@@ -211,7 +210,7 @@ class TranslationFailed(Exception):
     """The model's answer for one item was unusable (refused, truncated, malformed)."""
 
 
-def billed(msg: Any, default_model: ModelId = PROXY_MODEL) -> list[tuple[str, Usage]]:
+def billed(msg: Any, default_model: str = PROXY_MODEL) -> list[tuple[str, Usage]]:
     """(model name, usage) per billed attempt, as the tagger counts them."""
     iterations = getattr(msg.usage, "iterations", None)
     pairs = (
@@ -258,13 +257,15 @@ class ClaudeTranslator:
                 "format": {"type": "json_schema", "schema": _SCHEMA},
             },
         }
-        if PROXY_MODEL in SERVER_FALLBACK_MODELS:
+        if registry().get(PROXY_MODEL).server_fallbacks:
             params = {**params, "betas": [FALLBACK_BETA], "fallbacks": "default"}
         if not self.ledger.can_spend(self._estimate(params)):
             raise BudgetExceeded("the next translation would pass the budget cap")
         msg = self.client.beta.messages.create(**params)
         # records every billed attempt, then may raise BudgetExceeded
-        self.ledger.record_all(self.run_id, [(priced_model(m), u) for m, u in billed(msg)], False)
+        self.ledger.record_all(
+            self.run_id, [(registry().priced(m), u) for m, u in billed(msg)], False
+        )
         if msg.stop_reason != "end_turn":
             raise TranslationFailed(f"stop_reason {msg.stop_reason}")
         text = next((b.text for b in msg.content if b.type == "text"), None)

@@ -8,7 +8,7 @@ import pytest
 
 from conftest import toy_values, write_framework
 from fake_anthropic import FakeClient, message, usage
-from semval.config import Effort, ModelId
+from semval.config import HAIKU_5_5, OPUS_5_5, SONNET_5_5, Effort
 from semval.sampling.sample import SampleManifest, doc_text_path, write_manifest
 from semval.tagging import runner
 from semval.tagging.base import RunManifest, RunStatus, TaggerKind, TaggerSpec
@@ -66,7 +66,7 @@ def setup(tmp_path: Path) -> RunPaths:
 
 def spec(**kw) -> TaggerSpec:
     base = {
-        "kind": TaggerKind.CLAUDE, "model": ModelId.SONNET_5_5, "effort": Effort.MEDIUM,
+        "kind": TaggerKind.CLAUDE, "model": SONNET_5_5, "effort": Effort.MEDIUM,
         "framework_id": "toy", "level_id": "leaf", "unit": UnitLevel.ARTICLE,
     }  # fmt: skip
     base.update(kw)
@@ -285,7 +285,7 @@ def test_cli_few_shot_on_needs_a_readable_file(tmp_path):
     argv = ["tag", "--sample", "x", "--model", "claude-haiku-5-5", "--effort", "low",
             "--level", "leaf", "--unit", "article"]  # fmt: skip
     args = build_parser().parse_args([*argv, "--batch", "--limit-per-country", "2"])
-    assert args.model == ModelId.HAIKU_5_5 and args.unit == UnitLevel.ARTICLE and args.batch
+    assert args.model == HAIKU_5_5 and args.unit == UnitLevel.ARTICLE and args.batch
     assert args.few_shot == "off" and args.limit_per_country == 2
     assert args.few_shot_file is None  # _tag falls back to data/fewshot/touche23.yaml
     with pytest.raises(SystemExit, match="cannot load few-shot"):
@@ -371,7 +371,7 @@ def test_fallback_served_segments_in_manifest(tmp_path):
     from types import SimpleNamespace
 
     paths = setup(tmp_path)
-    s = spec(model=ModelId.OPUS_5_5)
+    s = spec(model=OPUS_5_5)
     its = [
         SimpleNamespace(type="message", model=None, input_tokens=900, output_tokens=0,
                         cache_creation_input_tokens=0, cache_read_input_tokens=0),

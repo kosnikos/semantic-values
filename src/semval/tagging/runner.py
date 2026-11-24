@@ -14,8 +14,9 @@ from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
-from semval.config import priced_model, retry_max_tokens
+from semval.config import retry_max_tokens
 from semval.fsutil import atomic_write_text
+from semval.models import registry
 from semval.tagging.base import (
     CallPath,
     RunManifest,
@@ -194,7 +195,7 @@ class _Run:
                 key = f"{c.batch_id}/{c.segment_id}/{n}"
                 if key in counted:
                     continue
-            model, batch = priced_model(c.model), c.path == CallPath.BATCH
+            model, batch = registry().priced(c.model), c.path == CallPath.BATCH
             cost = cost_of(c.usage, model, batch)
             try:
                 self.ledger.record(self.m.run_id, c.usage, model, batch, call_key=key)

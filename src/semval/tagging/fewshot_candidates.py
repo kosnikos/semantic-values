@@ -16,10 +16,8 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from semval.config import (
     MAX_TOKENS_BY_EFFORT,
-    SERVER_FALLBACK_MODELS,
+    OPUS_5_5,
     Effort,
-    ModelId,
-    priced_model,
 )
 from semval.datasets.touche23 import (
     CHARS_PER_TOKEN,
@@ -30,6 +28,7 @@ from semval.datasets.touche23 import (
     billed,
     load_split,
 )
+from semval.models import registry
 from semval.tagging.base import RawTag, Usage
 from semval.tagging.claude import FALLBACK_BETA
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
@@ -40,7 +39,7 @@ log = logging.getLogger(__name__)
 
 CANDIDATES_FILE = "fewshot_candidates.jsonl"
 CANDIDATES_RUN_ID = "touche23-fewshot-candidates"  # ledger run id and review "source run"
-DRAFT_MODEL = ModelId.OPUS_5_5
+DRAFT_MODEL = OPUS_5_5
 DRAFT_EFFORT = Effort.MEDIUM
 SELECTION_SPLITS: tuple[Literal["train", "validation"], ...] = ("train", "validation")
 
@@ -139,12 +138,12 @@ class FewShotDrafter:
                 "format": {"type": "json_schema", "schema": self.schema},
             },
         }
-        if DRAFT_MODEL in SERVER_FALLBACK_MODELS:
+        if registry().get(DRAFT_MODEL).server_fallbacks:
             params = {**params, "betas": [FALLBACK_BETA], "fallbacks": "default"}
         if not self.ledger.can_spend(self._estimate(params)):
             raise BudgetExceeded("the next draft would pass the budget cap")
         msg = self.client.beta.messages.create(**params)
-        pairs = [(priced_model(m), u) for m, u in billed(msg, DRAFT_MODEL)]
+        pairs = [(registry().priced(m), u) for m, u in billed(msg, DRAFT_MODEL)]
         self.ledger.record_all(self.run_id, pairs, False)  # all recorded, then may raise
         if msg.stop_reason != "end_turn":
             raise DraftFailed(f"stop_reason {msg.stop_reason}")
