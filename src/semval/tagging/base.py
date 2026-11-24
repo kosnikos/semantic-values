@@ -64,6 +64,8 @@ class TaggerSpec(BaseModel):
     unit: UnitLevel | None = None  # None: the tagger works at any level (lexicon)
     few_shot: bool = False
     batch: bool = False
+    # A file in data/prompts; checked when the tagger loads it, so old manifests load as v1.
+    prompt_id: str = "v1"
 
     @model_validator(mode="after")
     def _claude_needs_settings(self) -> "TaggerSpec":

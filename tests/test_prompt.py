@@ -96,10 +96,10 @@ def test_prompt_is_stable_and_hash_covers_schema():
     assert prompt_sha256(build_prompt(fewer, [])) != prompt_sha256(a)
 
 
-def test_hash_covers_user_message_template(monkeypatch):
-    from semval.tagging import prompt
+def test_hash_covers_user_message_template():
+    from semval.tagging.prompt import load_prompt
 
-    parts = build_prompt(targets(), [])
-    before = prompt_sha256(parts)
-    monkeypatch.setattr(prompt, "USER_TEMPLATE", prompt.USER_TEMPLATE.replace("Genre", "Kind"))
-    assert prompt_sha256(parts) != before
+    v1 = load_prompt("v1")
+    parts = build_prompt(targets(), [], v1)
+    changed = v1.model_copy(update={"user_template": v1.user_template.replace("Genre", "Kind")})
+    assert prompt_sha256(parts, changed) != prompt_sha256(parts, v1)

@@ -8,9 +8,12 @@ import hashlib
 import json
 from collections import Counter
 from dataclasses import dataclass
+from functools import cache
+from pathlib import Path
 from typing import Any, get_args
 
-from pydantic import BaseModel, ConfigDict, Field
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from semval.tagging.base import DefinitionWording, RawTag
 from semval.targets import TargetDef, TargetSet
@@ -18,29 +21,43 @@ from semval.units import DocumentMeta
 
 STANCES: tuple[str, ...] = get_args(RawTag.model_fields["stance"].annotation)
 MAX_QUOTES = 3
+DEFAULT_PROMPT_ID = "v1"
+PROMPTS_DIR = Path(__file__).resolve().parents[3] / "data" / "prompts"
 
-INSTRUCTIONS = f"""\
-You tag newspaper opinion texts with human values.
 
-For each value listed below that the text engages with, report the author's stance:
-- endorse: the author promotes or defends the value. This includes lamenting that it is \
-threatened or neglected.
-- reject: the author opposes or dismisses the value.
-- mention: the value is discussed without a clear authorial stance.
+class PromptTemplate(BaseModel):
+    """A prompt file: the instructions (``{max_quotes}`` is filled in) and the user message
+    template (``{language}``, ``{genre}``, ``{text}``)."""
 
-The stance is the author's own. A view the author only reports or quotes is a mention, \
-unless the author takes it up.
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
-Tag only values the text actually engages with. A text may engage with none; then return \
-an empty "tags" list.
+    id: str
+    instructions: str
+    user_template: str
+    notes: str = ""
 
-For each tag give 1 to {MAX_QUOTES} quotes that show the stance. Every quote must be copied \
-verbatim from the text: an exact substring, in the text's own language, not translated, \
-not shortened with ellipses. Keep quotes short (a clause or a sentence).
+    def rendered_instructions(self) -> str:
+        return self.instructions.format(max_quotes=MAX_QUOTES)
 
-Give each tag a confidence between 0 and 1.
 
-The value definitions are in English; the texts may be in any language."""
+def load_prompt(prompt_id: str, prompts_dir: Path = PROMPTS_DIR) -> PromptTemplate:
+    """The prompt in ``<prompts_dir>/<prompt_id>.yaml``; an unknown id lists the known ones."""
+    path = Path(prompts_dir) / f"{prompt_id}.yaml"
+    if not path.is_file():
+        known = sorted(p.stem for p in Path(prompts_dir).glob("*.yaml"))
+        raise ValueError(f"unknown prompt id {prompt_id!r}; known: {', '.join(known)}")
+    try:
+        template = PromptTemplate.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
+    except ValidationError as e:
+        raise ValueError(f"{path}: {e}") from e
+    if template.id != prompt_id:
+        raise ValueError(f"{path}: id {template.id!r} does not match the file name")
+    return template
+
+
+@cache
+def _default_template() -> PromptTemplate:
+    return load_prompt(DEFAULT_PROMPT_ID)
 
 
 class FewShotExample(BaseModel):
@@ -127,14 +144,17 @@ def _example_block(ex: FewShotExample, ids: set[str]) -> str:
     )
 
 
-def build_prompt(targets: TargetSet, few_shot: list[FewShotExample]) -> PromptParts:
+def build_prompt(
+    targets: TargetSet, few_shot: list[FewShotExample], template: PromptTemplate | None = None
+) -> PromptParts:
+    template = template or _default_template()
     wording: Counter[str] = Counter()
     blocks = []
     for t in targets.targets:
         text, kind = _definition(t)
         wording[kind.value] += 1
         blocks.append(_value_block(t, text))
-    parts = [INSTRUCTIONS, "Values:\n\n" + "\n\n".join(blocks)]
+    parts = [template.rendered_instructions(), "Values:\n\n" + "\n\n".join(blocks)]
     if few_shot:
         ids = set(targets.ids())
         examples = "\n\n".join(_example_block(ex, ids) for ex in few_shot)
@@ -144,15 +164,14 @@ def build_prompt(targets: TargetSet, few_shot: list[FewShotExample]) -> PromptPa
     )
 
 
-USER_TEMPLATE = "Language: {language}\nGenre: {genre}\n\n<text>\n{text}\n</text>"
+def user_message(text: str, meta: DocumentMeta, template: PromptTemplate | None = None) -> str:
+    template = template or _default_template()
+    return template.user_template.format(language=meta.language, genre=meta.genre, text=text)
 
 
-def user_message(text: str, meta: DocumentMeta) -> str:
-    return USER_TEMPLATE.format(language=meta.language, genre=meta.genre, text=text)
-
-
-def prompt_sha256(parts: PromptParts) -> str:
+def prompt_sha256(parts: PromptParts, template: PromptTemplate | None = None) -> str:
     """Hash of the system prompt, the user-message template and the schema JSON."""
+    template = template or _default_template()
     schema = json.dumps(parts.schema, sort_keys=True, ensure_ascii=False)
-    blob = f"{parts.system}\n{USER_TEMPLATE}\n{schema}"
+    blob = f"{parts.system}\n{template.user_template}\n{schema}"
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()

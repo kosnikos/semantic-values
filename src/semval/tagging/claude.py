@@ -46,7 +46,9 @@ from semval.tagging.prompt import (
     MAX_QUOTES,
     FewShotExample,
     PromptParts,
+    PromptTemplate,
     build_prompt,
+    load_prompt,
     prompt_sha256,
     user_message,
 )
@@ -175,6 +177,7 @@ class ClaudeTagger:
         self.model: ModelId = spec.model
         self.client = client
         self.few_shot = list(few_shot)
+        self.template: PromptTemplate = load_prompt(spec.prompt_id)
         self.spend_guard: Callable[[float], bool] | None = None
         # Called with the batch id and its segment ids (submission order) right after submit.
         self.on_batch_submitted: Callable[[str, list[str]], None] | None = None
@@ -188,12 +191,13 @@ class ClaudeTagger:
     # -- prompt ---------------------------------------------------------------------------
 
     def _prompt(self, targets: TargetSet) -> PromptParts:
-        return build_prompt(targets, self.few_shot)
+        return build_prompt(targets, self.few_shot, self.template)
 
     def prompt_info(self, targets: TargetSet) -> PromptInfo:
         parts = self._prompt(targets)
         return PromptInfo(
-            prompt_sha256=prompt_sha256(parts), definition_wording=parts.definition_wording
+            prompt_sha256=prompt_sha256(parts, self.template),
+            definition_wording=parts.definition_wording,
         )
 
     def _params(
@@ -206,7 +210,7 @@ class ClaudeTagger:
             "system": [
                 {"type": "text", "text": parts.system, "cache_control": {"type": "ephemeral"}}
             ],
-            "messages": [{"role": "user", "content": user_message(text, meta)}],
+            "messages": [{"role": "user", "content": user_message(text, meta, self.template)}],
             "output_config": {
                 "effort": str(self.spec.effort),
                 "format": {"type": "json_schema", "schema": parts.schema},
