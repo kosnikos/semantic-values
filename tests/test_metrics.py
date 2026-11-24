@@ -142,7 +142,8 @@ def test_stance_agreement_end_to_end_with_excluded_docs():
 
 
 def result(label, en, el, agree, cost, kind=TaggerKind.CLAUDE):
-    key = ConfigKey(kind=kind, model=label, effort="low", level_id="leaf", few_shot=False)
+    key = ConfigKey(kind=kind, model=label, effort="low", level_id="leaf", few_shot=False,
+                    baseline=kind == TaggerKind.LEXICON)  # fmt: skip
     return ConfigResult(
         key=key,
         en=InputScore(run_id="r", n_docs=300, macro_f1=en, macro_f1_mention=en) if en is not None else None,

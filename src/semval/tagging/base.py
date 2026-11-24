@@ -16,6 +16,8 @@ from semval.units import DocumentMeta, Segment, UnitLevel
 
 
 class TaggerKind(StrEnum):
+    """The built-in tagger kinds; others register in semval.tagging.registry."""
+
     CLAUDE = "claude"
     LEXICON = "lexicon"
 
@@ -56,7 +58,7 @@ class Usage(BaseModel):
 class TaggerSpec(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    kind: TaggerKind
+    kind: str  # a registered kind (semval.tagging.registry)
     model: ModelId | None = None
     effort: Effort | None = None
     framework_id: str
@@ -66,14 +68,22 @@ class TaggerSpec(BaseModel):
     batch: bool = False
     # A file in data/prompts; checked when the tagger loads it, so old manifests load as v1.
     prompt_id: str = "v1"
+    # Kind-specific settings (e.g. the lexicon's word-list file); empty in old manifests.
+    options: dict[str, str | int | float | bool] = Field(default_factory=dict)
 
     @model_validator(mode="after")
-    def _claude_needs_settings(self) -> "TaggerSpec":
-        if self.kind == TaggerKind.CLAUDE:
-            missing = [f for f in ("model", "effort", "unit") if getattr(self, f) is None]
-            if missing:
-                raise ValueError(f"a claude tagger spec needs {', '.join(missing)}")
+    def _kind_accepts_fields(self) -> "TaggerSpec":
+        from semval.tagging.registry import check_spec  # the registry imports this module
+
+        check_spec(self)
         return self
+
+    @property
+    def is_baseline(self) -> bool:
+        """A comparison baseline (the lexicon), never a recommended configuration."""
+        from semval.tagging.registry import is_baseline
+
+        return is_baseline(self.kind)
 
 
 class RawTag(BaseModel):

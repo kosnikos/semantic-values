@@ -52,6 +52,7 @@ from semval.tagging.prompt import (
     prompt_sha256,
     user_message,
 )
+from semval.tagging.registry import TaggerContext, register_tagger
 from semval.targets import TargetSet
 from semval.units import DocumentMeta, Segment
 
@@ -408,3 +409,15 @@ class ClaudeTagger:
             for sid, params in requests.items():
                 self._sync(sid, params, ids, out)
         return out.result()
+
+
+def _build(spec: TaggerSpec, ctx: TaggerContext) -> ClaudeTagger:
+    return ClaudeTagger(spec, ctx.client if ctx.client is not None else make_client(), ctx.few_shot)
+
+
+register_tagger(
+    TaggerKind.CLAUDE.value,
+    _build,
+    needs=frozenset({"model", "effort", "unit"}),
+    allows=frozenset({"few_shot", "batch"}),
+)

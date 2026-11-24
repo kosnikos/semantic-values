@@ -24,9 +24,8 @@ from semval.sources import (
 )
 from semval.tagging.fewshot import DEFAULT_FEWSHOT_PATH
 from semval.tagging.label_examples import DEFAULT_LOCAL_PATH as DEFAULT_LOCAL_FEWSHOT_PATH
+from semval.tagging.lexicon import DEFAULT_LEXICON_PATH
 from semval.tagging.runfiles import DEFAULT_RUNS_DIR
-
-DEFAULT_LEXICON_PATH = Path("data/lexicon/basic10_seed.yaml")
 
 DEFAULT_SOURCES = Path("data/sources/sources.yaml")
 DEFAULT_OUT = Path("docs/research/coverage.md")

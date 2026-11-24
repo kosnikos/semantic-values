@@ -23,14 +23,13 @@ from semval.tagging.base import (
     RunStatus,
     TagBatchResult,
     Tagger,
-    TaggerKind,
     TaggerSpec,
 )
-from semval.tagging.claude import ClaudeTagger, make_client
 from semval.tagging.fewshot import fewshot_at_level
 from semval.tagging.ledger import BudgetExceeded, CostLedger, cost_of
 from semval.tagging.prompt import FewShotExample
 from semval.tagging.quotes import resolve_quotes
+from semval.tagging.registry import TaggerContext, build_tagger
 from semval.tagging.runfiles import (  # noqa: F401 (re-exported)
     DEFAULT_PATHS,
     DEFAULT_RUNS_DIR,
@@ -72,12 +71,6 @@ def make_run_id(
         f"{ts}-{spec.kind}-{spec.model or 'none'}-{spec.effort or 'none'}-"
         f"{spec.level_id}-{unit or 'none'}-fs{int(spec.few_shot)}"
     )
-
-
-def make_tagger(spec: TaggerSpec, client: Any = None, few_shot: Sequence[FewShotExample] = ()):
-    if spec.kind != TaggerKind.CLAUDE:
-        raise ValueError(f"build the {spec.kind} tagger yourself and pass it as tagger=")
-    return ClaudeTagger(spec, client if client is not None else make_client(), few_shot)
 
 
 def select_documents(
@@ -255,8 +248,8 @@ def run_tagging(
     fw_dir = Path(paths.framework_dir)
     framework = load_framework(fw_dir / f"{spec.framework_id}.yaml", local_dir=fw_dir / "local")
     # few-shot examples are written at leaf level; the prompt shows them at the run's level
-    tagger = tagger or make_tagger(
-        spec, client, fewshot_at_level(few_shot, framework, spec.level_id)
+    tagger = tagger or build_tagger(
+        spec, TaggerContext(client, fewshot_at_level(few_shot, framework, spec.level_id))
     )
     if tagger.spec.model_copy(update={"unit": unit}) != run_spec:
         raise ValueError("the tagger's spec does not match the run spec")

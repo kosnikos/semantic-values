@@ -74,6 +74,7 @@ def config_key(m: RunManifest) -> ConfigKey:
         effort=s.effort.value if s.effort else None,
         level_id=s.level_id,
         few_shot=s.few_shot,
+        baseline=s.is_baseline,
     )
 
 
