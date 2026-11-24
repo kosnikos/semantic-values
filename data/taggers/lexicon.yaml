@@ -3,5 +3,3 @@ description: "Baseline: Basic-10 word-list matcher (English only), no model call
 kind: lexicon
 level: basic10
 framework: schwartz19
-options:
-  lexicon_file: data/lexicon/basic10_seed.yaml

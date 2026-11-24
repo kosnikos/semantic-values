@@ -8,14 +8,14 @@ the tagger's kind then checks.
 
 import logging
 from collections.abc import Iterable
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import yaml
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from semval.config import Effort
-from semval.models import ModelId
+from semval.models import ModelId, registry
 from semval.tagging.base import TaggerSpec
 from semval.tagging.prompt import load_prompt
 from semval.tagging.registry import check_spec, registered_kinds
@@ -72,21 +72,46 @@ def apply_overrides(setup: TaggerSetup, **overrides: Any) -> TaggerSetup:
     return TaggerSetup.model_validate({**setup.model_dump(), **changes})
 
 
-def skip_missing_few_shot(setup: TaggerSetup) -> TaggerSetup:
-    """``setup`` without the few-shot files that do not exist (the owner's local examples
-    are not in git), each skipped with a warning; if none is left the run is zero-shot."""
-    present = [p for p in setup.few_shot_files if p.is_file()]
+LOCAL_FEWSHOT_DIR = PurePosixPath("data/fewshot/local")
+
+
+def _is_local(path: Path) -> bool:
+    """Under ``data/fewshot/local/`` (git-ignored by design), with no ``..`` to escape it."""
+    p = PurePosixPath(path.as_posix())
+    return p.is_relative_to(LOCAL_FEWSHOT_DIR) and ".." not in p.parts
+
+
+def skip_missing_few_shot(setup: TaggerSetup, name: str) -> tuple[TaggerSetup, list[Path]]:
+    """``setup`` (called ``name``) without its missing few-shot files under
+    ``data/fewshot/local/`` (the owner's examples are not in git), plus the files skipped;
+    each is logged, and if none is left the run is zero-shot. A missing file anywhere else
+    is a ``ValueError`` naming the file and the setup: a typo must not change the method."""
+    present: list[Path] = []
+    skipped: list[Path] = []
     for p in setup.few_shot_files:
-        if p not in present:
+        if p.is_file():
+            present.append(p)
+        elif _is_local(p):
+            skipped.append(p)
             log.warning("few-shot file %s not found; skipping it", p)
-    if setup.few_shot_files and not present:
+        else:
+            raise ValueError(
+                f"few-shot file {p.as_posix()} of setup {name} does not exist "
+                f"(only files under {LOCAL_FEWSHOT_DIR}/ may be missing)"
+            )
+    if skipped and not present:
         log.warning("no few-shot file found: this run is zero-shot")
-    return setup.model_copy(update={"few_shot_files": present})
+    return setup.model_copy(update={"few_shot_files": present}), skipped
 
 
 def to_spec(setup: TaggerSetup) -> TaggerSpec:
     """The spec for ``setup``; ``ValueError`` if its kind does not accept the fields set."""
     _check_ids(setup)
+    if setup.model is not None and setup.model not in registry().requestable():
+        raise ValueError(
+            f"model {setup.model!r} is not requestable; requestable: "
+            f"{', '.join(registry().requestable())}"
+        )
     try:
         spec = _spec(setup)
     except ValidationError as e:

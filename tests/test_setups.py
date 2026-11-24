@@ -16,6 +16,7 @@ from semval.tagging.setups import (
 from semval.units import UnitLevel
 
 ROOT = Path(__file__).resolve().parents[1]
+_orig_load = load_setup
 
 
 def test_sonnet_high_setup_matches_decision() -> None:
@@ -34,7 +35,21 @@ def test_sonnet_high_setup_matches_decision() -> None:
 def test_lexicon_setup_is_a_baseline_with_its_file() -> None:
     spec = to_spec(load_setup("lexicon"))
     assert spec.is_baseline and spec.model is None and not spec.few_shot
-    assert spec.options == {"lexicon_file": "data/lexicon/basic10_seed.yaml"}
+    assert spec.options == {}  # the factory default is the same path; old runs have {}
+    from semval.tagging.lexicon import DEFAULT_LEXICON_PATH
+
+    assert DEFAULT_LEXICON_PATH == Path("data/lexicon/basic10_seed.yaml")
+
+
+def test_lexicon_setup_spec_equals_old_lexicon_manifests() -> None:
+    import json
+
+    from semval.tagging.base import RunManifest
+
+    spec = to_spec(apply_overrides(load_setup("lexicon"), unit="paragraph"))
+    for path in sorted((ROOT / "data" / "runs").glob("grid-lexicon-basic10-*/manifest.json")):
+        old = RunManifest.model_validate(json.loads(path.read_text(encoding="utf-8")))
+        assert old.spec == spec, path
 
 
 def test_unknown_setup_name_lists_known() -> None:
@@ -56,7 +71,7 @@ def test_overrides_replace_single_fields() -> None:
     assert s.model == "claude-opus-5-5" and not s.batch
     assert s.effort == base.effort and s.few_shot_files == base.few_shot_files
     merged = apply_overrides(load_setup("lexicon"), options={"x": 1})
-    assert merged.options == {"lexicon_file": "data/lexicon/basic10_seed.yaml", "x": 1}
+    assert merged.options == {"x": 1}
 
 
 def test_no_few_shot_gives_zero_shot_spec() -> None:
@@ -78,21 +93,94 @@ def test_no_few_shot_with_few_shot_file_is_an_error() -> None:
         main(["tag", "--sample", "x", "--no-few-shot", "--few-shot-file", "a.yaml"])
 
 
-def test_missing_local_fewshot_file_skipped_and_recorded(
+def _setup_with(files: list[Path]):
+    return apply_overrides(load_setup("sonnet-high"), few_shot_files=files)
+
+
+def test_missing_local_fewshot_file_skipped_and_reported(
     tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
     here = tmp_path / "here.yaml"
     here.write_text("examples: []\n", encoding="utf-8")
-    gone = tmp_path / "gone.yaml"
-    s = apply_overrides(load_setup("sonnet-high"), few_shot_files=[here, gone])
+    gone = Path("data/fewshot/local/gone.yaml")
     with caplog.at_level(logging.WARNING):
-        kept = skip_missing_few_shot(s)
-    assert kept.few_shot_files == [here] and "gone.yaml" in caplog.text
-    assert to_spec(kept).few_shot
+        kept, skipped = skip_missing_few_shot(_setup_with([here, gone]), "sonnet-high")
+    assert kept.few_shot_files == [here] and skipped == [gone]
+    assert "gone.yaml" in caplog.text and to_spec(kept).few_shot
     caplog.clear()
     with caplog.at_level(logging.WARNING):
-        none_left = skip_missing_few_shot(apply_overrides(s, few_shot_files=[gone]))
-    assert not to_spec(none_left).few_shot and "zero-shot" in caplog.text
+        none_left, skipped = skip_missing_few_shot(_setup_with([gone]), "sonnet-high")
+    assert skipped == [gone] and not to_spec(none_left).few_shot
+    assert "zero-shot" in caplog.text
+
+
+def test_missing_committed_fewshot_file_is_an_error_naming_file_and_setup() -> None:
+    typo = Path("data/fewshot/touche32.yaml")
+    with pytest.raises(ValueError, match=r"touche32\.yaml.*sonnet-high") as e:
+        skip_missing_few_shot(_setup_with([typo]), "sonnet-high")
+    assert "data/fewshot/local" in str(e.value)
+
+
+def test_missing_non_local_file_is_an_error_even_beside_a_local_one() -> None:
+    files = [Path("data/fewshot/local/a.yaml"), Path("nowhere/b.yaml")]
+    with pytest.raises(ValueError, match=r"b\.yaml"):
+        skip_missing_few_shot(_setup_with(files), "sonnet-high")
+
+
+def test_local_prefix_does_not_cover_a_dotdot_escape() -> None:
+    sneaky = Path("data/fewshot/local/../touche99.yaml")
+    with pytest.raises(ValueError, match="touche99"):
+        skip_missing_few_shot(_setup_with([sneaky]), "sonnet-high")
+
+
+def _install_setup(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, name: str, text: str) -> None:
+    """Make ``semval tag --tagger NAME`` read ``text`` as that setup (cwd is the repo root)."""
+    monkeypatch.chdir(ROOT)
+    (tmp_path / f"{name}.yaml").write_text(text, encoding="utf-8")
+    monkeypatch.setattr(
+        "semval.tagging.setups.load_setup", lambda n, dir=tmp_path: _orig_load(n, dir)
+    )
+
+
+SONNET = (ROOT / "data/taggers/sonnet-high.yaml").read_text(encoding="utf-8")
+LOCAL = "data/fewshot/local/articles.yaml"
+ABSENT = "data/fewshot/local/absent-for-test.yaml"
+
+
+def test_cli_missing_committed_file_in_setup_stops(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    _install_setup(monkeypatch, tmp_path, "typo", SONNET.replace("touche23", "touche32"))
+    with pytest.raises(SystemExit, match=r"touche32\.yaml.*setup typo"):
+        main(["tag", "--sample", "x", "--tagger", "typo", "--dry-run"])
+
+
+def test_cli_dry_run_shows_skipped_local_file(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    _install_setup(monkeypatch, tmp_path, "gap", SONNET.replace(LOCAL, ABSENT))
+    assert main(["tag", "--sample", "x", "--tagger", "gap", "--dry-run"]) == 0
+    out = capsys.readouterr().out
+    assert f"skipped (not found): {ABSENT}" in out
+    assert "few-shot files: data/fewshot/touche23.yaml\n" in out
+    assert "zero-shot" not in out
+
+
+def test_cli_dry_run_all_local_missing_says_zero_shot(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    text = SONNET.replace(LOCAL, ABSENT).replace("  - data/fewshot/touche23.yaml\n", "")
+    _install_setup(monkeypatch, tmp_path, "localonly", text)
+    assert main(["tag", "--sample", "x", "--tagger", "localonly", "--dry-run"]) == 0
+    out = capsys.readouterr().out
+    assert f"skipped (not found): {ABSENT}" in out
+    assert "this run would be zero-shot" in out
+
+
+def test_setup_with_unrequestable_model_is_rejected() -> None:
+    s = apply_overrides(load_setup("sonnet-high"), model="claude-opus-4-8")
+    with pytest.raises(ValueError, match=r"claude-opus-4-8.*requestable.*claude-haiku-5-5"):
+        to_spec(s)
 
 
 def test_option_values_parse_as_scalars() -> None:

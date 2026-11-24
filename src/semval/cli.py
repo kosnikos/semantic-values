@@ -177,8 +177,9 @@ def _sample(args: argparse.Namespace) -> int:
     return 0
 
 
-def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any]:
-    """The saved setup with the command-line overrides applied, and its spec."""
+def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any, list[Any]]:
+    """The saved setup with the command-line overrides applied, its spec, and the local
+    few-shot files skipped because they are missing."""
     from semval.tagging.setups import (
         apply_overrides,
         load_setup,
@@ -192,8 +193,9 @@ def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any]:
     try:
         setup = load_setup(args.tagger)
         files = [] if args.no_few_shot else args.few_shot_file
+        skipped: list[Any] = []
         if files is None:  # the setup's own list: a missing local file is skipped
-            setup = skip_missing_few_shot(setup)
+            setup, skipped = skip_missing_few_shot(setup, args.tagger)
         setup = apply_overrides(
             setup,
             model=args.model,
@@ -206,7 +208,7 @@ def _resolve_setup(args: argparse.Namespace) -> tuple[Any, Any]:
             batch=args.batch,
             options=parse_options(args.option) or None,
         )
-        return setup, to_spec(setup)
+        return setup, to_spec(setup), skipped
     except ValueError as e:
         raise SystemExit(f"error: tagger {args.tagger}: {e}") from None
 
@@ -216,7 +218,7 @@ def _tag(args: argparse.Namespace) -> int:
     from semval.tagging.runner import run_tagging
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    setup, spec = _resolve_setup(args)
+    setup, spec, skipped = _resolve_setup(args)
     files = [f.as_posix() for f in setup.few_shot_files]
     if args.dry_run:
         print(f"setup: {args.tagger}")
@@ -224,6 +226,10 @@ def _tag(args: argparse.Namespace) -> int:
             print(f"description: {setup.description}")
         print(f"spec: {spec.model_dump_json()}")
         print(f"few-shot files: {', '.join(files) or 'none (zero-shot)'}")
+        for p in skipped:
+            print(f"skipped (not found): {p.as_posix()}")
+        if skipped and not files:
+            print("no few-shot file found: this run would be zero-shot")
         return 0
     try:
         few_shot = load_fewshot_files(setup.few_shot_files)
